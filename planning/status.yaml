@@ -1,8 +1,8 @@
 project: personal-intelligence-action-engine
 schema_version: 1
-updated_at: null
+updated_at: 2026-06-09
 phases:
-  P0: NOT_STARTED
+  P0: IN_PROGRESS
   P1: NOT_STARTED
   P2: NOT_STARTED
   P3: NOT_STARTED
@@ -19,7 +19,8 @@ gates:
   P5-GATE: NOT_STARTED
   P6-GATE: NOT_STARTED
   P7-GATE: NOT_STARTED
-tasks: {}
+tasks:
+  P0-T01: DONE
 notes:
   - Update task states only after the required review and verification evidence exists.
   - Allowed task states are NOT_STARTED, IN_PROGRESS, DONE, NO_CHANGE_REQUIRED, BLOCKED, FAILED_VERIFICATION.

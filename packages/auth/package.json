@@ -1,0 +1,11 @@
+{
+  "name": "@pia/auth",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test:unit": "echo 'auth: no tests yet' && exit 0"
+  }
+}

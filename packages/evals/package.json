@@ -1,0 +1,11 @@
+{
+  "name": "@pia/evals",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test:unit": "echo 'evals: no tests yet' && exit 0"
+  }
+}

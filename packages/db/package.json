@@ -1,0 +1,11 @@
+{
+  "name": "@pia/db",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test:unit": "echo 'db: no tests yet' && exit 0"
+  }
+}

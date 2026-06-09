@@ -1,0 +1,22 @@
+{
+  "files": [],
+  "references": [
+    { "path": "apps/api" },
+    { "path": "apps/web" },
+    { "path": "apps/worker" },
+    { "path": "packages/auth" },
+    { "path": "packages/config" },
+    { "path": "packages/contracts" },
+    { "path": "packages/db" },
+    { "path": "packages/domain" },
+    { "path": "packages/audit" },
+    { "path": "packages/observability" },
+    { "path": "packages/storage" },
+    { "path": "packages/jobs" },
+    { "path": "packages/knowledge" },
+    { "path": "packages/ai" },
+    { "path": "packages/memory" },
+    { "path": "packages/tools" },
+    { "path": "packages/evals" }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "name": "personal-intelligence-action-engine",
+  "description": "Personal Intelligence and Action Engine",
+  "scripts": {
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint",
+    "test:unit": "turbo run test:unit",
+    "test": "turbo run test",
+    "format:check": "prettier --check '**/*.{ts,tsx,json,md,yaml,yml}'",
+    "format:fix": "prettier --write '**/*.{ts,tsx,json,md,yaml,yml}'",
+    "ci:format-check": "pnpm format:check"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "prettier": "^3.4.0",
+    "turbo": "^2.3.0",
+    "typescript": "~5.7.2",
+    "vitest": "^2.1.0"
+  },
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=9"
+  },
+  "packageManager": "pnpm@9.15.9+sha512.68046141893c66fad01c079231128e9afb89ef87e2691d69e4d40eee228988295fd4682181bae55b58418c3a253bde65a505ec7c5f9403ece5cc3cd37dcf2531"
+}

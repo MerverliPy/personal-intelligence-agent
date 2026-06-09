@@ -1,0 +1,12 @@
+{
+  "name": "@pia/web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo 'web: nothing to build' && exit 0",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test:unit": "echo 'web: no tests yet' && exit 0",
+    "dev": "echo 'web: dev mode not configured' && exit 0"
+  }
+}
