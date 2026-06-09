@@ -37,6 +37,9 @@ importers:
       '@pia/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@pia/observability':
+        specifier: workspace:*
+        version: link:../../packages/observability
 
   apps/web: {}
 
@@ -45,6 +48,9 @@ importers:
       '@pia/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@pia/observability':
+        specifier: workspace:*
+        version: link:../../packages/observability
 
   packages/ai: {}
 
@@ -68,7 +74,11 @@ importers:
 
   packages/memory: {}
 
-  packages/observability: {}
+  packages/observability:
+    dependencies:
+      '@pia/config':
+        specifier: workspace:*
+        version: link:../config
 
   packages/storage: {}
 

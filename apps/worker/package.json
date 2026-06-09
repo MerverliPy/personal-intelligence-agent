@@ -11,6 +11,7 @@
     "dev": "echo 'worker: dev mode not configured' && exit 0"
   },
   "dependencies": {
-    "@pia/config": "workspace:*"
+    "@pia/config": "workspace:*",
+    "@pia/observability": "workspace:*"
   }
 }
