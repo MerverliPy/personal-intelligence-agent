@@ -2,11 +2,15 @@
   "name": "@pia/api",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "echo 'api: nothing to build' && exit 0",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
     "test:unit": "echo 'api: no tests yet' && exit 0",
     "dev": "echo 'api: dev mode not configured' && exit 0"
+  },
+  "dependencies": {
+    "@pia/config": "workspace:*"
   }
 }

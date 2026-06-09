@@ -21,6 +21,7 @@ gates:
   P7-GATE: NOT_STARTED
 tasks:
   P0-T01: DONE
+  P0-T02: DONE
 notes:
   - Update task states only after the required review and verification evidence exists.
   - Allowed task states are NOT_STARTED, IN_PROGRESS, DONE, NO_CHANGE_REQUIRED, BLOCKED, FAILED_VERIFICATION.
