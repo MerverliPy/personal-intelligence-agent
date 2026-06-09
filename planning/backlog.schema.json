@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/opencode-backlog.schema.json",
+  "title": "OpenCode phased implementation backlog",
+  "type": "object",
+  "required": ["schema_version", "project", "execution_model", "phases", "tasks", "gates"],
+  "properties": {
+    "schema_version": {"type": "integer", "minimum": 1},
+    "project": {"type": "string", "minLength": 1},
+    "execution_model": {"type": "object"},
+    "phases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "objective", "gate"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^P[0-9]+$"},
+          "name": {"type": "string"},
+          "objective": {"type": "string"},
+          "gate": {"type": "string", "pattern": "^P[0-9]+-GATE$"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/task"}
+    },
+    "gates": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/gate"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "stringList": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "task": {
+      "type": "object",
+      "required": [
+        "id", "phase", "title", "objective", "depends_on", "requirements", "spec_refs",
+        "allowed_paths", "forbidden_paths", "inputs", "outputs", "implementation_notes",
+        "verification", "acceptance", "security_checks", "rollback", "stop_conditions",
+        "parallel_group", "required_reviewers"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^P[0-9]+-T[0-9]{2}$"},
+        "phase": {"type": "string", "pattern": "^P[0-9]+$"},
+        "title": {"type": "string", "minLength": 1},
+        "objective": {"type": "string", "minLength": 1},
+        "depends_on": {"$ref": "#/$defs/stringList"},
+        "requirements": {"$ref": "#/$defs/stringList"},
+        "spec_refs": {"$ref": "#/$defs/stringList"},
+        "allowed_paths": {"$ref": "#/$defs/stringList"},
+        "forbidden_paths": {"$ref": "#/$defs/stringList"},
+        "inputs": {"$ref": "#/$defs/stringList"},
+        "outputs": {"$ref": "#/$defs/stringList"},
+        "implementation_notes": {"$ref": "#/$defs/stringList"},
+        "verification": {"$ref": "#/$defs/stringList"},
+        "acceptance": {"$ref": "#/$defs/stringList"},
+        "security_checks": {"$ref": "#/$defs/stringList"},
+        "rollback": {"$ref": "#/$defs/stringList"},
+        "stop_conditions": {"$ref": "#/$defs/stringList"},
+        "parallel_group": {"type": ["string", "null"]},
+        "required_reviewers": {"$ref": "#/$defs/stringList"}
+      },
+      "additionalProperties": false
+    },
+    "gate": {
+      "type": "object",
+      "required": ["id", "phase", "depends_on", "command", "acceptance"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^P[0-9]+-GATE$"},
+        "phase": {"type": "string", "pattern": "^P[0-9]+$"},
+        "depends_on": {"$ref": "#/$defs/stringList"},
+        "command": {"type": "string"},
+        "acceptance": {"$ref": "#/$defs/stringList"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

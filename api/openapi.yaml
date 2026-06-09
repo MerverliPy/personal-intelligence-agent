@@ -1,0 +1,1850 @@
+openapi: 3.1.0
+info:
+  title: Personal Intelligence and Action Engine API
+  version: 0.1.0
+  description: Initial contract for authenticated workspaces, knowledge, conversations, memory, tools, approvals, audit, and
+    evaluations.
+servers:
+- url: /
+security:
+- bearerAuth: []
+tags:
+- name: Identity
+- name: Workspaces
+- name: Documents
+- name: Retrieval
+- name: Conversations
+- name: Memory
+- name: Tools
+- name: Approvals
+- name: Audit
+- name: Evaluations
+paths:
+  /health/live:
+    get:
+      security: []
+      operationId: getLiveness
+      responses:
+        '200':
+          description: Process is alive.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /health/ready:
+    get:
+      security: []
+      operationId: getReadiness
+      responses:
+        '200':
+          description: Required dependencies are ready.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /v1/me:
+    get:
+      tags:
+      - Identity
+      operationId: getCurrentPrincipal
+      responses:
+        '200':
+          description: Authenticated principal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Principal'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/workspaces:
+    get:
+      tags:
+      - Workspaces
+      operationId: listWorkspaces
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Authorized workspaces.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspacePage'
+    post:
+      tags:
+      - Workspaces
+      operationId: createWorkspace
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorkspaceRequest'
+      responses:
+        '201':
+          description: Workspace created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /v1/workspaces/{workspace_id}:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    get:
+      tags:
+      - Workspaces
+      operationId: getWorkspace
+      responses:
+        '200':
+          description: Workspace.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/workspaces/{workspace_id}/projects:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    get:
+      tags:
+      - Workspaces
+      operationId: listProjects
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Authorized projects.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectPage'
+    post:
+      tags:
+      - Workspaces
+      operationId: createProject
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectRequest'
+      responses:
+        '201':
+          description: Project created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+  /v1/workspaces/{workspace_id}/uploads:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    post:
+      tags:
+      - Documents
+      operationId: createUpload
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUploadRequest'
+      responses:
+        '201':
+          description: Bounded upload target created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadTarget'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+  /v1/workspaces/{workspace_id}/uploads/{upload_id}/complete:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    - name: upload_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+    post:
+      tags:
+      - Documents
+      operationId: completeUpload
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteUploadRequest'
+      responses:
+        '202':
+          description: Upload accepted for verification and ingestion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionJob'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /v1/workspaces/{workspace_id}/documents:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    get:
+      tags:
+      - Documents
+      operationId: listDocuments
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      - name: project_id
+        in: query
+        schema:
+          $ref: '#/components/schemas/Uuid'
+      - name: status
+        in: query
+        schema:
+          $ref: '#/components/schemas/DocumentVersionStatus'
+      responses:
+        '200':
+          description: Documents.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentPage'
+  /v1/workspaces/{workspace_id}/documents/{document_id}:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    - $ref: '#/components/parameters/DocumentId'
+    get:
+      tags:
+      - Documents
+      operationId: getDocument
+      responses:
+        '200':
+          description: Document and version summary.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+      - Documents
+      operationId: deleteDocument
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '202':
+          description: Deletion workflow accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationAccepted'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/workspaces/{workspace_id}/documents/{document_id}/ingestion-jobs:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    - $ref: '#/components/parameters/DocumentId'
+    post:
+      tags:
+      - Documents
+      operationId: createIngestionJob
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '202':
+          description: Ingestion/retry accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionJob'
+  /v1/workspaces/{workspace_id}/ingestion-jobs/{job_id}:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    - name: job_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+    get:
+      tags:
+      - Documents
+      operationId: getIngestionJob
+      responses:
+        '200':
+          description: Ingestion job state.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionJob'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/workspaces/{workspace_id}/retrieval/query:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    post:
+      tags:
+      - Retrieval
+      operationId: queryKnowledge
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetrievalQuery'
+      responses:
+        '200':
+          description: Authorized retrieval results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrievalResponse'
+  /v1/workspaces/{workspace_id}/retrieval/traces/{trace_id}:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    - name: trace_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+    get:
+      tags:
+      - Retrieval
+      operationId: getRetrievalTrace
+      responses:
+        '200':
+          description: Retrieval trace visible to authorized role.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrievalResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/workspaces/{workspace_id}/conversations:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    get:
+      tags:
+      - Conversations
+      operationId: listConversations
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Conversations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationPage'
+    post:
+      tags:
+      - Conversations
+      operationId: createConversation
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateConversationRequest'
+      responses:
+        '201':
+          description: Conversation created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+  /v1/workspaces/{workspace_id}/conversations/{conversation_id}:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    - $ref: '#/components/parameters/ConversationId'
+    get:
+      tags:
+      - Conversations
+      operationId: getConversation
+      responses:
+        '200':
+          description: Conversation with paginated message summary.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/workspaces/{workspace_id}/conversations/{conversation_id}/messages:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    - $ref: '#/components/parameters/ConversationId'
+    post:
+      tags:
+      - Conversations
+      operationId: createConversationMessage
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMessageRequest'
+      responses:
+        '202':
+          description: Message accepted and model run started.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelRun'
+  /v1/workspaces/{workspace_id}/conversations/{conversation_id}/events:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    - $ref: '#/components/parameters/ConversationId'
+    get:
+      tags:
+      - Conversations
+      operationId: streamConversationEvents
+      parameters:
+      - name: run_id
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/Uuid'
+      - name: Last-Event-ID
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Server-Sent Event stream.
+          content:
+            text/event-stream:
+              schema:
+                type: string
+  /v1/workspaces/{workspace_id}/messages/{message_id}/feedback:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    - name: message_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+    post:
+      tags:
+      - Conversations
+      operationId: createMessageFeedback
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFeedbackRequest'
+      responses:
+        '201':
+          description: Feedback recorded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+  /v1/workspaces/{workspace_id}/memories:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    get:
+      tags:
+      - Memory
+      operationId: listMemories
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Approved and historical memories visible to the principal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemoryPage'
+  /v1/workspaces/{workspace_id}/memory-candidates:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    get:
+      tags:
+      - Memory
+      operationId: listMemoryCandidates
+      responses:
+        '200':
+          description: Candidate memories.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemoryPage'
+  /v1/workspaces/{workspace_id}/memory-candidates/{candidate_id}/approve:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    - name: candidate_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+    post:
+      tags:
+      - Memory
+      operationId: approveMemoryCandidate
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApproveMemoryRequest'
+      responses:
+        '200':
+          description: Candidate approved as an exact version.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Memory'
+  /v1/workspaces/{workspace_id}/memory-candidates/{candidate_id}/reject:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    - name: candidate_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+    post:
+      tags:
+      - Memory
+      operationId: rejectMemoryCandidate
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '200':
+          description: Candidate rejected.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Memory'
+  /v1/workspaces/{workspace_id}/memories/{memory_id}:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    - name: memory_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+    patch:
+      tags:
+      - Memory
+      operationId: updateMemory
+      parameters:
+      - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMemoryRequest'
+      responses:
+        '200':
+          description: New memory version created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Memory'
+        '412':
+          $ref: '#/components/responses/PreconditionFailed'
+    delete:
+      tags:
+      - Memory
+      operationId: deleteMemory
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '202':
+          description: Memory deletion accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationAccepted'
+  /v1/workspaces/{workspace_id}/tools:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    get:
+      tags:
+      - Tools
+      operationId: listTools
+      responses:
+        '200':
+          description: Policy-visible tools and capabilities.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ToolDefinition'
+  /v1/workspaces/{workspace_id}/tool-runs:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    post:
+      tags:
+      - Tools
+      operationId: createToolRun
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateToolRunRequest'
+      responses:
+        '201':
+          description: Tool proposal accepted, denied, ready, or awaiting approval.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolRun'
+  /v1/workspaces/{workspace_id}/tool-runs/{tool_run_id}:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    - name: tool_run_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+    get:
+      tags:
+      - Tools
+      operationId: getToolRun
+      responses:
+        '200':
+          description: Tool run state.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolRun'
+  /v1/workspaces/{workspace_id}/approvals:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    get:
+      tags:
+      - Approvals
+      operationId: listApprovals
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Approval requests visible to the principal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalPage'
+  /v1/workspaces/{workspace_id}/approvals/{approval_id}/decisions:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    - name: approval_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+    post:
+      tags:
+      - Approvals
+      operationId: decideApproval
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalDecisionRequest'
+      responses:
+        '200':
+          description: Approval decision recorded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Approval'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /v1/workspaces/{workspace_id}/audit-events:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    get:
+      tags:
+      - Audit
+      operationId: listAuditEvents
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      - name: action
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Redacted append-only audit events.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditEventPage'
+  /v1/workspaces/{workspace_id}/evaluation-runs:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    post:
+      tags:
+      - Evaluations
+      operationId: createEvaluationRun
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEvaluationRunRequest'
+      responses:
+        '202':
+          description: Evaluation run accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationRun'
+  /v1/workspaces/{workspace_id}/evaluation-runs/{run_id}:
+    parameters:
+    - $ref: '#/components/parameters/WorkspaceId'
+    - name: run_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+    get:
+      tags:
+      - Evaluations
+      operationId: getEvaluationRun
+      responses:
+        '200':
+          description: Evaluation run and summary.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationRun'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    WorkspaceId:
+      name: workspace_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+    DocumentId:
+      name: document_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+    ConversationId:
+      name: conversation_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      schema:
+        type: string
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 25
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 200
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Authentication required or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    NotFound:
+      description: Resource not found or not visible to this principal.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    Conflict:
+      description: State or idempotency conflict.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    PreconditionFailed:
+      description: ETag/version precondition failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    PayloadTooLarge:
+      description: Upload exceeds configured limit.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    ServiceUnavailable:
+      description: Required dependency unavailable.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+  schemas:
+    Uuid:
+      type: string
+      format: uuid
+    Timestamp:
+      type: string
+      format: date-time
+    HealthResponse:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          enum:
+          - ok
+          - degraded
+          - unavailable
+        checks:
+          type: object
+          additionalProperties:
+            type: string
+    ErrorEnvelope:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          - request_id
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            request_id:
+              $ref: '#/components/schemas/Uuid'
+            details:
+              type: object
+              additionalProperties: true
+    Principal:
+      type: object
+      required:
+      - id
+      - email
+      - workspaces
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        email:
+          type: string
+          format: email
+        display_name:
+          type:
+          - string
+          - 'null'
+        workspaces:
+          type: array
+          items:
+            type: object
+            required:
+            - workspace_id
+            - role
+            properties:
+              workspace_id:
+                $ref: '#/components/schemas/Uuid'
+              role:
+                $ref: '#/components/schemas/WorkspaceRole'
+    WorkspaceRole:
+      type: string
+      enum:
+      - OWNER
+      - ADMIN
+      - CURATOR
+      - MEMBER
+      - AUDITOR
+    Sensitivity:
+      type: string
+      enum:
+      - PUBLIC
+      - INTERNAL
+      - CONFIDENTIAL
+      - HIGHLY_CONFIDENTIAL
+      - REGULATED
+      - PROHIBITED
+    Workspace:
+      type: object
+      required:
+      - id
+      - name
+      - created_at
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        name:
+          type: string
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+    CreateWorkspaceRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+    WorkspacePage:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Workspace'
+        next_cursor:
+          type:
+          - string
+          - 'null'
+    Project:
+      type: object
+      required:
+      - id
+      - workspace_id
+      - name
+      - created_at
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        workspace_id:
+          $ref: '#/components/schemas/Uuid'
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+    CreateProjectRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 160
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 2000
+    ProjectPage:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+        next_cursor:
+          type:
+          - string
+          - 'null'
+    CreateUploadRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - filename
+      - declared_mime_type
+      - size_bytes
+      - checksum_sha256
+      properties:
+        project_id:
+          oneOf:
+          - $ref: '#/components/schemas/Uuid'
+          - type: 'null'
+        filename:
+          type: string
+          minLength: 1
+          maxLength: 255
+        declared_mime_type:
+          type: string
+        size_bytes:
+          type: integer
+          minimum: 1
+        checksum_sha256:
+          type: string
+          pattern: ^[a-fA-F0-9]{64}$
+        sensitivity:
+          $ref: '#/components/schemas/Sensitivity'
+    UploadTarget:
+      type: object
+      required:
+      - upload_id
+      - method
+      - url
+      - expires_at
+      - required_headers
+      properties:
+        upload_id:
+          $ref: '#/components/schemas/Uuid'
+        method:
+          type: string
+          enum:
+          - PUT
+          - POST
+        url:
+          type: string
+          format: uri
+        expires_at:
+          $ref: '#/components/schemas/Timestamp'
+        required_headers:
+          type: object
+          additionalProperties:
+            type: string
+    CompleteUploadRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - checksum_sha256
+      properties:
+        checksum_sha256:
+          type: string
+          pattern: ^[a-fA-F0-9]{64}$
+    DocumentVersionStatus:
+      type: string
+      enum:
+      - PENDING_UPLOAD
+      - UPLOADED
+      - QUARANTINED
+      - INGESTING
+      - READY
+      - FAILED
+      - SUPERSEDED
+      - DELETED
+    Document:
+      type: object
+      required:
+      - id
+      - workspace_id
+      - title
+      - sensitivity
+      - created_at
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        workspace_id:
+          $ref: '#/components/schemas/Uuid'
+        project_id:
+          oneOf:
+          - $ref: '#/components/schemas/Uuid'
+          - type: 'null'
+        title:
+          type: string
+        sensitivity:
+          $ref: '#/components/schemas/Sensitivity'
+        current_version:
+          oneOf:
+          - $ref: '#/components/schemas/DocumentVersion'
+          - type: 'null'
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+    DocumentVersion:
+      type: object
+      required:
+      - id
+      - document_id
+      - version_number
+      - status
+      - created_at
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        document_id:
+          $ref: '#/components/schemas/Uuid'
+        version_number:
+          type: integer
+          minimum: 1
+        status:
+          $ref: '#/components/schemas/DocumentVersionStatus'
+        is_current:
+          type: boolean
+        checksum_sha256:
+          type: string
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+    DocumentPage:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+        next_cursor:
+          type:
+          - string
+          - 'null'
+    IngestionJob:
+      type: object
+      required:
+      - id
+      - document_version_id
+      - status
+      - attempt
+      - created_at
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        document_version_id:
+          $ref: '#/components/schemas/Uuid'
+        status:
+          type: string
+          enum:
+          - QUEUED
+          - RUNNING
+          - RETRY_WAIT
+          - SUCCEEDED
+          - FAILED_FINAL
+          - CANCELLED
+        stage:
+          type:
+          - string
+          - 'null'
+        attempt:
+          type: integer
+          minimum: 0
+        error_code:
+          type:
+          - string
+          - 'null'
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+        updated_at:
+          $ref: '#/components/schemas/Timestamp'
+    RetrievalQuery:
+      type: object
+      additionalProperties: false
+      required:
+      - query
+      properties:
+        query:
+          type: string
+          minLength: 1
+          maxLength: 10000
+        project_id:
+          oneOf:
+          - $ref: '#/components/schemas/Uuid'
+          - type: 'null'
+        source_ids:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/Uuid'
+        history_mode:
+          type: string
+          enum:
+          - CURRENT_ONLY
+          - INCLUDE_HISTORY
+          default: CURRENT_ONLY
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 50
+          default: 10
+        include_debug:
+          type: boolean
+          default: false
+    RetrievalResult:
+      type: object
+      required:
+      - rank
+      - chunk_id
+      - document_id
+      - document_version_id
+      - source_id
+      - locator
+      - text
+      - scores
+      properties:
+        rank:
+          type: integer
+          minimum: 1
+        chunk_id:
+          $ref: '#/components/schemas/Uuid'
+        document_id:
+          $ref: '#/components/schemas/Uuid'
+        document_version_id:
+          $ref: '#/components/schemas/Uuid'
+        source_id:
+          $ref: '#/components/schemas/Uuid'
+        source_title:
+          type: string
+        locator:
+          $ref: '#/components/schemas/SourceLocator'
+        text:
+          type: string
+        scores:
+          type: object
+          required:
+          - fused
+          properties:
+            lexical:
+              type:
+              - number
+              - 'null'
+            vector:
+              type:
+              - number
+              - 'null'
+            fused:
+              type: number
+    RetrievalResponse:
+      type: object
+      required:
+      - trace_id
+      - configuration_version
+      - results
+      - latency_ms
+      properties:
+        trace_id:
+          $ref: '#/components/schemas/Uuid'
+        configuration_version:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RetrievalResult'
+        latency_ms:
+          type: integer
+          minimum: 0
+    SourceLocator:
+      type: object
+      additionalProperties: true
+      properties:
+        page:
+          type:
+          - integer
+          - 'null'
+        section:
+          type:
+          - string
+          - 'null'
+        paragraph:
+          type:
+          - integer
+          - 'null'
+        start_char:
+          type:
+          - integer
+          - 'null'
+        end_char:
+          type:
+          - integer
+          - 'null'
+    Conversation:
+      type: object
+      required:
+      - id
+      - workspace_id
+      - mode
+      - created_at
+      - updated_at
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        workspace_id:
+          $ref: '#/components/schemas/Uuid'
+        project_id:
+          oneOf:
+          - $ref: '#/components/schemas/Uuid'
+          - type: 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        mode:
+          type: string
+          enum:
+          - ASK
+          - RESEARCH
+          - ANALYZE
+          - PLAN
+          - EXECUTE
+          - LEARN
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+        updated_at:
+          $ref: '#/components/schemas/Timestamp'
+    CreateConversationRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        project_id:
+          oneOf:
+          - $ref: '#/components/schemas/Uuid'
+          - type: 'null'
+        title:
+          type:
+          - string
+          - 'null'
+          maxLength: 200
+        mode:
+          type: string
+          enum:
+          - ASK
+          - RESEARCH
+          - ANALYZE
+          - PLAN
+          - EXECUTE
+          - LEARN
+          default: ASK
+    ConversationPage:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Conversation'
+        next_cursor:
+          type:
+          - string
+          - 'null'
+    CreateMessageRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - content
+      properties:
+        content:
+          type: string
+          minLength: 1
+          maxLength: 200000
+        mode:
+          type: string
+          enum:
+          - ASK
+          - RESEARCH
+          - ANALYZE
+          - PLAN
+          - EXECUTE
+          - LEARN
+        retrieval:
+          type: object
+          additionalProperties: false
+          properties:
+            enabled:
+              type: boolean
+              default: true
+            source_ids:
+              type: array
+              items:
+                $ref: '#/components/schemas/Uuid'
+    ModelRun:
+      type: object
+      required:
+      - id
+      - conversation_id
+      - user_message_id
+      - status
+      - created_at
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        conversation_id:
+          $ref: '#/components/schemas/Uuid'
+        user_message_id:
+          $ref: '#/components/schemas/Uuid'
+        assistant_message_id:
+          oneOf:
+          - $ref: '#/components/schemas/Uuid'
+          - type: 'null'
+        status:
+          type: string
+          enum:
+          - CREATED
+          - STREAMING
+          - COMPLETED
+          - CANCELLED
+          - FAILED
+          - INTERRUPTED
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+    CreateFeedbackRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - category
+      properties:
+        category:
+          type: string
+          enum:
+          - POSITIVE
+          - NEGATIVE
+          - INCORRECT
+          - INCOMPLETE
+          - CITATION_ISSUE
+          - STYLE_ISSUE
+          - UNSAFE
+        correction:
+          type:
+          - string
+          - 'null'
+          maxLength: 50000
+        notes:
+          type:
+          - string
+          - 'null'
+          maxLength: 10000
+    Feedback:
+      type: object
+      required:
+      - id
+      - message_id
+      - category
+      - created_at
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        message_id:
+          $ref: '#/components/schemas/Uuid'
+        category:
+          type: string
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+    Memory:
+      type: object
+      required:
+      - id
+      - type
+      - status
+      - scope
+      - sensitivity
+      - statement
+      - version
+      - created_at
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        type:
+          type: string
+          enum:
+          - PREFERENCE
+          - PROFILE_FACT
+          - PROJECT_FACT
+          - RELATIONSHIP
+          - DECISION
+          - COMMITMENT
+          - TERMINOLOGY
+          - PROCEDURE
+          - CORRECTION
+          - TEMPORARY_STATE
+          - HYPOTHESIS
+        status:
+          type: string
+          enum:
+          - CANDIDATE
+          - APPROVED
+          - REJECTED
+          - SUPERSEDED
+          - EXPIRED
+          - DELETED
+        scope:
+          type: object
+          additionalProperties: false
+          properties:
+            user_id:
+              oneOf:
+              - $ref: '#/components/schemas/Uuid'
+              - type: 'null'
+            project_id:
+              oneOf:
+              - $ref: '#/components/schemas/Uuid'
+              - type: 'null'
+        sensitivity:
+          $ref: '#/components/schemas/Sensitivity'
+        statement:
+          type: string
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        version:
+          type: integer
+          minimum: 1
+        source_message_id:
+          oneOf:
+          - $ref: '#/components/schemas/Uuid'
+          - type: 'null'
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+    MemoryPage:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Memory'
+        next_cursor:
+          type:
+          - string
+          - 'null'
+    ApproveMemoryRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - statement
+      - sensitivity
+      properties:
+        statement:
+          type: string
+          minLength: 1
+          maxLength: 10000
+        sensitivity:
+          $ref: '#/components/schemas/Sensitivity'
+        project_id:
+          oneOf:
+          - $ref: '#/components/schemas/Uuid'
+          - type: 'null'
+        expires_at:
+          oneOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+    UpdateMemoryRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - statement
+      properties:
+        statement:
+          type: string
+          minLength: 1
+          maxLength: 10000
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    ToolDefinition:
+      type: object
+      required:
+      - name
+      - version
+      - risk_class
+      - side_effects
+      - input_schema
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        description:
+          type: string
+        risk_class:
+          type: string
+          enum:
+          - READ_ONLY
+          - REVERSIBLE_WRITE
+          - CONSEQUENTIAL_WRITE
+          - PROHIBITED
+        side_effects:
+          type: boolean
+        input_schema:
+          type: object
+          additionalProperties: true
+    CreateToolRunRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - tool_name
+      - tool_version
+      - input
+      properties:
+        tool_name:
+          type: string
+        tool_version:
+          type: string
+        input:
+          type: object
+          additionalProperties: true
+        conversation_id:
+          oneOf:
+          - $ref: '#/components/schemas/Uuid'
+          - type: 'null'
+    ToolRun:
+      type: object
+      required:
+      - id
+      - tool_name
+      - tool_version
+      - status
+      - input_hash
+      - created_at
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        tool_name:
+          type: string
+        tool_version:
+          type: string
+        status:
+          type: string
+          enum:
+          - PROPOSED
+          - POLICY_DENIED
+          - APPROVAL_PENDING
+          - READY
+          - EXECUTING
+          - SUCCEEDED
+          - FAILED_RETRYABLE
+          - FAILED_FINAL
+          - UNKNOWN_EXTERNAL_STATE
+        input_hash:
+          type: string
+        approval_id:
+          oneOf:
+          - $ref: '#/components/schemas/Uuid'
+          - type: 'null'
+        external_reference:
+          type:
+          - string
+          - 'null'
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+    Approval:
+      type: object
+      required:
+      - id
+      - tool_run_id
+      - status
+      - input_hash
+      - expires_at
+      - created_at
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        tool_run_id:
+          $ref: '#/components/schemas/Uuid'
+        status:
+          type: string
+          enum:
+          - PENDING
+          - APPROVED
+          - REJECTED
+          - EXPIRED
+          - CANCELLED
+          - CONSUMED
+          - REVOKED
+        summary:
+          type: string
+        input_hash:
+          type: string
+        expires_at:
+          $ref: '#/components/schemas/Timestamp'
+        decided_at:
+          oneOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+    ApprovalPage:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Approval'
+        next_cursor:
+          type:
+          - string
+          - 'null'
+    ApprovalDecisionRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - decision
+      properties:
+        decision:
+          type: string
+          enum:
+          - APPROVE
+          - REJECT
+        reason:
+          type:
+          - string
+          - 'null'
+          maxLength: 2000
+    AuditEvent:
+      type: object
+      required:
+      - id
+      - workspace_id
+      - action
+      - outcome
+      - occurred_at
+      - request_id
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        workspace_id:
+          $ref: '#/components/schemas/Uuid'
+        actor_id:
+          oneOf:
+          - $ref: '#/components/schemas/Uuid'
+          - type: 'null'
+        action:
+          type: string
+        resource_type:
+          type:
+          - string
+          - 'null'
+        resource_id:
+          oneOf:
+          - $ref: '#/components/schemas/Uuid'
+          - type: 'null'
+        outcome:
+          type: string
+        reason_code:
+          type:
+          - string
+          - 'null'
+        occurred_at:
+          $ref: '#/components/schemas/Timestamp'
+        request_id:
+          $ref: '#/components/schemas/Uuid'
+    AuditEventPage:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEvent'
+        next_cursor:
+          type:
+          - string
+          - 'null'
+    CreateEvaluationRunRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - suite_name
+      - suite_version
+      properties:
+        suite_name:
+          type: string
+        suite_version:
+          type: string
+        candidate_configuration:
+          type: object
+          additionalProperties: true
+    EvaluationRun:
+      type: object
+      required:
+      - id
+      - suite_name
+      - suite_version
+      - status
+      - created_at
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        suite_name:
+          type: string
+        suite_version:
+          type: string
+        status:
+          type: string
+          enum:
+          - QUEUED
+          - RUNNING
+          - PASSED
+          - FAILED
+          - CANCELLED
+        summary:
+          type: object
+          additionalProperties: true
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+    OperationAccepted:
+      type: object
+      required:
+      - operation_id
+      - status
+      properties:
+        operation_id:
+          $ref: '#/components/schemas/Uuid'
+        status:
+          type: string
+          enum:
+          - ACCEPTED

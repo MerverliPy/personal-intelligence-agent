@@ -1,0 +1,33 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "plan",
+  "share": "disabled",
+  "snapshot": true,
+  "autoupdate": "notify",
+  "permission": {
+    "edit": "ask",
+    "webfetch": "allow",
+    "websearch": "allow",
+    "task": "allow",
+    "skill": "allow",
+    "bash": {
+      "*": "ask",
+      "pwd": "allow",
+      "ls *": "allow",
+      "find *": "allow",
+      "grep *": "allow",
+      "rg *": "allow",
+      "git status*": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "git show*": "allow",
+      "git branch*": "allow",
+      "git commit *": "ask",
+      "git push *": "deny",
+      "rm -rf *": "deny",
+      "docker compose down -v*": "ask",
+      "terraform apply*": "deny",
+      "terraform destroy*": "deny"
+    }
+  }
+}
