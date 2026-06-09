@@ -18,20 +18,20 @@ Build a controlled AI system that can retrieve trusted knowledge, maintain appro
 
 ## Authoritative documents
 
-| File | Purpose |
-|---|---|
-| `docs/00_PRODUCT_REQUIREMENTS.md` | Product requirements document |
-| `docs/01_SYSTEM_REQUIREMENTS.md` | Functional and nonfunctional system requirements |
-| `docs/02_ARCHITECTURE.md` | Target architecture and key decisions |
-| `docs/03_DATA_MODEL.md` | Domain model, lifecycle, and retention rules |
-| `docs/04_API_ARCHITECTURE.md` | API conventions and endpoint design |
-| `docs/05_SECURITY_GOVERNANCE.md` | Security, privacy, approvals, and threat controls |
-| `docs/06_PHASED_IMPLEMENTATION_PLAN.md` | Human-readable execution plan |
-| `docs/07_TEST_EVALUATION_STRATEGY.md` | Test, evaluation, and release gates |
-| `planning/backlog.yaml` | Machine-readable task graph for OpenCode |
-| `planning/status.yaml` | Execution state; update only after verification |
-| `api/openapi.yaml` | Initial API contract |
-| `db/schema.sql` | Initial PostgreSQL/pgvector schema |
+| File                                    | Purpose                                           |
+| --------------------------------------- | ------------------------------------------------- |
+| `docs/00_PRODUCT_REQUIREMENTS.md`       | Product requirements document                     |
+| `docs/01_SYSTEM_REQUIREMENTS.md`        | Functional and nonfunctional system requirements  |
+| `docs/02_ARCHITECTURE.md`               | Target architecture and key decisions             |
+| `docs/03_DATA_MODEL.md`                 | Domain model, lifecycle, and retention rules      |
+| `docs/04_API_ARCHITECTURE.md`           | API conventions and endpoint design               |
+| `docs/05_SECURITY_GOVERNANCE.md`        | Security, privacy, approvals, and threat controls |
+| `docs/06_PHASED_IMPLEMENTATION_PLAN.md` | Human-readable execution plan                     |
+| `docs/07_TEST_EVALUATION_STRATEGY.md`   | Test, evaluation, and release gates               |
+| `planning/backlog.yaml`                 | Machine-readable task graph for OpenCode          |
+| `planning/status.yaml`                  | Execution state; update only after verification   |
+| `api/openapi.yaml`                      | Initial API contract                              |
+| `db/schema.sql`                         | Initial PostgreSQL/pgvector schema                |
 
 ## Recommended implementation stack
 

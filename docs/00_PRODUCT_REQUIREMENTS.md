@@ -30,6 +30,7 @@ The product closes these gaps while avoiding uncontrolled continual training and
 A single primary owner who needs a private assistant for research, document intelligence, planning, decision support, and carefully authorized execution.
 
 Needs:
+
 - rapid answers grounded in personal and approved sources;
 - transparent sources and assumptions;
 - project-specific context;
@@ -48,16 +49,16 @@ The MVP remains single-owner in product experience but the data and authorizatio
 
 ## 4. Goals
 
-| ID | Goal | Success signal |
-|---|---|---|
-| G-001 | Produce source-grounded answers from approved documents | At least 90% citation validity on the curated MVP evaluation set |
-| G-002 | Preserve workspace and project isolation | Zero cross-tenant retrieval or object-access failures in security tests |
-| G-003 | Make uncertainty and evidence visible | Every retrieved factual answer exposes citations and answer confidence metadata |
-| G-004 | Capture corrections and feedback | Feedback is linked to the exact message, model run, retrieval trace, and source set |
-| G-005 | Support controlled persistent memory | Every durable memory is typed, source-linked, visible, editable, and deletable |
-| G-006 | Execute tools only within policy | Consequential actions require explicit approval and are idempotent and audited |
-| G-007 | Improve without uncontrolled self-modification | Every promoted change passes portable regression gates and can be rolled back |
-| G-008 | Remain provider-portable | Core domain logic depends on internal interfaces, not provider-specific SDK types |
+| ID    | Goal                                                    | Success signal                                                                      |
+| ----- | ------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| G-001 | Produce source-grounded answers from approved documents | At least 90% citation validity on the curated MVP evaluation set                    |
+| G-002 | Preserve workspace and project isolation                | Zero cross-tenant retrieval or object-access failures in security tests             |
+| G-003 | Make uncertainty and evidence visible                   | Every retrieved factual answer exposes citations and answer confidence metadata     |
+| G-004 | Capture corrections and feedback                        | Feedback is linked to the exact message, model run, retrieval trace, and source set |
+| G-005 | Support controlled persistent memory                    | Every durable memory is typed, source-linked, visible, editable, and deletable      |
+| G-006 | Execute tools only within policy                        | Consequential actions require explicit approval and are idempotent and audited      |
+| G-007 | Improve without uncontrolled self-modification          | Every promoted change passes portable regression gates and can be rolled back       |
+| G-008 | Remain provider-portable                                | Core domain logic depends on internal interfaces, not provider-specific SDK types   |
 
 ## 5. Non-goals
 
@@ -85,14 +86,14 @@ The initial program MUST NOT attempt:
 
 ## 7. Product modes
 
-| Mode | User intent | Minimum system behavior |
-|---|---|---|
-| Ask | Direct question | Answer from current context and approved knowledge; identify uncertainty |
-| Research | Multi-source investigation | Search, compare, rank sources, and produce a cited synthesis |
-| Analyze | Evaluate supplied evidence or data | Separate observations, assumptions, methods, findings, and limitations |
-| Plan | Define work | Produce objectives, dependencies, steps, risks, and completion criteria |
-| Execute | Perform authorized work | Apply policy, request approval where required, execute idempotently, and audit |
-| Learn | Improve future performance | Create candidate memory, evaluation, prompt, retrieval, or workflow changes; never silently promote consequential changes |
+| Mode     | User intent                        | Minimum system behavior                                                                                                   |
+| -------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Ask      | Direct question                    | Answer from current context and approved knowledge; identify uncertainty                                                  |
+| Research | Multi-source investigation         | Search, compare, rank sources, and produce a cited synthesis                                                              |
+| Analyze  | Evaluate supplied evidence or data | Separate observations, assumptions, methods, findings, and limitations                                                    |
+| Plan     | Define work                        | Produce objectives, dependencies, steps, risks, and completion criteria                                                   |
+| Execute  | Perform authorized work            | Apply policy, request approval where required, execute idempotently, and audit                                            |
+| Learn    | Improve future performance         | Create candidate memory, evaluation, prompt, retrieval, or workflow changes; never silently promote consequential changes |
 
 ## 8. Core user journeys
 

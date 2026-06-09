@@ -7,6 +7,7 @@ subtask: true
 Read @planning/status.yaml, @planning/backlog.yaml, and available records under `planning/runs/`.
 
 Return a compact status report with:
+
 - phase completion;
 - verified tasks;
 - blocked or failed tasks;

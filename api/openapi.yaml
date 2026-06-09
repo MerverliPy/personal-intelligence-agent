@@ -2,23 +2,24 @@ openapi: 3.1.0
 info:
   title: Personal Intelligence and Action Engine API
   version: 0.1.0
-  description: Initial contract for authenticated workspaces, knowledge, conversations, memory, tools, approvals, audit, and
+  description:
+    Initial contract for authenticated workspaces, knowledge, conversations, memory, tools, approvals, audit, and
     evaluations.
 servers:
-- url: /
+  - url: /
 security:
-- bearerAuth: []
+  - bearerAuth: []
 tags:
-- name: Identity
-- name: Workspaces
-- name: Documents
-- name: Retrieval
-- name: Conversations
-- name: Memory
-- name: Tools
-- name: Approvals
-- name: Audit
-- name: Evaluations
+  - name: Identity
+  - name: Workspaces
+  - name: Documents
+  - name: Retrieval
+  - name: Conversations
+  - name: Memory
+  - name: Tools
+  - name: Approvals
+  - name: Audit
+  - name: Evaluations
 paths:
   /health/live:
     get:
@@ -47,7 +48,7 @@ paths:
   /v1/me:
     get:
       tags:
-      - Identity
+        - Identity
       operationId: getCurrentPrincipal
       responses:
         '200':
@@ -61,11 +62,11 @@ paths:
   /v1/workspaces:
     get:
       tags:
-      - Workspaces
+        - Workspaces
       operationId: listWorkspaces
       parameters:
-      - $ref: '#/components/parameters/Cursor'
-      - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
       responses:
         '200':
           description: Authorized workspaces.
@@ -75,10 +76,10 @@ paths:
                 $ref: '#/components/schemas/WorkspacePage'
     post:
       tags:
-      - Workspaces
+        - Workspaces
       operationId: createWorkspace
       parameters:
-      - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
@@ -96,10 +97,10 @@ paths:
           $ref: '#/components/responses/Conflict'
   /v1/workspaces/{workspace_id}:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/WorkspaceId'
     get:
       tags:
-      - Workspaces
+        - Workspaces
       operationId: getWorkspace
       responses:
         '200':
@@ -112,14 +113,14 @@ paths:
           $ref: '#/components/responses/NotFound'
   /v1/workspaces/{workspace_id}/projects:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/WorkspaceId'
     get:
       tags:
-      - Workspaces
+        - Workspaces
       operationId: listProjects
       parameters:
-      - $ref: '#/components/parameters/Cursor'
-      - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
       responses:
         '200':
           description: Authorized projects.
@@ -129,10 +130,10 @@ paths:
                 $ref: '#/components/schemas/ProjectPage'
     post:
       tags:
-      - Workspaces
+        - Workspaces
       operationId: createProject
       parameters:
-      - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
@@ -148,13 +149,13 @@ paths:
                 $ref: '#/components/schemas/Project'
   /v1/workspaces/{workspace_id}/uploads:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/WorkspaceId'
     post:
       tags:
-      - Documents
+        - Documents
       operationId: createUpload
       parameters:
-      - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
@@ -172,18 +173,18 @@ paths:
           $ref: '#/components/responses/PayloadTooLarge'
   /v1/workspaces/{workspace_id}/uploads/{upload_id}/complete:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
-    - name: upload_id
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/Uuid'
+      - $ref: '#/components/parameters/WorkspaceId'
+      - name: upload_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Uuid'
     post:
       tags:
-      - Documents
+        - Documents
       operationId: completeUpload
       parameters:
-      - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
@@ -201,22 +202,22 @@ paths:
           $ref: '#/components/responses/Conflict'
   /v1/workspaces/{workspace_id}/documents:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/WorkspaceId'
     get:
       tags:
-      - Documents
+        - Documents
       operationId: listDocuments
       parameters:
-      - $ref: '#/components/parameters/Cursor'
-      - $ref: '#/components/parameters/Limit'
-      - name: project_id
-        in: query
-        schema:
-          $ref: '#/components/schemas/Uuid'
-      - name: status
-        in: query
-        schema:
-          $ref: '#/components/schemas/DocumentVersionStatus'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+        - name: project_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/Uuid'
+        - name: status
+          in: query
+          schema:
+            $ref: '#/components/schemas/DocumentVersionStatus'
       responses:
         '200':
           description: Documents.
@@ -226,11 +227,11 @@ paths:
                 $ref: '#/components/schemas/DocumentPage'
   /v1/workspaces/{workspace_id}/documents/{document_id}:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
-    - $ref: '#/components/parameters/DocumentId'
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/DocumentId'
     get:
       tags:
-      - Documents
+        - Documents
       operationId: getDocument
       responses:
         '200':
@@ -243,10 +244,10 @@ paths:
           $ref: '#/components/responses/NotFound'
     delete:
       tags:
-      - Documents
+        - Documents
       operationId: deleteDocument
       parameters:
-      - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IdempotencyKey'
       responses:
         '202':
           description: Deletion workflow accepted.
@@ -258,14 +259,14 @@ paths:
           $ref: '#/components/responses/NotFound'
   /v1/workspaces/{workspace_id}/documents/{document_id}/ingestion-jobs:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
-    - $ref: '#/components/parameters/DocumentId'
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/DocumentId'
     post:
       tags:
-      - Documents
+        - Documents
       operationId: createIngestionJob
       parameters:
-      - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IdempotencyKey'
       responses:
         '202':
           description: Ingestion/retry accepted.
@@ -275,15 +276,15 @@ paths:
                 $ref: '#/components/schemas/IngestionJob'
   /v1/workspaces/{workspace_id}/ingestion-jobs/{job_id}:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
-    - name: job_id
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/Uuid'
+      - $ref: '#/components/parameters/WorkspaceId'
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Uuid'
     get:
       tags:
-      - Documents
+        - Documents
       operationId: getIngestionJob
       responses:
         '200':
@@ -296,10 +297,10 @@ paths:
           $ref: '#/components/responses/NotFound'
   /v1/workspaces/{workspace_id}/retrieval/query:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/WorkspaceId'
     post:
       tags:
-      - Retrieval
+        - Retrieval
       operationId: queryKnowledge
       requestBody:
         required: true
@@ -316,15 +317,15 @@ paths:
                 $ref: '#/components/schemas/RetrievalResponse'
   /v1/workspaces/{workspace_id}/retrieval/traces/{trace_id}:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
-    - name: trace_id
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/Uuid'
+      - $ref: '#/components/parameters/WorkspaceId'
+      - name: trace_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Uuid'
     get:
       tags:
-      - Retrieval
+        - Retrieval
       operationId: getRetrievalTrace
       responses:
         '200':
@@ -337,14 +338,14 @@ paths:
           $ref: '#/components/responses/NotFound'
   /v1/workspaces/{workspace_id}/conversations:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/WorkspaceId'
     get:
       tags:
-      - Conversations
+        - Conversations
       operationId: listConversations
       parameters:
-      - $ref: '#/components/parameters/Cursor'
-      - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
       responses:
         '200':
           description: Conversations.
@@ -354,10 +355,10 @@ paths:
                 $ref: '#/components/schemas/ConversationPage'
     post:
       tags:
-      - Conversations
+        - Conversations
       operationId: createConversation
       parameters:
-      - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
@@ -373,11 +374,11 @@ paths:
                 $ref: '#/components/schemas/Conversation'
   /v1/workspaces/{workspace_id}/conversations/{conversation_id}:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
-    - $ref: '#/components/parameters/ConversationId'
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ConversationId'
     get:
       tags:
-      - Conversations
+        - Conversations
       operationId: getConversation
       responses:
         '200':
@@ -390,14 +391,14 @@ paths:
           $ref: '#/components/responses/NotFound'
   /v1/workspaces/{workspace_id}/conversations/{conversation_id}/messages:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
-    - $ref: '#/components/parameters/ConversationId'
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ConversationId'
     post:
       tags:
-      - Conversations
+        - Conversations
       operationId: createConversationMessage
       parameters:
-      - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
@@ -413,23 +414,23 @@ paths:
                 $ref: '#/components/schemas/ModelRun'
   /v1/workspaces/{workspace_id}/conversations/{conversation_id}/events:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
-    - $ref: '#/components/parameters/ConversationId'
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ConversationId'
     get:
       tags:
-      - Conversations
+        - Conversations
       operationId: streamConversationEvents
       parameters:
-      - name: run_id
-        in: query
-        required: true
-        schema:
-          $ref: '#/components/schemas/Uuid'
-      - name: Last-Event-ID
-        in: header
-        required: false
-        schema:
-          type: string
+        - name: run_id
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+        - name: Last-Event-ID
+          in: header
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: Server-Sent Event stream.
@@ -439,18 +440,18 @@ paths:
                 type: string
   /v1/workspaces/{workspace_id}/messages/{message_id}/feedback:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
-    - name: message_id
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/Uuid'
+      - $ref: '#/components/parameters/WorkspaceId'
+      - name: message_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Uuid'
     post:
       tags:
-      - Conversations
+        - Conversations
       operationId: createMessageFeedback
       parameters:
-      - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
@@ -466,14 +467,14 @@ paths:
                 $ref: '#/components/schemas/Feedback'
   /v1/workspaces/{workspace_id}/memories:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/WorkspaceId'
     get:
       tags:
-      - Memory
+        - Memory
       operationId: listMemories
       parameters:
-      - $ref: '#/components/parameters/Cursor'
-      - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
       responses:
         '200':
           description: Approved and historical memories visible to the principal.
@@ -483,10 +484,10 @@ paths:
                 $ref: '#/components/schemas/MemoryPage'
   /v1/workspaces/{workspace_id}/memory-candidates:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/WorkspaceId'
     get:
       tags:
-      - Memory
+        - Memory
       operationId: listMemoryCandidates
       responses:
         '200':
@@ -497,18 +498,18 @@ paths:
                 $ref: '#/components/schemas/MemoryPage'
   /v1/workspaces/{workspace_id}/memory-candidates/{candidate_id}/approve:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
-    - name: candidate_id
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/Uuid'
+      - $ref: '#/components/parameters/WorkspaceId'
+      - name: candidate_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Uuid'
     post:
       tags:
-      - Memory
+        - Memory
       operationId: approveMemoryCandidate
       parameters:
-      - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
@@ -524,18 +525,18 @@ paths:
                 $ref: '#/components/schemas/Memory'
   /v1/workspaces/{workspace_id}/memory-candidates/{candidate_id}/reject:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
-    - name: candidate_id
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/Uuid'
+      - $ref: '#/components/parameters/WorkspaceId'
+      - name: candidate_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Uuid'
     post:
       tags:
-      - Memory
+        - Memory
       operationId: rejectMemoryCandidate
       parameters:
-      - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IdempotencyKey'
       responses:
         '200':
           description: Candidate rejected.
@@ -545,18 +546,18 @@ paths:
                 $ref: '#/components/schemas/Memory'
   /v1/workspaces/{workspace_id}/memories/{memory_id}:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
-    - name: memory_id
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/Uuid'
+      - $ref: '#/components/parameters/WorkspaceId'
+      - name: memory_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Uuid'
     patch:
       tags:
-      - Memory
+        - Memory
       operationId: updateMemory
       parameters:
-      - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IfMatch'
       requestBody:
         required: true
         content:
@@ -574,10 +575,10 @@ paths:
           $ref: '#/components/responses/PreconditionFailed'
     delete:
       tags:
-      - Memory
+        - Memory
       operationId: deleteMemory
       parameters:
-      - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IdempotencyKey'
       responses:
         '202':
           description: Memory deletion accepted.
@@ -587,10 +588,10 @@ paths:
                 $ref: '#/components/schemas/OperationAccepted'
   /v1/workspaces/{workspace_id}/tools:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/WorkspaceId'
     get:
       tags:
-      - Tools
+        - Tools
       operationId: listTools
       responses:
         '200':
@@ -603,13 +604,13 @@ paths:
                   $ref: '#/components/schemas/ToolDefinition'
   /v1/workspaces/{workspace_id}/tool-runs:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/WorkspaceId'
     post:
       tags:
-      - Tools
+        - Tools
       operationId: createToolRun
       parameters:
-      - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
@@ -625,15 +626,15 @@ paths:
                 $ref: '#/components/schemas/ToolRun'
   /v1/workspaces/{workspace_id}/tool-runs/{tool_run_id}:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
-    - name: tool_run_id
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/Uuid'
+      - $ref: '#/components/parameters/WorkspaceId'
+      - name: tool_run_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Uuid'
     get:
       tags:
-      - Tools
+        - Tools
       operationId: getToolRun
       responses:
         '200':
@@ -644,14 +645,14 @@ paths:
                 $ref: '#/components/schemas/ToolRun'
   /v1/workspaces/{workspace_id}/approvals:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/WorkspaceId'
     get:
       tags:
-      - Approvals
+        - Approvals
       operationId: listApprovals
       parameters:
-      - $ref: '#/components/parameters/Cursor'
-      - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
       responses:
         '200':
           description: Approval requests visible to the principal.
@@ -661,18 +662,18 @@ paths:
                 $ref: '#/components/schemas/ApprovalPage'
   /v1/workspaces/{workspace_id}/approvals/{approval_id}/decisions:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
-    - name: approval_id
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/Uuid'
+      - $ref: '#/components/parameters/WorkspaceId'
+      - name: approval_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Uuid'
     post:
       tags:
-      - Approvals
+        - Approvals
       operationId: decideApproval
       parameters:
-      - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
@@ -690,18 +691,18 @@ paths:
           $ref: '#/components/responses/Conflict'
   /v1/workspaces/{workspace_id}/audit-events:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/WorkspaceId'
     get:
       tags:
-      - Audit
+        - Audit
       operationId: listAuditEvents
       parameters:
-      - $ref: '#/components/parameters/Cursor'
-      - $ref: '#/components/parameters/Limit'
-      - name: action
-        in: query
-        schema:
-          type: string
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+        - name: action
+          in: query
+          schema:
+            type: string
       responses:
         '200':
           description: Redacted append-only audit events.
@@ -711,13 +712,13 @@ paths:
                 $ref: '#/components/schemas/AuditEventPage'
   /v1/workspaces/{workspace_id}/evaluation-runs:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/WorkspaceId'
     post:
       tags:
-      - Evaluations
+        - Evaluations
       operationId: createEvaluationRun
       parameters:
-      - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
@@ -733,15 +734,15 @@ paths:
                 $ref: '#/components/schemas/EvaluationRun'
   /v1/workspaces/{workspace_id}/evaluation-runs/{run_id}:
     parameters:
-    - $ref: '#/components/parameters/WorkspaceId'
-    - name: run_id
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/Uuid'
+      - $ref: '#/components/parameters/WorkspaceId'
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Uuid'
     get:
       tags:
-      - Evaluations
+        - Evaluations
       operationId: getEvaluationRun
       responses:
         '200':
@@ -851,14 +852,14 @@ components:
     HealthResponse:
       type: object
       required:
-      - status
+        - status
       properties:
         status:
           type: string
           enum:
-          - ok
-          - degraded
-          - unavailable
+            - ok
+            - degraded
+            - unavailable
         checks:
           type: object
           additionalProperties:
@@ -866,14 +867,14 @@ components:
     ErrorEnvelope:
       type: object
       required:
-      - error
+        - error
       properties:
         error:
           type: object
           required:
-          - code
-          - message
-          - request_id
+            - code
+            - message
+            - request_id
           properties:
             code:
               type: string
@@ -887,9 +888,9 @@ components:
     Principal:
       type: object
       required:
-      - id
-      - email
-      - workspaces
+        - id
+        - email
+        - workspaces
       properties:
         id:
           $ref: '#/components/schemas/Uuid'
@@ -898,15 +899,15 @@ components:
           format: email
         display_name:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
         workspaces:
           type: array
           items:
             type: object
             required:
-            - workspace_id
-            - role
+              - workspace_id
+              - role
             properties:
               workspace_id:
                 $ref: '#/components/schemas/Uuid'
@@ -915,26 +916,26 @@ components:
     WorkspaceRole:
       type: string
       enum:
-      - OWNER
-      - ADMIN
-      - CURATOR
-      - MEMBER
-      - AUDITOR
+        - OWNER
+        - ADMIN
+        - CURATOR
+        - MEMBER
+        - AUDITOR
     Sensitivity:
       type: string
       enum:
-      - PUBLIC
-      - INTERNAL
-      - CONFIDENTIAL
-      - HIGHLY_CONFIDENTIAL
-      - REGULATED
-      - PROHIBITED
+        - PUBLIC
+        - INTERNAL
+        - CONFIDENTIAL
+        - HIGHLY_CONFIDENTIAL
+        - REGULATED
+        - PROHIBITED
     Workspace:
       type: object
       required:
-      - id
-      - name
-      - created_at
+        - id
+        - name
+        - created_at
       properties:
         id:
           $ref: '#/components/schemas/Uuid'
@@ -946,7 +947,7 @@ components:
       type: object
       additionalProperties: false
       required:
-      - name
+        - name
       properties:
         name:
           type: string
@@ -955,7 +956,7 @@ components:
     WorkspacePage:
       type: object
       required:
-      - items
+        - items
       properties:
         items:
           type: array
@@ -963,15 +964,15 @@ components:
             $ref: '#/components/schemas/Workspace'
         next_cursor:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
     Project:
       type: object
       required:
-      - id
-      - workspace_id
-      - name
-      - created_at
+        - id
+        - workspace_id
+        - name
+        - created_at
       properties:
         id:
           $ref: '#/components/schemas/Uuid'
@@ -981,15 +982,15 @@ components:
           type: string
         description:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
         created_at:
           $ref: '#/components/schemas/Timestamp'
     CreateProjectRequest:
       type: object
       additionalProperties: false
       required:
-      - name
+        - name
       properties:
         name:
           type: string
@@ -997,13 +998,13 @@ components:
           maxLength: 160
         description:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
           maxLength: 2000
     ProjectPage:
       type: object
       required:
-      - items
+        - items
       properties:
         items:
           type: array
@@ -1011,21 +1012,21 @@ components:
             $ref: '#/components/schemas/Project'
         next_cursor:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
     CreateUploadRequest:
       type: object
       additionalProperties: false
       required:
-      - filename
-      - declared_mime_type
-      - size_bytes
-      - checksum_sha256
+        - filename
+        - declared_mime_type
+        - size_bytes
+        - checksum_sha256
       properties:
         project_id:
           oneOf:
-          - $ref: '#/components/schemas/Uuid'
-          - type: 'null'
+            - $ref: '#/components/schemas/Uuid'
+            - type: 'null'
         filename:
           type: string
           minLength: 1
@@ -1043,19 +1044,19 @@ components:
     UploadTarget:
       type: object
       required:
-      - upload_id
-      - method
-      - url
-      - expires_at
-      - required_headers
+        - upload_id
+        - method
+        - url
+        - expires_at
+        - required_headers
       properties:
         upload_id:
           $ref: '#/components/schemas/Uuid'
         method:
           type: string
           enum:
-          - PUT
-          - POST
+            - PUT
+            - POST
         url:
           type: string
           format: uri
@@ -1069,7 +1070,7 @@ components:
       type: object
       additionalProperties: false
       required:
-      - checksum_sha256
+        - checksum_sha256
       properties:
         checksum_sha256:
           type: string
@@ -1077,22 +1078,22 @@ components:
     DocumentVersionStatus:
       type: string
       enum:
-      - PENDING_UPLOAD
-      - UPLOADED
-      - QUARANTINED
-      - INGESTING
-      - READY
-      - FAILED
-      - SUPERSEDED
-      - DELETED
+        - PENDING_UPLOAD
+        - UPLOADED
+        - QUARANTINED
+        - INGESTING
+        - READY
+        - FAILED
+        - SUPERSEDED
+        - DELETED
     Document:
       type: object
       required:
-      - id
-      - workspace_id
-      - title
-      - sensitivity
-      - created_at
+        - id
+        - workspace_id
+        - title
+        - sensitivity
+        - created_at
       properties:
         id:
           $ref: '#/components/schemas/Uuid'
@@ -1100,26 +1101,26 @@ components:
           $ref: '#/components/schemas/Uuid'
         project_id:
           oneOf:
-          - $ref: '#/components/schemas/Uuid'
-          - type: 'null'
+            - $ref: '#/components/schemas/Uuid'
+            - type: 'null'
         title:
           type: string
         sensitivity:
           $ref: '#/components/schemas/Sensitivity'
         current_version:
           oneOf:
-          - $ref: '#/components/schemas/DocumentVersion'
-          - type: 'null'
+            - $ref: '#/components/schemas/DocumentVersion'
+            - type: 'null'
         created_at:
           $ref: '#/components/schemas/Timestamp'
     DocumentVersion:
       type: object
       required:
-      - id
-      - document_id
-      - version_number
-      - status
-      - created_at
+        - id
+        - document_id
+        - version_number
+        - status
+        - created_at
       properties:
         id:
           $ref: '#/components/schemas/Uuid'
@@ -1139,7 +1140,7 @@ components:
     DocumentPage:
       type: object
       required:
-      - items
+        - items
       properties:
         items:
           type: array
@@ -1147,16 +1148,16 @@ components:
             $ref: '#/components/schemas/Document'
         next_cursor:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
     IngestionJob:
       type: object
       required:
-      - id
-      - document_version_id
-      - status
-      - attempt
-      - created_at
+        - id
+        - document_version_id
+        - status
+        - attempt
+        - created_at
       properties:
         id:
           $ref: '#/components/schemas/Uuid'
@@ -1165,23 +1166,23 @@ components:
         status:
           type: string
           enum:
-          - QUEUED
-          - RUNNING
-          - RETRY_WAIT
-          - SUCCEEDED
-          - FAILED_FINAL
-          - CANCELLED
+            - QUEUED
+            - RUNNING
+            - RETRY_WAIT
+            - SUCCEEDED
+            - FAILED_FINAL
+            - CANCELLED
         stage:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
         attempt:
           type: integer
           minimum: 0
         error_code:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
         created_at:
           $ref: '#/components/schemas/Timestamp'
         updated_at:
@@ -1190,7 +1191,7 @@ components:
       type: object
       additionalProperties: false
       required:
-      - query
+        - query
       properties:
         query:
           type: string
@@ -1198,8 +1199,8 @@ components:
           maxLength: 10000
         project_id:
           oneOf:
-          - $ref: '#/components/schemas/Uuid'
-          - type: 'null'
+            - $ref: '#/components/schemas/Uuid'
+            - type: 'null'
         source_ids:
           type: array
           maxItems: 100
@@ -1208,8 +1209,8 @@ components:
         history_mode:
           type: string
           enum:
-          - CURRENT_ONLY
-          - INCLUDE_HISTORY
+            - CURRENT_ONLY
+            - INCLUDE_HISTORY
           default: CURRENT_ONLY
         limit:
           type: integer
@@ -1222,14 +1223,14 @@ components:
     RetrievalResult:
       type: object
       required:
-      - rank
-      - chunk_id
-      - document_id
-      - document_version_id
-      - source_id
-      - locator
-      - text
-      - scores
+        - rank
+        - chunk_id
+        - document_id
+        - document_version_id
+        - source_id
+        - locator
+        - text
+        - scores
       properties:
         rank:
           type: integer
@@ -1251,25 +1252,25 @@ components:
         scores:
           type: object
           required:
-          - fused
+            - fused
           properties:
             lexical:
               type:
-              - number
-              - 'null'
+                - number
+                - 'null'
             vector:
               type:
-              - number
-              - 'null'
+                - number
+                - 'null'
             fused:
               type: number
     RetrievalResponse:
       type: object
       required:
-      - trace_id
-      - configuration_version
-      - results
-      - latency_ms
+        - trace_id
+        - configuration_version
+        - results
+        - latency_ms
       properties:
         trace_id:
           $ref: '#/components/schemas/Uuid'
@@ -1288,32 +1289,32 @@ components:
       properties:
         page:
           type:
-          - integer
-          - 'null'
+            - integer
+            - 'null'
         section:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
         paragraph:
           type:
-          - integer
-          - 'null'
+            - integer
+            - 'null'
         start_char:
           type:
-          - integer
-          - 'null'
+            - integer
+            - 'null'
         end_char:
           type:
-          - integer
-          - 'null'
+            - integer
+            - 'null'
     Conversation:
       type: object
       required:
-      - id
-      - workspace_id
-      - mode
-      - created_at
-      - updated_at
+        - id
+        - workspace_id
+        - mode
+        - created_at
+        - updated_at
       properties:
         id:
           $ref: '#/components/schemas/Uuid'
@@ -1321,21 +1322,21 @@ components:
           $ref: '#/components/schemas/Uuid'
         project_id:
           oneOf:
-          - $ref: '#/components/schemas/Uuid'
-          - type: 'null'
+            - $ref: '#/components/schemas/Uuid'
+            - type: 'null'
         title:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
         mode:
           type: string
           enum:
-          - ASK
-          - RESEARCH
-          - ANALYZE
-          - PLAN
-          - EXECUTE
-          - LEARN
+            - ASK
+            - RESEARCH
+            - ANALYZE
+            - PLAN
+            - EXECUTE
+            - LEARN
         created_at:
           $ref: '#/components/schemas/Timestamp'
         updated_at:
@@ -1346,27 +1347,27 @@ components:
       properties:
         project_id:
           oneOf:
-          - $ref: '#/components/schemas/Uuid'
-          - type: 'null'
+            - $ref: '#/components/schemas/Uuid'
+            - type: 'null'
         title:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
           maxLength: 200
         mode:
           type: string
           enum:
-          - ASK
-          - RESEARCH
-          - ANALYZE
-          - PLAN
-          - EXECUTE
-          - LEARN
+            - ASK
+            - RESEARCH
+            - ANALYZE
+            - PLAN
+            - EXECUTE
+            - LEARN
           default: ASK
     ConversationPage:
       type: object
       required:
-      - items
+        - items
       properties:
         items:
           type: array
@@ -1374,13 +1375,13 @@ components:
             $ref: '#/components/schemas/Conversation'
         next_cursor:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
     CreateMessageRequest:
       type: object
       additionalProperties: false
       required:
-      - content
+        - content
       properties:
         content:
           type: string
@@ -1389,12 +1390,12 @@ components:
         mode:
           type: string
           enum:
-          - ASK
-          - RESEARCH
-          - ANALYZE
-          - PLAN
-          - EXECUTE
-          - LEARN
+            - ASK
+            - RESEARCH
+            - ANALYZE
+            - PLAN
+            - EXECUTE
+            - LEARN
         retrieval:
           type: object
           additionalProperties: false
@@ -1409,11 +1410,11 @@ components:
     ModelRun:
       type: object
       required:
-      - id
-      - conversation_id
-      - user_message_id
-      - status
-      - created_at
+        - id
+        - conversation_id
+        - user_message_id
+        - status
+        - created_at
       properties:
         id:
           $ref: '#/components/schemas/Uuid'
@@ -1423,52 +1424,52 @@ components:
           $ref: '#/components/schemas/Uuid'
         assistant_message_id:
           oneOf:
-          - $ref: '#/components/schemas/Uuid'
-          - type: 'null'
+            - $ref: '#/components/schemas/Uuid'
+            - type: 'null'
         status:
           type: string
           enum:
-          - CREATED
-          - STREAMING
-          - COMPLETED
-          - CANCELLED
-          - FAILED
-          - INTERRUPTED
+            - CREATED
+            - STREAMING
+            - COMPLETED
+            - CANCELLED
+            - FAILED
+            - INTERRUPTED
         created_at:
           $ref: '#/components/schemas/Timestamp'
     CreateFeedbackRequest:
       type: object
       additionalProperties: false
       required:
-      - category
+        - category
       properties:
         category:
           type: string
           enum:
-          - POSITIVE
-          - NEGATIVE
-          - INCORRECT
-          - INCOMPLETE
-          - CITATION_ISSUE
-          - STYLE_ISSUE
-          - UNSAFE
+            - POSITIVE
+            - NEGATIVE
+            - INCORRECT
+            - INCOMPLETE
+            - CITATION_ISSUE
+            - STYLE_ISSUE
+            - UNSAFE
         correction:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
           maxLength: 50000
         notes:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
           maxLength: 10000
     Feedback:
       type: object
       required:
-      - id
-      - message_id
-      - category
-      - created_at
+        - id
+        - message_id
+        - category
+        - created_at
       properties:
         id:
           $ref: '#/components/schemas/Uuid'
@@ -1481,52 +1482,52 @@ components:
     Memory:
       type: object
       required:
-      - id
-      - type
-      - status
-      - scope
-      - sensitivity
-      - statement
-      - version
-      - created_at
+        - id
+        - type
+        - status
+        - scope
+        - sensitivity
+        - statement
+        - version
+        - created_at
       properties:
         id:
           $ref: '#/components/schemas/Uuid'
         type:
           type: string
           enum:
-          - PREFERENCE
-          - PROFILE_FACT
-          - PROJECT_FACT
-          - RELATIONSHIP
-          - DECISION
-          - COMMITMENT
-          - TERMINOLOGY
-          - PROCEDURE
-          - CORRECTION
-          - TEMPORARY_STATE
-          - HYPOTHESIS
+            - PREFERENCE
+            - PROFILE_FACT
+            - PROJECT_FACT
+            - RELATIONSHIP
+            - DECISION
+            - COMMITMENT
+            - TERMINOLOGY
+            - PROCEDURE
+            - CORRECTION
+            - TEMPORARY_STATE
+            - HYPOTHESIS
         status:
           type: string
           enum:
-          - CANDIDATE
-          - APPROVED
-          - REJECTED
-          - SUPERSEDED
-          - EXPIRED
-          - DELETED
+            - CANDIDATE
+            - APPROVED
+            - REJECTED
+            - SUPERSEDED
+            - EXPIRED
+            - DELETED
         scope:
           type: object
           additionalProperties: false
           properties:
             user_id:
               oneOf:
-              - $ref: '#/components/schemas/Uuid'
-              - type: 'null'
+                - $ref: '#/components/schemas/Uuid'
+                - type: 'null'
             project_id:
               oneOf:
-              - $ref: '#/components/schemas/Uuid'
-              - type: 'null'
+                - $ref: '#/components/schemas/Uuid'
+                - type: 'null'
         sensitivity:
           $ref: '#/components/schemas/Sensitivity'
         statement:
@@ -1540,14 +1541,14 @@ components:
           minimum: 1
         source_message_id:
           oneOf:
-          - $ref: '#/components/schemas/Uuid'
-          - type: 'null'
+            - $ref: '#/components/schemas/Uuid'
+            - type: 'null'
         created_at:
           $ref: '#/components/schemas/Timestamp'
     MemoryPage:
       type: object
       required:
-      - items
+        - items
       properties:
         items:
           type: array
@@ -1555,14 +1556,14 @@ components:
             $ref: '#/components/schemas/Memory'
         next_cursor:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
     ApproveMemoryRequest:
       type: object
       additionalProperties: false
       required:
-      - statement
-      - sensitivity
+        - statement
+        - sensitivity
       properties:
         statement:
           type: string
@@ -1572,17 +1573,17 @@ components:
           $ref: '#/components/schemas/Sensitivity'
         project_id:
           oneOf:
-          - $ref: '#/components/schemas/Uuid'
-          - type: 'null'
+            - $ref: '#/components/schemas/Uuid'
+            - type: 'null'
         expires_at:
           oneOf:
-          - $ref: '#/components/schemas/Timestamp'
-          - type: 'null'
+            - $ref: '#/components/schemas/Timestamp'
+            - type: 'null'
     UpdateMemoryRequest:
       type: object
       additionalProperties: false
       required:
-      - statement
+        - statement
       properties:
         statement:
           type: string
@@ -1595,11 +1596,11 @@ components:
     ToolDefinition:
       type: object
       required:
-      - name
-      - version
-      - risk_class
-      - side_effects
-      - input_schema
+        - name
+        - version
+        - risk_class
+        - side_effects
+        - input_schema
       properties:
         name:
           type: string
@@ -1610,10 +1611,10 @@ components:
         risk_class:
           type: string
           enum:
-          - READ_ONLY
-          - REVERSIBLE_WRITE
-          - CONSEQUENTIAL_WRITE
-          - PROHIBITED
+            - READ_ONLY
+            - REVERSIBLE_WRITE
+            - CONSEQUENTIAL_WRITE
+            - PROHIBITED
         side_effects:
           type: boolean
         input_schema:
@@ -1623,9 +1624,9 @@ components:
       type: object
       additionalProperties: false
       required:
-      - tool_name
-      - tool_version
-      - input
+        - tool_name
+        - tool_version
+        - input
       properties:
         tool_name:
           type: string
@@ -1636,17 +1637,17 @@ components:
           additionalProperties: true
         conversation_id:
           oneOf:
-          - $ref: '#/components/schemas/Uuid'
-          - type: 'null'
+            - $ref: '#/components/schemas/Uuid'
+            - type: 'null'
     ToolRun:
       type: object
       required:
-      - id
-      - tool_name
-      - tool_version
-      - status
-      - input_hash
-      - created_at
+        - id
+        - tool_name
+        - tool_version
+        - status
+        - input_hash
+        - created_at
       properties:
         id:
           $ref: '#/components/schemas/Uuid'
@@ -1657,36 +1658,36 @@ components:
         status:
           type: string
           enum:
-          - PROPOSED
-          - POLICY_DENIED
-          - APPROVAL_PENDING
-          - READY
-          - EXECUTING
-          - SUCCEEDED
-          - FAILED_RETRYABLE
-          - FAILED_FINAL
-          - UNKNOWN_EXTERNAL_STATE
+            - PROPOSED
+            - POLICY_DENIED
+            - APPROVAL_PENDING
+            - READY
+            - EXECUTING
+            - SUCCEEDED
+            - FAILED_RETRYABLE
+            - FAILED_FINAL
+            - UNKNOWN_EXTERNAL_STATE
         input_hash:
           type: string
         approval_id:
           oneOf:
-          - $ref: '#/components/schemas/Uuid'
-          - type: 'null'
+            - $ref: '#/components/schemas/Uuid'
+            - type: 'null'
         external_reference:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
         created_at:
           $ref: '#/components/schemas/Timestamp'
     Approval:
       type: object
       required:
-      - id
-      - tool_run_id
-      - status
-      - input_hash
-      - expires_at
-      - created_at
+        - id
+        - tool_run_id
+        - status
+        - input_hash
+        - expires_at
+        - created_at
       properties:
         id:
           $ref: '#/components/schemas/Uuid'
@@ -1695,13 +1696,13 @@ components:
         status:
           type: string
           enum:
-          - PENDING
-          - APPROVED
-          - REJECTED
-          - EXPIRED
-          - CANCELLED
-          - CONSUMED
-          - REVOKED
+            - PENDING
+            - APPROVED
+            - REJECTED
+            - EXPIRED
+            - CANCELLED
+            - CONSUMED
+            - REVOKED
         summary:
           type: string
         input_hash:
@@ -1710,14 +1711,14 @@ components:
           $ref: '#/components/schemas/Timestamp'
         decided_at:
           oneOf:
-          - $ref: '#/components/schemas/Timestamp'
-          - type: 'null'
+            - $ref: '#/components/schemas/Timestamp'
+            - type: 'null'
         created_at:
           $ref: '#/components/schemas/Timestamp'
     ApprovalPage:
       type: object
       required:
-      - items
+        - items
       properties:
         items:
           type: array
@@ -1725,33 +1726,33 @@ components:
             $ref: '#/components/schemas/Approval'
         next_cursor:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
     ApprovalDecisionRequest:
       type: object
       additionalProperties: false
       required:
-      - decision
+        - decision
       properties:
         decision:
           type: string
           enum:
-          - APPROVE
-          - REJECT
+            - APPROVE
+            - REJECT
         reason:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
           maxLength: 2000
     AuditEvent:
       type: object
       required:
-      - id
-      - workspace_id
-      - action
-      - outcome
-      - occurred_at
-      - request_id
+        - id
+        - workspace_id
+        - action
+        - outcome
+        - occurred_at
+        - request_id
       properties:
         id:
           $ref: '#/components/schemas/Uuid'
@@ -1759,24 +1760,24 @@ components:
           $ref: '#/components/schemas/Uuid'
         actor_id:
           oneOf:
-          - $ref: '#/components/schemas/Uuid'
-          - type: 'null'
+            - $ref: '#/components/schemas/Uuid'
+            - type: 'null'
         action:
           type: string
         resource_type:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
         resource_id:
           oneOf:
-          - $ref: '#/components/schemas/Uuid'
-          - type: 'null'
+            - $ref: '#/components/schemas/Uuid'
+            - type: 'null'
         outcome:
           type: string
         reason_code:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
         occurred_at:
           $ref: '#/components/schemas/Timestamp'
         request_id:
@@ -1784,7 +1785,7 @@ components:
     AuditEventPage:
       type: object
       required:
-      - items
+        - items
       properties:
         items:
           type: array
@@ -1792,14 +1793,14 @@ components:
             $ref: '#/components/schemas/AuditEvent'
         next_cursor:
           type:
-          - string
-          - 'null'
+            - string
+            - 'null'
     CreateEvaluationRunRequest:
       type: object
       additionalProperties: false
       required:
-      - suite_name
-      - suite_version
+        - suite_name
+        - suite_version
       properties:
         suite_name:
           type: string
@@ -1811,11 +1812,11 @@ components:
     EvaluationRun:
       type: object
       required:
-      - id
-      - suite_name
-      - suite_version
-      - status
-      - created_at
+        - id
+        - suite_name
+        - suite_version
+        - status
+        - created_at
       properties:
         id:
           $ref: '#/components/schemas/Uuid'
@@ -1826,11 +1827,11 @@ components:
         status:
           type: string
           enum:
-          - QUEUED
-          - RUNNING
-          - PASSED
-          - FAILED
-          - CANCELLED
+            - QUEUED
+            - RUNNING
+            - PASSED
+            - FAILED
+            - CANCELLED
         summary:
           type: object
           additionalProperties: true
@@ -1839,12 +1840,12 @@ components:
     OperationAccepted:
       type: object
       required:
-      - operation_id
-      - status
+        - operation_id
+        - status
       properties:
         operation_id:
           $ref: '#/components/schemas/Uuid'
         status:
           type: string
           enum:
-          - ACCEPTED
+            - ACCEPTED

@@ -22,6 +22,7 @@ metadata:
 ## Stop conditions
 
 Stop as `BLOCKED` when:
+
 - a dependency is incomplete;
 - a specification conflict changes externally visible behavior;
 - a credential or external account is required;

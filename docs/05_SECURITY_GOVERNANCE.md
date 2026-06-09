@@ -30,20 +30,20 @@ Untrusted content may provide facts but never authority.
 
 ## 3. Threat scenarios and controls
 
-| Threat | Required controls |
-|---|---|
-| Cross-tenant object access | Workspace key on records, server-side object authorization, negative tests, optional RLS defense in depth |
-| Prompt injection in documents/web | Delimit retrieved content, immutable system policy, tool filtering outside model, injection tests, no instruction promotion from evidence |
-| Approval bypass | Canonical request hash, exact-input binding, expiry, reauthorization at execution, transactional consume |
-| Duplicate external action | Idempotency key, external reference capture, ambiguous-state reconciliation |
-| Malicious upload | Signed bounded upload, checksum, MIME verification, malware scan, sandbox parsing, archive limits |
-| SSRF/unsafe egress | URL validation, DNS/IP controls, network allowlists, connector isolation, no arbitrary tool-created fetch authority |
-| Secret leakage | Secret manager, redaction, structured logs, provider request minimization, no secrets in prompts |
-| Data exfiltration through model provider | Sensitivity policy, provider eligibility, redaction, private/local path for restricted data, auditable routing |
-| Memory poisoning | Candidate state, provenance, confidence, approval for sensitive/consequential memory, correction and deletion |
-| Knowledge poisoning | Source trust metadata, quarantine, versioning, conflicting-source disclosure, curator controls |
-| Audit tampering | Append-only storage, restricted writer, integrity/retention monitoring, export controls |
-| Unsafe self-modification | Source-controlled prompts/policies, evaluations, human approval, feature flags, rollback |
+| Threat                                   | Required controls                                                                                                                         |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Cross-tenant object access               | Workspace key on records, server-side object authorization, negative tests, optional RLS defense in depth                                 |
+| Prompt injection in documents/web        | Delimit retrieved content, immutable system policy, tool filtering outside model, injection tests, no instruction promotion from evidence |
+| Approval bypass                          | Canonical request hash, exact-input binding, expiry, reauthorization at execution, transactional consume                                  |
+| Duplicate external action                | Idempotency key, external reference capture, ambiguous-state reconciliation                                                               |
+| Malicious upload                         | Signed bounded upload, checksum, MIME verification, malware scan, sandbox parsing, archive limits                                         |
+| SSRF/unsafe egress                       | URL validation, DNS/IP controls, network allowlists, connector isolation, no arbitrary tool-created fetch authority                       |
+| Secret leakage                           | Secret manager, redaction, structured logs, provider request minimization, no secrets in prompts                                          |
+| Data exfiltration through model provider | Sensitivity policy, provider eligibility, redaction, private/local path for restricted data, auditable routing                            |
+| Memory poisoning                         | Candidate state, provenance, confidence, approval for sensitive/consequential memory, correction and deletion                             |
+| Knowledge poisoning                      | Source trust metadata, quarantine, versioning, conflicting-source disclosure, curator controls                                            |
+| Audit tampering                          | Append-only storage, restricted writer, integrity/retention monitoring, export controls                                                   |
+| Unsafe self-modification                 | Source-controlled prompts/policies, evaluations, human approval, feature flags, rollback                                                  |
 
 ## 4. Authorization model
 
@@ -71,19 +71,19 @@ Policy decisions return allow, deny, or approval-required plus a stable reason c
 
 ## 5. Approval matrix
 
-| Operation | Default |
-|---|---|
-| Read authorized documents | Allow |
-| Search approved sources | Allow |
-| Analyze or summarize | Allow |
-| Create internal draft | Allow |
-| Create reversible internal organizational metadata | Allow or configurable |
-| Send external message | Approval required |
-| Create/update external calendar event | Approval required |
-| Delete data | Approval required; show retention effect |
-| Change permissions or connectors | Approval required |
-| Purchase, payment, contract, legal submission | Prohibited initially |
-| Deploy or change production infrastructure | Human-controlled outside agent |
+| Operation                                          | Default                                  |
+| -------------------------------------------------- | ---------------------------------------- |
+| Read authorized documents                          | Allow                                    |
+| Search approved sources                            | Allow                                    |
+| Analyze or summarize                               | Allow                                    |
+| Create internal draft                              | Allow                                    |
+| Create reversible internal organizational metadata | Allow or configurable                    |
+| Send external message                              | Approval required                        |
+| Create/update external calendar event              | Approval required                        |
+| Delete data                                        | Approval required; show retention effect |
+| Change permissions or connectors                   | Approval required                        |
+| Purchase, payment, contract, legal submission      | Prohibited initially                     |
+| Deploy or change production infrastructure         | Human-controlled outside agent           |
 
 ## 6. Prompt-injection controls
 
@@ -129,6 +129,7 @@ The application MUST NOT store plaintext passwords, API keys, OAuth refresh toke
 Log structured metadata, not raw content by default. Sensitive text may appear only in explicitly protected diagnostic storage with access and retention controls.
 
 Audit events include:
+
 - login and session events;
 - membership and permission changes;
 - document upload, quarantine, version, and deletion;

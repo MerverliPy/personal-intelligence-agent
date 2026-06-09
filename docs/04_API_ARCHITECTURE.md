@@ -53,6 +53,7 @@
 ```
 
 Rules:
+
 - `message` is safe for the caller.
 - Internal stack traces, provider payloads, SQL text, secrets, and unauthorized object metadata are never returned.
 - `details` is schema-controlled per error code.

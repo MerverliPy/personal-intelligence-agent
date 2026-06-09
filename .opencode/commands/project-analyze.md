@@ -7,6 +7,7 @@ subtask: true
 Analyze the repository using @AGENTS.md, @planning/status.yaml, @planning/backlog.yaml, and the authoritative documents in @docs/.
 
 Return:
+
 - current implementation state;
 - specification conflicts or missing decisions;
 - dependency graph concerns;

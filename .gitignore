@@ -27,3 +27,7 @@ coverage/
 
 # Debug
 *.log
+
+# CI artifacts
+/ci-output/
+/test-results/

@@ -184,7 +184,8 @@ describe('loadConfig', () => {
             // But never includes the actual secret value
             expect(msg).not.toContain('SuperSecret123');
           }
-        });
+        },
+      );
     });
 
     it('error message names missing secret keys without values', () => {
@@ -206,7 +207,8 @@ describe('loadConfig', () => {
             // Never exposes any value
             expect(msg).not.toContain('SuperSecret');
           }
-        });
+        },
+      );
     });
   });
 

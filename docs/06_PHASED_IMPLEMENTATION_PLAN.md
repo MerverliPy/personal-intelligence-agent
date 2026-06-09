@@ -44,14 +44,14 @@ The independent reviewer runs `/task-review <TASK-ID>`. Only after PASS may stat
 
 ### 2.4 State rules
 
-| State | Meaning |
-|---|---|
-| NOT_STARTED | No implementation attempt |
-| IN_PROGRESS | Active bounded implementation |
-| DONE | Acceptance criteria and verification passed |
-| NO_CHANGE_REQUIRED | Criteria already passed; independent evidence recorded |
-| BLOCKED | Safe progress requires external input or unavailable dependency |
-| FAILED_VERIFICATION | Implementation exists but required checks fail |
+| State               | Meaning                                                         |
+| ------------------- | --------------------------------------------------------------- |
+| NOT_STARTED         | No implementation attempt                                       |
+| IN_PROGRESS         | Active bounded implementation                                   |
+| DONE                | Acceptance criteria and verification passed                     |
+| NO_CHANGE_REQUIRED  | Criteria already passed; independent evidence recorded          |
+| BLOCKED             | Safe progress requires external input or unavailable dependency |
+| FAILED_VERIFICATION | Implementation exists but required checks fail                  |
 
 ## 3. Parallelism policy
 

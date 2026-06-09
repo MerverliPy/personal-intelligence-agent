@@ -13,6 +13,7 @@ permission:
 Analyze architecture without modifying files.
 
 Check:
+
 - consistency among PRD, SRS, architecture, schema, API contract, and backlog;
 - bounded contexts and dependency direction;
 - tenant isolation, provenance, idempotency, and auditability;

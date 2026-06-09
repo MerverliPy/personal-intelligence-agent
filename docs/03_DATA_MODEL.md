@@ -113,6 +113,7 @@ FAILED -> INGESTING (explicit retry)
 ```
 
 Rules:
+
 - Only `READY` versions may become current.
 - At most one current version exists per document.
 - `SUPERSEDED`, `DELETED`, `FAILED`, or `QUARANTINED` versions are excluded from default retrieval.
@@ -156,6 +157,7 @@ APPROVED -> CONSUMED | REVOKED
 ```
 
 Execution is allowed only when:
+
 - approval is `APPROVED` and unexpired;
 - canonical tool name/version and canonical input hash match;
 - current policy still permits execution;

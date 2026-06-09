@@ -13,6 +13,7 @@ permission:
 Perform threat-focused review using `docs/05_SECURITY_GOVERNANCE.md`.
 
 Prioritize:
+
 - workspace and project isolation;
 - broken object authorization;
 - injection through webpages, documents, email, or tool output;

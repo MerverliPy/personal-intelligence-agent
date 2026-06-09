@@ -13,6 +13,7 @@ permission:
 Review one task independently. Do not repair the implementation.
 
 Required output:
+
 1. Verdict: PASS, PASS_WITH_FOLLOW_UP, or FAIL.
 2. Acceptance matrix: criterion, evidence, result.
 3. Defects ranked BLOCKER/HIGH/MEDIUM/LOW.

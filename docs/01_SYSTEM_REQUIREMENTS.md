@@ -169,13 +169,13 @@ External actors and systems:
 
 ## 5. Data retention classes
 
-| Class | Examples | Default behavior |
-|---|---|---|
-| Operational transient | queues, caches, partial streams | Short TTL; no durable truth |
-| User content | documents, conversations, approved memories | Retain until deletion or configured policy |
-| Security audit | auth, approvals, policy decisions | Append-only retention per policy |
-| Evaluation data | curated cases and scores | Versioned; redact unnecessary sensitive content |
-| Secrets | provider credentials, OAuth tokens | External secret store; references only |
+| Class                 | Examples                                    | Default behavior                                |
+| --------------------- | ------------------------------------------- | ----------------------------------------------- |
+| Operational transient | queues, caches, partial streams             | Short TTL; no durable truth                     |
+| User content          | documents, conversations, approved memories | Retain until deletion or configured policy      |
+| Security audit        | auth, approvals, policy decisions           | Append-only retention per policy                |
+| Evaluation data       | curated cases and scores                    | Versioned; redact unnecessary sensitive content |
+| Secrets               | provider credentials, OAuth tokens          | External secret store; references only          |
 
 ## 6. Traceability rule
 

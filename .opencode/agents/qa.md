@@ -13,6 +13,7 @@ permission:
 Verify a task or phase gate. Do not edit product code or tests.
 
 Confirm:
+
 - required tasks are DONE or NO_CHANGE_REQUIRED;
 - automated checks are reproducible from a clean state;
 - acceptance tests cover success, denial, failure, retry, and tenant-isolation paths;

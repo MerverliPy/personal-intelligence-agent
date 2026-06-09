@@ -6,21 +6,21 @@ A modular monolith with independently deployable web, API, and worker processes 
 
 ## 2. Technology baseline
 
-| Concern | Decision |
-|---|---|
-| Language | TypeScript, strict mode |
-| Repository | pnpm workspace monorepo with Turborepo |
-| Web | Next.js App Router |
-| API | Fastify with schema-first request/response validation |
-| Jobs | Durable workflow/job adapter; local implementation may use a development queue, production implementation must support durable retries and visibility |
-| Database | PostgreSQL with pgvector and full-text search |
-| Cache/coordination | Redis |
-| Object storage | S3-compatible abstraction |
-| Auth | OIDC, server-side session or secure token exchange, application RBAC |
-| AI | Provider-neutral gateway; OpenAI Responses API/Agents SDK first adapter |
-| Observability | OpenTelemetry-compatible traces, metrics, logs |
-| Infrastructure | Docker Compose local; Terraform-compatible deployment modules |
-| API contract | OpenAPI 3.1, generated client types, contract tests |
+| Concern            | Decision                                                                                                                                              |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Language           | TypeScript, strict mode                                                                                                                               |
+| Repository         | pnpm workspace monorepo with Turborepo                                                                                                                |
+| Web                | Next.js App Router                                                                                                                                    |
+| API                | Fastify with schema-first request/response validation                                                                                                 |
+| Jobs               | Durable workflow/job adapter; local implementation may use a development queue, production implementation must support durable retries and visibility |
+| Database           | PostgreSQL with pgvector and full-text search                                                                                                         |
+| Cache/coordination | Redis                                                                                                                                                 |
+| Object storage     | S3-compatible abstraction                                                                                                                             |
+| Auth               | OIDC, server-side session or secure token exchange, application RBAC                                                                                  |
+| AI                 | Provider-neutral gateway; OpenAI Responses API/Agents SDK first adapter                                                                               |
+| Observability      | OpenTelemetry-compatible traces, metrics, logs                                                                                                        |
+| Infrastructure     | Docker Compose local; Terraform-compatible deployment modules                                                                                         |
+| API contract       | OpenAPI 3.1, generated client types, contract tests                                                                                                   |
 
 Versions are pinned in Phase P0 after compatibility verification.
 

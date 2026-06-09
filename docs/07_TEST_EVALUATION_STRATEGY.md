@@ -71,6 +71,7 @@ The platform requires both conventional software testing and probabilistic AI ev
 ### Retrieval suite
 
 Metrics:
+
 - recall@5 and recall@10
 - precision@5
 - mean reciprocal rank or nDCG
@@ -80,6 +81,7 @@ Metrics:
 - P50/P95 latency
 
 Initial gate targets for curated MVP corpus:
+
 - recall@10 >= 0.90
 - precision@5 >= 0.70
 - current-version correctness = 1.00
@@ -91,6 +93,7 @@ Thresholds are baselines and must be recalibrated with representative data; secu
 ### Grounded-answer suite
 
 Dimensions:
+
 - answer correctness against reference or rubric
 - claim support by retrieved evidence
 - citation completeness and validity
@@ -100,6 +103,7 @@ Dimensions:
 - verbosity/style separately from factual quality
 
 Initial gates:
+
 - citation validity >= 0.98 overall and 1.00 for security/policy test cases
 - groundedness >= 0.90 on curated set
 - fabricated-source rate = 0
