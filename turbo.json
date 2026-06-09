@@ -20,6 +20,14 @@
     "test": {
       "dependsOn": ["build"],
       "cache": true
+    },
+    "test:integration": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "db:migrate:test": {
+      "dependsOn": ["build"],
+      "cache": false
     }
   }
 }

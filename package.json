@@ -12,7 +12,9 @@
     "format:fix": "prettier --write '**/*.{ts,tsx,json,md,yaml,yml}'",
     "security:secrets": "bash scripts/security/check-secrets.sh",
     "security:dependencies": "bash scripts/security/check-dependencies.sh",
-    "ci:check": "bash scripts/ci/check-all.sh"
+    "ci:check": "bash scripts/ci/check-all.sh",
+    "db:migrate:test": "pnpm --filter @pia/db db:migrate:test",
+    "test:integration": "turbo run test:integration"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

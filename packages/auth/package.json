@@ -2,10 +2,25 @@
   "name": "@pia/auth",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
-    "test:unit": "echo 'auth: no tests yet' && exit 0"
-  }
+    "test:unit": "vitest run"
+  },
+  "dependencies": {
+    "jose": "^5.9.0",
+    "openid-client": "^6.1.0"
+  },
+  "devDependencies": {}
 }

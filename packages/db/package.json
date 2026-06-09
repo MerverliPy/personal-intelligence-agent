@@ -2,10 +2,28 @@
   "name": "@pia/db",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
-    "test:unit": "echo 'db: no tests yet' && exit 0"
+    "test:unit": "echo 'db: unit tests require a running PostgreSQL instance; use test:integration' && exit 0",
+    "test:integration": "vitest run",
+    "db:migrate:test": "vitest run test/migration.test.ts"
+  },
+  "dependencies": {
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.0"
   }
 }

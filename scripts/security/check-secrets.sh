@@ -48,6 +48,7 @@ EXCLUDE_FILES=(
 FILTER_OUT=(
   "packages/config/test/"
   "packages/observability/test/"
+  "packages/db/"
   "docs/development/"
   "scripts/dev/"
 )
