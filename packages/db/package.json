@@ -21,6 +21,7 @@
     "db:migrate:test": "vitest run test/migration.test.ts"
   },
   "dependencies": {
+    "@pia/domain": "workspace:*",
     "pg": "^8.13.0"
   },
   "devDependencies": {

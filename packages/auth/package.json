@@ -19,8 +19,13 @@
     "test:unit": "vitest run"
   },
   "dependencies": {
+    "@pia/db": "workspace:*",
+    "@pia/domain": "workspace:*",
     "jose": "^5.9.0",
-    "openid-client": "^6.1.0"
+    "openid-client": "^6.1.0",
+    "pg": "^8.13.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/pg": "^8.11.0"
+  }
 }

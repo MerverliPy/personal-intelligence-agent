@@ -31,3 +31,13 @@ export {
   type AuthenticatedRequest,
   type AuthResult,
 } from './middleware.js';
+
+export {
+  evaluatePolicy,
+  requireAuthorization,
+  createPoolMembershipProvider,
+  WORKSPACE_PERMISSION_ROLE,
+  type MembershipProvider,
+  type AuthorizedRequest,
+  type RequireAuthorizationOptions,
+} from './rbac.js';

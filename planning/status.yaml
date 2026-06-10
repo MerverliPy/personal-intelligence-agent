@@ -28,6 +28,11 @@ tasks:
   P0-T06: DONE
   P1-T01: DONE
   P1-T02: DONE
+  P1-T03: DONE
+  P1-T04: DONE
+  P1-T05: NOT_STARTED
+  P1-T06: NOT_STARTED
+  P1-T07: NOT_STARTED
 notes:
   - Update task states only after the required review and verification evidence exists.
   - Allowed task states are NOT_STARTED, IN_PROGRESS, DONE, NO_CHANGE_REQUIRED, BLOCKED, FAILED_VERIFICATION.
