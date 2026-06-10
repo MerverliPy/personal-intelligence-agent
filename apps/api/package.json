@@ -7,12 +7,24 @@
     "build": "echo 'api: nothing to build' && exit 0",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
-    "test:unit": "echo 'api: no tests yet' && exit 0",
+    "test:unit": "vitest run",
     "dev": "echo 'api: dev mode not configured' && exit 0"
   },
   "dependencies": {
+    "@fastify/cookie": "^11.0.2",
     "@pia/auth": "workspace:*",
     "@pia/config": "workspace:*",
-    "@pia/observability": "workspace:*"
+    "@pia/contracts": "workspace:*",
+    "@pia/db": "workspace:*",
+    "@pia/jobs": "workspace:*",
+    "@pia/knowledge": "workspace:*",
+    "@pia/observability": "workspace:*",
+    "@pia/storage": "workspace:*",
+    "fastify": "^5.8.5",
+    "fastify-plugin": "^6.0.0",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.0"
   }
 }
