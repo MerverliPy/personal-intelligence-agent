@@ -1101,3 +1101,67 @@ export async function listPendingJobs(pool: Pool, limit?: number): Promise<Inges
     updatedAt: row.updated_at,
   }));
 }
+
+/**
+ * Updates the stage checkpoint on an ingestion job.
+ *
+ * Called after each pipeline stage completes so resumption knows where to
+ * restart after a worker interruption.
+ */
+export async function updateIngestionJobStage(
+  pool: Pool,
+  workspaceId: string,
+  jobId: string,
+  stage: string,
+): Promise<void> {
+  await pool.query(
+    `UPDATE ingestion_jobs
+     SET stage = $3, updated_at = now()
+     WHERE workspace_id = $1 AND id = $2`,
+    [workspaceId, jobId, stage],
+  );
+}
+
+/**
+ * Records an error on an ingestion job without changing its status.
+ *
+ * The caller is responsible for the status transition (RETRY_WAIT or
+ * FAILED_FINAL). This function only persists the diagnostic metadata.
+ */
+export async function updateIngestionJobError(
+  pool: Pool,
+  workspaceId: string,
+  jobId: string,
+  errorCode: string,
+  errorSafeMessage: string,
+): Promise<void> {
+  await pool.query(
+    `UPDATE ingestion_jobs
+     SET error_code = $3,
+         error_safe_message = $4,
+         updated_at = now()
+     WHERE workspace_id = $1 AND id = $2`,
+    [workspaceId, jobId, errorCode, errorSafeMessage],
+  );
+}
+
+/**
+ * Updates the attempt counter and start timestamp on an ingestion job.
+ *
+ * Called at the beginning of a processing attempt.
+ */
+export async function updateIngestionJobAttempt(
+  pool: Pool,
+  workspaceId: string,
+  jobId: string,
+  attempt: number,
+): Promise<void> {
+  await pool.query(
+    `UPDATE ingestion_jobs
+     SET attempt = $3,
+         started_at = coalesce(started_at, now()),
+         updated_at = now()
+     WHERE workspace_id = $1 AND id = $2`,
+    [workspaceId, jobId, attempt],
+  );
+}

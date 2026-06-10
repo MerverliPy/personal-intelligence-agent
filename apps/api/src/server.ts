@@ -1,8 +1,12 @@
 import Fastify from 'fastify';
 import fastifyCookie from '@fastify/cookie';
-import type { OidcConfig } from '@pia/auth';
+import type { Pool } from 'pg';
+import type { OidcConfig, OidcClient, LoginTransactionStore } from '@pia/auth';
+import { InMemoryLoginTransactionStore, createFakeOidcClient } from '@pia/auth';
+import type { AppMode } from '@pia/config';
 import { createErrorEnvelope } from '@pia/contracts';
 import requestIdPlugin from './plugins/request-id.js';
+import correlationPlugin from './plugins/correlation.js';
 import errorHandlerPlugin from './plugins/error-handler.js';
 import authPlugin from './plugins/auth.js';
 import type { AuthPluginOptions } from './plugins/auth.js';
@@ -12,33 +16,59 @@ import securityHeadersPlugin, { csrfPlugin } from './plugins/security.js';
 import healthRoutes from './routes/health.js';
 import workspaceRoutes from './routes/workspaces.js';
 import uploadRoutes from './routes/uploads.js';
+import authRoutes from './routes/auth.js';
 import webShell from './routes/web.js';
+
+/**
+ * Server creation options.
+ */
+export interface CreateServerOptions {
+  oidcConfig: OidcConfig;
+  mode: AppMode;
+  /** OIDC client (production or fake). Defaults to fake client if not provided. */
+  oidcClient?: OidcClient;
+  /** Login transaction store. Defaults to InMemory if not provided. */
+  loginStore?: LoginTransactionStore;
+  /** PostgreSQL pool for identity mapping. Required for production auth routes. */
+  dbPool?: Pool;
+}
 
 /**
  * Creates and configures the Fastify API server.
  *
  * Plugin registration order matters:
  * 1. request-id     — assigns correlation IDs to every request
- * 2. error-handler  — intercepts all errors, returns standard envelope
- * 3. cookie         — parses session cookies
- * 4. auth           — extracts session, attaches req.session
- * 5. workspace-ctx  — resolves workspace membership context
- * 6. idempotency    — handles Idempotency-Key for write operations
- * 7. routes         — health, identity, workspaces, etc.
+ * 2. correlation    — wraps request in AsyncLocalStorage correlation context
+ * 3. error-handler  — intercepts all errors, returns standard envelope
+ * 4. cookie         — parses session cookies
+ * 5. auth           — extracts session, attaches req.session
+ * 6. workspace-ctx  — resolves workspace membership context
+ * 7. idempotency    — handles Idempotency-Key for write operations
+ * 8. routes         — health, identity, workspaces, etc.
  */
-export async function createServer(opts: { oidcConfig: OidcConfig }) {
+export async function createServer(opts: CreateServerOptions) {
+  const {
+    oidcConfig,
+    mode,
+    oidcClient = createFakeOidcClient(oidcConfig),
+    loginStore = new InMemoryLoginTransactionStore(),
+    dbPool,
+  } = opts;
+
   const app = Fastify({
     logger: false, // We use @pia/observability logger instead
     genReqId: () => crypto.randomUUID(),
+    trustProxy: mode === 'production',
   });
 
   // ------------------------------------------------------------------
   // Plugins
   // ------------------------------------------------------------------
   await app.register(requestIdPlugin);
+  await app.register(correlationPlugin);
   await app.register(errorHandlerPlugin);
   await app.register(fastifyCookie);
-  await app.register(authPlugin, { oidcConfig: opts.oidcConfig } satisfies AuthPluginOptions);
+  await app.register(authPlugin, { oidcConfig } satisfies AuthPluginOptions);
   await app.register(workspaceContextPlugin);
   await app.register(idempotencyPlugin);
   await app.register(securityHeadersPlugin);
@@ -50,6 +80,17 @@ export async function createServer(opts: { oidcConfig: OidcConfig }) {
   await app.register(healthRoutes);
   await app.register(workspaceRoutes);
   await app.register(uploadRoutes);
+
+  // Auth routes (login/callback/logout) — only register if DB pool available
+  if (dbPool) {
+    await app.register(authRoutes, {
+      oidcConfig,
+      oidcClient,
+      loginStore,
+      dbPool,
+    });
+  }
+
   await app.register(webShell);
 
   // Add Content-Type for all responses

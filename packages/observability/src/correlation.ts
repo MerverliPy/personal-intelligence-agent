@@ -24,17 +24,41 @@ export function createCorrelationId(): string {
 }
 
 /**
- * Creates a new correlation context with a fresh correlation ID.
+ * Creates a new correlation context.
+ *
+ * @param correlationId - Optional correlation ID. If not provided, a fresh UUID v4 is generated.
+ * @param traceId - Optional distributed trace ID.
+ * @param spanId - Optional span ID for the current operation.
  */
-export function createCorrelationContext(traceId?: string, spanId?: string): CorrelationContext {
+export function createCorrelationContext(
+  correlationIdOrTrace?: string,
+  spanId?: string,
+): CorrelationContext {
+  // Determine if first arg is intended as correlationId or traceId.
+  // We treat the first arg as correlationId when it's a UUID-like string.
+  // Otherwise it's treated as traceId for backward compatibility.
+  let correlationId: string;
+  let traceId: string | undefined;
+  let finalSpanId: string | undefined;
+
+  if (correlationIdOrTrace !== undefined && correlationIdOrTrace.length > 0) {
+    correlationId = correlationIdOrTrace;
+  } else {
+    correlationId = createCorrelationId();
+  }
+
+  if (spanId !== undefined) {
+    finalSpanId = spanId;
+  }
+
   const ctx: CorrelationContext = {
-    correlationId: createCorrelationId(),
+    correlationId,
   };
   if (traceId !== undefined) {
     ctx.traceId = traceId;
   }
-  if (spanId !== undefined) {
-    ctx.spanId = spanId;
+  if (finalSpanId !== undefined) {
+    ctx.spanId = finalSpanId;
   }
   return ctx;
 }

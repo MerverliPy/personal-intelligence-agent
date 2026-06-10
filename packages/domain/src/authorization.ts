@@ -72,13 +72,6 @@ export interface AuthorizationContext {
   /** Optional resource identifier for object-level authorization. */
   resourceId?: string;
 }
-
-/**
- * A single, stable authorization decision.
- *
- * Policy decisions are independent of model output — the application must
- * enforce them without delegation to an LLM or external service.
- */
 export interface AuthorizationDecision {
   /** The outcome. */
   decision: Decision;

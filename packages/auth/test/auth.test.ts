@@ -1,6 +1,11 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { createHash } from 'node:crypto';
 import { FakeOidcProvider } from '../src/fake-oidc-provider.js';
-import { createFakeOidcClient } from '../src/oidc-client.js';
+import {
+  createFakeOidcClient,
+  generateCodeVerifier,
+  computeCodeChallenge,
+} from '../src/oidc-client.js';
 import {
   createSessionToken,
   verifySessionToken,
@@ -9,6 +14,12 @@ import {
   SESSION_COOKIE,
 } from '../src/session.js';
 import { authenticateRequest, type AuthenticatedRequest } from '../src/middleware.js';
+import {
+  InMemoryLoginTransactionStore,
+  generateState,
+  generateNonce,
+  type LoginTransactionData,
+} from '../src/login-store.js';
 import type { OidcConfig } from '../src/types.js';
 
 // ---------------------------------------------------------------------------
@@ -69,11 +80,12 @@ describe('FakeOidcProvider', () => {
   });
 
   it('redirects on authorize', async () => {
+    const challenge = createHash('sha256').update('test-challenge').digest('base64url');
     const authUrl = new URL(`${providerUrl}/authorize`);
     authUrl.searchParams.set('response_type', 'code');
     authUrl.searchParams.set('client_id', 'test-client');
     authUrl.searchParams.set('redirect_uri', 'http://localhost:3000/cb');
-    authUrl.searchParams.set('code_challenge', 'test-challenge');
+    authUrl.searchParams.set('code_challenge', challenge);
     authUrl.searchParams.set('code_challenge_method', 'S256');
     authUrl.searchParams.set('state', 'test-state');
 
@@ -88,12 +100,16 @@ describe('FakeOidcProvider', () => {
   });
 
   it('exchanges code for tokens', async () => {
+    // PKCE: challenge = SHA256(verifier)
+    const verifier = 'pkce-challenge';
+    const challenge = createHash('sha256').update(verifier).digest('base64url');
+
     // Step 1: Get authorization code
     const authUrl = new URL(`${providerUrl}/authorize`);
     authUrl.searchParams.set('response_type', 'code');
     authUrl.searchParams.set('client_id', 'test-client');
     authUrl.searchParams.set('redirect_uri', 'http://localhost:3000/cb');
-    authUrl.searchParams.set('code_challenge', 'pkce-challenge');
+    authUrl.searchParams.set('code_challenge', challenge);
     authUrl.searchParams.set('code_challenge_method', 'S256');
 
     const authRes = await fetch(authUrl.toString(), { redirect: 'manual' });
@@ -108,7 +124,7 @@ describe('FakeOidcProvider', () => {
       redirect_uri: 'http://localhost:3000/cb',
       client_id: 'test-client',
       client_secret: 'test-secret',
-      code_verifier: 'pkce-challenge',
+      code_verifier: verifier,
     });
 
     const tokenRes = await fetch(`${providerUrl}/token`, {
@@ -125,12 +141,15 @@ describe('FakeOidcProvider', () => {
   });
 
   it('returns user info with valid access token', async () => {
+    const uiVerifier = 'ui-challenge';
+    const uiChallenge = createHash('sha256').update(uiVerifier).digest('base64url');
+
     // Get an access token via the full flow
     const authUrl = new URL(`${providerUrl}/authorize`);
     authUrl.searchParams.set('response_type', 'code');
     authUrl.searchParams.set('client_id', 'test-client');
     authUrl.searchParams.set('redirect_uri', 'http://localhost:3000/cb');
-    authUrl.searchParams.set('code_challenge', 'ui-challenge');
+    authUrl.searchParams.set('code_challenge', uiChallenge);
     authUrl.searchParams.set('code_challenge_method', 'S256');
 
     const authRes = await fetch(authUrl.toString(), { redirect: 'manual' });
@@ -142,7 +161,7 @@ describe('FakeOidcProvider', () => {
       redirect_uri: 'http://localhost:3000/cb',
       client_id: 'test-client',
       client_secret: 'test-secret',
-      code_verifier: 'ui-challenge',
+      code_verifier: uiVerifier,
     });
     const tokenRes = await fetch(`${providerUrl}/token`, {
       method: 'POST',
@@ -167,11 +186,14 @@ describe('FakeOidcProvider', () => {
   });
 
   it('rejects double-use authorization code', async () => {
+    const suVerifier = 'single-use';
+    const suChallenge = createHash('sha256').update(suVerifier).digest('base64url');
+
     const authUrl = new URL(`${providerUrl}/authorize`);
     authUrl.searchParams.set('response_type', 'code');
     authUrl.searchParams.set('client_id', 'test-client');
     authUrl.searchParams.set('redirect_uri', 'http://localhost:3000/cb');
-    authUrl.searchParams.set('code_challenge', 'single-use');
+    authUrl.searchParams.set('code_challenge', suChallenge);
     authUrl.searchParams.set('code_challenge_method', 'S256');
 
     const authRes = await fetch(authUrl.toString(), { redirect: 'manual' });
@@ -183,7 +205,7 @@ describe('FakeOidcProvider', () => {
       redirect_uri: 'http://localhost:3000/cb',
       client_id: 'test-client',
       client_secret: 'test-secret',
-      code_verifier: 'single-use',
+      code_verifier: suVerifier,
     });
 
     // First use — succeeds
@@ -474,5 +496,222 @@ describe('end-to-end OIDC auth flow', () => {
 
     const result = await authenticateRequest(req, config);
     expect(result.authenticated).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Login transaction store (server-side state management)
+// ---------------------------------------------------------------------------
+
+describe('InMemoryLoginTransactionStore', () => {
+  const store = new InMemoryLoginTransactionStore();
+  const testData: LoginTransactionData = {
+    codeVerifier: 'test-verifier-abc123',
+    nonce: 'test-nonce-xyz789',
+    redirectUri: 'http://localhost:3000/auth/callback',
+    returnUrl: '/dashboard',
+  };
+
+  it('stores and retrieves a login transaction', async () => {
+    const state = generateState();
+    await store.create(state, testData, 300);
+    const consumed = await store.consume(state);
+    expect(consumed).not.toBeNull();
+    expect(consumed!.codeVerifier).toBe('test-verifier-abc123');
+    expect(consumed!.nonce).toBe('test-nonce-xyz789');
+    expect(consumed!.redirectUri).toBe('http://localhost:3000/auth/callback');
+    expect(consumed!.returnUrl).toBe('/dashboard');
+  });
+
+  it('consumes a transaction exactly once (replay protection)', async () => {
+    const state = generateState();
+    await store.create(state, testData, 300);
+
+    const first = await store.consume(state);
+    expect(first).not.toBeNull();
+
+    const second = await store.consume(state);
+    expect(second).toBeNull();
+  });
+
+  it('returns null for unknown state', async () => {
+    const consumed = await store.consume('nonexistent-state');
+    expect(consumed).toBeNull();
+  });
+
+  it('returns null for expired transactions', async () => {
+    const state = generateState();
+    await store.create(state, testData, 0);
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    const consumed = await store.consume(state);
+    expect(consumed).toBeNull();
+  });
+
+  it('generates unique state values', () => {
+    const state1 = generateState();
+    const state2 = generateState();
+    expect(state1).not.toBe(state2);
+    expect(state1.length).toBe(64);
+    expect(state1).toMatch(/^[0-9a-f]+$/);
+  });
+
+  it('generates unique nonce values', () => {
+    const nonce1 = generateNonce();
+    const nonce2 = generateNonce();
+    expect(nonce1).not.toBe(nonce2);
+    expect(nonce1.length).toBe(64);
+    expect(nonce1).toMatch(/^[0-9a-f]+$/);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// PKCE (Proof Key for Code Exchange)
+// ---------------------------------------------------------------------------
+
+describe('PKCE', () => {
+  it('generateCodeVerifier produces valid verifier', () => {
+    const verifier = generateCodeVerifier();
+    expect(verifier.length).toBeGreaterThanOrEqual(43);
+    expect(verifier).toMatch(/^[A-Za-z0-9\-_]+$/);
+  });
+
+  it('computeCodeChallenge produces valid S256 challenge', () => {
+    const verifier = generateCodeVerifier();
+    const challenge = computeCodeChallenge(verifier);
+    expect(challenge.length).toBe(43);
+    expect(challenge).toMatch(/^[A-Za-z0-9\-_]+$/);
+  });
+
+  it('different verifiers produce different challenges', () => {
+    const v1 = generateCodeVerifier();
+    const v2 = generateCodeVerifier();
+    const c1 = computeCodeChallenge(v1);
+    const c2 = computeCodeChallenge(v2);
+    expect(c1).not.toBe(c2);
+  });
+
+  it('same verifier produces same challenge (deterministic)', () => {
+    const verifier = generateCodeVerifier();
+    const c1 = computeCodeChallenge(verifier);
+    const c2 = computeCodeChallenge(verifier);
+    expect(c1).toBe(c2);
+  });
+
+  it('rejects wrong code verifier in token exchange', async () => {
+    const localProvider = new FakeOidcProvider();
+    const localProviderUrl = await localProvider.start();
+
+    const localConfig: OidcConfig = {
+      issuerUrl: localProviderUrl,
+      clientId: 'test-client',
+      clientSecret: 'test-secret',
+      redirectUri: 'http://localhost:3000/auth/callback',
+      sessionSecret: new TextEncoder().encode('test-session-secret-at-least-32-bytes-long!!'),
+      sessionMaxAgeSeconds: 3600,
+      secureCookies: false,
+    };
+
+    try {
+      const client = createFakeOidcClient(localConfig);
+
+      const authParams = await client.getAuthorizationUrl();
+      const authRes = await fetch(authParams.authorizationUrl, { redirect: 'manual' });
+      const location = new URL(authRes.headers.get('location')!);
+      const code = location.searchParams.get('code')!;
+      const state = location.searchParams.get('state')!;
+
+      const wrongVerifier = generateCodeVerifier();
+      await expect(client.handleCallback(code, state, wrongVerifier)).rejects.toThrow();
+    } finally {
+      await localProvider.stop();
+    }
+  });
+
+  it('rejects authorization code reuse (replay attack)', async () => {
+    const localProvider = new FakeOidcProvider();
+    const localProviderUrl = await localProvider.start();
+
+    const localConfig: OidcConfig = {
+      issuerUrl: localProviderUrl,
+      clientId: 'test-client',
+      clientSecret: 'test-secret',
+      redirectUri: 'http://localhost:3000/auth/callback',
+      sessionSecret: new TextEncoder().encode('test-session-secret-at-least-32-bytes-long!!'),
+      sessionMaxAgeSeconds: 3600,
+      secureCookies: false,
+    };
+
+    try {
+      const client = createFakeOidcClient(localConfig);
+
+      const authParams = await client.getAuthorizationUrl();
+      const authRes = await fetch(authParams.authorizationUrl, { redirect: 'manual' });
+      const location = new URL(authRes.headers.get('location')!);
+      const code = location.searchParams.get('code')!;
+      const state = location.searchParams.get('state')!;
+
+      await client.handleCallback(code, state, authParams.codeVerifier);
+
+      await expect(client.handleCallback(code, state, authParams.codeVerifier)).rejects.toThrow();
+    } finally {
+      await localProvider.stop();
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Redirect URI validation
+// ---------------------------------------------------------------------------
+
+describe('Redirect URI consistency', () => {
+  it('login store preserves and validates redirect URI', async () => {
+    const store = new InMemoryLoginTransactionStore();
+    const state = generateState();
+    const expectedRedirectUri = 'http://localhost:3000/auth/callback';
+
+    await store.create(
+      state,
+      {
+        codeVerifier: generateCodeVerifier(),
+        nonce: generateNonce(),
+        redirectUri: expectedRedirectUri,
+      },
+      300,
+    );
+
+    const consumed = await store.consume(state);
+    expect(consumed).not.toBeNull();
+    expect(consumed!.redirectUri).toBe(expectedRedirectUri);
+  });
+
+  it('different redirect URIs are stored independently', async () => {
+    const store = new InMemoryLoginTransactionStore();
+    const state1 = generateState();
+    const state2 = generateState();
+
+    await store.create(
+      state1,
+      {
+        codeVerifier: generateCodeVerifier(),
+        nonce: generateNonce(),
+        redirectUri: 'http://localhost:3000/auth/callback',
+      },
+      300,
+    );
+
+    await store.create(
+      state2,
+      {
+        codeVerifier: generateCodeVerifier(),
+        nonce: generateNonce(),
+        redirectUri: 'http://app.example.com/auth/callback',
+      },
+      300,
+    );
+
+    const consumed1 = await store.consume(state1);
+    const consumed2 = await store.consume(state2);
+    expect(consumed1!.redirectUri).toBe('http://localhost:3000/auth/callback');
+    expect(consumed2!.redirectUri).toBe('http://app.example.com/auth/callback');
   });
 });

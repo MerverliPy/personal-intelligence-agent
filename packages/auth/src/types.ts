@@ -5,7 +5,7 @@ export interface AuthenticatedPrincipal {
   /** User email. */
   email: string;
   /** Display name from the identity provider. */
-  displayName?: string;
+  displayName: string | undefined;
   /** OIDC issuer URL. */
   issuer: string;
   /** OIDC subject claim. */
@@ -21,7 +21,7 @@ export interface SessionData {
   /** User email. */
   email: string;
   /** Display name. */
-  displayName?: string;
+  displayName: string | undefined;
   /** OIDC issuer. */
   issuer: string;
   /** OIDC subject. */
@@ -60,8 +60,8 @@ export interface AuthorizationParams {
 export interface OidcUserInfo {
   sub: string;
   email: string;
-  email_verified?: boolean;
-  name?: string;
-  preferred_username?: string;
-  picture?: string;
+  email_verified: boolean | undefined;
+  name: string | undefined;
+  preferred_username: string | undefined;
+  picture: string | undefined;
 }

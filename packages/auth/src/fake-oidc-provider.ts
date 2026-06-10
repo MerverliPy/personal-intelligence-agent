@@ -1,5 +1,5 @@
 import { createServer, type Server, type IncomingMessage, type ServerResponse } from 'node:http';
-import { randomBytes } from 'node:crypto';
+import { randomBytes, createHash } from 'node:crypto';
 import { SignJWT, exportJWK, generateKeyPair, importJWK, type JWK } from 'jose';
 import type { OidcUserInfo } from './types.js';
 
@@ -34,7 +34,7 @@ const DEFAULT_USERS: TestUser[] = [
 
 /** PKCE params stored during authorization. */
 interface PendingAuth {
-  codeVerifier: string;
+  codeChallenge: string;
   userSub: string;
   expiresAt: number;
 }
@@ -200,18 +200,12 @@ export class FakeOidcProvider {
       return;
     }
 
-    // Generate a verifier-like value to pair with the challenge
-    // In PKCE S256, the client sends code_challenge = BASE64URL(SHA256(code_verifier))
-    // For testing, we store the challenge itself as the "verifier" and accept it directly
-    // in the token exchange when the challenge == verifier (self-verifying in test)
-    const codeVerifier = codeChallenge;
-
-    // Pick the first user as the authenticated user
+    // Store the actual code challenge for PKCE verification at token exchange.
     const user = this.users[0]!;
     const code = randomBytes(32).toString('hex');
 
     this.pendingAuths.set(code, {
-      codeVerifier,
+      codeChallenge,
       userSub: user.sub,
       expiresAt: Date.now() + 60_000, // 60 seconds
     });
@@ -254,8 +248,15 @@ export class FakeOidcProvider {
       // Clean up pending auth
       this.pendingAuths.delete(code);
 
-      // Accept any verifier for testing (the test client sends the same value as challenge)
-      // In real PKCE, we'd verify BASE64URL(SHA256(code_verifier)) == stored challenge
+      // Verify PKCE: BASE64URL(SHA256(code_verifier)) must equal the challenge
+      const expectedChallenge = createHash('sha256').update(codeVerifier).digest('base64url');
+      if (expectedChallenge !== pending.codeChallenge) {
+        res.writeHead(400);
+        res.end(
+          JSON.stringify({ error: 'invalid_grant', error_description: 'PKCE verification failed' }),
+        );
+        return;
+      }
 
       const user = this.users.find((u) => u.sub === pending.userSub);
       if (!user) {
@@ -337,6 +338,7 @@ export class FakeOidcProvider {
       email_verified: user.email_verified,
       name: user.name,
       preferred_username: user.preferred_username,
+      picture: undefined,
     };
 
     res.writeHead(200, { 'Content-Type': 'application/json' });

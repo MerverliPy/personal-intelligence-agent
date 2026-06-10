@@ -68,6 +68,7 @@ export function loadConfig(): AppConfig {
     server: {
       port: parseInt(raw['PORT'] ?? '3000', 10),
       host: raw['HOST'] ?? '0.0.0.0',
+      publicAppUrl: raw['PUBLIC_APP_URL'] ?? 'http://localhost:3000',
     },
     database: {
       url: redactRequired(raw['DATABASE_URL']),

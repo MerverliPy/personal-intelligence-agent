@@ -1,6 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import type { SessionData, OidcConfig } from './types.js';
 import { SESSION_COOKIE, verifySessionToken } from './session.js';
+import type { RevocationStore } from './session.js';
 import type { OidcClient } from './oidc-client.js';
 
 /** Extended request with authenticated principal. */
@@ -16,10 +17,15 @@ export type AuthResult =
 
 /**
  * Extracts and verifies the session from the request cookie.
+ *
+ * @param req - The incoming HTTP request.
+ * @param config - OIDC configuration.
+ * @param revocationStore - Optional store for session revocation checks.
  */
 export async function authenticateRequest(
   req: IncomingMessage,
   config: OidcConfig,
+  revocationStore?: RevocationStore,
 ): Promise<AuthResult> {
   const cookieHeader = req.headers['cookie'];
   if (!cookieHeader) {
@@ -33,7 +39,7 @@ export async function authenticateRequest(
     return { authenticated: false, reason: 'No session cookie' };
   }
 
-  const session = await verifySessionToken(token, config.sessionSecret);
+  const session = await verifySessionToken(token, config.sessionSecret, revocationStore);
 
   if (!session) {
     return { authenticated: false, reason: 'Invalid or expired session' };

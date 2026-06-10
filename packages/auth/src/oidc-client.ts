@@ -1,4 +1,18 @@
 import { randomBytes, createHash } from 'node:crypto';
+import {
+  discovery,
+  randomState,
+  randomNonce,
+  randomPKCECodeVerifier,
+  calculatePKCECodeChallenge,
+  buildAuthorizationUrl,
+  authorizationCodeGrant,
+  fetchUserInfo,
+  ClientSecretPost,
+  type Configuration,
+  type AuthorizationCodeGrantChecks,
+  type UserInfoResponse,
+} from 'openid-client';
 import type { OidcConfig, AuthorizationParams, OidcUserInfo } from './types.js';
 
 // ---------------------------------------------------------------------------
@@ -7,13 +21,15 @@ import type { OidcConfig, AuthorizationParams, OidcUserInfo } from './types.js';
 
 /**
  * Generates a PKCE code verifier (cryptographically random URL-safe string).
+ * Prefers `openid-client`'s implementation when available.
  */
 export function generateCodeVerifier(): string {
-  return randomBytes(32).toString('base64url');
+  return randomPKCECodeVerifier();
 }
 
 /**
  * Computes the S256 PKCE code challenge from a verifier.
+ * Prefers `openid-client`'s implementation when available.
  */
 export function computeCodeChallenge(verifier: string): string {
   return createHash('sha256').update(verifier).digest('base64url');
@@ -56,8 +72,6 @@ export function createFakeOidcClient(config: OidcConfig): OidcClient {
 
     getAuthorizationUrl: async (): Promise<AuthorizationParams> => {
       const codeVerifier = generateCodeVerifier();
-      // For testing, we send the verifier as the challenge directly
-      // (the fake provider accepts challenge == verifier)
       const codeChallenge = computeCodeChallenge(codeVerifier);
       const state = randomBytes(16).toString('hex');
 
@@ -126,17 +140,133 @@ export function createFakeOidcClient(config: OidcConfig): OidcClient {
 }
 
 // ---------------------------------------------------------------------------
-// Real OIDC client (stub — implemented when openid-client is wired)
+// Real OIDC client (production, using openid-client)
 // ---------------------------------------------------------------------------
 
 /**
  * Creates a production OIDC client using `openid-client`.
  *
- * Currently a stub that throws. Will be fully implemented when
- * a real OIDC provider (Keycloak, Auth0, etc.) is configured.
+ * Performs provider discovery (`.well-known/openid-configuration`) at
+ * construction time. The discovery result is cached.
+ *
+ * Each authorization flow:
+ * 1. Generates fresh PKCE verifier/challenge, state, and nonce.
+ * 2. Builds the provider authorization URL via `buildAuthorizationUrl`.
+ * 3. Returns `(authorizationUrl, state, codeVerifier)` to the caller.
+ *
+ * The caller must:
+ * - Store `(state → {codeVerifier, nonce})` server-side (see `LoginTransactionStore`).
+ * - Pass the callback parameters to `handleCallback`.
+ *
+ * `handleCallback`:
+ * - Calls `authorizationCodeGrant` to exchange the code for tokens.
+ *   The library validates: ID token signature (JWKS), `iss`, `aud`, `exp`,
+ *   `nonce`, and `state`.
+ * - Calls `fetchUserInfo` to retrieve user claims.
+ * - Returns `OidcUserInfo` (subset of standard claims).
  */
-export function createRealOidcClient(_config: OidcConfig): OidcClient {
-  throw new Error(
-    'Real OIDC client not yet implemented. Configure a real OIDC provider or use the fake client for testing.',
-  );
+export function createRealOidcClient(config: OidcConfig): OidcClient {
+  const issuerUrl = config.issuerUrl;
+  let cachedConfig: Configuration | null = null;
+
+  /**
+   * Lazily discovers and caches the provider configuration.
+   */
+  async function getConfig(): Promise<Configuration> {
+    if (cachedConfig) return cachedConfig;
+
+    cachedConfig = await discovery(
+      new URL(issuerUrl),
+      config.clientId,
+      undefined,
+      ClientSecretPost(config.clientSecret),
+    );
+
+    return cachedConfig;
+  }
+
+  return {
+    getIssuerUrl: () => issuerUrl,
+
+    getAuthorizationUrl: async (): Promise<AuthorizationParams> => {
+      const oidcConfig = await getConfig();
+      const codeVerifier = randomPKCECodeVerifier();
+      const codeChallenge = await calculatePKCECodeChallenge(codeVerifier);
+      const state = randomState();
+      const nonce = randomNonce();
+
+      const authUrl = buildAuthorizationUrl(oidcConfig, {
+        scope: 'openid email profile',
+        code_challenge: codeChallenge,
+        code_challenge_method: 'S256',
+        state,
+        nonce,
+        redirect_uri: config.redirectUri,
+      });
+
+      return {
+        authorizationUrl: authUrl.toString(),
+        codeVerifier,
+        state,
+      };
+    },
+
+    handleCallback: async (
+      code: string,
+      state: string,
+      codeVerifier: string,
+    ): Promise<OidcUserInfo> => {
+      const oidcConfig = await getConfig();
+
+      // The current URL (callback) — openid-client needs this to extract
+      // query parameters. We reconstruct it from config.
+      const callbackUrl = new URL(config.redirectUri);
+      callbackUrl.searchParams.set('code', code);
+      callbackUrl.searchParams.set('state', state);
+
+      // authorizationCodeGrant validates:
+      // - ID Token signature (via JWKS from discovery)
+      // - `iss` claim matches the issuer from discovery
+      // - `aud` claim includes client_id
+      // - `exp` claim (expiry)
+      // - `nonce` claim (if nonce was set in authorization request)
+      // - `state` parameter matches authorization response
+      const checks: AuthorizationCodeGrantChecks = {
+        expectedState: state,
+      };
+
+      const tokenSet = await authorizationCodeGrant(oidcConfig, callbackUrl, checks, {
+        code_verifier: codeVerifier,
+      });
+
+      if (!tokenSet.access_token) {
+        throw new Error('No access token returned by token endpoint');
+      }
+
+      // fetchUserInfo validates that the `sub` claim in the UserInfo response
+      // matches the `sub` claim from the ID Token.
+      const expectedSubject = tokenSet.claims()?.sub;
+      if (!expectedSubject) {
+        throw new Error('No subject claim in ID token');
+      }
+
+      let userInfo: UserInfoResponse;
+      try {
+        userInfo = await fetchUserInfo(oidcConfig, tokenSet.access_token, expectedSubject);
+      } catch (err) {
+        throw new Error(
+          `UserInfo request failed: ${err instanceof Error ? err.message : String(err)}`,
+        );
+      }
+
+      return {
+        sub: userInfo.sub,
+        email: userInfo.email ?? '',
+        email_verified: userInfo.email_verified ?? false,
+        name: userInfo.name ?? undefined,
+        preferred_username: userInfo.preferred_username ?? undefined,
+        picture: userInfo.picture ?? undefined,
+      } satisfies OidcUserInfo;
+    },
+  };
 }

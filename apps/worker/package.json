@@ -12,6 +12,9 @@
   },
   "dependencies": {
     "@pia/config": "workspace:*",
+    "@pia/db": "workspace:*",
+    "@pia/jobs": "workspace:*",
+    "@pia/knowledge": "workspace:*",
     "@pia/observability": "workspace:*"
   }
 }

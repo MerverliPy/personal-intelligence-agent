@@ -19,9 +19,13 @@ export {
 export {
   createSessionToken,
   verifySessionToken,
+  revokeSession,
   sessionCookieHeader,
   clearSessionCookieHeader,
+  InMemoryRevocationStore,
   SESSION_COOKIE,
+  type RevocationStore,
+  type VerifiedSessionPayload,
 } from './session.js';
 
 export {
@@ -41,3 +45,15 @@ export {
   type AuthorizedRequest,
   type RequireAuthorizationOptions,
 } from './rbac.js';
+
+export {
+  type LoginTransactionStore,
+  type LoginTransactionData,
+  InMemoryLoginTransactionStore,
+  RedisLoginTransactionStore,
+  generateState,
+  generateNonce,
+  type RedisClient,
+} from './login-store.js';
+
+export { resolveOrCreateUser, type ResolvedIdentity } from './identity.js';

@@ -1,8 +1,31 @@
 import { loadConfig, safeConfigForLogging } from '@pia/config';
 import { createObservability, runWithCorrelation } from '@pia/observability';
+import { createPool } from '@pia/db';
+import { JobConsumer } from '@pia/jobs';
+import type { JobHandler, JobContext, OutboxRecord } from '@pia/jobs';
+import {
+  IngestionWorkflowHandler,
+  noopExtractionStage,
+  noopChunkingStage,
+  noopEmbeddingStage,
+} from '@pia/knowledge';
+
+/**
+ * Handler for `document.upload.completed` events.
+ *
+ * Downstream processing after upload completion (audit logging,
+ * notifications, etc.) can be added here. Currently a no-op placeholder.
+ */
+const uploadCompletedHandler: JobHandler = {
+  eventType: 'document.upload.completed',
+
+  async handle(record: OutboxRecord, context: JobContext): Promise<void> {
+    void record;
+    void context;
+  },
+};
 
 function main(): void {
-  // Validate configuration before processing work
   try {
     const config = loadConfig();
     const observability = createObservability({
@@ -11,15 +34,60 @@ function main(): void {
       logFormat: config.logging.format,
     });
 
-    // Every worker job is wrapped in a correlation context
     runWithCorrelation(() => {
-      observability.logger.info('Worker starting', {
+      const logger = observability.logger;
+      const pool = createPool();
+
+      logger.info('Worker starting', {
         mode: config.mode,
         config: safeConfigForLogging(config),
       });
+
+      const consumer = new JobConsumer(pool, logger, {
+        workerIdentity: `worker-${process.pid}`,
+      });
+
+      // Register handlers
+      consumer.register(uploadCompletedHandler);
+
+      // Ingestion workflow: durable, idempotent pipeline with resumable stages.
+      // Extraction, chunking, and embedding stages use no-op implementations
+      // until P2-T04 (parsers), P2-T05 (chunking), and P2-T06 (embeddings).
+      const ingestionHandler = new IngestionWorkflowHandler({
+        pool,
+        logger,
+        stages: {
+          extraction: noopExtractionStage,
+          chunking: noopChunkingStage,
+          embedding: noopEmbeddingStage,
+        },
+      });
+      consumer.register(ingestionHandler);
+
+      // TODO: Register additional handlers as they are implemented:
+      //   consumer.register(evaluationHandler);
+      //   consumer.register(memoryHandler);
+
+      consumer.start();
+
+      // Graceful shutdown
+      const shutdown = (signal: string) => {
+        logger.info('Worker received signal', { signal });
+        consumer.stop();
+        void pool.end().then(() => {
+          process.exit(0);
+        });
+      };
+
+      process.on('SIGTERM', () => shutdown('SIGTERM'));
+      process.on('SIGINT', () => shutdown('SIGINT'));
+
+      logger.info('Worker ready and polling for jobs', {
+        workerIdentity: `worker-${process.pid}`,
+      });
     });
   } catch (error) {
-    console.error('Failed to load configuration:', error instanceof Error ? error.message : error);
+    console.error('Failed to start worker:', error instanceof Error ? error.message : error);
     process.exit(1);
   }
 }

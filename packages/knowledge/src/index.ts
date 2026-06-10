@@ -47,6 +47,9 @@ export {
   getIngestionJobById,
   transitionIngestionJobStatus,
   listPendingJobs,
+  updateIngestionJobStage,
+  updateIngestionJobError,
+  updateIngestionJobAttempt,
 } from './repositories.js';
 
 // ---------------------------------------------------------------------------
@@ -59,3 +62,25 @@ export {
   isDefaultAllowedMimeType,
   defaultAllowedMimeTypes,
 } from './scan.js';
+
+// ---------------------------------------------------------------------------
+// Ingestion workflow
+// ---------------------------------------------------------------------------
+
+export type {
+  IngestionStage,
+  StageContext,
+  StageResult,
+  IngestionStageName,
+} from './ingestion/types.js';
+export { INGESTION_STAGE_NAMES } from './ingestion/types.js';
+
+export {
+  noopExtractionStage,
+  noopChunkingStage,
+  noopEmbeddingStage,
+} from './ingestion/noop-stages.js';
+
+export { publishingStage } from './ingestion/publishing-stage.js';
+
+export { IngestionWorkflowHandler, type IngestionWorkflowConfig } from './ingestion/workflow.js';

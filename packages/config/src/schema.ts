@@ -9,6 +9,7 @@ export interface AppConfig {
   readonly server: {
     readonly port: number;
     readonly host: string;
+    readonly publicAppUrl: string;
   };
   readonly database: {
     readonly url: Redacted;
@@ -66,10 +67,18 @@ export const CONFIG_SCHEMA: Record<string, ConfigField> = {
   },
   HOST: {
     env: 'HOST',
-    description: 'Server host',
+    description: 'Server bind host',
     secret: false,
     required: false,
     default: '0.0.0.0',
+  },
+  PUBLIC_APP_URL: {
+    env: 'PUBLIC_APP_URL',
+    description:
+      'Public-facing application URL (used for OIDC redirect URIs, distinct from bind address)',
+    secret: false,
+    required: false,
+    default: 'http://localhost:3000',
   },
   DATABASE_URL: {
     env: 'DATABASE_URL',
