@@ -16,6 +16,20 @@ jobs:
     name: Quality Gates
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: pia
+          POSTGRES_PASSWORD: pia-dev
+          POSTGRES_DB: pia
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U pia -d pia"
+          --health-interval=3s
+          --health-timeout=3s
+          --health-retries=10
 
     steps:
       - name: Checkout

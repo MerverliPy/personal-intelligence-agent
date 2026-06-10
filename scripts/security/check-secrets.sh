@@ -134,6 +134,7 @@ for pattern in "${PATTERNS[@]}"; do
       -e "[Rr]edact" \
       -e '"[REDACTED]"' \
       -e "\[REDACTED\]" \
+      -e "postgresql://pia:pia-dev@localhost:5432/" \
       -e "SKILL\.md" \
       $DIR_FILTER \
       || true)
