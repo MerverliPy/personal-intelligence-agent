@@ -9,6 +9,7 @@ import {
   resolveOrCreateUser,
 } from '@pia/auth';
 import type { RateLimitOptions } from '../plugins/rate-limit.js';
+import { auditEventFromRequest } from '../plugins/audit.js';
 
 /**
  * Options passed to the auth routes plugin.
@@ -66,6 +67,9 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
         300,
       ); // 5-minute TTL
 
+      // Emit audit event
+      app.auditWriter.write(auditEventFromRequest(_request, 'auth.login.initiated', 'success'));
+
       // Redirect user to the OIDC provider's authorization endpoint
       return reply.redirect(authParams.authorizationUrl, 302);
     },
@@ -88,6 +92,12 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
 
       // Handle OIDC error responses from the provider
       if (error) {
+        app.auditWriter.write(
+          auditEventFromRequest(request, 'auth.login.failed', 'failure', {
+            reasonCode: 'OIDC_PROVIDER_ERROR',
+            metadata: { error, errorDescription },
+          }),
+        );
         return reply.status(400).send({
           error: {
             code: 'UNAUTHORIZED',
@@ -98,6 +108,11 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
       }
 
       if (!code || !state) {
+        app.auditWriter.write(
+          auditEventFromRequest(request, 'auth.login.failed', 'failure', {
+            reasonCode: 'MISSING_PARAMS',
+          }),
+        );
         return reply.status(400).send({
           error: {
             code: 'VALIDATION_ERROR',
@@ -110,6 +125,11 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
       // Consume the login transaction (one-time use)
       const transaction = await loginStore.consume(state);
       if (!transaction) {
+        app.auditWriter.write(
+          auditEventFromRequest(request, 'auth.login.failed', 'denied', {
+            reasonCode: 'INVALID_TRANSACTION',
+          }),
+        );
         return reply.status(400).send({
           error: {
             code: 'UNAUTHORIZED',
@@ -121,6 +141,11 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
 
       // Verify redirect URI consistency
       if (transaction.redirectUri !== oidcConfig.redirectUri) {
+        app.auditWriter.write(
+          auditEventFromRequest(request, 'auth.login.failed', 'denied', {
+            reasonCode: 'REDIRECT_URI_MISMATCH',
+          }),
+        );
         return reply.status(400).send({
           error: {
             code: 'UNAUTHORIZED',
@@ -142,6 +167,12 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
           transaction.nonce,
         );
       } catch (err) {
+        app.auditWriter.write(
+          auditEventFromRequest(request, 'auth.login.failed', 'failure', {
+            reasonCode: 'TOKEN_EXCHANGE_FAILED',
+            metadata: { error: err instanceof Error ? err.message : String(err) },
+          }),
+        );
         return reply.status(400).send({
           error: {
             code: 'UNAUTHORIZED',
@@ -163,6 +194,11 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
           userInfoResult.name ?? undefined,
         );
       } catch {
+        app.auditWriter.write(
+          auditEventFromRequest(request, 'auth.login.failed', 'failure', {
+            reasonCode: 'IDENTITY_RESOLUTION_FAILED',
+          }),
+        );
         return reply.status(500).send({
           error: {
             code: 'INTERNAL_ERROR',
@@ -195,6 +231,16 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
       );
       void reply.header('set-cookie', cookieHeader);
 
+      // Emit audit event for successful login
+      app.auditWriter.write(
+        auditEventFromRequest(request, 'auth.login.completed', 'success', {
+          actorId: resolvedUser.userId,
+          actorType: 'user',
+          resourceType: 'user',
+          resourceId: resolvedUser.userId,
+        }),
+      );
+
       // Redirect to the return URL (or home)
       const returnUrl = transaction.returnUrl ?? '/';
       return reply.redirect(returnUrl, 302);
@@ -209,11 +255,14 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
     {
       config: { rateLimit: { max: 10, windowSeconds: 60 } satisfies RateLimitOptions },
     },
-    async (_request: FastifyRequest, reply: FastifyReply) => {
+    async (request: FastifyRequest, reply: FastifyReply) => {
       // NOTE: Server-side session revocation is deferred.
       // The session token remains valid until natural expiry (max 24h).
       // Mitigation: cookies are HttpOnly + SameSite=Lax.
       // A Redis-backed RevocationStore will enable full revocation (see P1-T02 run record).
+
+      // Emit audit event for logout
+      app.auditWriter.write(auditEventFromRequest(request, 'auth.logout', 'success'));
 
       // Clear the session cookie
       const clearHeader = clearSessionCookieHeader(oidcConfig.secureCookies);

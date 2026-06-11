@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
+    "@pia/audit": "workspace:*",
     "@pia/auth": "workspace:*",
     "@pia/config": "workspace:*",
     "@pia/contracts": "workspace:*",

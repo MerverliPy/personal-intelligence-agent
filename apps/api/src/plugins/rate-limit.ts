@@ -1,5 +1,7 @@
-import type { FastifyPluginAsync, FastifyRequest, FastifyReply } from 'fastify';
+import type { FastifyInstance, FastifyPluginAsync, FastifyRequest, FastifyReply } from 'fastify';
 import fp from 'fastify-plugin';
+import type { AuditWriter } from '@pia/audit';
+import { getCurrentCorrelationId } from '@pia/observability';
 
 export interface RateLimitOptions {
   /** Maximum requests per window (per client IP and route). */
@@ -54,6 +56,7 @@ const rateLimitPlugin: FastifyPluginAsync<RateLimitOptions> = async (app, opts) 
     void reply.header('X-RateLimit-Reset', String(Math.ceil(entry.resetAt / 1000)));
 
     if (entry.count > max) {
+      emitRateLimitAudit(app, request, max);
       return reply.status(429).send({
         error: {
           code: 'RATE_LIMITED',
@@ -69,3 +72,18 @@ export default fp(rateLimitPlugin, {
   name: 'rate-limit',
   fastify: '5.x',
 });
+
+function emitRateLimitAudit(app: FastifyInstance, request: FastifyRequest, limit: number): void {
+  const auditWriter = app.auditWriter as AuditWriter | undefined;
+  if (!auditWriter) return;
+
+  auditWriter.write({
+    actorType: 'service',
+    action: 'security.rate_limited',
+    outcome: 'denied',
+    reasonCode: 'RATE_LIMIT_EXCEEDED',
+    requestId: getCurrentCorrelationId() ?? request.id,
+    resourceType: request.routeOptions.url ?? '/',
+    metadata: { ip: request.ip, limit },
+  });
+}

@@ -1,6 +1,8 @@
 import type { FastifyInstance, FastifyPluginAsync, FastifyRequest, FastifyReply } from 'fastify';
 import fp from 'fastify-plugin';
 import crypto from 'node:crypto';
+import type { AuditWriter } from '@pia/audit';
+import { getCurrentCorrelationId } from '@pia/observability';
 
 const CSRF_COOKIE = 'XSRF-TOKEN';
 const CSRF_HEADER = 'x-xsrf-token';
@@ -67,6 +69,7 @@ export const csrfPlugin: FastifyPluginAsync = async (app: FastifyInstance) => {
     const headerToken = request.headers[CSRF_HEADER];
 
     if (!cookieToken || typeof headerToken !== 'string' || headerToken.length === 0) {
+      emitCsrfAudit(app, request, 'CSRF_TOKEN_MISSING');
       return reply.status(403).send({
         error: {
           code: 'CSRF_TOKEN_MISSING',
@@ -77,6 +80,7 @@ export const csrfPlugin: FastifyPluginAsync = async (app: FastifyInstance) => {
     }
 
     if (!timingSafeEqual(headerToken, cookieToken)) {
+      emitCsrfAudit(app, request, 'CSRF_TOKEN_INVALID');
       return reply.status(403).send({
         error: {
           code: 'CSRF_TOKEN_INVALID',
@@ -129,4 +133,21 @@ function timingSafeEqual(a: string, b: string): boolean {
     result |= a.charCodeAt(i) ^ b.charCodeAt(i);
   }
   return result === 0;
+}
+
+function emitCsrfAudit(app: FastifyInstance, request: FastifyRequest, reasonCode: string): void {
+  const auditWriter = app.auditWriter as AuditWriter | undefined;
+  if (!auditWriter) return;
+
+  const userId = request.session?.userId;
+
+  auditWriter.write({
+    actorType: userId ? 'user' : 'service',
+    action: 'security.csrf_violation',
+    outcome: 'denied',
+    reasonCode,
+    requestId: getCurrentCorrelationId() ?? request.id,
+    resourceType: request.routeOptions.url ?? '/',
+    ...(userId ? { actorId: userId } : {}),
+  });
 }

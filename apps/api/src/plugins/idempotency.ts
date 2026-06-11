@@ -226,8 +226,14 @@ const idempotencyPlugin: FastifyPluginAsync<IdempotencyPluginOptions> = async (
           meta.idempotencyKey,
         ],
       );
-    } catch {
-      // Silently fail — the idempotency record is clean-up, not critical
+    } catch (err) {
+      request.log.warn(
+        {
+          err: err instanceof Error ? err.message : String(err),
+          idempotencyKey: meta.idempotencyKey,
+        },
+        'Idempotency record update failed — response delivered without persistence',
+      );
     } finally {
       client.release();
     }

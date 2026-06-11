@@ -14,6 +14,7 @@ import workspaceContextPlugin from './plugins/workspace-context.js';
 import idempotencyPlugin from './plugins/idempotency.js';
 import securityHeadersPlugin, { csrfPlugin } from './plugins/security.js';
 import rateLimitPlugin from './plugins/rate-limit.js';
+import auditPlugin from './plugins/audit.js';
 import healthRoutes from './routes/health.js';
 import workspaceRoutes from './routes/workspaces.js';
 import uploadRoutes from './routes/uploads.js';
@@ -84,8 +85,9 @@ export async function createServer(opts: CreateServerOptions) {
   await app.register(workspaceRoutes);
   await app.register(uploadRoutes);
 
-  // Auth routes (login/callback/logout) — only register if DB pool available
+  // Auth routes (login/callback/logout) and audit logging — only register if DB pool available
   if (dbPool) {
+    await app.register(auditPlugin, { dbPool });
     await app.register(authRoutes, {
       oidcConfig,
       oidcClient,
