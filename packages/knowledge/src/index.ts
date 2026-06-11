@@ -104,3 +104,23 @@ export { PdfParser, pdfParser } from './parsing/pdf-parser.js';
 export { DocxParser, docxParser } from './parsing/docx-parser.js';
 export type { ExtractionLimits, CreateExtractionStageOptions } from './parsing/extraction-stage.js';
 export { createExtractionStage } from './parsing/extraction-stage.js';
+
+// ---------------------------------------------------------------------------
+// Chunking (P2-T05)
+// ---------------------------------------------------------------------------
+
+export type {
+  Chunk,
+  ChunkingOptions,
+  ChunkingInput,
+  ChunkingResult,
+  ChunkingMetadata,
+  ChunkingStrategy,
+} from './chunking/types.js';
+export { DEFAULT_CHUNKING_OPTIONS } from './chunking/types.js';
+export {
+  createDefaultChunkingStrategy,
+  defaultChunkingStrategy,
+} from './chunking/chunking-strategy.js';
+export type { CreateChunkingStageOptions } from './chunking/chunking-stage.js';
+export { createChunkingStage } from './chunking/chunking-stage.js';

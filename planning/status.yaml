@@ -1,6 +1,6 @@
 project: personal-intelligence-action-engine
 schema_version: 1
-updated_at: 2026-06-10
+updated_at: 2026-06-11
 phases:
   P0: DONE
   P1: DONE
@@ -36,6 +36,8 @@ tasks:
   P2-T01: DONE
   P2-T02: DONE
   P2-T03: DONE
+  P2-T04: DONE
+  P2-T05: DONE
 notes:
   - Update task states only after the required review and verification evidence exists.
   - Allowed task states are NOT_STARTED, IN_PROGRESS, DONE, NO_CHANGE_REQUIRED, BLOCKED, FAILED_VERIFICATION.
