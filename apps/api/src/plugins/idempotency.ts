@@ -260,6 +260,10 @@ interface IdempotencyRequest {
  * the same value.
  */
 function hashPayload(payload: unknown): string {
+  // Guard against null, primitives, and arrays — only plain objects are hashable
+  if (payload === null || typeof payload !== 'object' || Array.isArray(payload)) {
+    payload = {};
+  }
   const normalized = JSON.stringify(payload, Object.keys(payload as object).sort());
   return createHash('sha256').update(normalized).digest('hex');
 }

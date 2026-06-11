@@ -6,32 +6,32 @@ steps: 80
 color: warning
 permission:
   read:
-    "*": allow
-    "*.env": ask
-    "*.env.*": ask
-    "*.env.example": allow
+    '*': allow
+    '*.env': ask
+    '*.env.*': ask
+    '*.env.example': allow
   edit: ask
   glob: allow
   grep: allow
   list: allow
   bash:
-    "*": ask
-    "pwd": allow
-    "git status*": allow
-    "git diff*": allow
-    "git log*": allow
-    "git show*": allow
-    "git ls-files*": allow
-    "git branch --show-current*": allow
-    "git rev-parse*": allow
-    "git remote -v*": allow
-    "rg *": allow
-    "grep *": allow
-    "wc *": allow
-    "head *": allow
-    "tail *": allow
-    "sed -n *": allow
-    "opencode stats*": allow
+    '*': ask
+    'pwd': allow
+    'git status*': allow
+    'git diff*': allow
+    'git log*': allow
+    'git show*': allow
+    'git ls-files*': allow
+    'git branch --show-current*': allow
+    'git rev-parse*': allow
+    'git remote -v*': allow
+    'rg *': allow
+    'grep *': allow
+    'wc *': allow
+    'head *': allow
+    'tail *': allow
+    'sed -n *': allow
+    'opencode stats*': allow
   task: deny
   todowrite: allow
   webfetch: ask

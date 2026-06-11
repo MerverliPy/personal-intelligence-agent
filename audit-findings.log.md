@@ -10,12 +10,12 @@
 
 ## Finding F-001 — P1-T02 Status/Run Record Disagreement
 
-| Field | Value |
-|---|---|
-| Priority | P2 (material) |
-| Confidence | Confirmed |
-| Category | Planning governance |
-| Files | `planning/status.yaml:31` · `planning/runs/P1-T02.md:7` |
+| Field      | Value                                                   |
+| ---------- | ------------------------------------------------------- |
+| Priority   | P2 (material)                                           |
+| Confidence | Confirmed                                               |
+| Category   | Planning governance                                     |
+| Files      | `planning/status.yaml:31` · `planning/runs/P1-T02.md:7` |
 
 ### What happened
 
@@ -35,12 +35,12 @@ Reconcile the two files. The run record's evidence (all tests pass, all criteria
 
 ## Finding F-002 — P0-T05 Audit Addendum Is Stale
 
-| Field | Value |
-|---|---|
-| Priority | P2 (material) |
-| Confidence | Confirmed |
-| Category | Planning governance |
-| Files | `planning/runs/P0-T05.md:73-80` · `packages/jobs/src/consumer.ts:198-200` |
+| Field      | Value                                                                     |
+| ---------- | ------------------------------------------------------------------------- |
+| Priority   | P2 (material)                                                             |
+| Confidence | Confirmed                                                                 |
+| Category   | Planning governance                                                       |
+| Files      | `planning/runs/P0-T05.md:73-80` · `packages/jobs/src/consumer.ts:198-200` |
 
 ### What happened
 
@@ -48,12 +48,12 @@ The audit addendum in the P0-T05 run record (dated 2026-06-10) claims that `runW
 
 All four fixes are **already in the code**:
 
-| Required fix | Status in code |
-|---|---|
+| Required fix                             | Status in code                                     |
+| ---------------------------------------- | -------------------------------------------------- |
 | Wrap API requests in correlation context | Done — `apps/api/src/plugins/correlation.ts:18-22` |
-| Wrap job handlers in correlation context | Done — `packages/jobs/src/consumer.ts:198-200` |
-| Add bounded ID validation | Done — `apps/api/src/plugins/request-id.ts:8,14` |
-| Add context isolation tests | Done — `apps/api/test/api.test.ts:254-323` |
+| Wrap job handlers in correlation context | Done — `packages/jobs/src/consumer.ts:198-200`     |
+| Add bounded ID validation                | Done — `apps/api/src/plugins/request-id.ts:8,14`   |
+| Add context isolation tests              | Done — `apps/api/test/api.test.ts:254-323`         |
 
 The code was fixed but the status was never updated.
 
@@ -69,12 +69,12 @@ Update `planning/status.yaml` line 27 from `FAILED_VERIFICATION` to `DONE`. Upda
 
 ## Finding F-003 — Auth Logout Doesn't Revoke Sessions
 
-| Field | Value |
-|---|---|
-| Priority | P2 (material) |
-| Confidence | Confirmed |
-| Category | Correctness — runtime crash |
-| Files | `apps/api/src/routes/auth.ts:200` |
+| Field      | Value                             |
+| ---------- | --------------------------------- |
+| Priority   | P2 (material)                     |
+| Confidence | Confirmed                         |
+| Category   | Correctness — runtime crash       |
+| Files      | `apps/api/src/routes/auth.ts:200` |
 
 ### What happened
 
@@ -105,12 +105,12 @@ Either way, the `undefined as never` type assertion must be removed.
 
 ## Finding F-004 — `hashPayload` Crashes on Non-Object Input
 
-| Field | Value |
-|---|---|
-| Priority | P3 (low) |
-| Confidence | Confirmed |
-| Category | Robustness — latent defect |
-| Files | `apps/api/src/plugins/idempotency.ts:262-265` |
+| Field      | Value                                         |
+| ---------- | --------------------------------------------- |
+| Priority   | P3 (low)                                      |
+| Confidence | Confirmed                                     |
+| Category   | Robustness — latent defect                    |
+| Files      | `apps/api/src/plugins/idempotency.ts:262-265` |
 
 ### What happened
 
@@ -141,12 +141,12 @@ Add unit tests for `hashPayload(null)`, `hashPayload(undefined)`, `hashPayload("
 
 ## Finding F-005 — Health Check Creates New DB Pool Per Call
 
-| Field | Value |
-|---|---|
-| Priority | P3 (low) |
-| Confidence | Confirmed |
-| Category | Resource efficiency |
-| Files | `apps/api/src/routes/health.ts:18-21` |
+| Field      | Value                                 |
+| ---------- | ------------------------------------- |
+| Priority   | P3 (low)                              |
+| Confidence | Confirmed                             |
+| Category   | Resource efficiency                   |
+| Files      | `apps/api/src/routes/health.ts:18-21` |
 
 ### What happened
 
@@ -169,12 +169,12 @@ Create the pool once at module scope and reuse it. Clean it up in a Fastify `onC
 
 ## Finding F-006 — MANIFEST.md Is Outdated
 
-| Field | Value |
-|---|---|
-| Priority | P3 (low) |
-| Confidence | Confirmed |
-| Category | Documentation |
-| Files | `MANIFEST.md:5` |
+| Field      | Value           |
+| ---------- | --------------- |
+| Priority   | P3 (low)        |
+| Confidence | Confirmed       |
+| Category   | Documentation   |
+| Files      | `MANIFEST.md:5` |
 
 ### What happened
 
@@ -220,7 +220,7 @@ The run record at `planning/runs/P1-T02.md:153` states `createRealOidcClient` is
 
 ## File Index
 
-| File | Lines | Purpose |
-|---|---|---|
-| `audit-findings.log.md` | this file | Human-readable findings log |
-| `audit-handoff.md` | companion | Repair phase handoff with executable instructions |
+| File                    | Lines     | Purpose                                           |
+| ----------------------- | --------- | ------------------------------------------------- |
+| `audit-findings.log.md` | this file | Human-readable findings log                       |
+| `audit-handoff.md`      | companion | Repair phase handoff with executable instructions |

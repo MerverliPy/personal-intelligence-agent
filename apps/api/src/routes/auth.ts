@@ -8,7 +8,6 @@ import {
   createSessionToken,
   sessionCookieHeader,
   clearSessionCookieHeader,
-  revokeSession,
   resolveOrCreateUser,
 } from '@pia/auth';
 
@@ -189,20 +188,11 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
   // ------------------------------------------------------------------
   // POST /auth/logout — terminate session
   // ------------------------------------------------------------------
-  app.post('/auth/logout', async (request: FastifyRequest, reply: FastifyReply) => {
-    const cookieHeader = request.headers['cookie'];
-    if (cookieHeader) {
-      // Extract and potentially revoke the session token
-      const cookies = parseCookiesStr(cookieHeader);
-      const token = cookies['pia_session'];
-      if (token) {
-        try {
-          await revokeSession(token, oidcConfig.sessionSecret, undefined as never);
-        } catch {
-          // Token may already be expired/invalid — clear cookie regardless
-        }
-      }
-    }
+  app.post('/auth/logout', async (_request: FastifyRequest, reply: FastifyReply) => {
+    // NOTE: Server-side session revocation is deferred.
+    // The session token remains valid until natural expiry (max 24h).
+    // Mitigation: cookies are HttpOnly + SameSite=Lax.
+    // A Redis-backed RevocationStore will enable full revocation (see P1-T02 run record).
 
     // Clear the session cookie
     const clearHeader = clearSessionCookieHeader(oidcConfig.secureCookies);
@@ -211,21 +201,6 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
     return reply.send({ status: 'ok', message: 'Logged out.' });
   });
 };
-
-/**
- * Simple cookie string parser.
- */
-function parseCookiesStr(header: string): Record<string, string> {
-  const result: Record<string, string> = {};
-  for (const pair of header.split(';')) {
-    const eqIdx = pair.indexOf('=');
-    if (eqIdx === -1) continue;
-    const key = pair.slice(0, eqIdx).trim();
-    const value = pair.slice(eqIdx + 1).trim();
-    result[key] = value;
-  }
-  return result;
-}
 
 export default fp(authRoutesPlugin, {
   name: 'auth-routes',
