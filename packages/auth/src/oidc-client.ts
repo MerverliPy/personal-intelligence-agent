@@ -51,7 +51,12 @@ export interface OidcClient {
   getAuthorizationUrl(): Promise<AuthorizationParams>;
 
   /** Exchange authorization code for tokens and return user info. */
-  handleCallback(code: string, state: string, codeVerifier: string, nonce: string): Promise<OidcUserInfo>;
+  handleCallback(
+    code: string,
+    state: string,
+    codeVerifier: string,
+    nonce: string,
+  ): Promise<OidcUserInfo>;
 
   /** Return the issuer URL this client is configured for. */
   getIssuerUrl(): string;

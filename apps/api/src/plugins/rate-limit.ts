@@ -29,7 +29,9 @@ const rateLimitPlugin: FastifyPluginAsync<RateLimitOptions> = async (app, opts) 
 
   app.addHook('preHandler', async (request: FastifyRequest, reply: FastifyReply) => {
     // Route-level config via Fastify 5 routeOptions.config
-    const routeConfig = (request.routeOptions.config as { rateLimit?: RateLimitOptions } | undefined)?.rateLimit;
+    const routeConfig = (
+      request.routeOptions.config as { rateLimit?: RateLimitOptions } | undefined
+    )?.rateLimit;
     const max = routeConfig?.max ?? opts.max ?? defaultMax;
     const windowMs = (routeConfig?.windowSeconds ?? opts.windowSeconds ?? 60) * 1000;
 

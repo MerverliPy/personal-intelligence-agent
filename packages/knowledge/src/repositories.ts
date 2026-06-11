@@ -1062,7 +1062,11 @@ export async function transitionIngestionJobStatus(
  * Lists pending ingestion jobs (QUEUED or RETRY_WAIT) with FOR UPDATE SKIP LOCKED
  * for safe concurrent consumption by workers.
  */
-export async function listPendingJobs(pool: Pool, workspaceId: string, limit?: number): Promise<IngestionJob[]> {
+export async function listPendingJobs(
+  pool: Pool,
+  workspaceId: string,
+  limit?: number,
+): Promise<IngestionJob[]> {
   const result = await pool.query<{
     id: string;
     workspace_id: string;

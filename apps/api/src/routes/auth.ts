@@ -43,168 +43,185 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
   // ------------------------------------------------------------------
   // GET /auth/login — initiate OIDC flow
   // ------------------------------------------------------------------
-  app.get('/auth/login', {
-    config: { rateLimit: { max: 5, windowSeconds: 60 } satisfies RateLimitOptions },
-  }, async (_request: FastifyRequest, reply: FastifyReply) => {
-    // The OIDC client generates state internally (CSRF protection) and embeds
-    // it in the authorization URL.  We must use that state — not an independent
-    // one — so the callback can match it against the stored transaction.
-    const authParams = await oidcClient.getAuthorizationUrl();
+  app.get(
+    '/auth/login',
+    {
+      config: { rateLimit: { max: 5, windowSeconds: 60 } satisfies RateLimitOptions },
+    },
+    async (_request: FastifyRequest, reply: FastifyReply) => {
+      // The OIDC client generates state internally (CSRF protection) and embeds
+      // it in the authorization URL.  We must use that state — not an independent
+      // one — so the callback can match it against the stored transaction.
+      const authParams = await oidcClient.getAuthorizationUrl();
 
-    // Store the login transaction (state → {codeVerifier, nonce, redirectUri})
-    await loginStore.create(
-      authParams.state,
-      {
-        codeVerifier: authParams.codeVerifier,
-        nonce: authParams.nonce,
-        redirectUri: oidcConfig.redirectUri,
-        returnUrl: '/',
-      },
-      300,
-    ); // 5-minute TTL
+      // Store the login transaction (state → {codeVerifier, nonce, redirectUri})
+      await loginStore.create(
+        authParams.state,
+        {
+          codeVerifier: authParams.codeVerifier,
+          nonce: authParams.nonce,
+          redirectUri: oidcConfig.redirectUri,
+          returnUrl: '/',
+        },
+        300,
+      ); // 5-minute TTL
 
-    // Redirect user to the OIDC provider's authorization endpoint
-    return reply.redirect(authParams.authorizationUrl, 302);
-  });
+      // Redirect user to the OIDC provider's authorization endpoint
+      return reply.redirect(authParams.authorizationUrl, 302);
+    },
+  );
 
   // ------------------------------------------------------------------
   // GET /auth/callback — handle OIDC callback
   // ------------------------------------------------------------------
-  app.get('/auth/callback', {
-    config: { rateLimit: { max: 10, windowSeconds: 60 } satisfies RateLimitOptions },
-  }, async (request: FastifyRequest, reply: FastifyReply) => {
-    const query = request.query as Record<string, string>;
-    const code = query['code'];
-    const state = query['state'];
-    const error = query['error'];
-    const errorDescription = query['error_description'];
+  app.get(
+    '/auth/callback',
+    {
+      config: { rateLimit: { max: 10, windowSeconds: 60 } satisfies RateLimitOptions },
+    },
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const query = request.query as Record<string, string>;
+      const code = query['code'];
+      const state = query['state'];
+      const error = query['error'];
+      const errorDescription = query['error_description'];
 
-    // Handle OIDC error responses from the provider
-    if (error) {
-      return reply.status(400).send({
-        error: {
-          code: 'UNAUTHORIZED',
-          message: errorDescription ?? error,
-          request_id: request.id,
-        },
-      });
-    }
+      // Handle OIDC error responses from the provider
+      if (error) {
+        return reply.status(400).send({
+          error: {
+            code: 'UNAUTHORIZED',
+            message: errorDescription ?? error,
+            request_id: request.id,
+          },
+        });
+      }
 
-    if (!code || !state) {
-      return reply.status(400).send({
-        error: {
-          code: 'VALIDATION_ERROR',
-          message: 'Missing code or state parameter in callback.',
-          request_id: request.id,
-        },
-      });
-    }
+      if (!code || !state) {
+        return reply.status(400).send({
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Missing code or state parameter in callback.',
+            request_id: request.id,
+          },
+        });
+      }
 
-    // Consume the login transaction (one-time use)
-    const transaction = await loginStore.consume(state);
-    if (!transaction) {
-      return reply.status(400).send({
-        error: {
-          code: 'UNAUTHORIZED',
-          message: 'Invalid or expired login session. Please try logging in again.',
-          request_id: request.id,
-        },
-      });
-    }
+      // Consume the login transaction (one-time use)
+      const transaction = await loginStore.consume(state);
+      if (!transaction) {
+        return reply.status(400).send({
+          error: {
+            code: 'UNAUTHORIZED',
+            message: 'Invalid or expired login session. Please try logging in again.',
+            request_id: request.id,
+          },
+        });
+      }
 
-    // Verify redirect URI consistency
-    if (transaction.redirectUri !== oidcConfig.redirectUri) {
-      return reply.status(400).send({
-        error: {
-          code: 'UNAUTHORIZED',
-          message: 'Redirect URI mismatch. Login flow may have been tampered with.',
-          request_id: request.id,
-        },
-      });
-    }
+      // Verify redirect URI consistency
+      if (transaction.redirectUri !== oidcConfig.redirectUri) {
+        return reply.status(400).send({
+          error: {
+            code: 'UNAUTHORIZED',
+            message: 'Redirect URI mismatch. Login flow may have been tampered with.',
+            request_id: request.id,
+          },
+        });
+      }
 
-    let userInfoResult;
-    try {
-      // Exchange authorization code for tokens and retrieve user info.
-      // The OIDC client (real) validates: ID token signature, iss, aud, exp,
-      // nonce (generated internally), and state parameter.
-      userInfoResult = await oidcClient.handleCallback(code, state, transaction.codeVerifier, transaction.nonce);
-    } catch (err) {
-      return reply.status(400).send({
-        error: {
-          code: 'UNAUTHORIZED',
-          message: 'Authentication failed. Please try logging in again.',
-          request_id: request.id,
-        },
-      });
-    }
+      let userInfoResult;
+      try {
+        // Exchange authorization code for tokens and retrieve user info.
+        // The OIDC client (real) validates: ID token signature, iss, aud, exp,
+        // nonce (generated internally), and state parameter.
+        userInfoResult = await oidcClient.handleCallback(
+          code,
+          state,
+          transaction.codeVerifier,
+          transaction.nonce,
+        );
+      } catch (err) {
+        return reply.status(400).send({
+          error: {
+            code: 'UNAUTHORIZED',
+            message: 'Authentication failed. Please try logging in again.',
+            request_id: request.id,
+          },
+        });
+      }
 
-    // Resolve or create the local user identity from the OIDC claims.
-    // This transactional step maps (issuer, subject) → users.id via user_identities.
-    let resolvedUser;
-    try {
-      resolvedUser = await resolveOrCreateUser(
-        dbPool,
-        oidcConfig.issuerUrl,
-        userInfoResult.sub,
-        userInfoResult.email,
-        userInfoResult.name ?? undefined,
+      // Resolve or create the local user identity from the OIDC claims.
+      // This transactional step maps (issuer, subject) → users.id via user_identities.
+      let resolvedUser;
+      try {
+        resolvedUser = await resolveOrCreateUser(
+          dbPool,
+          oidcConfig.issuerUrl,
+          userInfoResult.sub,
+          userInfoResult.email,
+          userInfoResult.name ?? undefined,
+        );
+      } catch {
+        return reply.status(500).send({
+          error: {
+            code: 'INTERNAL_ERROR',
+            message: 'An internal error occurred.',
+            request_id: request.id,
+          },
+        });
+      }
+
+      // Create a session for the user
+      const sessionData: SessionData = {
+        userId: resolvedUser.userId,
+        email: resolvedUser.email,
+        displayName: userInfoResult.name,
+        issuer: oidcConfig.issuerUrl,
+        subject: userInfoResult.sub,
+      };
+
+      const sessionToken = await createSessionToken(
+        sessionData,
+        oidcConfig.sessionSecret,
+        oidcConfig.sessionMaxAgeSeconds,
       );
-    } catch {
-      return reply.status(500).send({
-        error: {
-          code: 'INTERNAL_ERROR',
-          message: 'An internal error occurred.',
-          request_id: request.id,
-        },
-      });
-    }
 
-    // Create a session for the user
-    const sessionData: SessionData = {
-      userId: resolvedUser.userId,
-      email: resolvedUser.email,
-      displayName: userInfoResult.name,
-      issuer: oidcConfig.issuerUrl,
-      subject: userInfoResult.sub,
-    };
+      // Set the session cookie
+      const cookieHeader = sessionCookieHeader(
+        sessionToken,
+        oidcConfig.sessionMaxAgeSeconds,
+        oidcConfig.secureCookies,
+      );
+      void reply.header('set-cookie', cookieHeader);
 
-    const sessionToken = await createSessionToken(
-      sessionData,
-      oidcConfig.sessionSecret,
-      oidcConfig.sessionMaxAgeSeconds,
-    );
-
-    // Set the session cookie
-    const cookieHeader = sessionCookieHeader(
-      sessionToken,
-      oidcConfig.sessionMaxAgeSeconds,
-      oidcConfig.secureCookies,
-    );
-    void reply.header('set-cookie', cookieHeader);
-
-    // Redirect to the return URL (or home)
-    const returnUrl = transaction.returnUrl ?? '/';
-    return reply.redirect(returnUrl, 302);
-  });
+      // Redirect to the return URL (or home)
+      const returnUrl = transaction.returnUrl ?? '/';
+      return reply.redirect(returnUrl, 302);
+    },
+  );
 
   // ------------------------------------------------------------------
   // POST /auth/logout — terminate session
   // ------------------------------------------------------------------
-  app.post('/auth/logout', {
-    config: { rateLimit: { max: 10, windowSeconds: 60 } satisfies RateLimitOptions },
-  }, async (_request: FastifyRequest, reply: FastifyReply) => {
-    // NOTE: Server-side session revocation is deferred.
-    // The session token remains valid until natural expiry (max 24h).
-    // Mitigation: cookies are HttpOnly + SameSite=Lax.
-    // A Redis-backed RevocationStore will enable full revocation (see P1-T02 run record).
+  app.post(
+    '/auth/logout',
+    {
+      config: { rateLimit: { max: 10, windowSeconds: 60 } satisfies RateLimitOptions },
+    },
+    async (_request: FastifyRequest, reply: FastifyReply) => {
+      // NOTE: Server-side session revocation is deferred.
+      // The session token remains valid until natural expiry (max 24h).
+      // Mitigation: cookies are HttpOnly + SameSite=Lax.
+      // A Redis-backed RevocationStore will enable full revocation (see P1-T02 run record).
 
-    // Clear the session cookie
-    const clearHeader = clearSessionCookieHeader(oidcConfig.secureCookies);
-    void reply.header('set-cookie', clearHeader);
+      // Clear the session cookie
+      const clearHeader = clearSessionCookieHeader(oidcConfig.secureCookies);
+      void reply.header('set-cookie', clearHeader);
 
-    return reply.send({ status: 'ok', message: 'Logged out.' });
-  });
+      return reply.send({ status: 'ok', message: 'Logged out.' });
+    },
+  );
 };
 
 export default fp(authRoutesPlugin, {

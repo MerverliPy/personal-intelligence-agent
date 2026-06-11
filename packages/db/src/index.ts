@@ -6,7 +6,4 @@ export {
   type Migration,
   type MigrationResult,
 } from './migrate.js';
-export {
-  getWorkspaceMembership,
-  getProjectMembership,
-} from './membership.js';
+export { getWorkspaceMembership, getProjectMembership } from './membership.js';
