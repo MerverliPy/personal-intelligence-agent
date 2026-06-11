@@ -74,6 +74,7 @@ export function createFakeOidcClient(config: OidcConfig): OidcClient {
       const codeVerifier = generateCodeVerifier();
       const codeChallenge = computeCodeChallenge(codeVerifier);
       const state = randomBytes(16).toString('hex');
+      const nonce = randomBytes(16).toString('hex');
 
       const authUrl = new URL(`${issuerUrl}/authorize`);
       authUrl.searchParams.set('response_type', 'code');
@@ -83,11 +84,13 @@ export function createFakeOidcClient(config: OidcConfig): OidcClient {
       authUrl.searchParams.set('code_challenge', codeChallenge);
       authUrl.searchParams.set('code_challenge_method', 'S256');
       authUrl.searchParams.set('state', state);
+      authUrl.searchParams.set('nonce', nonce);
 
       return {
         authorizationUrl: authUrl.toString(),
         codeVerifier,
         state,
+        nonce,
       };
     },
 
@@ -208,6 +211,7 @@ export function createRealOidcClient(config: OidcConfig): OidcClient {
         authorizationUrl: authUrl.toString(),
         codeVerifier,
         state,
+        nonce,
       };
     },
 

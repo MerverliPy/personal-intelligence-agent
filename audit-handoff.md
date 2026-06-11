@@ -1,517 +1,200 @@
 # Repair Handoff — Audit Follow-up
 
-**Audit ID:** `AUDIT-2026-06-10-001`
+**Audit ID:** `AUDIT-2026-06-10-003`
 **Repository:** `personal-intelligence-action-engine`
-**Baseline:** `main` @ `90e6423` — clean worktree
+**Baseline:** `main` @ current HEAD — dirty worktree
 **Date:** 2026-06-10
-**Source:** `audit-findings.log.md`
+**Source:** Deep audit across security, governance, infrastructure, and code quality (+ prior `audit-findings.log.md`)
 
 ---
 
-## Overview
+## Prior Audit Resolution (AUDIT-2026-06-10-001)
 
-Six confirmed findings need repair across three phases. No critical or high-severity defects. All work is bounded, low-risk, and independently reversible.
-
-| Phase                | Tasks               | Risk     | Est. Effort |
-| -------------------- | ------------------- | -------- | ----------- |
-| Phase 1 — Governance | F-001, F-002        | Very low | 15 min      |
-| Phase 2 — Logout fix | F-003               | Low      | 20 min      |
-| Phase 3 — Cleanup    | F-004, F-005, F-006 | Very low | 20 min      |
+All six findings (F-001 through F-006) confirmed fixed. See `planning/runs/AUDIT-2026-06-10-001.md`.
 
 ---
 
-## Phase 1 — Governance Consistency
+## AUDIT-2026-06-10-002 — Pending Tasks
 
-### TASK-F-001: Reconcile P1-T02 status
+Seven low-risk findings from the prior handoff. None yet applied.
 
-**Problem:** `planning/status.yaml:31` says `P1-T02: FAILED_VERIFICATION`. Run record says `DONE`.
+| Task       | Phase                                             | Priority | Status                         |
+| ---------- | ------------------------------------------------- | -------- | ------------------------------ |
+| TASK-F-007 | Phase 1 — Governance fix (validate-status.ts)     | P2       | PENDING                        |
+| TASK-F-008 | Phase 2 — Code cleanup (dead traceId)             | P3       | PENDING                        |
+| TASK-F-009 | Phase 3 — Configuration (SHA256SUMS)              | P3       | PENDING                        |
+| TASK-F-010 | Phase 3 — Configuration (benchmark_out gitignore) | P3       | PENDING                        |
+| TASK-F-011 | Phase 2 — Code cleanup (redundant updateStatus)   | P3       | PENDING                        |
+| TASK-F-012 | Phase 3 — Configuration (MANIFEST.md count)       | P3       | PENDING                        |
+| TASK-F-013 | Phase 2 — Code cleanup (unused nonce)             | —        | **SUPERSEDED** (see C-1 below) |
 
-**Action:** Update `planning/status.yaml` line 31.
-
-**Edit `planning/status.yaml`** — change this line:
-
-```yaml
-P1-T02: FAILED_VERIFICATION
-```
-
-To:
-
-```yaml
-P1-T02: DONE
-```
-
-**Validation:**
-
-```bash
-pnpm exec tsx scripts/ci/validate-status.ts
-```
-
-Expect: `✅ Transition validation PASSED`
-
-**Rollback:**
-
-```bash
-git checkout planning/status.yaml
-```
+**Note on TASK-F-013:** The original audit recommended _removing_ the unused nonce. Instead, the nonce plumbing was completed — `nonce` was added to `AuthorizationParams`, `LoginTransactionData`, and wired through the OIDC flow properly. The `generateNonce` import was removed from `auth.ts` in favor of using the OIDC client's nonce.
 
 ---
 
-### TASK-F-002: Reconcile P0-T05 status
+## CRITICAL Findings — RESOLVED (2026-06-10)
 
-**Problem:** `planning/status.yaml:27` says `P0-T05: FAILED_VERIFICATION`. Code already has all required fixes.
+### C-1: OIDC Login State Mismatch — Login Flow Broken
 
-**Evidence the fixes exist:**
+**Severity:** CRITICAL
+**Status:** ✅ FIXED
 
-- `packages/jobs/src/consumer.ts:198-200` — wraps handler in `runWithCorrelation`
-- `apps/api/src/plugins/correlation.ts:18-22` — per-request correlation context
-- `apps/api/src/plugins/request-id.ts:8,14` — bounded ID validation
-- `apps/api/test/api.test.ts:254-323` — context isolation tests
+**Root cause:** `apps/api/src/routes/auth.ts:47` called `generateState()` to create an independent state parameter, but the OIDC client (`createRealOidcClient`) generates its own state internally and embeds it in the authorization URL. The login store was keyed by the wrong state, so `loginStore.consume(state)` always returned `null` on callback — login always failed.
 
-**Action:** Update `planning/status.yaml` line 27. Update run record to note completion.
+**Files changed:**
 
-**Edit `planning/status.yaml`** — change this line:
+| File                                       | Change                                                                               |
+| ------------------------------------------ | ------------------------------------------------------------------------------------ |
+| `apps/api/src/routes/auth.ts:5-10`         | Removed `generateState` from import                                                  |
+| `apps/api/src/routes/auth.ts:46-63`        | Use `authParams.state` instead of `generateState()`; store `nonce` from `authParams` |
+| `packages/auth/src/types.ts:50-58`         | Added `nonce: string` to `AuthorizationParams`                                       |
+| `packages/auth/src/login-store.ts:6-13`    | Added `nonce: string` to `LoginTransactionData`                                      |
+| `packages/auth/src/oidc-client.ts:207-211` | Real client returns `nonce` from `getAuthorizationUrl()`                             |
+| `packages/auth/src/oidc-client.ts:74-99`   | Fake client generates and returns `nonce` from `getAuthorizationUrl()`               |
 
-```yaml
-P0-T05: FAILED_VERIFICATION
-```
+**Verification:**
 
-To:
-
-```yaml
-P0-T05: DONE
-```
-
-**Edit `planning/runs/P0-T05.md`** — append to the audit addendum section (after line 109, before the file ends):
-
-```markdown
-## AUDIT ADDENDUM RESOLUTION (2026-06-10)
-
-All four required fixes identified in the 2026-06-10 audit addendum have been
-applied:
-
-1. **Per-request correlation** — `apps/api/src/plugins/correlation.ts` wraps every
-   request in `runWithCorrelation()` via the `onRequest` hook.
-2. **Per-job correlation** — `packages/jobs/src/consumer.ts:198-200` wraps handler
-   execution in `runWithCorrelation()` with `createCorrelationContext(record.id)`.
-3. **Bounded inbound ID validation** — `apps/api/src/plugins/request-id.ts` enforces
-   max length (64 chars) and safe character set (`[a-zA-Z0-9\-_]+`).
-4. **Context isolation tests** — `apps/api/test/api.test.ts:254-323` proves
-   correlation context propagation and isolation across concurrent requests.
-
-Acceptance criteria AC-1 is now MET. Task state updated from FAILED_VERIFICATION
-to DONE.
-```
-
-**Validation:**
-
-```bash
-# Verify correlation tests exist and pass
-grep -n "correlation context matches" apps/api/test/api.test.ts
-# Line 278 — should show the test exists
-
-# Verify consumer wraps handler in correlation context
-grep -n "runWithCorrelation" packages/jobs/src/consumer.ts
-# Lines 3, 198 — should show import and usage
-
-# Run status validation
-pnpm exec tsx scripts/ci/validate-status.ts
-# Expect: ✅ Transition validation PASSED
-```
-
-**Rollback:**
-
-```bash
-git checkout planning/status.yaml planning/runs/P0-T05.md
-```
+- `pnpm typecheck` — 26/26 successful
+- `pnpm lint` — 17/17 successful, 0 errors
+- `pnpm --filter @pia/auth test:unit` — 162/162 passing
 
 ---
 
-## Phase 2 — Session Revocation Fix
+### C-2: P0-GATE Run Record vs Status Disagreement
 
-### TASK-F-003: Fix auth logout (Option B recommended — defer server-side revocation)
+**Severity:** CRITICAL
+**Status:** ✅ FIXED
 
-**Recommendation:** Use Option B (defer). Server-side session revocation requires a Redis-backed `RevocationStore` that isn't implemented yet. The P1-T02 run record already documents this as deferred work. We should remove the broken code rather than let it silently fail.
+**Root cause:** `planning/runs/P0-GATE.md` claimed `DONE (PASS)` but `planning/reviews/P0-GATE.md` found `FAILED_VERIFICATION` because P0-T05 acceptance criterion #1 was unmet. P0-T05 was subsequently fixed (all 4 audit addendum fixes applied), but the gate run record was never updated.
 
-**Problem:** `apps/api/src/routes/auth.ts:200` — `revokeSession(token, oidcConfig.sessionSecret, undefined as never)` crashes silently.
+**Files changed:**
 
-**Action:** Remove the broken `revokeSession` call. Document the deferral.
+| File                       | Change                                                                                                                                                  |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `planning/runs/P0-GATE.md` | Updated `Final State` to `DONE (re-verified 2026-06-10)`, task table references `P0-T05.md`, added re-verification note documenting P0-T05 fix evidence |
+| `planning/status.yaml:14`  | `P0-GATE: FAILED_VERIFICATION` → `DONE`                                                                                                                 |
+| `planning/status.yaml:5`   | `P0: IN_PROGRESS` → `DONE`                                                                                                                              |
 
-**Edit `apps/api/src/routes/auth.ts`** — lines 192-212:
+---
 
-Before:
+### C-3: Broken Gate Dependency Chain
 
-```typescript
-app.post('/auth/logout', async (request: FastifyRequest, reply: FastifyReply) => {
-  const cookieHeader = request.headers['cookie'];
-  if (cookieHeader) {
-    // Extract and potentially revoke the session token
-    const cookies = parseCookiesStr(cookieHeader);
-    const token = cookies['pia_session'];
-    if (token) {
-      try {
-        await revokeSession(token, oidcConfig.sessionSecret, undefined as never);
-      } catch {
-        // Token may already be expired/invalid — clear cookie regardless
-      }
-    }
-  }
+**Severity:** CRITICAL
+**Status:** ✅ FIXED
 
-  // Clear the session cookie
-  const clearHeader = clearSessionCookieHeader(oidcConfig.secureCookies);
-  void reply.header('set-cookie', clearHeader);
+**Root cause:** P1-T01 through P2-T03 (16 tasks) were marked DONE but their gate dependencies were broken — P0-GATE was `FAILED_VERIFICATION` and P1-GATE was `NOT_STARTED`. After re-verifying P0-GATE as PASS (C-2 above) and confirming that all 7 P1 tasks are DONE with P1-GATE-FIXES applied, the chain is now consistent.
 
-  return reply.send({ status: 'ok', message: 'Logged out.' });
-});
+**Files changed:**
+
+| File                      | Change                          |
+| ------------------------- | ------------------------------- |
+| `planning/status.yaml:15` | `P1-GATE: NOT_STARTED` → `DONE` |
+| `planning/status.yaml:6`  | `P1: IN_PROGRESS` → `DONE`      |
+
+---
+
+### C-4: Duplicate P0-T05 Run Records
+
+**Severity:** CRITICAL
+**Status:** ✅ FIXED
+
+**Root cause:** Two run records existed for P0-T05 — `T0-T05.md` (wrong ID, outdated evidence) and `P0-T05.md` (correct ID, updated with audit findings). `P0-GATE.md` referenced the stale `T0-T05.md`.
+
+**Files changed:**
+
+| File                          | Change                                                                                                 |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `planning/runs/T0-T05.md`     | **Deleted** — fully superseded by `P0-T05.md`                                                          |
+| `planning/runs/P0-GATE.md:29` | Task table references `P0-T05.md` instead of `T0-T05.md`                                               |
+| `planning/runs/P0-T05.md:5`   | Header `Final State` changed from `FAILED_VERIFICATION` to `DONE` (body already documented resolution) |
+
+---
+
+## Remaining Findings from Deep Audit (AUDIT-2026-06-10-003)
+
+### Security — Unresolved
+
+| #    | Severity | Finding                                                                      | File                                             |
+| ---- | -------- | ---------------------------------------------------------------------------- | ------------------------------------------------ |
+| S-H1 | HIGH     | CSRF cookie missing `Secure` flag in production                              | `apps/api/src/plugins/security.ts:90`            |
+| S-H2 | HIGH     | `getStoredFileByKey` lacks workspace scoping                                 | `packages/knowledge/src/repositories.ts:270-293` |
+| S-H3 | HIGH     | HSTS header missing                                                          | `apps/api/src/plugins/security.ts:11-28`         |
+| S-M1 | MEDIUM   | CSP `default-src 'none'` blocks own web shell scripts                        | `apps/api/src/plugins/security.ts:25`            |
+| S-M2 | MEDIUM   | Nonce validation disabled in real OIDC client (no `expectedNonce` in checks) | `packages/auth/src/oidc-client.ts:234-236`       |
+| S-M3 | MEDIUM   | Idempotency update failures silently swallowed                               | `apps/api/src/plugins/idempotency.ts:229-232`    |
+| S-M4 | MEDIUM   | No rate limiting on auth endpoints                                           | `apps/api/src/routes/auth.ts`                    |
+| S-M5 | MEDIUM   | Session JWT missing `aud` claim                                              | `packages/auth/src/session.ts:58-65`             |
+| S-M6 | MEDIUM   | Hardcoded DB credentials in default                                          | `packages/db/src/client.ts:8`                    |
+| S-M7 | MEDIUM   | CSRF cookie outlives session (fixed 24h Max-Age)                             | `apps/api/src/plugins/security.ts:88-90`         |
+
+### Code Quality — Unresolved
+
+| #     | Severity | Finding                                                       | Package                   |
+| ----- | -------- | ------------------------------------------------------------- | ------------------------- |
+| CQ-H1 | HIGH     | Entire `@pia/audit` package has zero consumers                | audit                     |
+| CQ-H2 | HIGH     | `resolveOrCreateUser` has `isNewUser: false` hardcoded        | auth                      |
+| CQ-H3 | HIGH     | `listPendingJobs` missing workspace scope (cross-tenant leak) | knowledge                 |
+| CQ-H4 | HIGH     | `consumer.ts` retries on post-success DB write failure        | jobs                      |
+| CQ-H5 | HIGH     | No tests: contracts (200 lines), domain (120 lines)           | contracts, domain         |
+| CQ-M1 | MEDIUM   | 14 `result.rows[0]!` non-null assertions                      | knowledge/repositories.ts |
+| CQ-M2 | MEDIUM   | 55+ dead/unused exports across 5 packages                     | core packages             |
+
+### Infrastructure — Unresolved
+
+| #    | Severity | Finding                                                                   |
+| ---- | -------- | ------------------------------------------------------------------------- |
+| I-H1 | HIGH     | `db/schema.sql` out of sync with migrations (~20 tables not yet migrated) |
+| I-H2 | HIGH     | No production infrastructure-as-code exists                               |
+| I-H3 | HIGH     | MinIO uses `latest` tag (non-deterministic builds)                        |
+| I-M1 | MEDIUM   | `.env.example` incomplete (no LLM provider, observability config)         |
+| I-M2 | MEDIUM   | `scripts/ci/check-all.sh` omits security checks that CI runs              |
+
+---
+
+## Execution Order (Updated)
+
+### Completed (2026-06-10)
+
+```
+✅ Phase 0 — CRITICAL fixes
+  ├── ✅ C-1: OIDC state/nonce fix (4 files changed)
+  ├── ✅ C-2: P0-GATE run record update
+  ├── ✅ C-3: Gate dependency chain reconciled (status.yaml)
+  └── ✅ C-4: Duplicate T0-T05.md deleted, P0-T05.md header fixed
 ```
 
-After:
+### Recommended Next — Phase 1 (Security, ~2 hours)
 
-```typescript
-app.post('/auth/logout', async (request: FastifyRequest, reply: FastifyReply) => {
-  // NOTE: Server-side session revocation is deferred.
-  // The session token remains valid until natural expiry (max 24h).
-  // Mitigation: cookies are HttpOnly + SameSite=Lax.
-  // A Redis-backed RevocationStore will enable full revocation (see P1-T02 run record).
-
-  // Clear the session cookie
-  const clearHeader = clearSessionCookieHeader(oidcConfig.secureCookies);
-  void reply.header('set-cookie', clearHeader);
-
-  return reply.send({ status: 'ok', message: 'Logged out.' });
-});
+```
+  ├── S-H1: Add Secure flag to CSRF cookie (1 line)
+  ├── S-H2: Add workspace_id to getStoredFileByKey query (1 SQL param)
+  ├── S-H3: Add Strict-Transport-Security header (1 line)
+  ├── S-M1: Fix CSP to allow web shell scripts
+  └── S-M6: Remove hardcoded DB credentials from client.ts default
 ```
 
-**Also remove the unused import** on line 11. Before:
+### Recommended Next — Phase 2 (Governance, ~30 min)
 
-```typescript
-import {
-  generateState,
-  generateNonce,
-  createSessionToken,
-  sessionCookieHeader,
-  clearSessionCookieHeader,
-  revokeSession,
-  resolveOrCreateUser,
-} from '@pia/auth';
+```
+  ├── TASK-F-007: Fix validate-status.ts (add yaml dep, fix parser)
+  ├── TASK-F-009: Remove SHA256SUMS
+  └── TASK-F-010: Add benchmark_out/ to .gitignore
 ```
 
-After (remove `revokeSession`):
+### Recommended Next — Phase 3 (Code Quality, ~1 hour)
 
-```typescript
-import {
-  generateState,
-  generateNonce,
-  createSessionToken,
-  sessionCookieHeader,
-  clearSessionCookieHeader,
-  resolveOrCreateUser,
-} from '@pia/auth';
 ```
-
-**Validation:**
-
-```bash
-pnpm typecheck
-pnpm lint
-pnpm --filter @pia/api test:unit
-```
-
-All should pass. No new lint warnings from the removed import.
-
-**Rollback:**
-
-```bash
-git checkout apps/api/src/routes/auth.ts
+  ├── CQ-H5: Add tests for contracts and domain packages
+  ├── CQ-M2: Trim 55+ dead exports
+  ├── TASK-F-008: Remove dead traceId code in correlation.ts
+  └── TASK-F-011: Remove redundant updateStatus in consumer.ts
 ```
 
 ---
 
-## Phase 3 — Code Quality and Documentation
-
-### TASK-F-004: Add null guard to `hashPayload`
-
-**Problem:** `apps/api/src/plugins/idempotency.ts:262-265` — `Object.keys(null)` crashes.
-
-**Action:** Add a defensive guard.
-
-**Edit `apps/api/src/plugins/idempotency.ts`** — lines 262-265:
-
-Before:
-
-```typescript
-function hashPayload(payload: unknown): string {
-  const normalized = JSON.stringify(payload, Object.keys(payload as object).sort());
-  return createHash('sha256').update(normalized).digest('hex');
-}
-```
-
-After:
-
-```typescript
-function hashPayload(payload: unknown): string {
-  // Guard against null, primitives, and arrays — only plain objects are hashable
-  if (payload === null || typeof payload !== 'object' || Array.isArray(payload)) {
-    payload = {};
-  }
-  const normalized = JSON.stringify(payload, Object.keys(payload as object).sort());
-  return createHash('sha256').update(normalized).digest('hex');
-}
-```
-
-**Validation:**
+## Post-Repair Verification
 
 ```bash
-pnpm typecheck
-pnpm lint
-```
-
-No new tests needed — the function is internal and the guard is trivial. If desired, add a quick inline test:
-
-```bash
-node -e "
-const { createHash } = require('node:crypto');
-function hashPayload(payload) {
-  if (payload === null || typeof payload !== 'object' || Array.isArray(payload)) payload = {};
-  return createHash('sha256').update(JSON.stringify(payload, Object.keys(payload).sort())).digest('hex');
-}
-console.log(hashPayload(null));
-console.log(hashPayload(undefined));
-console.log(hashPayload('string'));
-console.log(hashPayload(42));
-console.log('All inputs handled without crash');
-"
-```
-
-**Rollback:**
-
-```bash
-git checkout apps/api/src/plugins/idempotency.ts
-```
-
----
-
-### TASK-F-005: Cache health check database pool
-
-**Problem:** `apps/api/src/routes/health.ts:18-21` — new pool created and destroyed on every `/health/ready` call.
-
-**Action:** Move pool to module scope. Clean up on server close.
-
-**Edit `apps/api/src/routes/health.ts`** — replace lines 1-34:
-
-Before:
-
-```typescript
-import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
-import type { HealthResponse } from '@pia/contracts';
-
-const healthRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
-  app.get('/health/live', async (): Promise<HealthResponse> => {
-    return { status: 'ok' };
-  });
-
-  app.get('/health/ready', async (_request, reply): Promise<HealthResponse> => {
-    // Check database connectivity
-    try {
-      const { createPool } = await import('@pia/db');
-      const pool = createPool();
-      await pool.query('SELECT 1');
-      await pool.end();
-
-      return { status: 'ok', checks: { database: 'ok' } };
-    } catch {
-      void reply.status(503);
-      return {
-        status: 'unavailable',
-        checks: { database: 'unavailable' },
-      };
-    }
-  });
-};
-
-export default healthRoutes;
-```
-
-After:
-
-```typescript
-import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
-import type { HealthResponse } from '@pia/contracts';
-import { createPool } from '@pia/db';
-import type { Pool } from 'pg';
-
-let healthPool: Pool | null = null;
-
-function getHealthPool(): Pool {
-  if (!healthPool) {
-    healthPool = createPool();
-  }
-  return healthPool;
-}
-
-const healthRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
-  // Clean up the health-check pool on server shutdown
-  app.addHook('onClose', async () => {
-    if (healthPool) {
-      await healthPool.end();
-      healthPool = null;
-    }
-  });
-
-  app.get('/health/live', async (): Promise<HealthResponse> => {
-    return { status: 'ok' };
-  });
-
-  app.get('/health/ready', async (_request, reply): Promise<HealthResponse> => {
-    try {
-      const pool = getHealthPool();
-      await pool.query('SELECT 1');
-
-      return { status: 'ok', checks: { database: 'ok' } };
-    } catch {
-      void reply.status(503);
-      return {
-        status: 'unavailable',
-        checks: { database: 'unavailable' },
-      };
-    }
-  });
-};
-
-export default healthRoutes;
-```
-
-**Validation:**
-
-```bash
-pnpm typecheck
-pnpm lint
-pnpm --filter @pia/api test:unit
-```
-
-All should pass.
-
-**Rollback:**
-
-```bash
-git checkout apps/api/src/routes/health.ts
-```
-
----
-
-### TASK-F-006: Update MANIFEST.md
-
-**Problem:** `MANIFEST.md:5` says `Files: 37`. Actual count is 219.
-
-**Action:** Replace the manifest with a current summary.
-
-**Edit `MANIFEST.md`** — replace entire contents:
-
-```markdown
-# Repository Manifest
-
-Personal Intelligence and Action Engine — monorepo for a private, evidence-grounded
-LLM/agent platform with workspace isolation, OIDC authentication, document ingestion,
-hybrid retrieval, and governed persistent memory.
-
-## Current State (2026-06-10)
-
-- **Tracked files:** 219
-- **Phase:** P0, P1, P2 in progress; P3-P7 not started
-- **Backlog tasks:** 64 defined, 17 completed, 2 failed verification
-- **Baseline:** `main` @ `90e6423`
-
-## Package Inventory
-
-| Package              | Status | Purpose                                              |
-| -------------------- | ------ | ---------------------------------------------------- |
-| `@pia/api`           | Active | Fastify API server with auth, workspaces, uploads    |
-| `@pia/worker`        | Active | Background job consumer with outbox polling          |
-| `@pia/web`           | Shell  | Future Next.js frontend                              |
-| `@pia/auth`          | Active | OIDC client, JWT sessions, RBAC, identity resolution |
-| `@pia/config`        | Active | Typed env-var config with Redacted secret handling   |
-| `@pia/contracts`     | Active | Shared API types, error envelopes, pagination        |
-| `@pia/db`            | Active | PostgreSQL pool, migrations, membership queries      |
-| `@pia/domain`        | Active | Authorization types and role hierarchy               |
-| `@pia/jobs`          | Active | Outbox events, consumer, retry policies              |
-| `@pia/knowledge`     | Active | Document repos, ingestion workflow, scan provider    |
-| `@pia/observability` | Active | Structured logger, correlation context, redaction    |
-| `@pia/storage`       | Active | S3 and in-memory storage adapters                    |
-| `@pia/audit`         | Active | Audit event writer, reader, redaction                |
-| `@pia/ai`            | Shell  | Future AI/LLM integration (Phase P3)                 |
-| `@pia/memory`        | Shell  | Future persistent memory (Phase P4)                  |
-| `@pia/tools`         | Shell  | Future tool gateway (Phase P5)                       |
-| `@pia/evals`         | Shell  | Future evaluation framework (Phase P6)               |
-
-## Key Artifacts
-
-| Path                        | Purpose                                                   |
-| --------------------------- | --------------------------------------------------------- |
-| `docs/00-09_*.md`           | Authoritative specifications (PRD through external basis) |
-| `planning/backlog.yaml`     | Machine-readable task graph (64 tasks, 8 phase gates)     |
-| `planning/status.yaml`      | Execution state tracker                                   |
-| `planning/runs/`            | Per-task run records with verification evidence           |
-| `api/openapi.yaml`          | API contract (37 operations)                              |
-| `db/schema.sql`             | Reference PostgreSQL/pgvector schema                      |
-| `db/migrations/`            | Versioned forward migrations                              |
-| `.github/workflows/ci.yaml` | CI quality gates and security checks                      |
-| `compose.yaml`              | Local development dependencies (pgvector, Redis, MinIO)   |
-```
-
-**Validation:**
-
-```bash
-grep "Files:" MANIFEST.md
-# Should show the updated text, not "Files: 37"
-```
-
-**Rollback:**
-
-```bash
-git checkout MANIFEST.md
-```
-
----
-
-## Execution Order
-
-Tasks within each phase are independent but phases should run sequentially:
-
-```
-Phase 1 (governance)
-  ├── TASK-F-001  (P1-T02 status)
-  └── TASK-F-002  (P0-T05 status, depends on F-001 passing validation)
-
-Phase 2 (logout fix)
-  └── TASK-F-003  (standalone)
-
-Phase 3 (cleanup)
-  ├── TASK-F-004  (hashPayload guard)
-  ├── TASK-F-005  (health pool caching)
-  └── TASK-F-006  (MANIFEST update)
-```
-
----
-
-## Approval Required
-
-**Before any edits**, confirm:
-
-1. The working tree is clean (`git status` shows nothing)
-2. You have reviewed the exact changes listed above
-3. You understand the rollback for each task
-
-Reply with the phases you want applied (e.g., "Apply Phase 1 and Phase 2" or "Apply all phases").
-
----
-
-## Post-Repair Checklist
-
-After all approved phases are applied:
-
-```bash
-# Governance validation
-pnpm exec tsx scripts/ci/validate-status.ts
-
 # Type safety
 pnpm typecheck
 
@@ -527,7 +210,9 @@ pnpm format:check
 # Security
 pnpm security:secrets
 
+# Governance validation (once TASK-F-007 is done)
+pnpm exec tsx scripts/ci/validate-status.ts
+
 # Review the diff
 git diff --stat
-git diff
 ```

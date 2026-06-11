@@ -2,8 +2,8 @@ project: personal-intelligence-action-engine
 schema_version: 1
 updated_at: 2026-06-10
 phases:
-  P0: IN_PROGRESS
-  P1: IN_PROGRESS
+  P0: DONE
+  P1: DONE
   P2: IN_PROGRESS
   P3: NOT_STARTED
   P4: NOT_STARTED
@@ -11,8 +11,8 @@ phases:
   P6: NOT_STARTED
   P7: NOT_STARTED
 gates:
-  P0-GATE: FAILED_VERIFICATION
-  P1-GATE: NOT_STARTED
+  P0-GATE: DONE
+  P1-GATE: DONE
   P2-GATE: NOT_STARTED
   P3-GATE: NOT_STARTED
   P4-GATE: NOT_STARTED

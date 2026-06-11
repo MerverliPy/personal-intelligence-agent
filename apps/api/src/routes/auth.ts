@@ -3,7 +3,6 @@ import fp from 'fastify-plugin';
 import type { Pool } from 'pg';
 import type { OidcClient, OidcConfig, LoginTransactionStore, SessionData } from '@pia/auth';
 import {
-  generateState,
   createSessionToken,
   sessionCookieHeader,
   clearSessionCookieHeader,
@@ -44,15 +43,17 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
   // GET /auth/login — initiate OIDC flow
   // ------------------------------------------------------------------
   app.get('/auth/login', async (_request: FastifyRequest, reply: FastifyReply) => {
-    const state = generateState();
-
+    // The OIDC client generates state internally (CSRF protection) and embeds
+    // it in the authorization URL.  We must use that state — not an independent
+    // one — so the callback can match it against the stored transaction.
     const authParams = await oidcClient.getAuthorizationUrl();
 
-    // Store the login transaction (state → {codeVerifier, redirectUri})
+    // Store the login transaction (state → {codeVerifier, nonce, redirectUri})
     await loginStore.create(
-      state,
+      authParams.state,
       {
         codeVerifier: authParams.codeVerifier,
+        nonce: authParams.nonce,
         redirectUri: oidcConfig.redirectUri,
         returnUrl: '/',
       },

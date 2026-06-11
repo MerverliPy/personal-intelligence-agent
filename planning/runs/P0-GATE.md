@@ -4,8 +4,8 @@
 
 - **ID:** P0-GATE
 - **Phase:** P0
-- **Final State:** DONE (PASS)
-- **Completed:** 2026-06-09
+- **Final State:** DONE (re-verified 2026-06-10)
+- **Completed:** 2026-06-09 (original) / 2026-06-10 (re-verification after P0-T05 audit resolution)
 
 ---
 
@@ -20,14 +20,14 @@
 
 ### Task Completion Status
 
-| Task   | State | Run Record                                       | Deps Satisfied |
-| ------ | ----- | ------------------------------------------------ | -------------- |
-| P0-T01 | DONE  | `planning/runs/P0-T01.md` — monorepo + toolchain | none           |
-| P0-T02 | DONE  | `planning/runs/P0-T02.md` — typed config         | P0-T01         |
-| P0-T03 | DONE  | `planning/runs/P0-T03.md` — Docker Compose       | P0-T01         |
-| P0-T04 | DONE  | `planning/runs/P0-T04.md` — CI + quality gates   | P0-T01         |
-| P0-T05 | DONE  | `planning/runs/T0-T05.md` — observability        | P0-T01, P0-T02 |
-| P0-T06 | DONE  | `planning/runs/P0-T06.md` — threat model + sec   | P0-T01         |
+| Task   | State | Run Record                                              | Deps Satisfied |
+| ------ | ----- | ------------------------------------------------------- | -------------- |
+| P0-T01 | DONE  | `planning/runs/P0-T01.md` — monorepo + toolchain        | none           |
+| P0-T02 | DONE  | `planning/runs/P0-T02.md` — typed config                | P0-T01         |
+| P0-T03 | DONE  | `planning/runs/P0-T03.md` — Docker Compose              | P0-T01         |
+| P0-T04 | DONE  | `planning/runs/P0-T04.md` — CI + quality gates          | P0-T01         |
+| P0-T05 | DONE  | `planning/runs/P0-T05.md` — observability + correlation | P0-T01, P0-T02 |
+| P0-T06 | DONE  | `planning/runs/P0-T06.md` — threat model + sec          | P0-T01         |
 
 ### Quality Gate Checks — All PASS
 
@@ -62,12 +62,23 @@ Additional validations:
 
 ## Observations (Non-Blocking)
 
-1. **Run record naming inconsistency**: `planning/runs/T0-T05.md` should be `P0-T05.md` to match task ID convention.
+1. ~~Run record naming inconsistency~~ — Resolved 2026-06-10: `T0-T05.md` deleted, gate record references `P0-T05.md`.
 2. **Incomplete reviewer sign-off sections**: Records for P0-T01, P0-T02, P0-T05, and P0-T06 lack explicit reviewer sign-off subsections (P0-T03 and P0-T04 include them). Verification evidence is complete regardless.
 3. **Dev-only dependency vulnerabilities** (accepted risk, documented in P0-T06): vitest 2.1.9 (critical GHSA-5xrq-8626-4rwp), esbuild/vite (moderate). No production impact — `pnpm audit --prod` is clean.
 4. **Missing top-level scripts vs. test strategy**: `docs/07_TEST_EVALUATION_STRATEGY.md` §6 lists `test:integration`, `test:e2e`, `test:security`, `eval:retrieval`, and `eval:answers` as "Canonical scripts to be implemented in P0." These belong to later phases per the task graph — specification alignment gap, not a P0 defect.
 5. **App build stubs** (`echo`): `apps/web`, `apps/api`, `apps/worker` have no real build tooling yet. Expected at P0 — real frameworks are introduced in P1-T07.
 6. **Docker services not integrated in CI**: `compose.yaml` services are available locally but not started in GitHub Actions. P1 tasks will add service containers when integration tests are added.
+
+### Re-Verification Note (2026-06-10)
+
+The review at `planning/reviews/P0-GATE.md` (2026-06-10) downgraded the gate to `FAILED_VERIFICATION` because P0-T05 acceptance criterion #1 (per-request/job correlation) was unmet. P0-T05 has since been remediated — all four required fixes from the audit addendum (`planning/runs/P0-T05.md:111-126`) are confirmed in code:
+
+- `apps/api/src/plugins/correlation.ts` — wraps every request in `runWithCorrelation()`
+- `packages/jobs/src/consumer.ts:198-200` — wraps handler execution in `runWithCorrelation()`
+- `apps/api/src/plugins/request-id.ts` — enforces max length (64) and safe character set
+- `apps/api/test/api.test.ts:254-323` — context isolation tests
+
+With P0-T05 now DONE, the gate is re-verified as PASS.
 
 ## Commands Run and Results
 

@@ -54,6 +54,8 @@ export interface AuthorizationParams {
   codeVerifier: string;
   /** Opaque state parameter for CSRF protection. */
   state: string;
+  /** OIDC nonce for replay protection (stored server-side, validated on callback). */
+  nonce: string;
 }
 
 /** User info returned from the OIDC provider. */
