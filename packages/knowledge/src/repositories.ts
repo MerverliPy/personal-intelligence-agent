@@ -265,10 +265,11 @@ export async function createStoredFile(
 }
 
 /**
- * Returns a stored file by storage provider and object key.
+ * Returns a stored file by workspace, storage provider, and object key.
  */
 export async function getStoredFileByKey(
   pool: Pool,
+  workspaceId: string,
   storageProvider: string,
   objectKey: string,
 ): Promise<StoredFile | null> {
@@ -287,10 +288,10 @@ export async function getStoredFileByKey(
     created_by: string;
     created_at: string;
     deleted_at: string | null;
-  }>(`SELECT * FROM stored_files WHERE storage_provider = $1 AND object_key = $2`, [
-    storageProvider,
-    objectKey,
-  ]);
+  }>(
+    `SELECT * FROM stored_files WHERE workspace_id = $1 AND storage_provider = $2 AND object_key = $3`,
+    [workspaceId, storageProvider, objectKey],
+  );
   if (result.rows.length === 0) return null;
   const row = result.rows[0]!;
   return {

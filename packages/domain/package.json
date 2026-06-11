@@ -16,6 +16,6 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
-    "test:unit": "echo 'domain: no tests yet' && exit 0"
+    "test:unit": "vitest run"
   }
 }

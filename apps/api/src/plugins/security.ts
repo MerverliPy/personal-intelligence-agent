@@ -16,13 +16,22 @@ async function securityHeadersHook(
   void reply.header('X-Content-Type-Options', 'nosniff');
   void reply.header('X-Frame-Options', 'DENY');
   void reply.header('Referrer-Policy', 'strict-origin-when-cross-origin');
+
+  // S-H3: HTTP Strict Transport Security (production only — HSTS over HTTP breaks dev)
+  if (process.env['NODE_ENV'] === 'production') {
+    void reply.header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+
   void reply.header(
     'Permissions-Policy',
     'camera=(), microphone=(), geolocation=(), interest-cohort=()',
   );
   void reply.header(
     'Content-Security-Policy',
-    "default-src 'none'; frame-ancestors 'none'; form-action 'self'",
+    // S-M1: Allow self-origin scripts and fetch for the authenticated web shell.
+    // default-src 'none' is the baseline; script-src and connect-src are relaxed
+    // to let the /app shell run inline module scripts and call API endpoints.
+    "default-src 'none'; script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; form-action 'self'",
   );
   return payload;
 }
@@ -87,7 +96,8 @@ export const csrfPlugin: FastifyPluginAsync = async (app: FastifyInstance) => {
 
     const token = crypto.randomBytes(32).toString('base64url');
     const existingSetCookie = reply.getHeader('set-cookie');
-    const csrfCookie = `${CSRF_COOKIE}=${token}; Path=/; SameSite=Strict; Max-Age=${24 * 3600}`;
+    const secureFlag = process.env['NODE_ENV'] === 'production' ? '; Secure' : '';
+    const csrfCookie = `${CSRF_COOKIE}=${token}; Path=/; SameSite=Strict; Max-Age=${24 * 3600}${secureFlag}`;
 
     if (Array.isArray(existingSetCookie)) {
       void reply.header('Set-Cookie', [...existingSetCookie, csrfCookie]);

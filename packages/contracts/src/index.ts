@@ -132,7 +132,7 @@ export const MAX_PAGE_LIMIT = 200;
  * Uses base64url-encoded JSON for simplicity.
  */
 export function encodeCursor(value: string): string {
-  return Buffer.from(JSON.stringify({ v: value })).toString('base64url');
+  return Buffer.from(JSON.stringify({ value })).toString('base64url');
 }
 
 /**

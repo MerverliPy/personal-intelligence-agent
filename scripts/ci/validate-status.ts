@@ -85,7 +85,8 @@ function validate(backlog: Backlog, status: Status): ValidationError[] {
 
     const deps = task.depends_on ?? [];
     for (const depId of deps) {
-      const depState = status.tasks[depId];
+      // Dependencies can be tasks or gates — resolve from the correct map.
+      const depState = status.tasks[depId] ?? status.gates[depId];
       if (depState !== 'DONE' && depState !== 'NO_CHANGE_REQUIRED') {
         errors.push({
           type: 'dependency',

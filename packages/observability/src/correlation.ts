@@ -8,8 +8,6 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 export interface CorrelationContext {
   /** Unique correlation identifier. */
   correlationId: string;
-  /** Optional trace/parent id for distributed tracing. */
-  traceId?: string;
   /** Optional span id for the current operation. */
   spanId?: string;
 }
@@ -27,7 +25,6 @@ export function createCorrelationId(): string {
  * Creates a new correlation context.
  *
  * @param correlationId - Optional correlation ID. If not provided, a fresh UUID v4 is generated.
- * @param traceId - Optional distributed trace ID.
  * @param spanId - Optional span ID for the current operation.
  */
 export function createCorrelationContext(

@@ -442,7 +442,7 @@ describe('stored file repository', () => {
     expect(file.storageProvider).toBe('minio');
     expect(file.sizeBytes).toBe(1024);
 
-    const byKey = await getStoredFileByKey(pool, 'minio', key);
+    const byKey = await getStoredFileByKey(pool, wsid, 'minio', key);
     expect(byKey).not.toBeNull();
     expect(byKey!.originalFilename).toBe('file1.txt');
 

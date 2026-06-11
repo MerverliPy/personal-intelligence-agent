@@ -212,6 +212,7 @@ export async function completeUploadWorkflow(
     // -------------------------------------------------------------------
     const existing = await getStoredFileByKey(
       asPool(client),
+      input.workspaceId,
       input.storageProviderName,
       completion.objectKey,
     );
