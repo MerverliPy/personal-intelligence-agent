@@ -44,7 +44,7 @@ export type {
 } from './types.js';
 
 export { createLogger } from './logger.js';
-export { createNoopMeter, createNoopTracer } from './metrics.js';
+// createNoopMeter / createNoopTracer are internal to createObservability above
 export { redactSensitiveFields, redactLogPayload, SENSITIVE_LOG_FIELDS } from './redact.js';
 export {
   createCorrelationId,

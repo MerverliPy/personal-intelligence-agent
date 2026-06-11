@@ -40,6 +40,13 @@ export async function resolveOrCreateUser(
   email: string,
   displayName?: string,
 ): Promise<ResolvedIdentity> {
+  // Determine whether this is a new user before the upsert.
+  const preCheck = await client.query<{ id: string }>(
+    `SELECT id FROM users WHERE lower(email) = lower($1) AND deleted_at IS NULL`,
+    [email],
+  );
+  const isNewUser = preCheck.rows.length === 0;
+
   // 1. Upsert the user by email.
   const userResult = await client.query<{ id: string; email: string }>(
     `INSERT INTO users (email, display_name)
@@ -126,7 +133,7 @@ export async function resolveOrCreateUser(
 
   return {
     userId: resolvedUserId,
-    isNewUser: false,
+    isNewUser,
     isNewIdentity,
     email,
   };

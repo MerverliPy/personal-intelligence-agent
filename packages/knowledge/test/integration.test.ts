@@ -803,7 +803,7 @@ describe('ingestion job repository', () => {
       idempotencyKey: `ingest-pending-${Date.now()}`,
       pipelineVersion: '1.0.0',
     });
-    const jobs = await listPendingJobs(pool, 50);
+    const jobs = await listPendingJobs(pool, wsid, 50);
     const allQueuedOrRetry = jobs.every((j) => j.status === 'QUEUED' || j.status === 'RETRY_WAIT');
     expect(allQueuedOrRetry).toBe(true);
   });

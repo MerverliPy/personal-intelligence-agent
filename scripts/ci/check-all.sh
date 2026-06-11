@@ -42,4 +42,12 @@ echo "=== Build ==="
 pnpm build
 
 echo ""
+echo "=== Security: Secrets scan ==="
+pnpm security:secrets
+
+echo ""
+echo "=== Security: Dependency audit ==="
+pnpm security:dependencies
+
+echo ""
 echo "=== All quality gates passed ==="

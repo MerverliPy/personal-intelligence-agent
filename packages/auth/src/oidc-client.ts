@@ -51,7 +51,7 @@ export interface OidcClient {
   getAuthorizationUrl(): Promise<AuthorizationParams>;
 
   /** Exchange authorization code for tokens and return user info. */
-  handleCallback(code: string, state: string, codeVerifier: string): Promise<OidcUserInfo>;
+  handleCallback(code: string, state: string, codeVerifier: string, nonce: string): Promise<OidcUserInfo>;
 
   /** Return the issuer URL this client is configured for. */
   getIssuerUrl(): string;
@@ -98,6 +98,7 @@ export function createFakeOidcClient(config: OidcConfig): OidcClient {
       code: string,
       _state: string,
       codeVerifier: string,
+      _nonce: string,
     ): Promise<OidcUserInfo> => {
       // Exchange code for tokens
       const tokenBody = new URLSearchParams({
@@ -219,6 +220,7 @@ export function createRealOidcClient(config: OidcConfig): OidcClient {
       code: string,
       state: string,
       codeVerifier: string,
+      nonce: string,
     ): Promise<OidcUserInfo> => {
       const oidcConfig = await getConfig();
 
@@ -237,6 +239,7 @@ export function createRealOidcClient(config: OidcConfig): OidcClient {
       // - `state` parameter matches authorization response
       const checks: AuthorizationCodeGrantChecks = {
         expectedState: state,
+        expectedNonce: nonce,
       };
 
       const tokenSet = await authorizationCodeGrant(oidcConfig, callbackUrl, checks, {

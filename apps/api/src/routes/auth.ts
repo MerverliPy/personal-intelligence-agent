@@ -8,6 +8,7 @@ import {
   clearSessionCookieHeader,
   resolveOrCreateUser,
 } from '@pia/auth';
+import type { RateLimitOptions } from '../plugins/rate-limit.js';
 
 /**
  * Options passed to the auth routes plugin.
@@ -42,7 +43,9 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
   // ------------------------------------------------------------------
   // GET /auth/login — initiate OIDC flow
   // ------------------------------------------------------------------
-  app.get('/auth/login', async (_request: FastifyRequest, reply: FastifyReply) => {
+  app.get('/auth/login', {
+    config: { rateLimit: { max: 5, windowSeconds: 60 } satisfies RateLimitOptions },
+  }, async (_request: FastifyRequest, reply: FastifyReply) => {
     // The OIDC client generates state internally (CSRF protection) and embeds
     // it in the authorization URL.  We must use that state — not an independent
     // one — so the callback can match it against the stored transaction.
@@ -67,7 +70,9 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
   // ------------------------------------------------------------------
   // GET /auth/callback — handle OIDC callback
   // ------------------------------------------------------------------
-  app.get('/auth/callback', async (request: FastifyRequest, reply: FastifyReply) => {
+  app.get('/auth/callback', {
+    config: { rateLimit: { max: 10, windowSeconds: 60 } satisfies RateLimitOptions },
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
     const query = request.query as Record<string, string>;
     const code = query['code'];
     const state = query['state'];
@@ -123,7 +128,7 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
       // Exchange authorization code for tokens and retrieve user info.
       // The OIDC client (real) validates: ID token signature, iss, aud, exp,
       // nonce (generated internally), and state parameter.
-      userInfoResult = await oidcClient.handleCallback(code, state, transaction.codeVerifier);
+      userInfoResult = await oidcClient.handleCallback(code, state, transaction.codeVerifier, transaction.nonce);
     } catch (err) {
       return reply.status(400).send({
         error: {
@@ -186,7 +191,9 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
   // ------------------------------------------------------------------
   // POST /auth/logout — terminate session
   // ------------------------------------------------------------------
-  app.post('/auth/logout', async (_request: FastifyRequest, reply: FastifyReply) => {
+  app.post('/auth/logout', {
+    config: { rateLimit: { max: 10, windowSeconds: 60 } satisfies RateLimitOptions },
+  }, async (_request: FastifyRequest, reply: FastifyReply) => {
     // NOTE: Server-side session revocation is deferred.
     // The session token remains valid until natural expiry (max 24h).
     // Mitigation: cookies are HttpOnly + SameSite=Lax.

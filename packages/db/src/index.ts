@@ -8,8 +8,5 @@ export {
 } from './migrate.js';
 export {
   getWorkspaceMembership,
-  listWorkspaceMembers,
   getProjectMembership,
-  listWorkspacesForUser,
-  listProjectsForUser,
 } from './membership.js';

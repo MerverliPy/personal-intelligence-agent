@@ -31,7 +31,7 @@ async function securityHeadersHook(
     // S-M1: Allow self-origin scripts and fetch for the authenticated web shell.
     // default-src 'none' is the baseline; script-src and connect-src are relaxed
     // to let the /app shell run inline module scripts and call API endpoints.
-    "default-src 'none'; script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; form-action 'self'",
+    "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; form-action 'self'",
   );
   return payload;
 }
@@ -91,13 +91,12 @@ export const csrfPlugin: FastifyPluginAsync = async (app: FastifyInstance) => {
   app.addHook('onSend', async (request, reply, payload) => {
     if (!request.session) return payload;
 
-    const cookies = parseCookies(request.headers['cookie'] ?? '');
-    if (cookies[CSRF_COOKIE]) return payload; // Already has a token
+    // Always set a fresh CSRF token to keep the Max-Age aligned with the session
 
     const token = crypto.randomBytes(32).toString('base64url');
     const existingSetCookie = reply.getHeader('set-cookie');
     const secureFlag = process.env['NODE_ENV'] === 'production' ? '; Secure' : '';
-    const csrfCookie = `${CSRF_COOKIE}=${token}; Path=/; SameSite=Strict; Max-Age=${24 * 3600}${secureFlag}`;
+    const csrfCookie = `${CSRF_COOKIE}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${24 * 3600}${secureFlag}`;
 
     if (Array.isArray(existingSetCookie)) {
       void reply.header('Set-Cookie', [...existingSetCookie, csrfCookie]);

@@ -13,6 +13,7 @@ import type { AuthPluginOptions } from './plugins/auth.js';
 import workspaceContextPlugin from './plugins/workspace-context.js';
 import idempotencyPlugin from './plugins/idempotency.js';
 import securityHeadersPlugin, { csrfPlugin } from './plugins/security.js';
+import rateLimitPlugin from './plugins/rate-limit.js';
 import healthRoutes from './routes/health.js';
 import workspaceRoutes from './routes/workspaces.js';
 import uploadRoutes from './routes/uploads.js';
@@ -44,7 +45,8 @@ export interface CreateServerOptions {
  * 5. auth           — extracts session, attaches req.session
  * 6. workspace-ctx  — resolves workspace membership context
  * 7. idempotency    — handles Idempotency-Key for write operations
- * 8. routes         — health, identity, workspaces, etc.
+ * 8. rate-limit     — enforces per-route request rate limits
+ * 9. routes         — health, identity, workspaces, etc.
  */
 export async function createServer(opts: CreateServerOptions) {
   const {
@@ -73,6 +75,7 @@ export async function createServer(opts: CreateServerOptions) {
   await app.register(idempotencyPlugin);
   await app.register(securityHeadersPlugin);
   await app.register(csrfPlugin);
+  await app.register(rateLimitPlugin);
 
   // ------------------------------------------------------------------
   // Routes

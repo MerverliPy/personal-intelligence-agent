@@ -61,6 +61,7 @@ export async function createSessionToken(
     .setIssuedAt()
     .setExpirationTime(`${maxAgeSeconds}s`)
     .setJti(jti)
+    .setAudience('pia-api')
     .sign(secret);
 }
 
@@ -86,7 +87,7 @@ export async function verifySessionToken(
   revocationStore?: RevocationStore,
 ): Promise<SessionData | null> {
   try {
-    const { payload } = await jwtVerify(token, secret, { algorithms: ['HS256'] });
+    const { payload } = await jwtVerify(token, secret, { algorithms: ['HS256'], audience: 'pia-api' });
 
     // Check revocation if a store is provided and the token has a jti
     if (revocationStore && payload.jti) {

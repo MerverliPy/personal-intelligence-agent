@@ -183,19 +183,11 @@ export class JobConsumer {
       startedAt,
     };
 
+    // --- Run the handler ---
     try {
       await runWithCorrelation(async () => {
         await handler.handle(record, context);
       }, createCorrelationContext(record.id));
-
-      // Success
-      await this.markCompleted(record.id);
-      this.logger.info('JobConsumer: job completed', {
-        jobId: record.id,
-        eventType: record.eventType,
-        attempt: context.attempt,
-        durationMs: Date.now() - startedAt.getTime(),
-      });
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err));
       const terminal = isTerminalError(error);
@@ -223,7 +215,18 @@ export class JobConsumer {
       }
 
       await this.scheduleRetry(record.id, context.attempt, delayMs);
+      return;
     }
+
+    // --- Handler succeeded: mark completed (independent retry, no handler re-run) ---
+    await this.markCompletedWithRetry(record.id);
+
+    this.logger.info('JobConsumer: job completed', {
+      jobId: record.id,
+      eventType: record.eventType,
+      attempt: context.attempt,
+      durationMs: Date.now() - startedAt.getTime(),
+    });
   }
 
   // -----------------------------------------------------------------------
@@ -275,6 +278,36 @@ export class JobConsumer {
        WHERE id = $1`,
       [jobId],
     );
+  }
+
+  /**
+   * Writes the COMPLETED status with up to 3 retries on transient DB errors.
+   * Does NOT re-invoke the handler — a persistent failure leaves the job in
+   * PROCESSING state for a future reconciliation sweep.
+   */
+  private async markCompletedWithRetry(jobId: string): Promise<void> {
+    for (let retry = 0; retry < 3; retry++) {
+      try {
+        await this.markCompleted(jobId);
+        return;
+      } catch (err) {
+        if (retry < 2) {
+          const delay = 2 ** retry * 500;
+          this.logger.warn('JobConsumer: markCompleted retry', {
+            jobId,
+            retry: retry + 1,
+            delayMs: delay,
+            error: err instanceof Error ? err.message : String(err),
+          });
+          await new Promise((resolve) => setTimeout(resolve, delay));
+        } else {
+          this.logger.error('JobConsumer: markCompleted failed after retries', {
+            jobId,
+            error: err instanceof Error ? err.message : String(err),
+          });
+        }
+      }
+    }
   }
 
   private async markDead(jobId: string, reason: string): Promise<void> {

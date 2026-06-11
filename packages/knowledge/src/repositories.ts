@@ -18,6 +18,12 @@ import {
   isValidIngestionJobTransition,
 } from './state-machine.js';
 
+function firstRow<T>(rows: T[]): T {
+  const first = rows[0];
+  if (first === undefined) throw new Error('Expected at least one row');
+  return first;
+}
+
 // ---------------------------------------------------------------------------
 // Sources
 // ---------------------------------------------------------------------------
@@ -57,7 +63,7 @@ export async function createSource(pool: Pool, input: CreateSourceInput): Promis
       input.createdBy,
     ],
   );
-  const row = result.rows[0]!;
+  const row = firstRow(result.rows);
   return {
     id: row.id,
     workspaceId: row.workspace_id,
@@ -104,7 +110,7 @@ export async function getSourceById(
     sourceId,
   ]);
   if (result.rows.length === 0) return null;
-  const row = result.rows[0]!;
+  const row = firstRow(result.rows);
   return {
     id: row.id,
     workspaceId: row.workspace_id,
@@ -245,7 +251,7 @@ export async function createStoredFile(
       input.createdBy,
     ],
   );
-  const row = result.rows[0]!;
+  const row = firstRow(result.rows);
   return {
     id: row.id,
     workspaceId: row.workspace_id,
@@ -289,11 +295,11 @@ export async function getStoredFileByKey(
     created_at: string;
     deleted_at: string | null;
   }>(
-    `SELECT * FROM stored_files WHERE workspace_id = $1 AND storage_provider = $2 AND object_key = $3`,
+    `SELECT * FROM stored_files WHERE workspace_id = $1 AND storage_provider = $2 AND object_key = $3 AND deleted_at IS NULL`,
     [workspaceId, storageProvider, objectKey],
   );
   if (result.rows.length === 0) return null;
-  const row = result.rows[0]!;
+  const row = firstRow(result.rows);
   return {
     id: row.id,
     workspaceId: row.workspace_id,
@@ -361,7 +367,7 @@ export async function updateStoredFileScanResult(
   if (result.rows.length === 0) {
     throw new Error(`Stored file not found: ${fileId}`);
   }
-  const row = result.rows[0]!;
+  const row = firstRow(result.rows);
   return {
     id: row.id,
     workspaceId: row.workspace_id,
@@ -408,7 +414,7 @@ export async function getStoredFileById(
     fileId,
   ]);
   if (result.rows.length === 0) return null;
-  const row = result.rows[0]!;
+  const row = firstRow(result.rows);
   return {
     id: row.id,
     workspaceId: row.workspace_id,
@@ -460,7 +466,7 @@ export async function createDocument(pool: Pool, input: CreateDocumentInput): Pr
       input.createdBy,
     ],
   );
-  const row = result.rows[0]!;
+  const row = firstRow(result.rows);
   return {
     id: row.id,
     workspaceId: row.workspace_id,
@@ -501,7 +507,7 @@ export async function getDocumentById(
     documentId,
   ]);
   if (result.rows.length === 0) return null;
-  const row = result.rows[0]!;
+  const row = firstRow(result.rows);
   return {
     id: row.id,
     workspaceId: row.workspace_id,
@@ -630,7 +636,7 @@ export async function createDocumentVersion(
       input.createdBy,
     ],
   );
-  const row = result.rows[0]!;
+  const row = firstRow(result.rows);
   return {
     id: row.id,
     workspaceId: row.workspace_id,
@@ -683,7 +689,7 @@ export async function getDocumentVersionById(
     versionId,
   ]);
   if (result.rows.length === 0) return null;
-  const row = result.rows[0]!;
+  const row = firstRow(result.rows);
   return {
     id: row.id,
     workspaceId: row.workspace_id,
@@ -821,7 +827,7 @@ export async function transitionDocumentVersionStatus(
   if (result.rows.length === 0) {
     throw new Error(`Document version not found after update: ${versionId}`);
   }
-  const row = result.rows[0]!;
+  const row = firstRow(result.rows);
   return {
     id: row.id,
     workspaceId: row.workspace_id,
@@ -918,7 +924,7 @@ export async function createIngestionJob(
      RETURNING *`,
     [input.workspaceId, input.documentVersionId, input.idempotencyKey, input.pipelineVersion],
   );
-  const row = result.rows[0]!;
+  const row = firstRow(result.rows);
   return {
     id: row.id,
     workspaceId: row.workspace_id,
@@ -966,7 +972,7 @@ export async function getIngestionJobById(
     updated_at: string;
   }>(`SELECT * FROM ingestion_jobs WHERE workspace_id = $1 AND id = $2`, [workspaceId, jobId]);
   if (result.rows.length === 0) return null;
-  const row = result.rows[0]!;
+  const row = firstRow(result.rows);
   return {
     id: row.id,
     workspaceId: row.workspace_id,
@@ -1031,7 +1037,7 @@ export async function transitionIngestionJobStatus(
   if (result.rows.length === 0) {
     throw new Error(`Ingestion job not found after update: ${jobId}`);
   }
-  const row = result.rows[0]!;
+  const row = firstRow(result.rows);
   return {
     id: row.id,
     workspaceId: row.workspace_id,
@@ -1056,7 +1062,7 @@ export async function transitionIngestionJobStatus(
  * Lists pending ingestion jobs (QUEUED or RETRY_WAIT) with FOR UPDATE SKIP LOCKED
  * for safe concurrent consumption by workers.
  */
-export async function listPendingJobs(pool: Pool, limit?: number): Promise<IngestionJob[]> {
+export async function listPendingJobs(pool: Pool, workspaceId: string, limit?: number): Promise<IngestionJob[]> {
   const result = await pool.query<{
     id: string;
     workspace_id: string;
@@ -1076,12 +1082,13 @@ export async function listPendingJobs(pool: Pool, limit?: number): Promise<Inges
     updated_at: string;
   }>(
     `SELECT * FROM ingestion_jobs
-     WHERE status IN ('QUEUED', 'RETRY_WAIT')
+     WHERE workspace_id = $1
+       AND status IN ('QUEUED', 'RETRY_WAIT')
        AND (next_attempt_at IS NULL OR next_attempt_at <= now())
      ORDER BY created_at
-     LIMIT $1
+     LIMIT $2
      FOR UPDATE SKIP LOCKED`,
-    [limit ?? 10],
+    [workspaceId, limit ?? 10],
   );
   return result.rows.map((row) => ({
     id: row.id,

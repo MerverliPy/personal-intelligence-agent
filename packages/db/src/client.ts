@@ -5,7 +5,7 @@ import { Pool, type PoolConfig } from 'pg';
  * In production, DATABASE_URL must be set explicitly.
  */
 const DEFAULT_POOL_CONFIG: PoolConfig = {
-  connectionString: process.env['DATABASE_URL'] ?? 'postgresql://localhost:5432/pia',
+  connectionString: process.env['DATABASE_URL'] ?? '',
   max: 10,
   idleTimeoutMillis: 30_000,
   connectionTimeoutMillis: 5_000,
