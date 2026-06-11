@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.next/
+.turbo/
+coverage/
+.idea/
+.vscode/
+.git/
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+ci-output/
+test-results/
+.venv/

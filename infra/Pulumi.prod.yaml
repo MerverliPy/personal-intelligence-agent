@@ -1,0 +1,18 @@
+encryptionsalt: v1:CHANGEME=
+config:
+  aws:region: us-east-2
+
+  pia-prod:vpcCidr: '10.0.0.0/16'
+  pia-prod:azCount: '2'
+  pia-prod:databaseName: pia
+  pia-prod:databaseUser: pia_admin
+  pia-prod:redisNodeType: cache.t4g.micro
+  pia-prod:apiCpu: '512'
+  pia-prod:apiMemory: '1024'
+  pia-prod:apiDesiredCount: '2'
+  pia-prod:apiPort: '3000'
+  pia-prod:workerCpu: '512'
+  pia-prod:workerMemory: '1024'
+  pia-prod:workerDesiredCount: '1'
+  pia-prod:domainName: ''
+  pia-prod:certificateArn: ''
