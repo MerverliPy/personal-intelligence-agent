@@ -6,8 +6,6 @@ import { randomBytes } from 'node:crypto';
 export interface LoginTransactionData {
   /** PKCE code verifier for the authorization code exchange. */
   codeVerifier: string;
-  /** OIDC nonce parameter for replay protection. */
-  nonce: string;
   /** The redirect URI used to initiate the flow. */
   redirectUri: string;
   /** Where to redirect the user after successful login (state parameter). */

@@ -1,7 +1,7 @@
 import type { Pool } from 'pg';
 import type { Logger } from '@pia/observability';
 import { runWithCorrelation, createCorrelationContext } from '@pia/observability';
-import type { JobHandler, JobContext, OutboxRecord, OutboxStatus } from './types.js';
+import type { JobHandler, JobContext, OutboxRecord } from './types.js';
 import { createExponentialBackoffRetryPolicy, isTerminalError } from './retry.js';
 
 /**
@@ -176,17 +176,6 @@ export class JobConsumer {
   private async processJob(record: OutboxRecord, handler: JobHandler): Promise<void> {
     const startedAt = new Date();
 
-    try {
-      // Mark as PROCESSING before invoking handler
-      await this.updateStatus(record.id, 'PROCESSING');
-    } catch (err) {
-      this.logger.error('JobConsumer: failed to mark PROCESSING', {
-        jobId: record.id,
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return;
-    }
-
     const context: JobContext = {
       correlationId: record.id,
       attempt: record.attempt + 1,
@@ -276,10 +265,6 @@ export class JobConsumer {
       [this.config.batchSize],
     );
     return result.rows;
-  }
-
-  private async updateStatus(jobId: string, status: OutboxStatus): Promise<void> {
-    await this.pool.query(`UPDATE outbox_events SET status = $2 WHERE id = $1`, [jobId, status]);
   }
 
   private async markCompleted(jobId: string): Promise<void> {

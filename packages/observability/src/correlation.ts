@@ -31,32 +31,19 @@ export function createCorrelationId(): string {
  * @param spanId - Optional span ID for the current operation.
  */
 export function createCorrelationContext(
-  correlationIdOrTrace?: string,
+  correlationId?: string,
   spanId?: string,
 ): CorrelationContext {
-  // Determine if first arg is intended as correlationId or traceId.
-  // We treat the first arg as correlationId when it's a UUID-like string.
-  // Otherwise it's treated as traceId for backward compatibility.
-  let correlationId: string;
-  let traceId: string | undefined;
   let finalSpanId: string | undefined;
-
-  if (correlationIdOrTrace !== undefined && correlationIdOrTrace.length > 0) {
-    correlationId = correlationIdOrTrace;
-  } else {
-    correlationId = createCorrelationId();
-  }
 
   if (spanId !== undefined) {
     finalSpanId = spanId;
   }
 
   const ctx: CorrelationContext = {
-    correlationId,
+    correlationId:
+      correlationId && correlationId.length > 0 ? correlationId : createCorrelationId(),
   };
-  if (traceId !== undefined) {
-    ctx.traceId = traceId;
-  }
   if (finalSpanId !== undefined) {
     ctx.spanId = finalSpanId;
   }

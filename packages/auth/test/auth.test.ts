@@ -507,7 +507,6 @@ describe('InMemoryLoginTransactionStore', () => {
   const store = new InMemoryLoginTransactionStore();
   const testData: LoginTransactionData = {
     codeVerifier: 'test-verifier-abc123',
-    nonce: 'test-nonce-xyz789',
     redirectUri: 'http://localhost:3000/auth/callback',
     returnUrl: '/dashboard',
   };
@@ -518,7 +517,6 @@ describe('InMemoryLoginTransactionStore', () => {
     const consumed = await store.consume(state);
     expect(consumed).not.toBeNull();
     expect(consumed!.codeVerifier).toBe('test-verifier-abc123');
-    expect(consumed!.nonce).toBe('test-nonce-xyz789');
     expect(consumed!.redirectUri).toBe('http://localhost:3000/auth/callback');
     expect(consumed!.returnUrl).toBe('/dashboard');
   });
@@ -673,7 +671,6 @@ describe('Redirect URI consistency', () => {
       state,
       {
         codeVerifier: generateCodeVerifier(),
-        nonce: generateNonce(),
         redirectUri: expectedRedirectUri,
       },
       300,
@@ -693,7 +690,6 @@ describe('Redirect URI consistency', () => {
       state1,
       {
         codeVerifier: generateCodeVerifier(),
-        nonce: generateNonce(),
         redirectUri: 'http://localhost:3000/auth/callback',
       },
       300,
@@ -703,7 +699,6 @@ describe('Redirect URI consistency', () => {
       state2,
       {
         codeVerifier: generateCodeVerifier(),
-        nonce: generateNonce(),
         redirectUri: 'http://app.example.com/auth/callback',
       },
       300,

@@ -4,7 +4,6 @@ import type { Pool } from 'pg';
 import type { OidcClient, OidcConfig, LoginTransactionStore, SessionData } from '@pia/auth';
 import {
   generateState,
-  generateNonce,
   createSessionToken,
   sessionCookieHeader,
   clearSessionCookieHeader,
@@ -46,16 +45,14 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
   // ------------------------------------------------------------------
   app.get('/auth/login', async (_request: FastifyRequest, reply: FastifyReply) => {
     const state = generateState();
-    const nonce = generateNonce();
 
     const authParams = await oidcClient.getAuthorizationUrl();
 
-    // Store the login transaction (state → {codeVerifier, nonce, redirectUri})
+    // Store the login transaction (state → {codeVerifier, redirectUri})
     await loginStore.create(
       state,
       {
         codeVerifier: authParams.codeVerifier,
-        nonce,
         redirectUri: oidcConfig.redirectUri,
         returnUrl: '/',
       },
@@ -123,8 +120,8 @@ const authRoutesPlugin: FastifyPluginAsync<AuthRoutesOptions> = async (
     let userInfoResult;
     try {
       // Exchange authorization code for tokens and retrieve user info.
-      // The OIDC client (real) validates: ID token signature, iss, aud, exp.
-      // State and nonce validation is handled by the library via checks.
+      // The OIDC client (real) validates: ID token signature, iss, aud, exp,
+      // nonce (generated internally), and state parameter.
       userInfoResult = await oidcClient.handleCallback(code, state, transaction.codeVerifier);
     } catch (err) {
       return reply.status(400).send({

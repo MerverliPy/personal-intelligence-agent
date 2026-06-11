@@ -31,3 +31,6 @@ coverage/
 # CI artifacts
 /ci-output/
 /test-results/
+
+# Benchmark artifacts
+/benchmark_out/

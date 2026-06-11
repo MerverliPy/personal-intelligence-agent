@@ -26,6 +26,10 @@ echo "=== Lint ==="
 pnpm lint
 
 echo ""
+echo "=== Status validation ==="
+pnpm exec tsx scripts/ci/validate-status.ts
+
+echo ""
 echo "=== Type check ==="
 pnpm typecheck
 

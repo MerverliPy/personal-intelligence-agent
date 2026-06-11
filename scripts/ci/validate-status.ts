@@ -3,6 +3,7 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parse as parseYaml } from 'yaml';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -40,76 +41,23 @@ const rootDir = resolve(__dirname, '..', '..');
 
 function loadBacklog(): Backlog {
   const text = readFileSync(resolve(rootDir, 'planning', 'backlog.yaml'), 'utf-8');
-  return parseSimpleYaml(text) as unknown as Backlog;
+  const parsed = parseYaml(text) as Record<string, unknown>;
+
+  return {
+    phases: (parsed['phases'] as PhaseDef[]) ?? [],
+    tasks: (parsed['tasks'] as TaskDef[]) ?? [],
+  };
 }
 
 function loadStatus(): Status {
   const text = readFileSync(resolve(rootDir, 'planning', 'status.yaml'), 'utf-8');
-  const parsed = parseSimpleYaml(text) as Record<string, unknown>;
+  const parsed = parseYaml(text) as Record<string, unknown>;
 
   return {
     tasks: (parsed['tasks'] as Record<string, string>) ?? {},
     gates: (parsed['gates'] as Record<string, string>) ?? {},
     phases: (parsed['phases'] as Record<string, string>) ?? {},
   };
-}
-
-/**
- * Minimal YAML parser sufficient for the flat structure of backlog.yaml
- * and status.yaml. Does not handle complex YAML; only flat key: value and
- * simple sequences.
- */
-function parseSimpleYaml(text: string): Record<string, unknown> {
-  const result: Record<string, unknown> = {};
-  let currentSection: string | null = null;
-  let currentSectionObj: Record<string, unknown> = {};
-
-  for (const line of text.split('\n')) {
-    const trimmed = line.trimEnd();
-
-    // Skip empty and comment lines
-    if (trimmed.length === 0 || trimmed.startsWith('#')) continue;
-
-    // Top-level mapping
-    const topMatch = trimmed.match(/^(\w[\w_-]*):\s*(.*)$/);
-    if (topMatch && !trimmed.startsWith(' ')) {
-      const key = topMatch[1]!;
-      const value = topMatch[2]!.trim();
-
-      if (key === 'tasks' || key === 'gates') {
-        currentSection = key;
-        currentSectionObj = {};
-      } else if (key === 'phases') {
-        currentSection = key;
-        currentSectionObj = {};
-      } else {
-        result[key] = value || undefined;
-      }
-      continue;
-    }
-
-    // Indented key: value (inside current section)
-    const indentMatch = trimmed.match(/^  (\w[\w_-]*):\s*(.*)$/);
-    if (indentMatch && currentSection) {
-      const key = indentMatch[1]!;
-      const value = indentMatch[2]!.trim();
-      currentSectionObj[key] = value || undefined;
-      continue;
-    }
-
-    // Sequence items (- id: P0-T01)
-    const seqMatch = trimmed.match(/^\s*-\s*id:\s*(.*)$/);
-    if (seqMatch && currentSection === 'tasks') {
-      // Read the next few lines for task properties
-      continue;
-    }
-  }
-
-  if (currentSection) {
-    result[currentSection] = currentSectionObj;
-  }
-
-  return result;
 }
 
 // ---------------------------------------------------------------------------
@@ -125,7 +73,6 @@ interface ValidationError {
 function validate(backlog: Backlog, status: Status): ValidationError[] {
   const errors: ValidationError[] = [];
   const taskMap = new Map(backlog.tasks.map((t) => [t.id, t]));
-  const phaseMap = new Map(backlog.phases.map((p) => [p.id, p]));
   const reviewsDir = resolve(rootDir, 'planning', 'reviews');
 
   const reviewsExist = existsSync(reviewsDir);
@@ -156,7 +103,6 @@ function validate(backlog: Backlog, status: Status): ValidationError[] {
 
     const requiredReviewers = task.required_reviewers ?? [];
     for (const reviewer of requiredReviewers) {
-      // Look for a review file matching the task ID
       const reviewFilePath = `${task.id}.md`;
       if (!reviewFiles.has(reviewFilePath)) {
         errors.push({
@@ -172,7 +118,6 @@ function validate(backlog: Backlog, status: Status): ValidationError[] {
   for (const [gateId, gateState] of Object.entries(status.gates)) {
     if (gateState !== 'DONE') continue;
 
-    // Find the phase for this gate
     const phase = backlog.phases.find((p) => p.gate === gateId);
     if (!phase) continue;
 
@@ -219,7 +164,9 @@ function main(): void {
     process.exit(1);
   }
 
-  console.log('✅ Transition validation PASSED');
+  console.log(
+    `✅ Transition validation PASSED (${backlog.tasks.length} tasks, ${backlog.phases.length} phases checked)`,
+  );
   process.exit(0);
 }
 
