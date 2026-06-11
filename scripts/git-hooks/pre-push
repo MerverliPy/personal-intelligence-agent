@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# pre-push — Run CI quality gates before pushing to main.
+#
+# Installed via: pnpm setup:hooks
+#
+# Gate order (fast → slow, fail-early):
+#   1. format:check
+#   2. lint
+#   3. security:secrets
+#   4. typecheck
+#   5. test:unit (if local PostgreSQL is available)
+#
+# Unit tests and build are left to CI for speed; run pnpm ci:check for the full pipeline.
+
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$ROOT_DIR"
+
+GATED_REMOTE="${GATED_REMOTE:-origin}"
+GATED_BRANCH="${GATED_BRANCH:-main}"
+FAIL=0
+
+run_check() {
+  local label="$1"
+  shift
+  printf '\033[36m▶ %s...\033[0m ' "$label"
+  if "$@" >/dev/null 2>&1; then
+    printf '\033[32mPASS\033[0m\n'
+  else
+    printf '\033[31mFAIL\033[0m\n'
+    FAIL=1
+  fi
+}
+
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+  if [[ "$remote_ref" != "refs/heads/${GATED_BRANCH}" ]]; then
+    continue
+  fi
+
+  echo ""
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "  Pre-push quality gate — pushing to ${GATED_BRANCH}"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+  run_check "format:check" pnpm format:check
+  run_check "lint"        pnpm lint
+  run_check "secrets"     pnpm security:secrets
+  run_check "typecheck"   pnpm typecheck
+
+  if command -v pg_isready &>/dev/null && pg_isready -h localhost -U pia -d pia -q 2>/dev/null; then
+    run_check "test:unit" pnpm test:unit
+  else
+    echo "  (skip test:unit — no local PostgreSQL at localhost:5432)"
+  fi
+
+  echo ""
+
+  if [ "$FAIL" -eq 1 ]; then
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "  PUSH BLOCKED — fix failures above, then retry."
+    echo "  Run 'pnpm format:fix' to auto-fix formatting."
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    exit 1
+  fi
+
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "  All gates passed. Pushing..."
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+done
+
+exit 0

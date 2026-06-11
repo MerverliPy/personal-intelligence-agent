@@ -28,6 +28,7 @@ EXCLUDE_DIRS=(
   ".next"
   "coverage"
   ".opencode"
+  ".venv"
   "ci-output"
   "test-results"
   "planning"
@@ -51,6 +52,7 @@ FILTER_OUT=(
   "packages/db/"
   "docs/development/"
   "scripts/dev/"
+  "infra/"
 )
 
 build_grep_excludes() {
@@ -135,6 +137,7 @@ for pattern in "${PATTERNS[@]}"; do
       -e '"[REDACTED]"' \
       -e "\[REDACTED\]" \
       -e "postgresql://pia:pia-dev@localhost:5432/" \
+      -e "pulumi\.interpolate" \
       -e "SKILL\.md" \
       $DIR_FILTER \
       || true)

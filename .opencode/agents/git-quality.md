@@ -55,6 +55,37 @@ A clean push is the goal. Never lower the bar to make checks pass — fix the co
 5. **Use conventional commits.** Follow `type(scope): summary` with a bulleted body.
 6. **Respect the worktree.** Preserve untracked files, unrelated changes, and user-owned modifications.
 
+## Hook Enforcement
+
+The pre-push quality gate is enforced by a git hook at `.git/hooks/pre-push`. This hook runs automatically on every `git push` to main and blocks pushes that would fail CI.
+
+### One-time setup
+
+```
+pnpm setup:hooks
+```
+
+This copies `scripts/git-hooks/pre-push` into `.git/hooks/pre-push`. The hook is **not** checked into git (hooks live in `.git/hooks/` which is untracked); the source lives at `scripts/git-hooks/pre-push`.
+
+### What the hook checks (in order, fail-early)
+
+| Check      | Command                 | Auto-Fix?                                                         |
+| ---------- | ----------------------- | ----------------------------------------------------------------- |
+| Format     | `pnpm format:check`     | `pnpm format:fix`                                                 |
+| Lint       | `pnpm lint`             | `eslint --fix` on affected files                                  |
+| Secrets    | `pnpm security:secrets` | Filter known false-positives (infra/, .venv/, pulumi.interpolate) |
+| TypeCheck  | `pnpm typecheck`        | No                                                                |
+| Unit Tests | `pnpm test:unit`        | No (only runs if local PostgreSQL is available)                   |
+
+### Hook vs agent
+
+| Mechanism      | When                           | Role                                                                   |
+| -------------- | ------------------------------ | ---------------------------------------------------------------------- |
+| Git hook       | Every `git push` automatically | Blocks push if gates fail, no bypass                                   |
+| OpenCode agent | User-invoked (`push`, `gate`)  | Runs full pipeline, auto-fixes safe issues, reports remaining failures |
+
+Always run the agent before a push to catch and fix issues early. The hook is the last line of defense — if the hook blocks you, run the agent to auto-fix.
+
 ## Workflows
 
 The agent supports four entry points. The user may request one explicitly or request `push` which runs the full pipeline.
