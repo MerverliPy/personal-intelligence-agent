@@ -84,3 +84,5 @@ These findings are legitimate but correctly deferred to later phases:
 | MEDIUM-3: S3 checksum silently skipped                    | P2-T02                              | Accepted — will be fixed in upload completion pipeline                                       |
 | MEDIUM-4: Hardcoded DB credential default                 | P7 (production hardening)           | Accepted — development-only default; production requires DATABASE_URL                        |
 | HIGH-1: resourceId/resourceType unused                    | P2/P4                               | Accepted — object-level authorization for knowledge/memory resources arrives in later phases |
+
+**MEDIUM-2 risk acceptance (2026-06-11):** Reason codes exposed in 403 responses are internal enum values (`WORKSPACE_NOT_FOUND`, `PERMISSION_DENIED`, etc.) — they do not disclose secrets, PII, or sensitive system internals. The risk is accepted as-is. No remediation task is needed.

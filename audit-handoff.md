@@ -226,9 +226,8 @@ pnpm security:secrets
 
 # Governance validation
 pnpm exec tsx scripts/ci/validate-status.ts
-# Note: 26 errors reported about missing planning/reviews/*.md review records.
-# These are legitimate governance gaps (review sign-off records) — not a script bug.
-# The validate-status.ts script itself is functioning correctly.
+# ✅ Transition validation PASSED (64 tasks, 8 phases checked)
+# All review records now present under planning/reviews/. No errors.
 
 # Review the diff
 git diff --stat

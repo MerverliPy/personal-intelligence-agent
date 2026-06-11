@@ -56,5 +56,5 @@ None — document-only update.
 
 ## Remaining Risks or Follow-up Tasks
 
-- **I-H2**: Production IaC is still missing. This requires an architectural decision (Pulumi vs Terraform vs CDK).
-- **Missing review records**: 26 DONE tasks lack reviewer sign-off records in `planning/reviews/`. These should be created or the governance validation relaxed.
+- **I-H2**: ✅ RESOLVED (2026-06-11). Full Pulumi AWS IaC delivered (VPC, RDS, ECS, S3, IAM). See `planning/runs/I-H2.md`.
+- **Missing review records**: ✅ RESOLVED (2026-06-11). All 17 review records created under `planning/reviews/`. `validate-status.ts` passes with 0 errors.

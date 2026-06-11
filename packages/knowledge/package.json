@@ -16,18 +16,23 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
-    "test:unit": "vitest run test/state-machine.test.ts test/ingestion-workflow.test.ts",
+    "test:unit": "vitest run test/state-machine.test.ts test/ingestion-workflow.test.ts test/parsing.test.ts",
     "test:integration": "vitest run test/integration.test.ts"
   },
   "dependencies": {
     "@pia/domain": "workspace:*",
     "@pia/jobs": "workspace:*",
     "@pia/observability": "workspace:*",
+    "mammoth": "^1.8.0",
+    "pdf-parse": "^1.1.1",
     "pg": "^8.13.0"
   },
   "devDependencies": {
     "@pia/db": "workspace:*",
+    "@types/pdf-parse": "^1.1.4",
     "@types/pg": "^8.11.0",
+    "jszip": "^3.10.1",
+    "pdfkit": "^0.15.0",
     "vitest": "^2.1.0"
   }
 }

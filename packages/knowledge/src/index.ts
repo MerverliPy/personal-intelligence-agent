@@ -84,3 +84,23 @@ export {
 export { publishingStage } from './ingestion/publishing-stage.js';
 
 export { IngestionWorkflowHandler, type IngestionWorkflowConfig } from './ingestion/workflow.js';
+
+// ---------------------------------------------------------------------------
+// Parsing (P2-T04)
+// ---------------------------------------------------------------------------
+
+export type {
+  Locator,
+  LocatorType,
+  ParsedMetadata,
+  ParsedDocument,
+  ParserInput,
+  Parser,
+  ParserCategory,
+} from './parsing/types.js';
+export { ParserError, findParser, unsupportedFormatError } from './parsing/types.js';
+export { PlainTextParser, plainTextParser } from './parsing/plain-text-parser.js';
+export { PdfParser, pdfParser } from './parsing/pdf-parser.js';
+export { DocxParser, docxParser } from './parsing/docx-parser.js';
+export type { ExtractionLimits, CreateExtractionStageOptions } from './parsing/extraction-stage.js';
+export { createExtractionStage } from './parsing/extraction-stage.js';

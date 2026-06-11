@@ -1,0 +1,7 @@
+Hello World! This is a simple plain-text fixture.
+
+This is the second paragraph. It contains multiple sentences.
+The text should be normalized correctly by the plain text parser.
+
+Third paragraph with some  special   whitespace   that should be
+collapsed into single spaces during normalization.

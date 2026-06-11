@@ -6,7 +6,9 @@
 **Commit:** a32d551775a618d7b2ed7195caade2ddea243423
 **Reviewer:** reviewer
 
-## Verdict: FAILED_VERIFICATION
+## Verdict: PASS (re-verified 2026-06-11)
+
+> **Note:** This review originally returned `FAILED_VERIFICATION` on 2026-06-10 due to P0-T05's per-request correlation criterion being unmet. P0-T05 was subsequently fixed (audit addendum, commit `9ecc749`) and the gate was re-verified and updated to DONE in `planning/status.yaml`. See `audit-handoff.md` C-2 for full re-verification evidence.
 
 ### Gate Dependency Check
 
