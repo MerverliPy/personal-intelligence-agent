@@ -7,7 +7,7 @@
 - **Branch:** `main` @ `e209dcc` — clean worktree
 - **Stack:** TypeScript 5.7 strict, Node.js 22.22.3, pnpm 9.15.9, Fastify, PostgreSQL 17 + pgvector, Redis 7, MinIO, Turborepo, Vitest
 - **Architecture:** 3 apps (api, worker, web) composing 14 domain packages with strict dependency inversion; workspace-isolated RBAC, OIDC auth, append-only audit, durable outbox jobs
-- **Phase status:** P0 ✓ P1 ✓ P2 ✓ (all gates DONE); P3–P7 NOT_STARTED
+- **Phase status:** P0 ✓ P1 ✓ P2 ✓ (all gates DONE); P3 IN_PROGRESS (2/10), P4–P7 NOT_STARTED
 - **Health:** All CI quality gates pass. 23 of 64 tasks complete. No secrets, no build failures, no auth bypasses, no test.skip/only patterns, no `as any` in production code.
 - **Previous handoff:** `AGENT_HANDOFF.md` dated 2026-06-11 — all P1 and P2 findings (AUD-P1-001, AUD-P2-001, AUD-P2-002) resolved. Remaining P3 items partially addressed (gitignore entries added, MANIFEST count partially updated). Three new P2/P3 staleness findings discovered in this audit.
 - **Scope inspected:** Root manifests, all CI/security scripts, compose.yaml, planning/backlog.yaml, planning/status.yaml, all run records (35 files), all review records (24 files), all package.json boundaries, key source paths in auth/knowledge/storage/audit/jobs/observability/config, API routes, db/schema.sql, db/migrations (7 files), .gitignore, .env.example, README.md, MANIFEST.md, opencode.jsonc.
@@ -40,7 +40,7 @@
 | `packages/jobs/`          | `@pia/jobs`          | Outbox events, consumer, retry policies                            | Active          |
 | `packages/knowledge/`     | `@pia/knowledge`     | Parsing, chunking, embeddings, retrieval, citations, state machine | Active          |
 | `packages/evals/`         | `@pia/evals`         | Evaluation scorers, retrieval harness runner, dataset framework    | Active (P2-T10) |
-| `packages/ai/`            | `@pia/ai`            | Model gateway, prompt registry, context compiler                   | Shell (P3)      |
+| `packages/ai/`            | `@pia/ai`            | Model gateway, prompt registry, context compiler                   | Active (P3)     |
 | `packages/memory/`        | `@pia/memory`        | Candidate/approved memory lifecycle                                | Shell (P4)      |
 | `packages/tools/`         | `@pia/tools`         | Tool registry, policy engine, approvals                            | Shell (P5)      |
 

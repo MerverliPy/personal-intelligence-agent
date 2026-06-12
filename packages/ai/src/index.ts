@@ -42,3 +42,29 @@ export type {
   AnswerPromptInputs,
   ChatPromptInputs,
 } from './prompts/index.js';
+
+// ---------------------------------------------------------------------------
+// Context compiler (P3-T03)
+// ---------------------------------------------------------------------------
+
+export {
+  compileContext,
+  CONTEXT_SECTION_ORDER,
+  DEFAULT_COMPACTION_POLICY,
+  estimateTokens,
+} from './context/index.js';
+
+export type {
+  ContextSection,
+  EvidenceItem,
+  ToolDefinition,
+  InclusionReason,
+  ExclusionReason,
+  ItemMetadata,
+  ContextItem,
+  ContextManifest,
+  TokenBudget,
+  CompactionPolicy,
+  CompilerInput,
+  CompilerOutput,
+} from './context/index.js';
