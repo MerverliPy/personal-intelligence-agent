@@ -319,7 +319,8 @@ export interface RetrievalResult {
   chunk_id: string;
   document_id: string;
   document_version_id: string;
-  source_id?: string;
+  /** UUID of the source this chunk belongs to, or null for sourceless documents. */
+  source_id: string | null;
   source_title?: string;
   locator: SourceLocator;
   text: string;

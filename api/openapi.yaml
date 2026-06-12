@@ -1242,6 +1242,7 @@ components:
         document_version_id:
           $ref: '#/components/schemas/Uuid'
         source_id:
+          nullable: true
           $ref: '#/components/schemas/Uuid'
         source_title:
           type: string

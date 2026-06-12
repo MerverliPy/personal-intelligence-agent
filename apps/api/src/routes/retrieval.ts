@@ -85,25 +85,20 @@ const retrievalRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
       );
 
       // Transform internal results to API contract shape
-      const apiResults: RetrievalResult[] = response.results.map((r, i) => {
-        const result: RetrievalResult = {
-          rank: i + 1,
-          chunk_id: r.chunkId,
-          document_id: r.documentId,
-          document_version_id: r.documentVersionId,
-          locator: r.locator as RetrievalResult['locator'],
-          text: r.text,
-          scores: {
-            lexical: r.lexicalScore,
-            vector: r.vectorScore,
-            fused: r.fusedScore,
-          },
-        };
-        if (r.sourceId) {
-          result.source_id = r.sourceId;
-        }
-        return result;
-      });
+      const apiResults: RetrievalResult[] = response.results.map((r, i) => ({
+        rank: i + 1,
+        chunk_id: r.chunkId,
+        document_id: r.documentId,
+        document_version_id: r.documentVersionId,
+        source_id: r.sourceId ?? null,
+        locator: r.locator as RetrievalResult['locator'],
+        text: r.text,
+        scores: {
+          lexical: r.lexicalScore,
+          vector: r.vectorScore,
+          fused: r.fusedScore,
+        },
+      }));
 
       return {
         trace_id: response.traceId,
@@ -212,6 +207,7 @@ const retrievalRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
           chunk_id: rr.chunk_id,
           document_id: chunk?.document_id ?? '',
           document_version_id: chunk?.document_version_id ?? '',
+          source_id: chunk?.source_id ?? null,
           locator: (chunk?.locator as RetrievalResult['locator']) ?? {},
           text: chunk?.content ?? '',
           scores: {
@@ -220,9 +216,6 @@ const retrievalRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
             fused: rr.fused_score,
           },
         };
-        if (chunk?.source_id) {
-          result.source_id = chunk.source_id;
-        }
         apiResults.push(result);
       }
 

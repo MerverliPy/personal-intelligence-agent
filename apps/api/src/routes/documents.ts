@@ -216,7 +216,7 @@ const documentRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
   // -----------------------------------------------------------------------
   app.delete(
     '/v1/workspaces/:workspace_id/documents/:document_id',
-    async (request): Promise<OperationAccepted> => {
+    async (request, reply): Promise<OperationAccepted> => {
       const ctx = await requireWorkspaceContext(request);
       const params = request.params as Record<string, string>;
       const documentId = params['document_id']!;
@@ -228,6 +228,7 @@ const documentRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
         throw err;
       }
 
+      void reply.code(202);
       return {
         operation_id: documentId,
         status: 'ACCEPTED',
@@ -240,7 +241,7 @@ const documentRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
   // -----------------------------------------------------------------------
   app.post(
     '/v1/workspaces/:workspace_id/documents/:document_id/ingestion-jobs',
-    async (request): Promise<IngestionJob> => {
+    async (request, reply): Promise<IngestionJob> => {
       const ctx = await requireWorkspaceContext(request);
       const params = request.params as Record<string, string>;
       const documentId = params['document_id']!;
@@ -295,10 +296,16 @@ const documentRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
           pipelineVersion: version.pipelineVersion ?? '1.0.0',
         });
 
+        void reply.code(202);
         return buildIngestionJob(job);
-      } catch {
-        // If duplicate idempotency key, try to find the existing job
-        // The repository function throws on UNIQUE violation
+      } catch (err: unknown) {
+        // Narrow to PostgreSQL UNIQUE violation (code 23505) only.
+        // Any other error is a genuine failure — re-throw immediately.
+        const pgCode = (err as { code?: string }).code;
+        if (pgCode !== '23505') {
+          throw err;
+        }
+        // Idempotency: return the most recent existing job for this version
         const result = await pool.query<{
           id: string;
           workspace_id: string;
@@ -318,6 +325,7 @@ const documentRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
         );
         if (result.rows.length > 0) {
           const row = result.rows[0]!;
+          void reply.code(202);
           return buildIngestionJob({
             id: row.id,
             workspaceId: row.workspace_id,
