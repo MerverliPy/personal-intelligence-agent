@@ -100,6 +100,14 @@ export function loadConfig(): AppConfig {
       version: raw['EMBEDDING_VERSION'] ?? '1.0',
       batchSize: parsePositiveInt(raw['EMBEDDING_BATCH_SIZE'], 20),
     },
+    model: {
+      provider: raw['MODEL_PROVIDER'] ?? 'fake',
+      name: raw['MODEL_NAME'] ?? 'fake-v1',
+      apiKey: redactRequired(raw['MODEL_API_KEY'] ?? 'fake-key'),
+      maxTokens: parsePositiveInt(raw['MODEL_MAX_TOKENS'], 4096),
+      temperature: parseFloat(raw['MODEL_TEMPERATURE'] ?? '0.7'),
+      timeoutMs: parsePositiveInt(raw['MODEL_TIMEOUT_MS'], 30000),
+    },
   };
 }
 

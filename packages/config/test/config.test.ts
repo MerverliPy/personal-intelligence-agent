@@ -316,4 +316,78 @@ describe('loadConfig', () => {
       });
     });
   });
+
+  describe('model config defaults', () => {
+    it('loads model config with defaults', () => {
+      withEnv(
+        {
+          NODE_ENV: 'development',
+          DATABASE_URL: 'postgresql://localhost/db',
+          REDIS_URL: 'redis://localhost:6379',
+          OIDC_CLIENT_SECRET: 'secret',
+          SESSION_SECRET: 'secret',
+          STORAGE_ACCESS_KEY_ID: 'key',
+          STORAGE_SECRET_ACCESS_KEY: 'secret',
+        },
+        () => {
+          const config = loadConfig();
+          expect(config.model.provider).toBe('fake');
+          expect(config.model.name).toBe('fake-v1');
+          expect(isRedacted(config.model.apiKey)).toBe(true);
+          expect(config.model.maxTokens).toBe(4096);
+          expect(config.model.temperature).toBe(0.7);
+          expect(config.model.timeoutMs).toBe(30000);
+        },
+      );
+    });
+
+    it('allows overriding model config', () => {
+      withEnv(
+        {
+          NODE_ENV: 'development',
+          DATABASE_URL: 'postgresql://localhost/db',
+          REDIS_URL: 'redis://localhost:6379',
+          OIDC_CLIENT_SECRET: 'secret',
+          SESSION_SECRET: 'secret',
+          STORAGE_ACCESS_KEY_ID: 'key',
+          STORAGE_SECRET_ACCESS_KEY: 'secret',
+          MODEL_PROVIDER: 'openai',
+          MODEL_NAME: 'gpt-4o',
+          MODEL_API_KEY: 'sk-test-key',
+          MODEL_MAX_TOKENS: '2048',
+          MODEL_TEMPERATURE: '0.3',
+          MODEL_TIMEOUT_MS: '15000',
+        },
+        () => {
+          const config = loadConfig();
+          expect(config.model.provider).toBe('openai');
+          expect(config.model.name).toBe('gpt-4o');
+          expect(config.model.maxTokens).toBe(2048);
+          expect(config.model.temperature).toBe(0.3);
+          expect(config.model.timeoutMs).toBe(15000);
+        },
+      );
+    });
+
+    it('model API key is redacted in safeConfigForLogging', () => {
+      withEnv(
+        {
+          NODE_ENV: 'development',
+          DATABASE_URL: 'postgresql://localhost/db',
+          REDIS_URL: 'redis://localhost:6379',
+          OIDC_CLIENT_SECRET: 'secret',
+          SESSION_SECRET: 'secret',
+          STORAGE_ACCESS_KEY_ID: 'key',
+          STORAGE_SECRET_ACCESS_KEY: 'secret',
+          MODEL_API_KEY: 'sk-real-secret-key',
+        },
+        () => {
+          const config = loadConfig();
+          const safe = safeConfigForLogging(config);
+          const serialized = JSON.stringify(safe);
+          expect(serialized).not.toContain('sk-real-secret-key');
+        },
+      );
+    });
+  });
 });

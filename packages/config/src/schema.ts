@@ -41,6 +41,14 @@ export interface AppConfig {
     readonly version: string;
     readonly batchSize: number;
   };
+  readonly model: {
+    readonly provider: string;
+    readonly name: string;
+    readonly apiKey: Redacted;
+    readonly maxTokens: number;
+    readonly temperature: number;
+    readonly timeoutMs: number;
+  };
 }
 
 /** Configuration field definition. */
@@ -207,6 +215,48 @@ export const CONFIG_SCHEMA: Record<string, ConfigField> = {
     secret: false,
     required: false,
     default: '20',
+  },
+  MODEL_PROVIDER: {
+    env: 'MODEL_PROVIDER',
+    description: 'Model gateway provider identifier (fake, openai)',
+    secret: false,
+    required: false,
+    default: 'fake',
+  },
+  MODEL_NAME: {
+    env: 'MODEL_NAME',
+    description: 'Model name (e.g. gpt-4o)',
+    secret: false,
+    required: false,
+    default: 'fake-v1',
+  },
+  MODEL_API_KEY: {
+    env: 'MODEL_API_KEY',
+    description: 'API key for the model provider',
+    secret: true,
+    required: false,
+    default: 'fake-key',
+  },
+  MODEL_MAX_TOKENS: {
+    env: 'MODEL_MAX_TOKENS',
+    description: 'Default maximum tokens per generation request',
+    secret: false,
+    required: false,
+    default: '4096',
+  },
+  MODEL_TEMPERATURE: {
+    env: 'MODEL_TEMPERATURE',
+    description: 'Default sampling temperature (0-2)',
+    secret: false,
+    required: false,
+    default: '0.7',
+  },
+  MODEL_TIMEOUT_MS: {
+    env: 'MODEL_TIMEOUT_MS',
+    description: 'Request timeout in milliseconds',
+    secret: false,
+    required: false,
+    default: '30000',
   },
 } as const;
 
