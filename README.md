@@ -15,7 +15,7 @@
 
   <img src="https://img.shields.io/badge/P0_Foundation-COMPLETE-22C55E?style=for-the-badge&labelColor=166534" alt="P0 Foundation" />
   <img src="https://img.shields.io/badge/P1_Platform-COMPLETE-22C55E?style=for-the-badge&labelColor=166534" alt="P1 Platform" />
-  <img src="https://img.shields.io/badge/P2_Knowledge-7%2F10-F59E0B?style=for-the-badge&labelColor=92400E" alt="P2 Knowledge" />
+  <img src="https://img.shields.io/badge/P2_Knowledge-COMPLETE-22C55E?style=for-the-badge&labelColor=166534" alt="P2 Knowledge" />
   <img src="https://img.shields.io/badge/P3--P7-Planned-6B7280?style=for-the-badge&labelColor=374151" alt="P3-P7 Planned" />
 </div>
 
@@ -40,29 +40,23 @@ preserving cryptographic provenance, workspace-level access control, and a compl
 ## 🗺️ Delivery Roadmap
 
 > [!NOTE]
-> **20 of 50 tasks complete** across 8 phases. Phases P0 and P1 are fully delivered and verified.
-> P2 is in active progress with 3 remaining API/UI tasks before the P2 gate can close.
+> **23 of 64 tasks complete** across 8 phases. Phases P0, P1, and P2 are fully delivered and verified.
+> P3 is the next active phase.
 
-| Phase | Name                               |       Progress        |      Gate      |
-| :---: | ---------------------------------- | :-------------------: | :------------: |
-|  P0   | 🏗️ Engineering Foundation          | ████████████ **6/6**  |    ✅ DONE     |
-|  P1   | 🔐 Identity, Tenancy & Platform    | ████████████ **7/7**  |    ✅ DONE     |
-|  P2   | 📚 Knowledge Ingestion & Retrieval | ████████░░░░ **7/10** | 🔄 In Progress |
-|  P3   | 💬 Conversational Assistant        | ░░░░░░░░░░░░ **0/10** |   ⏳ Planned   |
-|  P4   | 🧠 Governed Persistent Memory      | ░░░░░░░░░░░░ **0/7**  |   ⏳ Planned   |
-|  P5   | ⚡ Tool Gateway & Approvals        | ░░░░░░░░░░░░ **0/8**  |   ⏳ Planned   |
-|  P6   | 📊 Portable Evaluation             | ░░░░░░░░░░░░ **0/8**  |   ⏳ Planned   |
-|  P7   | 🚀 Production Hardening            | ░░░░░░░░░░░░ **0/8**  |   ⏳ Planned   |
+| Phase | Name                               |        Progress        |    Gate    |
+| :---: | ---------------------------------- | :--------------------: | :--------: |
+|  P0   | 🏗️ Engineering Foundation          |  ████████████ **6/6**  |  ✅ DONE   |
+|  P1   | 🔐 Identity, Tenancy & Platform    |  ████████████ **7/7**  |  ✅ DONE   |
+|  P2   | 📚 Knowledge Ingestion & Retrieval | ████████████ **10/10** |  ✅ DONE   |
+|  P3   | 💬 Conversational Assistant        | ░░░░░░░░░░░░ **0/10**  | ⏳ Planned |
+|  P4   | 🧠 Governed Persistent Memory      |  ░░░░░░░░░░░░ **0/7**  | ⏳ Planned |
+|  P5   | ⚡ Tool Gateway & Approvals        |  ░░░░░░░░░░░░ **0/8**  | ⏳ Planned |
+|  P6   | 📊 Portable Evaluation             |  ░░░░░░░░░░░░ **0/8**  | ⏳ Planned |
+|  P7   | 🚀 Production Hardening            |  ░░░░░░░░░░░░ **0/8**  | ⏳ Planned |
 
 ### 🔄 Currently In Progress
 
-These 3 tasks are the last blockers before the P2 knowledge phase can be closed:
-
-| Task       | What It Will Deliver                                                                 |
-| ---------- | ------------------------------------------------------------------------------------ |
-| **P2-T08** | HTTP endpoints for documents, jobs, retrieval queries, and trace inspection          |
-| **P2-T09** | Document upload, processing status, and search results user interface                |
-| **P2-T10** | Portable retrieval evaluation harness (recall, precision, auth correctness, latency) |
+No tasks currently in progress. All P0–P2 tasks are complete. P3 (Conversational Assistant) is the next phase.
 
 <details>
 <summary>📋 <strong>View full P3–P7 roadmap</strong> (30 planned tasks)</summary>
@@ -759,5 +753,5 @@ pnpm security:dependencies   # npm audit for known CVEs
   <br/>
   <sub>Built with strict TypeScript · PostgreSQL + pgvector · Redis · Fastify · Next.js</sub>
   <br/>
-  <sub>20 of 50 tasks complete · P0 ✓ · P1 ✓ · P2 in progress</sub>
+  <sub>23 of 64 tasks complete · P0 ✓ · P1 ✓ · P2 ✓</sub>
 </div>
