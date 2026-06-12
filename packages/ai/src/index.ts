@@ -24,3 +24,21 @@ export type {
   SensitivityPolicy,
   OpenAIGatewayOptions,
 } from './gateway/index.js';
+
+// ---------------------------------------------------------------------------
+// Prompt registry (P3-T02)
+// ---------------------------------------------------------------------------
+
+export { renderPrompt, createPromptRenderer, createPromptRegistry } from './prompts/index.js';
+
+export type {
+  TemplateHash,
+  UntrustedBlocks,
+  PromptInputs,
+  PromptProvenance,
+  PromptRenderResult,
+  PromptDefinition,
+  PromptRegistry,
+  AnswerPromptInputs,
+  ChatPromptInputs,
+} from './prompts/index.js';
