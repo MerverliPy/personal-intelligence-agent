@@ -32,5 +32,14 @@ coverage/
 /ci-output/
 /test-results/
 
+# Python
+__pycache__/
+.venv/
+
 # Benchmark artifacts
 /benchmark_out/
+
+# Development utility scripts
+/apply_cyber_policy_fix.sh
+/benchmark_runner_tui.py
+/benchmark_runner_tui.py.bak.*
