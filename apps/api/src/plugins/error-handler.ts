@@ -25,6 +25,10 @@ const errorHandlerPlugin: FastifyPluginAsync = async (app: FastifyInstance) => {
     const requestId = request.id;
     const error = rawError as FastifyErrorLike & Error;
 
+    // Log the raw error for diagnostics
+    // eslint-disable-next-line no-console
+    console.error('[ERROR-HANDLER]', requestId, error.message, error.stack?.slice(0, 200));
+
     // Fastify validation errors
     if (error.validation) {
       return reply.status(400).send(

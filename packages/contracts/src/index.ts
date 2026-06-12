@@ -153,7 +153,7 @@ export function decodeCursor(cursor?: string): string | undefined {
  * Normalises a page limit to be within [1, MAX_PAGE_LIMIT].
  */
 export function normaliseLimit(limit?: number): number {
-  if (limit === undefined || limit === null) return DEFAULT_PAGE_LIMIT;
+  if (limit === undefined || limit === null || Number.isNaN(limit)) return DEFAULT_PAGE_LIMIT;
   return Math.max(1, Math.min(limit, MAX_PAGE_LIMIT));
 }
 

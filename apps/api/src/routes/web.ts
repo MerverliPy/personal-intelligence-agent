@@ -8,6 +8,10 @@ import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
  * as a convenience.
  */
 const webShell: FastifyPluginAsync = async (app: FastifyInstance) => {
+  app.get('/', async (_request, reply) => {
+    return reply.redirect('/app', 302);
+  });
+
   app.get('/app', async (_request, reply) => {
     void reply.header('content-type', 'text/html; charset=utf-8');
     return WEB_SHELL_HTML;
@@ -43,7 +47,7 @@ const WEB_SHELL_HTML = `<!DOCTYPE html>
   <div class="container">
     <div class="header">
       <h1>PIA</h1>
-      <span id="user-display"></span>
+      <span id="user-display"><a href="/auth/login" class="btn btn-primary">Sign In</a></span>
     </div>
     <div id="error-container"></div>
     <div id="content"><div class="loading">Loading workspaces...</div></div>
@@ -116,7 +120,7 @@ const WEB_SHELL_HTML = `<!DOCTYPE html>
         content.innerHTML = html;
       } catch (err) {
         showError(err.message);
-        content.innerHTML = '<div class="empty">Unable to load. Please check that you are authenticated.</div>';
+        content.innerHTML = '<div class="empty">Unable to load.<br><br><a href="/auth/login" class="btn btn-primary">Sign In</a></div>';
       }
     }
 

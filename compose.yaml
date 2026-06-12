@@ -40,7 +40,7 @@ services:
     restart: unless-stopped
 
   minio:
-    image: minio/minio:2024
+    image: minio/minio:latest
     container_name: pia-minio
     command: server /data --console-address ":9001"
     environment:

@@ -1,6 +1,8 @@
+import { randomBytes } from 'node:crypto';
 import { loadConfig, safeConfigForLogging } from '@pia/config';
 import { createObservability, runWithCorrelation } from '@pia/observability';
-import type { OidcConfig } from '@pia/auth';
+import type { OidcConfig, OidcClient, AuthorizationParams, OidcUserInfo } from '@pia/auth';
+import { createPool } from '@pia/db';
 import { createServer } from './server.js';
 
 /**
@@ -27,10 +29,52 @@ function buildOidcConfig(): OidcConfig {
   };
 }
 
+/**
+ * Bypass OIDC client for development — no external provider needed.
+ *
+ * Instead of redirecting to an external OIDC issuer, returns a URL that
+ * points directly to our own `/auth/callback` with a pre-authorized code.
+ * On callback, validates the bypass code and returns a hardcoded dev user.
+ */
+function createDevBypassOidcClient(config: OidcConfig): OidcClient {
+  const devSub = 'dev-user-1';
+  const devEmail = 'dev@localhost';
+
+  return {
+    getIssuerUrl: () => config.issuerUrl,
+
+    getAuthorizationUrl: async (): Promise<AuthorizationParams> => {
+      const state = randomBytes(16).toString('hex');
+      const codeVerifier = randomBytes(32).toString('base64url');
+      const nonce = randomBytes(16).toString('hex');
+
+      const authorizationUrl = `${config.redirectUri}?code=DEV-BYPASS&state=${encodeURIComponent(state)}`;
+
+      return { authorizationUrl, codeVerifier, state, nonce };
+    },
+
+    handleCallback: async (code: string): Promise<OidcUserInfo> => {
+      if (code !== 'DEV-BYPASS') {
+        throw new Error('Invalid dev bypass code');
+      }
+      return {
+        sub: devSub,
+        email: devEmail,
+        email_verified: true,
+        name: 'Dev User',
+        preferred_username: 'dev',
+        picture: undefined,
+      };
+    },
+  };
+}
+
 async function main(): Promise<void> {
   try {
     const config = loadConfig();
     const oidcConfig = buildOidcConfig();
+    const dbPool = createPool();
+    const oidcClient = createDevBypassOidcClient(oidcConfig);
     const observability = createObservability({
       enabled: true,
       logLevel: config.logging.level,
@@ -45,7 +89,7 @@ async function main(): Promise<void> {
       });
     });
 
-    const app = await createServer({ oidcConfig, mode: config.mode });
+    const app = await createServer({ oidcConfig, mode: config.mode, dbPool, oidcClient });
 
     // Start listening
     const port = config.server.port;
@@ -66,6 +110,7 @@ async function main(): Promise<void> {
       runWithCorrelation(() => {
         observability.logger.info('API server shutting down', { signal });
       });
+      await dbPool.end();
       await app.close();
       process.exit(0);
     };

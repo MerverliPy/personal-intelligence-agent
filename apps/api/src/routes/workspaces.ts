@@ -70,9 +70,8 @@ const workspaceRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
     const session = requireAuth(request);
 
     const cursor = decodeCursor((request.query as Record<string, string> | undefined)?.['cursor']);
-    const limit = normaliseLimit(
-      Number((request.query as Record<string, string> | undefined)?.['limit']),
-    );
+    const rawLimit = (request.query as Record<string, string> | undefined)?.['limit'];
+    const limit = normaliseLimit(rawLimit !== undefined ? Number(rawLimit) : undefined);
 
     // Build the query: only workspaces where the user is an active member
     const result = await pool.query<{
@@ -200,9 +199,8 @@ const workspaceRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
     const session = requireAuth(request);
 
     const cursor = decodeCursor((request.query as Record<string, string> | undefined)?.['cursor']);
-    const limit = normaliseLimit(
-      Number((request.query as Record<string, string> | undefined)?.['limit']),
-    );
+    const rawLimit = (request.query as Record<string, string> | undefined)?.['limit'];
+    const limit = normaliseLimit(rawLimit !== undefined ? Number(rawLimit) : undefined);
 
     // Enforce project-level membership: only return projects the user is a member of.
     // The INNER JOIN on project_members ensures AUDITOR-level workspace members
