@@ -198,3 +198,142 @@ export interface CompleteUploadResponse {
   mime_type: string;
   created_at: string;
 }
+
+// ---------------------------------------------------------------------------
+// Sensitivity and document status types
+// ---------------------------------------------------------------------------
+
+/** Sensitivity classification for documents. */
+export type Sensitivity =
+  | 'PUBLIC'
+  | 'INTERNAL'
+  | 'CONFIDENTIAL'
+  | 'HIGHLY_CONFIDENTIAL'
+  | 'REGULATED'
+  | 'PROHIBITED';
+
+/** Lifecycle states for document versions. */
+export type DocumentVersionStatus =
+  | 'PENDING_UPLOAD'
+  | 'UPLOADED'
+  | 'QUARANTINED'
+  | 'INGESTING'
+  | 'READY'
+  | 'FAILED'
+  | 'SUPERSEDED'
+  | 'DELETED';
+
+/** Lifecycle states for ingestion jobs. */
+export type IngestionJobStatusApi =
+  | 'QUEUED'
+  | 'RUNNING'
+  | 'RETRY_WAIT'
+  | 'SUCCEEDED'
+  | 'FAILED_FINAL'
+  | 'CANCELLED';
+
+// ---------------------------------------------------------------------------
+// Document types (per api/openapi.yaml §components/schemas/Document)
+// ---------------------------------------------------------------------------
+
+/** Structural locator within a document version. */
+export interface SourceLocator {
+  page?: number | null;
+  section?: string | null;
+  paragraph?: number | null;
+  start_char?: number | null;
+  end_char?: number | null;
+}
+
+/** A document version summary. */
+export interface DocumentVersion {
+  id: string;
+  document_id: string;
+  version_number: number;
+  status: DocumentVersionStatus;
+  is_current?: boolean;
+  checksum_sha256?: string;
+  created_at: string;
+}
+
+/** A document with its current version. */
+export interface Document {
+  id: string;
+  workspace_id: string;
+  project_id?: string | null;
+  title: string;
+  sensitivity: Sensitivity;
+  current_version?: DocumentVersion | null;
+  created_at: string;
+}
+
+/** Paginated list of documents. */
+export interface DocumentPage {
+  items: Document[];
+  next_cursor?: string | null;
+}
+
+// ---------------------------------------------------------------------------
+// Ingestion job types (per api/openapi.yaml §components/schemas/IngestionJob)
+// ---------------------------------------------------------------------------
+
+/** An ingestion job resource. */
+export interface IngestionJob {
+  id: string;
+  document_version_id: string;
+  status: IngestionJobStatusApi;
+  stage?: string | null;
+  attempt: number;
+  error_code?: string | null;
+  created_at: string;
+  updated_at?: string;
+}
+
+// ---------------------------------------------------------------------------
+// Operation accepted (per api/openapi.yaml §components/schemas/OperationAccepted)
+// ---------------------------------------------------------------------------
+
+/** Response for async operations (e.g. deletion). */
+export interface OperationAccepted {
+  operation_id: string;
+  status: 'ACCEPTED';
+}
+
+// ---------------------------------------------------------------------------
+// Retrieval types (per api/openapi.yaml §components/schemas/RetrievalQuery)
+// ---------------------------------------------------------------------------
+
+/** Request body for a retrieval query. */
+export interface RetrievalQueryRequest {
+  query: string;
+  project_id?: string | null;
+  source_ids?: string[];
+  history_mode?: 'CURRENT_ONLY' | 'INCLUDE_HISTORY';
+  limit?: number;
+  include_debug?: boolean;
+}
+
+/** A single retrieval result. */
+export interface RetrievalResult {
+  rank: number;
+  chunk_id: string;
+  document_id: string;
+  document_version_id: string;
+  source_id?: string;
+  source_title?: string;
+  locator: SourceLocator;
+  text: string;
+  scores: {
+    lexical?: number | null;
+    vector?: number | null;
+    fused: number;
+  };
+}
+
+/** Response body for a retrieval query or trace inspection. */
+export interface RetrievalResponse {
+  trace_id: string;
+  configuration_version: string;
+  results: RetrievalResult[];
+  latency_ms: number;
+}

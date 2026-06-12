@@ -18,6 +18,8 @@ import auditPlugin from './plugins/audit.js';
 import healthRoutes from './routes/health.js';
 import workspaceRoutes from './routes/workspaces.js';
 import uploadRoutes from './routes/uploads.js';
+import documentRoutes from './routes/documents.js';
+import retrievalRoutes from './routes/retrieval.js';
 import authRoutes from './routes/auth.js';
 import webShell from './routes/web.js';
 
@@ -84,6 +86,8 @@ export async function createServer(opts: CreateServerOptions) {
   await app.register(healthRoutes);
   await app.register(workspaceRoutes);
   await app.register(uploadRoutes);
+  await app.register(documentRoutes);
+  await app.register(retrievalRoutes);
 
   // Auth routes (login/callback/logout) and audit logging — only register if DB pool available
   if (dbPool) {
