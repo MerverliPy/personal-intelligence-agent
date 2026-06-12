@@ -90,14 +90,11 @@ export function createEmbeddingStage(options: CreateEmbeddingStageOptions): Inge
     },
 
     async execute(context: StageContext): Promise<StageResult> {
-      // Quick idempotency guard
-      if (await stage.isComplete(context)) {
-        return { performed: false };
-      }
-
       const { workspaceId, id: versionId } = context.version;
 
-      // 1. Fetch all chunks for this version (id + content), ordered by ordinal
+      // 1. Fetch all chunks for this version (id + content), ordered by ordinal.
+      //    This must run before isComplete so that the "no chunks" error is not
+      //    suppressed by isComplete returning true when there are zero chunks.
       const chunksResult = await context.pool.query<{
         id: string;
         content: string;
@@ -113,6 +110,11 @@ export function createEmbeddingStage(options: CreateEmbeddingStageOptions): Inge
       const allChunks = chunksResult.rows;
       if (allChunks.length === 0) {
         throw new TerminalJobError('No chunks found for embedding stage', 'EMBEDDING_NO_CHUNKS');
+      }
+
+      // Quick idempotency guard — must run after the no-chunks check above.
+      if (await stage.isComplete(context)) {
+        return { performed: false };
       }
 
       // 2. Determine which chunks still need embeddings

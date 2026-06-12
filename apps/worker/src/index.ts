@@ -101,6 +101,7 @@ function main(): void {
       });
     });
   } catch (error) {
+    // eslint-disable-next-line no-console -- logging unavailable at startup failure
     console.error('Failed to start worker:', error instanceof Error ? error.message : error);
     process.exit(1);
   }

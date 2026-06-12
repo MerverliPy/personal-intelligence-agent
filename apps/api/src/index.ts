@@ -73,6 +73,7 @@ async function main(): Promise<void> {
     process.on('SIGTERM', () => shutdown('SIGTERM'));
     process.on('SIGINT', () => shutdown('SIGINT'));
   } catch (error) {
+    // eslint-disable-next-line no-console -- logging unavailable at startup failure
     console.error('Failed to start API server:', error instanceof Error ? error.message : error);
     process.exit(1);
   }

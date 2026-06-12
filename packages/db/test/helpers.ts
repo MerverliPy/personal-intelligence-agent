@@ -42,7 +42,13 @@ export async function setupTestDatabase(): Promise<Pool> {
 
     // Drop and recreate.
     await adminPool.query(`DROP DATABASE IF EXISTS ${TEST_DB_NAME}`);
-    await adminPool.query(`CREATE DATABASE ${TEST_DB_NAME}`);
+    try {
+      await adminPool.query(`CREATE DATABASE ${TEST_DB_NAME}`);
+    } catch (err: unknown) {
+      const code = (err as { code?: string }).code;
+      if (code !== '42P04' && code !== '23505') throw err;
+      // Another vitest worker created the database first — that's fine.
+    }
   } finally {
     await adminPool.end();
   }

@@ -5,114 +5,114 @@ temperature: 0.1
 steps: 32
 permission:
   read:
-    "*": allow
-    "*.env": deny
-    "*.env.*": deny
-    "**/.env": deny
-    "**/.env.*": deny
-    "*.env.example": allow
-    "**/.env.example": allow
-    "*.pem": deny
-    "**/*.pem": deny
-    "*.key": deny
-    "**/*.key": deny
-    "*credentials*": deny
-    "**/*credentials*": deny
-    "**/.git/**": deny
+    '*': allow
+    '*.env': deny
+    '*.env.*': deny
+    '**/.env': deny
+    '**/.env.*': deny
+    '*.env.example': allow
+    '**/.env.example': allow
+    '*.pem': deny
+    '**/*.pem': deny
+    '*.key': deny
+    '**/*.key': deny
+    '*credentials*': deny
+    '**/*credentials*': deny
+    '**/.git/**': deny
   edit:
-    "*": deny
-    "AGENT_HANDOFF.md": allow
+    '*': deny
+    'AGENT_HANDOFF.md': allow
   glob: allow
   grep: allow
   list: allow
   lsp: allow
   bash:
-    "*": ask
-    "pwd": allow
-    "git status --short": allow
-    "git status --porcelain*": allow
-    "git rev-parse --show-toplevel": allow
-    "git rev-parse HEAD": allow
-    "git branch --show-current": allow
-    "git ls-files*": allow
-    "git diff --name-only*": allow
-    "git diff --stat*": allow
-    "rm *": deny
-    "rmdir *": deny
-    "sudo *": deny
-    "chmod *": deny
-    "chown *": deny
-    "git clean*": deny
-    "git reset*": deny
-    "git checkout*": deny
-    "git switch*": deny
-    "git restore*": deny
-    "git add*": deny
-    "git commit*": deny
-    "git push*": deny
-    "git pull*": deny
-    "git fetch*": deny
-    "git merge*": deny
-    "git rebase*": deny
-    "git cherry-pick*": deny
-    "git revert*": deny
-    "git stash*": deny
-    "git tag*": deny
-    "curl *": deny
-    "wget *": deny
-    "ssh *": deny
-    "scp *": deny
-    "rsync *": deny
-    "docker *": deny
-    "podman *": deny
-    "kubectl *": deny
-    "helm *": deny
-    "terraform *": deny
-    "tofu *": deny
-    "ansible*": deny
-    "aws *": deny
-    "gcloud *": deny
-    "az *": deny
-    "npx *": deny
-    "pnpx *": deny
-    "bunx *": deny
-    "uvx *": deny
-    "npm install*": deny
-    "npm i*": deny
-    "npm update*": deny
-    "npm uninstall*": deny
-    "pnpm install*": deny
-    "pnpm i*": deny
-    "pnpm add*": deny
-    "pnpm update*": deny
-    "pnpm remove*": deny
-    "yarn": deny
-    "yarn install*": deny
-    "yarn add*": deny
-    "yarn up*": deny
-    "yarn remove*": deny
-    "bun install*": deny
-    "bun add*": deny
-    "bun update*": deny
-    "bun remove*": deny
-    "pip install*": deny
-    "pip3 install*": deny
-    "pip uninstall*": deny
-    "python -m pip install*": deny
-    "python3 -m pip install*": deny
-    "poetry install*": deny
-    "poetry update*": deny
-    "uv sync*": deny
-    "uv add*": deny
-    "uv pip install*": deny
-    "cargo install*": deny
-    "cargo update*": deny
-    "go get*": deny
-    "go install*": deny
-    "composer install*": deny
-    "composer update*": deny
-    "bundle install*": deny
-    "gem install*": deny
+    '*': ask
+    'pwd': allow
+    'git status --short': allow
+    'git status --porcelain*': allow
+    'git rev-parse --show-toplevel': allow
+    'git rev-parse HEAD': allow
+    'git branch --show-current': allow
+    'git ls-files*': allow
+    'git diff --name-only*': allow
+    'git diff --stat*': allow
+    'rm *': deny
+    'rmdir *': deny
+    'sudo *': deny
+    'chmod *': deny
+    'chown *': deny
+    'git clean*': deny
+    'git reset*': deny
+    'git checkout*': deny
+    'git switch*': deny
+    'git restore*': deny
+    'git add*': deny
+    'git commit*': deny
+    'git push*': deny
+    'git pull*': deny
+    'git fetch*': deny
+    'git merge*': deny
+    'git rebase*': deny
+    'git cherry-pick*': deny
+    'git revert*': deny
+    'git stash*': deny
+    'git tag*': deny
+    'curl *': deny
+    'wget *': deny
+    'ssh *': deny
+    'scp *': deny
+    'rsync *': deny
+    'docker *': deny
+    'podman *': deny
+    'kubectl *': deny
+    'helm *': deny
+    'terraform *': deny
+    'tofu *': deny
+    'ansible*': deny
+    'aws *': deny
+    'gcloud *': deny
+    'az *': deny
+    'npx *': deny
+    'pnpx *': deny
+    'bunx *': deny
+    'uvx *': deny
+    'npm install*': deny
+    'npm i*': deny
+    'npm update*': deny
+    'npm uninstall*': deny
+    'pnpm install*': deny
+    'pnpm i*': deny
+    'pnpm add*': deny
+    'pnpm update*': deny
+    'pnpm remove*': deny
+    'yarn': deny
+    'yarn install*': deny
+    'yarn add*': deny
+    'yarn up*': deny
+    'yarn remove*': deny
+    'bun install*': deny
+    'bun add*': deny
+    'bun update*': deny
+    'bun remove*': deny
+    'pip install*': deny
+    'pip3 install*': deny
+    'pip uninstall*': deny
+    'python -m pip install*': deny
+    'python3 -m pip install*': deny
+    'poetry install*': deny
+    'poetry update*': deny
+    'uv sync*': deny
+    'uv add*': deny
+    'uv pip install*': deny
+    'cargo install*': deny
+    'cargo update*': deny
+    'go get*': deny
+    'go install*': deny
+    'composer install*': deny
+    'composer update*': deny
+    'bundle install*': deny
+    'gem install*': deny
   task: deny
   skill: deny
   question: deny
@@ -207,40 +207,51 @@ Use stable IDs such as `AUD-P1-001`. Do not reuse IDs or split one root cause ac
 # Repository Audit Agent Handoff
 
 ## Audit Summary
+
 Purpose and stack; architecture; branch and commit; pre-existing changes; inspected/uninspected areas; commands executed; overall health; severity counts; limitations.
 
 ## Repository Map
+
 Applications, services, packages, libraries, entry points, tests, build/CI configuration, deployment configuration, and excluded/generated areas.
 
 ## Validation Results
+
 Table: `Check | Command | Result | Evidence`
 
 Allowed results: `Passed`, `Failed`, `Blocked`, `Not Executed`, `Not Applicable`.
 
 ## Findings Summary
+
 Table: `ID | Severity | Confidence | Finding | Location | Status`
 
 ## Detailed Findings
+
 For every material finding include severity, confidence, status, affected paths/symbols, observed versus expected behavior, evidence, verified or explicitly unverified root cause, impact, reproduction, smallest safe remediation, required tests, regression risks, blockers, and acceptance criteria.
 
 ## Suspected Issues and Risks
+
 Separate suspected issues, maintainability/security risks, and optional improvements. Include evidence, missing validation, impact, and exact next action.
 
 ## Execution Plan
+
 Order phases by P0/P1, shared root causes, dependency order, then P2/P3. Keep unrelated changes separate.
 
 For each phase include objective, finding IDs, expected paths, checkbox tasks, exact validation commands, checkbox acceptance criteria, and rollback considerations.
 
 ## Final Verification Checklist
+
 Include exact applicable commands for dependency checks, formatting, linting, static analysis, type checking, build, unit/integration tests, security, documentation, CI-equivalent checks, Git status, unintended changes, and secret exposure.
 
 ## Deferred, Blocked, and Rejected Findings
+
 For each item include ID, decision, reason, risk, prerequisite, and recommended next action.
 
 ## Open Questions and Limitations
+
 State every material coverage, environment, dependency, service, credential, context, and validation limitation.
 
 ## Implementation Agent Starting Point
+
 State the first phase, first paths, first validation command, blockers, repository-state considerations, and changes that must remain separate.
 
 ## Completion checks

@@ -40,11 +40,18 @@ async function isPostgresAvailable(): Promise<boolean> {
   return dbAvailable;
 }
 
+/** Advisory lock key used to serialize cross-worker database setup. */
+const SETUP_LOCK_KEY = 1234567890;
+
 /**
  * Creates a fresh test database, runs all migrations, and returns a
- * connection pool. Safe to call from multiple test files — the database
- * is only created once per process. Returns null when PostgreSQL is
- * not available.
+ * connection pool. Safe to call from multiple test files concurrently —
+ * a PostgreSQL advisory lock serializes database creation and migration
+ * application across vitest worker threads. The database is never
+ * dropped during concurrent setup to avoid disrupting workers that are
+ * already running tests.
+ *
+ * Returns null when PostgreSQL is not available.
  */
 export async function setupTestDatabase(): Promise<Pool | null> {
   if (testPool) {
@@ -56,27 +63,40 @@ export async function setupTestDatabase(): Promise<Pool | null> {
   const adminPool = new Pool({ connectionString: ADMIN_DATABASE_URL });
 
   try {
-    if (!dbCreated) {
-      // Terminate any existing connections to the test database.
-      await adminPool.query(
-        `SELECT pg_terminate_backend(pg_stat_activity.pid)
-         FROM pg_stat_activity
-         WHERE pg_stat_activity.datname = $1
-           AND pid <> pg_backend_pid()`,
-        [TEST_DB_NAME],
-      );
+    // Serialize database creation + migration across concurrent workers.
+    await adminPool.query(`SELECT pg_advisory_lock(${SETUP_LOCK_KEY})`);
 
-      await adminPool.query(`DROP DATABASE IF EXISTS ${TEST_DB_NAME}`);
-      await adminPool.query(`CREATE DATABASE ${TEST_DB_NAME}`);
-      dbCreated = true;
+    try {
+      if (!dbCreated) {
+        // Create the test database if it does not already exist.
+        // (Another worker may have created it; that's fine — migrations
+        // are tracked inside the database and will be skipped on re-run.)
+        try {
+          await adminPool.query(`CREATE DATABASE ${TEST_DB_NAME}`);
+        } catch (err: unknown) {
+          const code = (err as { code?: string }).code;
+          // 42P04 = DUPLICATE_DATABASE, 23505 = unique_violation on pg_database index
+          if (code !== '42P04' && code !== '23505') throw err;
+        }
+
+        // Run migrations inside the lock so they are applied exactly once.
+        const migrationPool = new Pool({ connectionString: TEST_DATABASE_URL });
+        try {
+          await runMigrations(migrationPool, defaultMigrationsDir());
+        } finally {
+          await migrationPool.end();
+        }
+
+        dbCreated = true;
+      }
+    } finally {
+      await adminPool.query(`SELECT pg_advisory_unlock(${SETUP_LOCK_KEY})`);
     }
   } finally {
     await adminPool.end();
   }
 
   testPool = new Pool({ connectionString: TEST_DATABASE_URL });
-  await runMigrations(testPool, defaultMigrationsDir());
-
   return testPool;
 }
 
