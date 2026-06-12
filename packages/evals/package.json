@@ -2,10 +2,32 @@
   "name": "@pia/evals",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
-    "test:unit": "echo 'evals: no tests yet' && exit 0"
+    "test:unit": "vitest run",
+    "eval:retrieval": "tsx ../../evals/retrieval/run.ts"
+  },
+  "dependencies": {
+    "@pia/db": "workspace:*",
+    "@pia/knowledge": "workspace:*",
+    "pg": "^8.13.0",
+    "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.0",
+    "tsx": "^4.22.4",
+    "vitest": "^2.1.0"
   }
 }

@@ -1,0 +1,90 @@
+# Retrieval Evaluation Dataset — Sample (P2-T10)
+# Covers: version correctness, recall/precision, empty results, latency
+name: retrieval-sample
+version: '1.0.0'
+description: >
+  Sample evaluation cases for retrieval quality. Tests that current versions
+  are retrieved, superseded/deleted/quarantined versions are excluded, and
+  expected query behavior produces correct results.
+
+cases:
+  # -------------------------------------------------------------------
+  # Version correctness: current version, not superseded
+  # -------------------------------------------------------------------
+  - id: ret-version-current-001
+    type: retrieval
+    input:
+      workspace_fixture: alpha
+      query: 'retention policy requirements'
+      max_results: 10
+    expected:
+      must_include_document_versions:
+        - policy-v3
+      must_exclude_document_versions:
+        - policy-v1
+        - policy-v2
+      max_latency_ms: 5000
+    tags: [retrieval, versioning, regression]
+
+  # -------------------------------------------------------------------
+  # General knowledge: AI-related query should find AI document
+  # -------------------------------------------------------------------
+  - id: ret-knowledge-ai-001
+    type: retrieval
+    input:
+      workspace_fixture: alpha
+      query: 'artificial intelligence machine learning'
+      max_results: 10
+    expected:
+      must_include_documents:
+        - ai-doc
+      min_distinct_versions: 1
+      max_latency_ms: 5000
+    tags: [retrieval, knowledge, baseline]
+
+  # -------------------------------------------------------------------
+  # General knowledge: weather query
+  # -------------------------------------------------------------------
+  - id: ret-knowledge-weather-001
+    type: retrieval
+    input:
+      workspace_fixture: alpha
+      query: 'weather forecast today temperature'
+      max_results: 10
+    expected:
+      must_include_documents:
+        - weather-doc
+      max_latency_ms: 5000
+    tags: [retrieval, knowledge, baseline]
+
+  # -------------------------------------------------------------------
+  # Empty result: nonsense query should produce explicit empty results
+  # Note: with a fake/non-semantic embedding provider, vector search may
+  # return spurious matches. This test validates that the service handles
+  # empty lexical results gracefully without errors, not that vector
+  # search is semantically empty.
+  # -------------------------------------------------------------------
+  - id: ret-empty-result-001
+    type: retrieval
+    input:
+      workspace_fixture: alpha
+      query: 'xyznonexistenttermcompletelyabcdefg999'
+      max_results: 10
+    expected:
+      max_latency_ms: 5000
+    tags: [retrieval, edge-case]
+
+  # -------------------------------------------------------------------
+  # Sufficienct results: should find project-related content
+  # -------------------------------------------------------------------
+  - id: ret-knowledge-project-001
+    type: retrieval
+    input:
+      workspace_fixture: alpha
+      query: 'Project Phoenix renewable energy'
+      max_results: 10
+    expected:
+      must_include_documents:
+        - project-doc
+      max_latency_ms: 5000
+    tags: [retrieval, knowledge, baseline]

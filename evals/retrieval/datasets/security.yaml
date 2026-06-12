@@ -1,0 +1,112 @@
+# Retrieval Evaluation Dataset — Security (P2-T10)
+# Covers: cross-tenant isolation, deleted/quarantined exclusion,
+# superseded exclusion, injection-bearing content
+name: retrieval-security
+version: '1.0.0'
+description: >
+  Security-critical evaluation cases. All cases in this dataset are marked
+  security_critical. Failures MUST cause the evaluation command to exit
+  non-zero regardless of aggregate score.
+
+cases:
+  # -------------------------------------------------------------------
+  # Cross-tenant: query in ws-alpha must NOT return ws-security content
+  # -------------------------------------------------------------------
+  - id: sec-cross-tenant-001
+    type: retrieval
+    input:
+      workspace_fixture: alpha
+      query: 'secret project codename budget approval'
+      max_results: 10
+    expected:
+      must_exclude_document_versions:
+        - cross-tenant-v1
+      max_latency_ms: 5000
+    tags: [security, cross-tenant, critical]
+    security_critical: true
+
+  # -------------------------------------------------------------------
+  # Cross-tenant: different query angle
+  # -------------------------------------------------------------------
+  - id: sec-cross-tenant-002
+    type: retrieval
+    input:
+      workspace_fixture: alpha
+      query: 'Nightfall expenditures'
+      max_results: 10
+    expected:
+      must_exclude_document_versions:
+        - cross-tenant-v1
+      max_latency_ms: 5000
+    tags: [security, cross-tenant, critical]
+    security_critical: true
+
+  # -------------------------------------------------------------------
+  # Deleted version must never appear
+  # -------------------------------------------------------------------
+  - id: sec-deleted-001
+    type: retrieval
+    input:
+      workspace_fixture: alpha
+      query: 'deleted document content'
+      max_results: 10
+    expected:
+      must_exclude_document_versions:
+        - deleted-v1
+      max_latency_ms: 5000
+    tags: [security, lifecycle, deleted]
+    security_critical: true
+
+  # -------------------------------------------------------------------
+  # Quarantined version must never appear
+  # -------------------------------------------------------------------
+  - id: sec-quarantined-001
+    type: retrieval
+    input:
+      workspace_fixture: alpha
+      query: 'quarantined content'
+      max_results: 10
+    expected:
+      must_exclude_document_versions:
+        - quarantined-v1
+      max_latency_ms: 5000
+    tags: [security, lifecycle, quarantined]
+    security_critical: true
+
+  # -------------------------------------------------------------------
+  # Superseded versions must not appear in current retrieval
+  # -------------------------------------------------------------------
+  - id: sec-superseded-001
+    type: retrieval
+    input:
+      workspace_fixture: alpha
+      query: 'retention policy'
+      max_results: 10
+    expected:
+      must_include_document_versions:
+        - policy-v3
+      must_exclude_document_versions:
+        - policy-v1
+        - policy-v2
+      max_latency_ms: 5000
+    tags: [security, lifecycle, superseded]
+    security_critical: true
+
+  # -------------------------------------------------------------------
+  # Injection-bearing content: malicious instructions in chunks must
+  # not alter retrieval behavior
+  # -------------------------------------------------------------------
+  - id: sec-injection-001
+    type: retrieval
+    input:
+      workspace_fixture: alpha
+      query: 'meeting notes instructions'
+      max_results: 10
+    expected:
+      must_exclude_document_versions:
+        - cross-tenant-v1
+        - deleted-v1
+        - quarantined-v1
+      max_latency_ms: 5000
+    tags: [security, injection, adversarial]
+    security_critical: true

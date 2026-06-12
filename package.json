@@ -15,7 +15,8 @@
     "setup:hooks": "cp scripts/git-hooks/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push && echo 'Git hooks installed.'",
     "ci:check": "bash scripts/ci/check-all.sh",
     "db:migrate:test": "pnpm --filter @pia/db db:migrate:test",
-    "test:integration": "turbo run test:integration"
+    "test:integration": "turbo run test:integration",
+    "eval:retrieval": "pnpm --filter @pia/evals eval:retrieval"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

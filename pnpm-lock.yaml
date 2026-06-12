@@ -169,7 +169,30 @@ importers:
 
   packages/domain: {}
 
-  packages/evals: {}
+  packages/evals:
+    dependencies:
+      '@pia/db':
+        specifier: workspace:*
+        version: link:../db
+      '@pia/knowledge':
+        specifier: workspace:*
+        version: link:../knowledge
+      pg:
+        specifier: ^8.13.0
+        version: 8.21.0
+      yaml:
+        specifier: ^2.9.0
+        version: 2.9.0
+    devDependencies:
+      '@types/pg':
+        specifier: ^8.11.0
+        version: 8.20.0
+      tsx:
+        specifier: ^4.22.4
+        version: 4.22.4
+      vitest:
+        specifier: ^2.1.0
+        version: 2.1.9(@types/node@22.19.20)
 
   packages/jobs:
     dependencies:
