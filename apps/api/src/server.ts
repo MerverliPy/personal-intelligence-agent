@@ -22,6 +22,7 @@ import documentRoutes from './routes/documents.js';
 import retrievalRoutes from './routes/retrieval.js';
 import authRoutes from './routes/auth.js';
 import webShell from './routes/web.js';
+import webDocumentRoutes from './routes/web-documents.js';
 
 /**
  * Server creation options.
@@ -101,6 +102,7 @@ export async function createServer(opts: CreateServerOptions) {
   }
 
   await app.register(webShell);
+  await app.register(webDocumentRoutes);
 
   // Add Content-Type for all responses
   app.addHook('onSend', async (_request, reply, payload) => {

@@ -21,6 +21,7 @@
     "@pia/knowledge": "workspace:*",
     "@pia/observability": "workspace:*",
     "@pia/storage": "workspace:*",
+    "@pia/web": "workspace:*",
     "fastify": "^5.8.5",
     "fastify-plugin": "^6.0.0",
     "pg": "^8.13.0"

@@ -1,0 +1,189 @@
+/**
+ * Shared CSS used across all P2-T09 document and retrieval pages.
+ *
+ * @remarks
+ * NFR-UX-003 — accessible status announcements for core flows.
+ * Uses high-contrast colors, system font stack, and ARIA-friendly design.
+ */
+export const sharedCss = `
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; line-height: 1.5; }
+  .container { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #e0e0e0; }
+  .header h1 { font-size: 1.5rem; font-weight: 600; }
+  .header nav a { margin-left: 1rem; color: #444; text-decoration: none; font-size: 0.9rem; }
+  .header nav a:hover { text-decoration: underline; }
+  .error { background: #fee2e2; border: 1px solid #fca5a5; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; color: #991b1b; }
+  .success { background: #dcfce7; border: 1px solid #86efac; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; color: #166534; }
+  .info { background: #dbeafe; border: 1px solid #93c5fd; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; color: #1e40af; }
+  .warning { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; color: #92400e; }
+  .card { background: white; border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .card h2 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+  .card h3 { font-size: 1rem; margin-top: 1rem; margin-bottom: 0.5rem; }
+  .card .meta { font-size: 0.85rem; color: #666; margin-bottom: 0.5rem; }
+  .card .row { display: flex; justify-content: space-between; align-items: center; }
+  .loading { color: #888; font-style: italic; padding: 2rem; text-align: center; }
+  .empty { color: #999; padding: 2rem 0; text-align: center; }
+  .btn { display: inline-block; padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid #ccc; background: white; cursor: pointer; font-size: 0.9rem; text-decoration: none; color: #1a1a1a; }
+  .btn:hover { background: #f9f9f9; }
+  .btn-primary { background: #1a1a1a; color: white; border-color: #1a1a1a; }
+  .btn-primary:hover { background: #333; }
+  .btn-danger { border-color: #dc2626; color: #dc2626; }
+  .btn-danger:hover { background: #fef2f2; }
+  .btn-sm { padding: 0.3rem 0.7rem; font-size: 0.8rem; }
+  .btn:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; border-radius: 4px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; }
+  th { font-weight: 600; color: #555; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  tr:hover td { background: #fafafa; }
+  .badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+  .badge-ready { background: #dcfce7; color: #166534; }
+  .badge-processing { background: #dbeafe; color: #1e40af; }
+  .badge-failed { background: #fee2e2; color: #991b1b; }
+  .badge-quarantined { background: #fef3c7; color: #92400e; }
+  .badge-uploaded { background: #f3e8ff; color: #6b21a8; }
+  .badge-pending { background: #f3f4f6; color: #374151; }
+  form { margin-bottom: 1.5rem; }
+  label { display: block; margin-bottom: 0.25rem; font-weight: 500; font-size: 0.9rem; }
+  input[type="text"], input[type="search"], input[type="file"], select { width: 100%; max-width: 480px; padding: 0.5rem 0.75rem; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; margin-bottom: 0.75rem; }
+  fieldset { border: 1px solid #e0e0e0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+  legend { font-weight: 600; font-size: 0.9rem; padding: 0 0.5rem; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0; }
+  [role="status"] { position: fixed; top: 1rem; right: 1rem; max-width: 360px; z-index: 1000; pointer-events: none; }
+  .chunk { background: #fafafa; border: 1px solid #e5e5e5; border-radius: 6px; padding: 0.75rem; margin-bottom: 0.5rem; }
+  .chunk-text { font-size: 0.9rem; line-height: 1.6; margin-bottom: 0.5rem; }
+  .chunk-source { font-size: 0.8rem; color: #666; }
+  .score-bar { display: inline-flex; gap: 0.5rem; font-size: 0.75rem; }
+  .score-bar span { padding: 0.1rem 0.4rem; border-radius: 3px; background: #f0f0f0; }
+  .tab-bar { display: flex; gap: 0; border-bottom: 2px solid #e0e0e0; margin-bottom: 1.5rem; }
+  .tab-bar a { padding: 0.6rem 1rem; text-decoration: none; color: #666; border-bottom: 2px solid transparent; margin-bottom: -2px; font-size: 0.9rem; font-weight: 500; }
+  .tab-bar a.active, .tab-bar a:hover { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+  .progress-container { margin: 1rem 0; }
+  .progress-bar { height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #2563eb; border-radius: 4px; transition: width 0.3s ease; }
+`;
+
+/**
+ * Shared JavaScript utilities injected into every page.
+ * Provides apiFetch, escapeHtml, showError, clearError, showStatus.
+ */
+export const sharedJs = `
+const API_BASE = '';
+
+async function apiFetch(path, opts) {
+  const res = await fetch(path, opts);
+  const body = await res.json().catch(function() { return {}; });
+  if (!res.ok) {
+    const code = (body && body.error && body.error.code) || 'UNKNOWN';
+    const msg = (body && body.error && body.error.message) || 'Request failed';
+    throw new Error(code + ': ' + msg);
+  }
+  return body;
+}
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
+
+function showError(message) {
+  var el = document.getElementById('error-container');
+  if (el) el.innerHTML = '<div class="error" role="alert">' + escapeHtml(message) + '</div>';
+}
+
+function clearError() {
+  var el = document.getElementById('error-container');
+  if (el) el.innerHTML = '';
+}
+
+function showSuccess(message) {
+  var el = document.getElementById('error-container');
+  if (el) el.innerHTML = '<div class="success" role="status">' + escapeHtml(message) + '</div>';
+}
+
+var liveRegion = document.getElementById('live-region');
+if (!liveRegion) {
+  liveRegion = document.createElement('div');
+  liveRegion.id = 'live-region';
+  liveRegion.setAttribute('aria-live', 'polite');
+  liveRegion.setAttribute('aria-atomic', 'true');
+  liveRegion.className = 'sr-only';
+  document.body.appendChild(liveRegion);
+}
+
+function announce(message) {
+  liveRegion.textContent = '';
+  setTimeout(function() { liveRegion.textContent = message; }, 50);
+}
+`;
+
+/**
+ * Shared page shell: wraps content with header, error container, CSS, JS.
+ */
+export function pageShell({
+  title,
+  workspaceId,
+  workspaceName,
+  tabActive,
+  bodyHtml,
+  bodyScript,
+}: {
+  title: string;
+  workspaceId: string;
+  workspaceName: string;
+  tabActive: 'documents' | 'upload' | 'search' | null;
+  bodyHtml: string;
+  bodyScript: string;
+}): string {
+  const encodedName = workspaceName
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+  let tabs = '';
+  if (workspaceId) {
+    const makeTab = (label: string, href: string, active: boolean) =>
+      `<a href="${href}" class="${active ? 'active' : ''}">${label}</a>`;
+    tabs = `
+      <div class="tab-bar" role="navigation" aria-label="Workspace pages">
+        ${makeTab('Documents', `/app/workspaces/${workspaceId}/documents`, tabActive === 'documents')}
+        ${makeTab('Upload', `/app/workspaces/${workspaceId}/upload`, tabActive === 'upload')}
+        ${makeTab('Search', `/app/workspaces/${workspaceId}/search`, tabActive === 'search')}
+      </div>`;
+  }
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title} — PIA</title>
+  <style>${sharedCss}</style>
+</head>
+<body>
+  <div id="live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1>${encodedName}</h1>
+        <div class="meta">PIA — Personal Intelligence Agent</div>
+      </div>
+      <nav>
+        <a href="/app">← Workspaces</a>
+      </nav>
+    </div>
+    ${tabs}
+    <div id="error-container"></div>
+    <div id="content">
+${bodyHtml}
+    </div>
+  </div>
+  <script type="module">
+${sharedJs}
+${bodyScript}
+  </script>
+</body>
+</html>`;
+}
