@@ -30,7 +30,11 @@ import type {
 // Test lifecycle
 // ---------------------------------------------------------------------------
 
-let pool: Pool;
+let pool: Pool | null = null;
+
+function requirePool(ctx: { skip: () => void }): asserts pool is Pool {
+  if (!pool) ctx.skip();
+}
 
 beforeAll(async () => {
   pool = await setupTestDatabase();
@@ -126,7 +130,8 @@ describe('EmbeddingStage', () => {
   let sfid: string;
   let uid: string;
 
-  beforeEach(async () => {
+  beforeEach(async (vtCtx) => {
+    requirePool(vtCtx);
     const entities = await seedBaseEntities();
     wsid = entities.wsid;
     docid = entities.docid;
@@ -134,7 +139,8 @@ describe('EmbeddingStage', () => {
     uid = entities.uid;
   });
 
-  it('creates embeddings for all chunks', async () => {
+  it('creates embeddings for all chunks', async (vtCtx) => {
+    requirePool(vtCtx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const version = (await getDocumentVersionById(pool, wsid, versionId))!;
     const job = await createIngestionJob(pool, {
@@ -177,7 +183,8 @@ describe('EmbeddingStage', () => {
     expect(parseInt(embResult.rows[0]!.count, 10)).toBeGreaterThan(0);
   });
 
-  it('is idempotent — re-execution does not create duplicate embeddings', async () => {
+  it('is idempotent — re-execution does not create duplicate embeddings', async (vtCtx) => {
+    requirePool(vtCtx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const version = (await getDocumentVersionById(pool, wsid, versionId))!;
     const job = await createIngestionJob(pool, {
@@ -228,7 +235,8 @@ describe('EmbeddingStage', () => {
     expect(parseInt(count2.rows[0]!.count, 10)).toBe(firstCount);
   });
 
-  it('isComplete returns false when no embeddings exist', async () => {
+  it('isComplete returns false when no embeddings exist', async (vtCtx) => {
+    requirePool(vtCtx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const version = (await getDocumentVersionById(pool, wsid, versionId))!;
     const job = await createIngestionJob(pool, {
@@ -250,7 +258,8 @@ describe('EmbeddingStage', () => {
     expect(await stage.isComplete(ctx)).toBe(false);
   });
 
-  it('isComplete returns true after embeddings are created', async () => {
+  it('isComplete returns true after embeddings are created', async (vtCtx) => {
+    requirePool(vtCtx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const version = (await getDocumentVersionById(pool, wsid, versionId))!;
     const job = await createIngestionJob(pool, {
@@ -278,7 +287,8 @@ describe('EmbeddingStage', () => {
     expect(await stage.isComplete(ctx)).toBe(true);
   });
 
-  it('throws TerminalJobError when no chunks exist', async () => {
+  it('throws TerminalJobError when no chunks exist', async (vtCtx) => {
+    requirePool(vtCtx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const version = (await getDocumentVersionById(pool, wsid, versionId))!;
     const job = await createIngestionJob(pool, {
@@ -299,7 +309,8 @@ describe('EmbeddingStage', () => {
     await expect(stage.execute(ctx)).rejects.toThrow(TerminalJobError);
   });
 
-  it('handles multiple chunks with batching', async () => {
+  it('handles multiple chunks with batching', async (vtCtx) => {
+    requirePool(vtCtx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const version = (await getDocumentVersionById(pool, wsid, versionId))!;
     const job = await createIngestionJob(pool, {
@@ -353,7 +364,8 @@ describe('EmbeddingStage', () => {
     expect(parseInt(embResult.rows[0]!.count, 10)).toBe(5);
   });
 
-  it('persists embedding model, dimension, and version metadata', async () => {
+  it('persists embedding model, dimension, and version metadata', async (vtCtx) => {
+    requirePool(vtCtx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const version = (await getDocumentVersionById(pool, wsid, versionId))!;
     const job = await createIngestionJob(pool, {
@@ -394,7 +406,8 @@ describe('EmbeddingStage', () => {
     expect(embResult.rows[0]!.embedding_version).toBe('2.0-test');
   });
 
-  it('isolates embeddings by model version — different versions create separate embeddings', async () => {
+  it('isolates embeddings by model version — different versions create separate embeddings', async (vtCtx) => {
+    requirePool(vtCtx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const version = (await getDocumentVersionById(pool, wsid, versionId))!;
     const job = await createIngestionJob(pool, {
@@ -443,7 +456,8 @@ describe('EmbeddingStage', () => {
     expect(embN).toBe(chunkN * 2);
   });
 
-  it('propagates provider errors (transient)', async () => {
+  it('propagates provider errors (transient)', async (vtCtx) => {
+    requirePool(vtCtx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const version = (await getDocumentVersionById(pool, wsid, versionId))!;
     const job = await createIngestionJob(pool, {
@@ -474,7 +488,8 @@ describe('EmbeddingStage', () => {
     await expect(stage.execute(ctx)).rejects.toThrow('Simulated provider error');
   });
 
-  it('throws TerminalJobError on dimension mismatch', async () => {
+  it('throws TerminalJobError on dimension mismatch', async (vtCtx) => {
+    requirePool(vtCtx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const version = (await getDocumentVersionById(pool, wsid, versionId))!;
     const job = await createIngestionJob(pool, {
@@ -510,7 +525,8 @@ describe('EmbeddingStage', () => {
     await expect(stage.execute(ctx)).rejects.toThrow(TerminalJobError);
   });
 
-  it('handles chunk that is already embedded (partial idempotency within batch)', async () => {
+  it('handles chunk that is already embedded (partial idempotency within batch)', async (vtCtx) => {
+    requirePool(vtCtx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const version = (await getDocumentVersionById(pool, wsid, versionId))!;
     const job = await createIngestionJob(pool, {

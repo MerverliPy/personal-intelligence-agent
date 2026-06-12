@@ -24,11 +24,26 @@ const TEST_DATABASE_URL =
   process.env['DATABASE_URL']?.replace(/\/[^/]+$/, `/${TEST_DB_NAME}`) ??
   `postgresql://pia:pia-dev@localhost:5432/${TEST_DB_NAME}`;
 
-let pool: Pool;
+let pool: Pool | null = null;
 let dbCreated = false;
 
-async function setupDb(): Promise<Pool> {
+async function isPostgresAvailable(): Promise<boolean> {
+  try {
+    const probe = new Pool({
+      connectionString: ADMIN_DATABASE_URL,
+      connectionTimeoutMillis: 2000,
+    });
+    await probe.query('SELECT 1');
+    await probe.end();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function setupDb(): Promise<Pool | null> {
   if (pool) return pool;
+  if (!(await isPostgresAvailable())) return null;
 
   const adminPool = new Pool({ connectionString: ADMIN_DATABASE_URL });
   try {
@@ -154,6 +169,10 @@ async function completeTestUpload(
 // Tests
 // ---------------------------------------------------------------------------
 
+function requirePool(vtCtx: { skip: () => void }): asserts pool is Pool {
+  if (!pool) vtCtx.skip();
+}
+
 beforeAll(async () => {
   pool = await setupDb();
 }, 30_000);
@@ -164,7 +183,8 @@ afterAll(async () => {
   }
 });
 
-beforeEach(async () => {
+beforeEach(async (vtCtx) => {
+  requirePool(vtCtx);
   await seedWorkspace(pool, TEST_WORKSPACE_ID, TEST_USER_ID);
   // Clean up knowledge and outbox tables
   await pool.query('DELETE FROM outbox_events WHERE workspace_id = $1', [TEST_WORKSPACE_ID]);
@@ -179,7 +199,8 @@ beforeEach(async () => {
 // ---------------------------------------------------------------------------
 
 describe('Happy path — clean upload proceeds to ingestion', () => {
-  it('creates stored file, document, version, and ingestion job', async () => {
+  it('creates stored file, document, version, and ingestion job', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = createNoopScanProvider();
 
@@ -218,7 +239,8 @@ describe('Happy path — clean upload proceeds to ingestion', () => {
     expect(result.quarantineReason).toBeUndefined();
   });
 
-  it('persists checksum and size from storage', async () => {
+  it('persists checksum and size from storage', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = createNoopScanProvider();
 
@@ -243,7 +265,8 @@ describe('Happy path — clean upload proceeds to ingestion', () => {
 // ---------------------------------------------------------------------------
 
 describe('Quarantine — malware scan results', () => {
-  it('quarantines when scan returns INFECTED', async () => {
+  it('quarantines when scan returns INFECTED', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = mockScanProvider({ status: 'INFECTED' });
 
@@ -263,7 +286,8 @@ describe('Quarantine — malware scan results', () => {
     expect(result.storedFile.scanStatus).toBe('INFECTED');
   });
 
-  it('quarantines when scan returns PENDING', async () => {
+  it('quarantines when scan returns PENDING', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = mockScanProvider({ status: 'PENDING' });
 
@@ -282,7 +306,8 @@ describe('Quarantine — malware scan results', () => {
     expect(result.ingestionJob).toBeUndefined();
   });
 
-  it('quarantines when scan returns ERROR', async () => {
+  it('quarantines when scan returns ERROR', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = mockScanProvider({ status: 'ERROR' });
 
@@ -307,7 +332,8 @@ describe('Quarantine — malware scan results', () => {
 // ---------------------------------------------------------------------------
 
 describe('Quarantine — MIME type checks', () => {
-  it('quarantines unsupported MIME type', async () => {
+  it('quarantines unsupported MIME type', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = mockScanProvider({
       status: 'CLEAN',
@@ -329,7 +355,8 @@ describe('Quarantine — MIME type checks', () => {
     expect(result.ingestionJob).toBeUndefined();
   });
 
-  it('quarantines null detected MIME type', async () => {
+  it('quarantines null detected MIME type', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = mockScanProvider({
       status: 'CLEAN',
@@ -350,7 +377,8 @@ describe('Quarantine — MIME type checks', () => {
     expect(result.quarantineReason).toContain('not in the workspace allowed types');
   });
 
-  it('respects custom allowed MIME types list', async () => {
+  it('respects custom allowed MIME types list', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = mockScanProvider({
       status: 'CLEAN',
@@ -387,7 +415,8 @@ describe('Quarantine — MIME type checks', () => {
 // ---------------------------------------------------------------------------
 
 describe('Idempotency — duplicate completion', () => {
-  it('returns the same result on duplicate completion', async () => {
+  it('returns the same result on duplicate completion', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = createNoopScanProvider();
 
@@ -430,7 +459,8 @@ describe('Idempotency — duplicate completion', () => {
     expect(result2.version.status).toBe(result1.version.status);
   });
 
-  it('does not create duplicate ingestion jobs', async () => {
+  it('does not create duplicate ingestion jobs', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = createNoopScanProvider();
 
@@ -477,7 +507,8 @@ describe('Idempotency — duplicate completion', () => {
 // ---------------------------------------------------------------------------
 
 describe('Outbox events', () => {
-  it('publishes document.upload.completed event', async () => {
+  it('publishes document.upload.completed event', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = createNoopScanProvider();
 
@@ -508,7 +539,8 @@ describe('Outbox events', () => {
     expect(event.payload.status).toBe('INGESTING');
   });
 
-  it('publishes document.ingestion.requested event when proceeding to ingestion', async () => {
+  it('publishes document.ingestion.requested event when proceeding to ingestion', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = createNoopScanProvider();
 
@@ -536,7 +568,8 @@ describe('Outbox events', () => {
     expect(event.payload.ingestionJobId).toBeTruthy();
   });
 
-  it('does not publish ingestion.requested when quarantined', async () => {
+  it('does not publish ingestion.requested when quarantined', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = mockScanProvider({ status: 'INFECTED' });
 
@@ -568,7 +601,8 @@ describe('Outbox events', () => {
 // ---------------------------------------------------------------------------
 
 describe('Error handling', () => {
-  it('fails when object does not exist in storage', async () => {
+  it('fails when object does not exist in storage', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = createNoopScanProvider();
 
@@ -585,7 +619,8 @@ describe('Error handling', () => {
     ).rejects.toThrow(/Upload verification failed/);
   });
 
-  it('fails on checksum mismatch', async () => {
+  it('fails on checksum mismatch', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = createNoopScanProvider();
 
@@ -618,7 +653,8 @@ describe('Error handling', () => {
 // ---------------------------------------------------------------------------
 
 describe('Edge cases', () => {
-  it('handles different MIME types in the default allowlist', async () => {
+  it('handles different MIME types in the default allowlist', async (vtCtx) => {
+    requirePool(vtCtx);
     const allowedTypes = [
       ['doc.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
       ['data.csv', 'text/csv'],
@@ -645,7 +681,8 @@ describe('Edge cases', () => {
     }
   });
 
-  it('version number auto-increments within the same document', async () => {
+  it('version number auto-increments within the same document', async (vtCtx) => {
+    requirePool(vtCtx);
     const storage = createLocalStorageProvider();
     const scan = createNoopScanProvider();
 

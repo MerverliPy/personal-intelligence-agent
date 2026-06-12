@@ -8,7 +8,7 @@ import type { OutboxRecord } from '../src/types.js';
 // Test lifecycle
 // ---------------------------------------------------------------------------
 
-let pool: Pool;
+let pool: Pool | null = null;
 
 beforeAll(async () => {
   pool = await setupTestDatabase();
@@ -17,6 +17,10 @@ beforeAll(async () => {
 afterAll(async () => {
   await teardownTestDatabase();
 });
+
+function requirePool(ctx: { skip: () => void }): asserts pool is Pool {
+  if (!pool) ctx.skip();
+}
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -80,7 +84,8 @@ async function getRow(p: Pool, id: string): Promise<OutboxRecord | null> {
 // ---------------------------------------------------------------------------
 
 describe('publishOutboxEvents', () => {
-  it('publishes a single event inside a transaction and persists on commit', async () => {
+  it('publishes a single event inside a transaction and persists on commit', async (ctx) => {
+    requirePool(ctx);
     const record = await withTransaction(pool, async (client) => {
       const records = await publishOutboxEvents({
         client,
@@ -119,7 +124,8 @@ describe('publishOutboxEvents', () => {
     expect(inside).toBe('PENDING');
   });
 
-  it('rolls back events when the transaction is rolled back', async () => {
+  it('rolls back events when the transaction is rolled back', async (ctx) => {
+    requirePool(ctx);
     let rowId: string | undefined;
 
     // Manually manage the transaction so we can explicitly rollback
@@ -152,7 +158,8 @@ describe('publishOutboxEvents', () => {
     expect(row).toBeNull();
   });
 
-  it('publishes multiple events in one batch', async () => {
+  it('publishes multiple events in one batch', async (ctx) => {
+    requirePool(ctx);
     const records = await withTransaction(pool, async (client) => {
       const recs = await publishOutboxEvents({
         client,
@@ -195,7 +202,8 @@ describe('publishOutboxEvents', () => {
     }
   });
 
-  it('persists workspace-scoped events', async () => {
+  it('persists workspace-scoped events', async (ctx) => {
+    requirePool(ctx);
     const record = await withTransaction(pool, async (client) => {
       // Create a user first
       const userRes = await client.query<{ id: string }>(
@@ -230,7 +238,8 @@ describe('publishOutboxEvents', () => {
     expect(row!.workspaceId).toBe(record.workspaceId);
   });
 
-  it('stores JSON payload exactly as provided', async () => {
+  it('stores JSON payload exactly as provided', async (ctx) => {
+    requirePool(ctx);
     const complexPayload = {
       nested: { key: 'value', arr: [1, 2, 3] },
       flag: false,
@@ -257,7 +266,8 @@ describe('publishOutboxEvents', () => {
     expect(row!.payload).toEqual(complexPayload);
   });
 
-  it('rejects events with unregistered event types', async () => {
+  it('rejects events with unregistered event types', async (ctx) => {
+    requirePool(ctx);
     const client = await pool.connect();
     try {
       await client.query('BEGIN');
@@ -284,7 +294,8 @@ describe('publishOutboxEvents', () => {
     }
   });
 
-  it('handles custom availableAt timestamps', async () => {
+  it('handles custom availableAt timestamps', async (ctx) => {
+    requirePool(ctx);
     const future = new Date(Date.now() + 3_600_000); // 1 hour from now
 
     const record = await withTransaction(pool, async (client) => {
@@ -309,7 +320,8 @@ describe('publishOutboxEvents', () => {
     expect(row!.availableAt.getTime()).toBe(future.getTime());
   });
 
-  it('returns empty array for zero events', async () => {
+  it('returns empty array for zero events', async (ctx) => {
+    requirePool(ctx);
     const records = await withTransaction(pool, async (client) => {
       const recs = await publishOutboxEvents({ client, events: [] });
       expect(recs).toEqual([]);
@@ -325,7 +337,8 @@ describe('publishOutboxEvents', () => {
 // ---------------------------------------------------------------------------
 
 describe('publishOutboxEvent', () => {
-  it('publishes exactly one event and returns it', async () => {
+  it('publishes exactly one event and returns it', async (ctx) => {
+    requirePool(ctx);
     const record = await withTransaction(pool, async (client) => {
       const r = await publishOutboxEvent(client, {
         workspaceId: null,
@@ -351,7 +364,8 @@ describe('publishOutboxEvent', () => {
 // ---------------------------------------------------------------------------
 
 describe('outbox_events column integrity', () => {
-  it('has the expected status and default values', async () => {
+  it('has the expected status and default values', async (ctx) => {
+    requirePool(ctx);
     const record = await withTransaction(pool, async (client) => {
       const records = await publishOutboxEvents({
         client,

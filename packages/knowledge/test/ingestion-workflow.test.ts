@@ -28,7 +28,11 @@ import type { IngestionStage } from '../src/ingestion/types.js';
 // Test lifecycle
 // ---------------------------------------------------------------------------
 
-let pool: Pool;
+let pool: Pool | null = null;
+
+function requirePool(ctx: { skip: () => void }): asserts pool is Pool {
+  if (!pool) ctx.skip();
+}
 
 beforeAll(async () => {
   pool = await setupTestDatabase();
@@ -164,7 +168,8 @@ describe('publishingStage', () => {
   let sfid: string;
   let uid: string;
 
-  beforeEach(async () => {
+  beforeEach(async (ctx) => {
+    requirePool(ctx);
     const entities = await seedBaseEntities();
     wsid = entities.wsid;
     docid = entities.docid;
@@ -172,7 +177,8 @@ describe('publishingStage', () => {
     uid = entities.uid;
   });
 
-  it('transitions version to READY and sets as current atomically', async () => {
+  it('transitions version to READY and sets as current atomically', async (ctx) => {
+    requirePool(ctx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const version = (await getDocumentVersionById(pool, wsid, versionId))!;
     const job = await createIngestionJob(pool, {
@@ -197,7 +203,8 @@ describe('publishingStage', () => {
     expect(versionAfter!.readyAt).not.toBeNull();
   });
 
-  it('is idempotent — returns performed:false when already READY', async () => {
+  it('is idempotent — returns performed:false when already READY', async (ctx) => {
+    requirePool(ctx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const version = (await getDocumentVersionById(pool, wsid, versionId))!;
     const job = await createIngestionJob(pool, {
@@ -224,7 +231,8 @@ describe('publishingStage', () => {
     expect(result2.performed).toBe(false);
   });
 
-  it('isComplete returns true when READY', async () => {
+  it('isComplete returns true when READY', async (ctx) => {
+    requirePool(ctx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const version = (await getDocumentVersionById(pool, wsid, versionId))!;
     const job = await createIngestionJob(pool, {
@@ -260,7 +268,8 @@ describe('noop stages', () => {
   let sfid: string;
   let uid: string;
 
-  beforeEach(async () => {
+  beforeEach(async (ctx) => {
+    requirePool(ctx);
     const entities = await seedBaseEntities();
     wsid = entities.wsid;
     docid = entities.docid;
@@ -269,7 +278,8 @@ describe('noop stages', () => {
   });
 
   describe('noopExtractionStage', () => {
-    it('updates extraction_metadata', async () => {
+    it('updates extraction_metadata', async (ctx) => {
+      requirePool(ctx);
       const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
       const version = (await getDocumentVersionById(pool, wsid, versionId))!;
       const job = await createIngestionJob(pool, {
@@ -301,7 +311,8 @@ describe('noop stages', () => {
       ).toBe(true);
     });
 
-    it('is idempotent on re-execution', async () => {
+    it('is idempotent on re-execution', async (ctx) => {
+      requirePool(ctx);
       const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
       const version = (await getDocumentVersionById(pool, wsid, versionId))!;
       const job = await createIngestionJob(pool, {
@@ -326,7 +337,8 @@ describe('noop stages', () => {
   });
 
   describe('noopChunkingStage', () => {
-    it('creates a placeholder chunk', async () => {
+    it('creates a placeholder chunk', async (ctx) => {
+      requirePool(ctx);
       const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
       const version = (await getDocumentVersionById(pool, wsid, versionId))!;
       const job = await createIngestionJob(pool, {
@@ -357,7 +369,8 @@ describe('noop stages', () => {
       ).toBe(true);
     });
 
-    it('is idempotent — duplicate execution is no-op', async () => {
+    it('is idempotent — duplicate execution is no-op', async (ctx) => {
+      requirePool(ctx);
       const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
       const version = (await getDocumentVersionById(pool, wsid, versionId))!;
       const job = await createIngestionJob(pool, {
@@ -383,7 +396,8 @@ describe('noop stages', () => {
   });
 
   describe('noopEmbeddingStage', () => {
-    it('creates a placeholder embedding', async () => {
+    it('creates a placeholder embedding', async (ctx) => {
+      requirePool(ctx);
       const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
       const version = (await getDocumentVersionById(pool, wsid, versionId))!;
       const job = await createIngestionJob(pool, {
@@ -407,7 +421,8 @@ describe('noop stages', () => {
       expect(result.performed).toBe(true);
     });
 
-    it('throws TerminalJobError when no chunks exist', async () => {
+    it('throws TerminalJobError when no chunks exist', async (ctx) => {
+      requirePool(ctx);
       const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
       const version = (await getDocumentVersionById(pool, wsid, versionId))!;
       const job = await createIngestionJob(pool, {
@@ -422,7 +437,8 @@ describe('noop stages', () => {
       ).rejects.toThrow(TerminalJobError);
     });
 
-    it('is idempotent on re-execution', async () => {
+    it('is idempotent on re-execution', async (ctx) => {
+      requirePool(ctx);
       const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
       const version = (await getDocumentVersionById(pool, wsid, versionId))!;
       const job = await createIngestionJob(pool, {
@@ -459,7 +475,8 @@ describe('IngestionWorkflowHandler', () => {
   let sfid: string;
   let uid: string;
 
-  beforeEach(async () => {
+  beforeEach(async (ctx) => {
+    requirePool(ctx);
     const entities = await seedBaseEntities();
     wsid = entities.wsid;
     docid = entities.docid;
@@ -467,7 +484,8 @@ describe('IngestionWorkflowHandler', () => {
     uid = entities.uid;
   });
 
-  it('completes full pipeline and marks version READY', async () => {
+  it('completes full pipeline and marks version READY', async (ctx) => {
+    requirePool(ctx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const job = await createIngestionJob(pool, {
       workspaceId: wsid,
@@ -502,7 +520,8 @@ describe('IngestionWorkflowHandler', () => {
     expect(jobAfter!.stage).toBe('publishing');
   });
 
-  it('is idempotent — re-running the handler does not duplicate artefacts', async () => {
+  it('is idempotent — re-running the handler does not duplicate artefacts', async (ctx) => {
+    requirePool(ctx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const job = await createIngestionJob(pool, {
       workspaceId: wsid,
@@ -567,7 +586,8 @@ describe('IngestionWorkflowHandler', () => {
     expect(parseInt(embCount2.rows[0]!.count, 10)).toBe(1);
   });
 
-  it('handles missing versionId in payload', async () => {
+  it('handles missing versionId in payload', async (ctx) => {
+    requirePool(ctx);
     const handler = new IngestionWorkflowHandler({
       pool,
       logger: noopLogger(),
@@ -591,7 +611,8 @@ describe('IngestionWorkflowHandler', () => {
     await expect(handler.handle(record, makeJobContext('c1', 1))).rejects.toThrow(TerminalJobError);
   });
 
-  it('handles non-existent job gracefully', async () => {
+  it('handles non-existent job gracefully', async (ctx) => {
+    requirePool(ctx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const handler = new IngestionWorkflowHandler({
       pool,
@@ -603,7 +624,8 @@ describe('IngestionWorkflowHandler', () => {
     await expect(handler.handle(record, makeJobContext('c1', 1))).rejects.toThrow(TerminalJobError);
   });
 
-  it('skips when version is not in INGESTING state', async () => {
+  it('skips when version is not in INGESTING state', async (ctx) => {
+    requirePool(ctx);
     // Create a version that's already READY
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const version = (await getDocumentVersionById(pool, wsid, versionId))!;
@@ -638,7 +660,8 @@ describe('IngestionWorkflowHandler', () => {
     expect(jobAfter!.status).toBe('SUCCEEDED');
   });
 
-  it('failing stage never marks version READY', async () => {
+  it('failing stage never marks version READY', async (ctx) => {
+    requirePool(ctx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const job = await createIngestionJob(pool, {
       workspaceId: wsid,
@@ -687,7 +710,8 @@ describe('IngestionWorkflowHandler', () => {
     expect(jobAfter!.errorCode).toBe('INGESTION_STAGE_ERROR');
   });
 
-  it('terminal error transitions job to FAILED_FINAL', async () => {
+  it('terminal error transitions job to FAILED_FINAL', async (ctx) => {
+    requirePool(ctx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const job = await createIngestionJob(pool, {
       workspaceId: wsid,
@@ -731,7 +755,8 @@ describe('IngestionWorkflowHandler', () => {
     expect(jobAfter!.errorCode).toBe('EXTRACT_UNRECOVERABLE');
   });
 
-  it('resumes from checkpoint after simulated interruption', async () => {
+  it('resumes from checkpoint after simulated interruption', async (ctx) => {
+    requirePool(ctx);
     const versionId = await createIngestingVersion(wsid, uid, docid, sfid);
     const job = await createIngestionJob(pool, {
       workspaceId: wsid,

@@ -18,14 +18,38 @@ const TEST_DATABASE_URL =
   `postgresql://pia:pia-dev@localhost:5432/${TEST_DB_NAME}`;
 
 let testPool: Pool | undefined;
+let dbAvailable: boolean | undefined;
+
+/**
+ * Returns true if PostgreSQL is reachable at the configured address.
+ */
+async function isPostgresAvailable(): Promise<boolean> {
+  if (dbAvailable !== undefined) return dbAvailable;
+  try {
+    const probe = new Pool({
+      connectionString: ADMIN_DATABASE_URL,
+      connectionTimeoutMillis: 2000,
+    });
+    await probe.query('SELECT 1');
+    await probe.end();
+    dbAvailable = true;
+  } catch {
+    dbAvailable = false;
+  }
+  return dbAvailable;
+}
 
 /**
  * Creates a fresh test database, runs all migrations, and returns a
- * connection pool pointed at it.
+ * connection pool pointed at it. Skips gracefully when PostgreSQL is
+ * not available (returns null).
  *
  * Call {@link teardownTestDatabase} to release the pool after tests.
  */
-export async function setupTestDatabase(): Promise<Pool> {
+export async function setupTestDatabase(): Promise<Pool | null> {
+  if (testPool) return testPool;
+  if (!(await isPostgresAvailable())) return null;
+
   // Connect to the admin database to create/drop the test database.
   const adminPool = new Pool({ connectionString: ADMIN_DATABASE_URL });
 

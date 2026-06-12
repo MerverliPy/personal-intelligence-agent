@@ -232,16 +232,14 @@ describe('computeRrfScores', () => {
 // Integration: Lexical and vector search (requires PostgreSQL)
 // ---------------------------------------------------------------------------
 
-let pool: Pool | undefined;
-let dbAvailable = false;
+let pool: Pool | null = null;
+
+function requirePool(vtCtx: { skip: () => void }): asserts pool is Pool {
+  if (!pool) vtCtx.skip();
+}
 
 beforeAll(async () => {
-  try {
-    pool = await setupTestDatabase();
-    dbAvailable = true;
-  } catch {
-    dbAvailable = false;
-  }
+  pool = await setupTestDatabase();
 }, 30_000);
 
 afterAll(async () => {
@@ -388,7 +386,8 @@ async function createEmbeddingForChunk(wsid: string, chunkId: string): Promise<v
 // ---------------------------------------------------------------------------
 
 describe('executeLexicalSearch (DB)', () => {
-  it('returns chunks containing the query text', async () => {
+  it('returns chunks containing the query text', async (vtCtx) => {
+    requirePool(vtCtx);
     if (!dbAvailable) return;
 
     const { uid, wsid, docid, versionId } = await seedTestData();
@@ -407,7 +406,8 @@ describe('executeLexicalSearch (DB)', () => {
     expect(results[0]!.content).toContain('quick');
   });
 
-  it('filters by workspace — only returns chunks from the specified workspace', async () => {
+  it('filters by workspace — only returns chunks from the specified workspace', async (vtCtx) => {
+    requirePool(vtCtx);
     if (!dbAvailable) return;
 
     const { wsid, wsid2, docid, versionId } = await seedTestData();
@@ -471,7 +471,8 @@ describe('executeLexicalSearch (DB)', () => {
     }
   });
 
-  it('excludes non-READY versions', async () => {
+  it('excludes non-READY versions', async (vtCtx) => {
+    requirePool(vtCtx);
     if (!dbAvailable) return;
 
     const { uid, wsid, docid } = await seedTestData();
@@ -523,7 +524,8 @@ describe('executeLexicalSearch (DB)', () => {
     }
   });
 
-  it('returns empty array when no matches', async () => {
+  it('returns empty array when no matches', async (vtCtx) => {
+    requirePool(vtCtx);
     if (!dbAvailable) return;
 
     const { wsid } = await seedTestData();
@@ -536,7 +538,8 @@ describe('executeLexicalSearch (DB)', () => {
     const results = await executeLexicalSearch(pool!, query);
     expect(results).toHaveLength(0);
   });
-  it('filters by projectId — only returns chunks from the specified project', async () => {
+  it('filters by projectId — only returns chunks from the specified project', async (vtCtx) => {
+    requirePool(vtCtx);
     if (!dbAvailable) return;
 
     const { uid, wsid, docid, versionId } = await seedTestData();
@@ -624,7 +627,8 @@ describe('executeLexicalSearch (DB)', () => {
 // ---------------------------------------------------------------------------
 
 describe('executeVectorSearch (DB)', () => {
-  it('returns chunks ordered by vector similarity', async () => {
+  it('returns chunks ordered by vector similarity', async (vtCtx) => {
+    requirePool(vtCtx);
     if (!dbAvailable) return;
 
     const { wsid, docid, versionId } = await seedTestData();
@@ -670,7 +674,8 @@ describe('executeVectorSearch (DB)', () => {
     }
   });
 
-  it('filters by embedding model and version', async () => {
+  it('filters by embedding model and version', async (vtCtx) => {
+    requirePool(vtCtx);
     if (!dbAvailable) return;
 
     const { wsid, docid, versionId } = await seedTestData();
@@ -711,7 +716,8 @@ describe('executeVectorSearch (DB)', () => {
 // ---------------------------------------------------------------------------
 
 describe('RetrievalService (DB)', () => {
-  it('returns complete RetrievalResponse with trace', async () => {
+  it('returns complete RetrievalResponse with trace', async (vtCtx) => {
+    requirePool(vtCtx);
     if (!dbAvailable) return;
 
     const { uid, wsid, docid, versionId } = await seedTestData();
@@ -760,7 +766,8 @@ describe('RetrievalService (DB)', () => {
     }
   });
 
-  it('returns empty results explicitly (not null/undefined)', async () => {
+  it('returns empty results explicitly (not null/undefined)', async (vtCtx) => {
+    requirePool(vtCtx);
     if (!dbAvailable) return;
 
     const { uid, wsid } = await seedTestData();
@@ -783,7 +790,8 @@ describe('RetrievalService (DB)', () => {
     expect(response.traceId).toBeTruthy(); // trace should still be created
   });
 
-  it('respects maxResults limit', async () => {
+  it('respects maxResults limit', async (vtCtx) => {
+    requirePool(vtCtx);
     if (!dbAvailable) return;
 
     const { uid, wsid, docid, versionId } = await seedTestData();
@@ -816,7 +824,8 @@ describe('RetrievalService (DB)', () => {
     expect(response.results.length).toBeLessThanOrEqual(3);
   });
 
-  it('creates persistent trace records', async () => {
+  it('creates persistent trace records', async (vtCtx) => {
+    requirePool(vtCtx);
     if (!dbAvailable) return;
 
     const { uid, wsid, docid, versionId } = await seedTestData();
