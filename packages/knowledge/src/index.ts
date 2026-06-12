@@ -124,3 +124,48 @@ export {
 } from './chunking/chunking-strategy.js';
 export type { CreateChunkingStageOptions } from './chunking/chunking-stage.js';
 export { createChunkingStage } from './chunking/chunking-stage.js';
+
+// ---------------------------------------------------------------------------
+// Embeddings (P2-T06)
+// ---------------------------------------------------------------------------
+
+export type {
+  EmbeddingProvider,
+  EmbeddingModelConfig,
+  EmbeddingInput,
+  EmbeddingResult,
+  EmbeddingRequest,
+  EmbeddingResponse,
+} from './embeddings/types.js';
+
+export {
+  createFakeEmbeddingProvider,
+  fakeEmbeddingProvider,
+  defaultFakeModelConfig,
+} from './embeddings/fake-provider.js';
+
+export type { CreateEmbeddingStageOptions } from './embeddings/embedding-stage.js';
+export { createEmbeddingStage } from './embeddings/embedding-stage.js';
+
+// ---------------------------------------------------------------------------
+// Retrieval (P2-T07)
+// ---------------------------------------------------------------------------
+
+export type {
+  RetrievalQuery,
+  RetrievalResult,
+  RetrievalCandidate,
+  RetrievalConfig,
+  RetrievalTrace,
+  RetrievalResponse,
+} from './retrieval/types.js';
+export { executeLexicalSearch } from './retrieval/lexical-search.js';
+export type { VectorSearchOptions } from './retrieval/vector-search.js';
+export { executeVectorSearch } from './retrieval/vector-search.js';
+export {
+  reciprocalRankFusion,
+  deduplicateByContentHash,
+  computeRrfScores,
+} from './retrieval/fusion.js';
+export type { RetrievalServiceConfig } from './retrieval/retrieval-service.js';
+export { RetrievalService } from './retrieval/retrieval-service.js';

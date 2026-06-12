@@ -33,6 +33,14 @@ export interface AppConfig {
     readonly level: 'debug' | 'info' | 'warn' | 'error';
     readonly format: 'json' | 'pretty';
   };
+  readonly embedding: {
+    readonly provider: string;
+    readonly model: string;
+    readonly apiKey: Redacted;
+    readonly dimensions: number;
+    readonly version: string;
+    readonly batchSize: number;
+  };
 }
 
 /** Configuration field definition. */
@@ -157,6 +165,48 @@ export const CONFIG_SCHEMA: Record<string, ConfigField> = {
     secret: false,
     required: false,
     default: 'pretty',
+  },
+  EMBEDDING_PROVIDER: {
+    env: 'EMBEDDING_PROVIDER',
+    description: 'Embedding provider identifier (fake, openai)',
+    secret: false,
+    required: false,
+    default: 'fake',
+  },
+  EMBEDDING_MODEL: {
+    env: 'EMBEDDING_MODEL',
+    description: 'Embedding model name (e.g. text-embedding-3-small)',
+    secret: false,
+    required: false,
+    default: 'fake-v1',
+  },
+  EMBEDDING_API_KEY: {
+    env: 'EMBEDDING_API_KEY',
+    description: 'API key for the embedding provider',
+    secret: true,
+    required: false,
+    default: 'fake-key',
+  },
+  EMBEDDING_DIMENSIONS: {
+    env: 'EMBEDDING_DIMENSIONS',
+    description: 'Expected embedding vector dimensions',
+    secret: false,
+    required: false,
+    default: '1536',
+  },
+  EMBEDDING_VERSION: {
+    env: 'EMBEDDING_VERSION',
+    description: 'Embedding pipeline version for provenance',
+    secret: false,
+    required: false,
+    default: '1.0',
+  },
+  EMBEDDING_BATCH_SIZE: {
+    env: 'EMBEDDING_BATCH_SIZE',
+    description: 'Maximum number of chunks per provider request',
+    secret: false,
+    required: false,
+    default: '20',
   },
 } as const;
 

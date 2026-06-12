@@ -92,6 +92,14 @@ export function loadConfig(): AppConfig {
       level: parseLogLevel(raw['LOG_LEVEL']),
       format: parseLogFormat(raw['LOG_FORMAT']),
     },
+    embedding: {
+      provider: raw['EMBEDDING_PROVIDER'] ?? 'fake',
+      model: raw['EMBEDDING_MODEL'] ?? 'fake-v1',
+      apiKey: redactRequired(raw['EMBEDDING_API_KEY'] ?? 'fake-key'),
+      dimensions: parsePositiveInt(raw['EMBEDDING_DIMENSIONS'], 1536),
+      version: raw['EMBEDDING_VERSION'] ?? '1.0',
+      batchSize: parsePositiveInt(raw['EMBEDDING_BATCH_SIZE'], 20),
+    },
   };
 }
 
@@ -122,6 +130,13 @@ function parseLogLevel(raw: string | undefined): 'debug' | 'info' | 'warn' | 'er
 function parseLogFormat(raw: string | undefined): 'json' | 'pretty' {
   if (raw === 'json') return 'json';
   return 'pretty';
+}
+
+function parsePositiveInt(raw: string | undefined, defaultVal: number): number {
+  if (raw === undefined || raw.length === 0) return defaultVal;
+  const parsed = parseInt(raw, 10);
+  if (isNaN(parsed) || parsed < 1) return defaultVal;
+  return parsed;
 }
 
 /**

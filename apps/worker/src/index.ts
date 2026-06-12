@@ -7,7 +7,8 @@ import {
   IngestionWorkflowHandler,
   noopExtractionStage,
   noopChunkingStage,
-  noopEmbeddingStage,
+  createEmbeddingStage,
+  createFakeEmbeddingProvider,
 } from '@pia/knowledge';
 
 /**
@@ -51,15 +52,28 @@ function main(): void {
       consumer.register(uploadCompletedHandler);
 
       // Ingestion workflow: durable, idempotent pipeline with resumable stages.
-      // Extraction, chunking, and embedding stages use no-op implementations
-      // until P2-T04 (parsers), P2-T05 (chunking), and P2-T06 (embeddings).
+      // Extraction and chunking stages use no-op implementations until
+      // P2-T04 (parsers) and P2-T05 (chunking). Embedding uses the real
+      // embedding gateway (P2-T06) with configurable provider.
+      const embeddingStage = createEmbeddingStage({
+        pool,
+        provider: createFakeEmbeddingProvider(),
+        modelConfig: {
+          provider: config.embedding.provider,
+          model: config.embedding.model,
+          dimensions: config.embedding.dimensions,
+          version: config.embedding.version,
+        },
+        batchSize: config.embedding.batchSize,
+      });
+
       const ingestionHandler = new IngestionWorkflowHandler({
         pool,
         logger,
         stages: {
           extraction: noopExtractionStage,
           chunking: noopChunkingStage,
-          embedding: noopEmbeddingStage,
+          embedding: embeddingStage,
         },
       });
       consumer.register(ingestionHandler);
