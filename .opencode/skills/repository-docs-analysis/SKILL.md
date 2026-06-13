@@ -35,7 +35,7 @@ Use before proposing or applying documentation changes.
 ## Claim ledger
 
 | Claim | Evidence paths | Rating | Status | Validation | Conflict |
-|---|---|---|---|---|---|
+| ----- | -------------- | ------ | ------ | ---------- | -------- |
 
 ## Audit output
 

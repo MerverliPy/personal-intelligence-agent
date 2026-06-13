@@ -32,6 +32,6 @@ Use after edits or during read-only verification.
 ## Result format
 
 | Check | Status | Command/method | Evidence or failure |
-|---|---|---|---|
+| ----- | ------ | -------------- | ------------------- |
 
 Allowed statuses: **Passed**, **Failed**, **Not run**. A material factual failure blocks clean completion.

@@ -12,13 +12,13 @@ The repository includes an evidence-driven OpenCode documentation maintainer tha
 
 ## Commands
 
-| Command | Purpose |
-|---|---|
-| `/docs-audit [scope]` | Read-only evidence-backed audit. |
+| Command                    | Purpose                                                      |
+| -------------------------- | ------------------------------------------------------------ |
+| `/docs-audit [scope]`      | Read-only evidence-backed audit.                             |
 | `/docs-update [objective]` | Audit, apply low-risk documentation edits, validate, report. |
-| `/docs-changed [base]` | Diff-aware documentation maintenance. |
-| `/docs-verify [scope]` | Read-only factual/structural verification. |
-| `/docs-release [scope]` | Maintain Unreleased changelog or draft notes. |
+| `/docs-changed [base]`     | Diff-aware documentation maintenance.                        |
+| `/docs-verify [scope]`     | Read-only factual/structural verification.                   |
+| `/docs-release [scope]`    | Maintain Unreleased changelog or draft notes.                |
 
 The agent can also be invoked with `@repository-docs`.
 
