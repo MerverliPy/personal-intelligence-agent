@@ -90,18 +90,31 @@ Create `planning/runs/<TASK-ID>.md` before context loss or at completion. Keep i
 # <TASK-ID> Run Record
 
 ## Objective
+
 ## Implementation State
+
 ## Confirmed Requirements
+
 ## Constraints and Approval Boundaries
+
 ## Repository Baseline
+
 ## Findings and Decisions
+
 ## Files Inspected
+
 ## Files Modified
+
 ## Commands and Results
+
 ## Acceptance-Criterion Evidence
+
 ## Diff and Path-Boundary Review
+
 ## Outstanding Work
+
 ## Risks and Assumptions
+
 ## Next Action
 ```
 
