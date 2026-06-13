@@ -61,6 +61,9 @@ importers:
       '@pia/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@pia/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
       '@pia/jobs':
         specifier: workspace:*
         version: link:../../packages/jobs

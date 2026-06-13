@@ -55,3 +55,13 @@ export {
   type CitationRow,
   type CreateCitationInput,
 } from './citations.js';
+
+// Feedback
+export {
+  createFeedback,
+  getFeedbackForMessage,
+  getFeedback,
+  type FeedbackRow,
+  type FeedbackCategory,
+  type CreateFeedbackInput,
+} from './feedback.js';

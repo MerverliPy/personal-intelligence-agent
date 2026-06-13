@@ -18,6 +18,7 @@
     "@pia/config": "workspace:*",
     "@pia/contracts": "workspace:*",
     "@pia/db": "workspace:*",
+    "@pia/domain": "workspace:*",
     "@pia/jobs": "workspace:*",
     "@pia/knowledge": "workspace:*",
     "@pia/observability": "workspace:*",

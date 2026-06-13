@@ -505,3 +505,42 @@ export type SseEvent =
   | SseApprovalRequiredEvent
   | SseResponseCompletedEvent
   | SseRunFailedEvent;
+
+// ---------------------------------------------------------------------------
+// Feedback types (per P3-T08 / FR-FBK-001..004)
+// ---------------------------------------------------------------------------
+
+/** Feedback categories matching the database feedback_category enum. */
+export type FeedbackCategory =
+  | 'POSITIVE'
+  | 'NEGATIVE'
+  | 'INCORRECT'
+  | 'INCOMPLETE'
+  | 'CITATION_ISSUE'
+  | 'STYLE_ISSUE'
+  | 'UNSAFE';
+
+/** Request to submit feedback against a message. */
+export interface CreateFeedbackRequest {
+  category: FeedbackCategory;
+  model_run_id?: string | null;
+  correction?: string | null;
+  notes?: string | null;
+  suggested_failure_class?: string | null;
+  classification_confidence?: number | null;
+}
+
+/** A feedback resource. */
+export interface Feedback {
+  id: string;
+  workspace_id: string;
+  message_id: string;
+  model_run_id: string | null;
+  submitted_by: string;
+  category: FeedbackCategory;
+  correction: string | null;
+  notes: string | null;
+  suggested_failure_class: string | null;
+  classification_confidence: number | null;
+  created_at: string;
+}
