@@ -68,3 +68,25 @@ export type {
   CompilerInput,
   CompilerOutput,
 } from './context/index.js';
+
+// ---------------------------------------------------------------------------
+// Assistant orchestration (P3-T05)
+// ---------------------------------------------------------------------------
+
+export {
+  AssistantOrchestrator,
+  mapDbRoleToGateway,
+  mapGatewayRoleToDb,
+} from './assistant/index.js';
+
+export type {
+  OrchestratorSseEvent,
+  OrchestratorRunOptions,
+  AssistantOrchestratorConfig,
+  SseRunStartedEvent,
+  SseResponseDeltaEvent,
+  SseCitationProvisionalEvent,
+  SseApprovalRequiredEvent,
+  SseResponseCompletedEvent,
+  SseRunFailedEvent,
+} from './assistant/index.js';

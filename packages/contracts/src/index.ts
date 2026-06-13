@@ -338,3 +338,149 @@ export interface RetrievalResponse {
   results: RetrievalResult[];
   latency_ms: number;
 }
+
+// ---------------------------------------------------------------------------
+// Conversation types (per api/openapi.yaml §components/schemas/Conversation)
+// ---------------------------------------------------------------------------
+
+/** Valid conversation modes. */
+export type ConversationMode = 'ASK' | 'RESEARCH' | 'ANALYZE' | 'PLAN' | 'EXECUTE' | 'LEARN';
+
+/** A conversation resource. */
+export interface Conversation {
+  id: string;
+  workspace_id: string;
+  project_id?: string | null;
+  title?: string | null;
+  mode: ConversationMode;
+  created_at: string;
+  updated_at: string;
+}
+
+/** Request to create a conversation. */
+export interface CreateConversationRequest {
+  project_id?: string | null;
+  title?: string | null;
+  mode?: ConversationMode;
+}
+
+/** Paginated list of conversations. */
+export interface ConversationPage {
+  items: Conversation[];
+  next_cursor?: string | null;
+}
+
+// ---------------------------------------------------------------------------
+// Message types (per api/openapi.yaml §components/schemas/CreateMessageRequest)
+// ---------------------------------------------------------------------------
+
+/** Request to create a message and initiate a model run. */
+export interface CreateMessageRequest {
+  content: string;
+  mode?: ConversationMode;
+  retrieval?: {
+    enabled?: boolean;
+    source_ids?: string[];
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Model-run types (per api/openapi.yaml §components/schemas/ModelRun)
+// ---------------------------------------------------------------------------
+
+/** Model-run statuses matching the database enum. */
+export type ModelRunStatusApi =
+  | 'CREATED'
+  | 'STREAMING'
+  | 'COMPLETED'
+  | 'CANCELLED'
+  | 'FAILED'
+  | 'INTERRUPTED';
+
+/** A model-run resource returned by the API. */
+export interface ModelRun {
+  id: string;
+  conversation_id: string;
+  user_message_id: string;
+  assistant_message_id?: string | null;
+  status: ModelRunStatusApi;
+  provider: string;
+  model: string;
+  prompt_name: string;
+  prompt_version: string;
+  input_tokens?: number | null;
+  output_tokens?: number | null;
+  latency_ms?: number | null;
+  error_code?: string | null;
+  started_at?: string | null;
+  completed_at?: string | null;
+  created_at: string;
+}
+
+// ---------------------------------------------------------------------------
+// SSE event types (per docs/04_API_ARCHITECTURE.md#6-sse-event-contract)
+// ---------------------------------------------------------------------------
+
+/** SSE event sent when a run transitions to STREAMING. */
+export interface SseRunStartedEvent {
+  type: 'run.started';
+  run_id: string;
+  message_id: string;
+  sequence: number;
+}
+
+/** SSE event carrying a token of generated text. */
+export interface SseResponseDeltaEvent {
+  type: 'response.delta';
+  sequence: number;
+  text: string;
+}
+
+/** SSE event for a provisional citation reference. */
+export interface SseCitationProvisionalEvent {
+  type: 'citation.provisional';
+  sequence: number;
+  citation_id: string;
+  source: Record<string, unknown>;
+}
+
+/** SSE event for an approval that blocks further progress. */
+export interface SseApprovalRequiredEvent {
+  type: 'approval.required';
+  sequence: number;
+  approval_id: string;
+  summary: string;
+}
+
+/** SSE event signalling successful completion. */
+export interface SseResponseCompletedEvent {
+  type: 'response.completed';
+  sequence: number;
+  message_id: string;
+  usage: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
+  citations: unknown[];
+}
+
+/** SSE event signalling a failed run. */
+export interface SseRunFailedEvent {
+  type: 'run.failed';
+  sequence: number;
+  error: {
+    code: string;
+    message: string;
+    request_id: string;
+  };
+}
+
+/** Union of all SSE event types sent to the client. */
+export type SseEvent =
+  | SseRunStartedEvent
+  | SseResponseDeltaEvent
+  | SseCitationProvisionalEvent
+  | SseApprovalRequiredEvent
+  | SseResponseCompletedEvent
+  | SseRunFailedEvent;

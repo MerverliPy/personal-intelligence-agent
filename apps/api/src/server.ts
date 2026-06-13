@@ -20,6 +20,7 @@ import workspaceRoutes from './routes/workspaces.js';
 import uploadRoutes from './routes/uploads.js';
 import documentRoutes from './routes/documents.js';
 import retrievalRoutes from './routes/retrieval.js';
+import conversationRoutes from './routes/conversations.js';
 import authRoutes from './routes/auth.js';
 import webShell from './routes/web.js';
 import webDocumentRoutes from './routes/web-documents.js';
@@ -89,6 +90,7 @@ export async function createServer(opts: CreateServerOptions) {
   await app.register(uploadRoutes);
   await app.register(documentRoutes);
   await app.register(retrievalRoutes);
+  await app.register(conversationRoutes);
 
   // Auth routes (login/callback/logout) and audit logging — only register if DB pool available
   if (dbPool) {
