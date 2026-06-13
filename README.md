@@ -16,7 +16,8 @@
   <img src="https://img.shields.io/badge/P0_Foundation-COMPLETE-22C55E?style=for-the-badge&labelColor=166534" alt="P0 Foundation" />
   <img src="https://img.shields.io/badge/P1_Platform-COMPLETE-22C55E?style=for-the-badge&labelColor=166534" alt="P1 Platform" />
   <img src="https://img.shields.io/badge/P2_Knowledge-COMPLETE-22C55E?style=for-the-badge&labelColor=166534" alt="P2 Knowledge" />
-  <img src="https://img.shields.io/badge/P3--P7-Planned-6B7280?style=for-the-badge&labelColor=374151" alt="P3-P7 Planned" />
+  <img src="https://img.shields.io/badge/P3-Assistant-3B82F6?style=for-the-badge&labelColor=1E40AF" alt="P3 Assistant In Progress" />
+  <img src="https://img.shields.io/badge/P4--P7-Planned-6B7280?style=for-the-badge&labelColor=374151" alt="P4-P7 Planned" />
 </div>
 
 <br/>
@@ -40,7 +41,7 @@ preserving cryptographic provenance, workspace-level access control, and a compl
 ## 🗺️ Delivery Roadmap
 
 > [!NOTE]
-> **23 of 64 tasks complete** across 8 phases. Phases P0, P1, and P2 are fully delivered and verified.
+> **29 of 64 tasks complete** across 8 phases. Phases P0, P1, and P2 are fully delivered and verified.
 > P3 is the next active phase.
 
 | Phase | Name                               |        Progress        |    Gate    |
@@ -48,7 +49,7 @@ preserving cryptographic provenance, workspace-level access control, and a compl
 |  P0   | 🏗️ Engineering Foundation          |  ████████████ **6/6**  |  ✅ DONE   |
 |  P1   | 🔐 Identity, Tenancy & Platform    |  ████████████ **7/7**  |  ✅ DONE   |
 |  P2   | 📚 Knowledge Ingestion & Retrieval | ████████████ **10/10** |  ✅ DONE   |
-|  P3   | 💬 Conversational Assistant        | ░░░░░░░░░░░░ **0/10**  | ⏳ Planned |
+|  P3   | 💬 Conversational Assistant        | ███████░░░░░ **6/10**  | 🔄 In Progress |
 |  P4   | 🧠 Governed Persistent Memory      |  ░░░░░░░░░░░░ **0/7**  | ⏳ Planned |
 |  P5   | ⚡ Tool Gateway & Approvals        |  ░░░░░░░░░░░░ **0/8**  | ⏳ Planned |
 |  P6   | 📊 Portable Evaluation             |  ░░░░░░░░░░░░ **0/8**  | ⏳ Planned |
@@ -56,10 +57,10 @@ preserving cryptographic provenance, workspace-level access control, and a compl
 
 ### 🔄 Currently In Progress
 
-No tasks currently in progress. All P0–P2 tasks are complete. P3 (Conversational Assistant) is the next phase.
+**P3 — Conversational Assistant** is in progress (6 of 10 tasks complete). P3-T01 through P3-T06 are verified and delivered, covering the model gateway, prompt registry, context compiler, conversation persistence, assistant orchestration, and grounded citations.
 
 <details>
-<summary>📋 <strong>View full P3–P7 roadmap</strong> (30 planned tasks)</summary>
+<summary>📋 <strong>View full P3–P7 roadmap</strong> (35 remaining tasks)</summary>
 
 **P3 — Conversational Assistant** (10 tasks): Provider-neutral model gateway, prompt registry, context compiler, conversation persistence, assistant orchestration, grounded citations, citation verifier, feedback classification, conversational UI, end-to-end evaluation suites.
 
@@ -534,7 +535,7 @@ pnpm dev
 
 | Service                  | URL                     | Credentials (dev only)      |
 | ------------------------ | ----------------------- | --------------------------- |
-| PostgreSQL 17 + pgvector | `localhost:5432`        | `postgres` / `postgres`     |
+| PostgreSQL 17 + pgvector | `localhost:5432`        | `pia` / `pia-dev`     |
 | Redis 7                  | `localhost:6379`        | None                        |
 | MinIO API                | `localhost:9000`        | `minioadmin` / `minioadmin` |
 | MinIO Console            | `http://localhost:9001` | Same as above               |
@@ -626,17 +627,17 @@ graph LR
 /
 ├── apps/
 │   ├── api/            Fastify HTTP/SSE application server
-│   ├── web/            Next.js App Router user interface (shell)
+│   ├── web/            Next.js App Router user interface
 │   └── worker/         Background job consumer
 ├── packages/
-│   ├── ai/             Model gateway, prompt registry, context compiler (shell)
+│   ├── ai/             Model gateway, prompt registry, context compiler
 │   ├── audit/          Append-only audit event writer, reader, redaction
 │   ├── auth/           OIDC adapter, sessions, RBAC, policy decisions
 │   ├── config/         Typed environment configuration with secret redaction
 │   ├── contracts/      Shared API types, error envelopes, pagination
 │   ├── db/             Migration runner, connection pool, membership queries
 │   ├── domain/         Shared authorization types and role hierarchy
-│   ├── evals/          Evaluation datasets, scorers, runners (shell)
+│   ├── evals/          Evaluation datasets, scorers, runners
 │   ├── jobs/           Durable job abstraction, outbox, retry, dead-letter
 │   ├── knowledge/      Parsing, chunking, embeddings, retrieval, citations
 │   ├── memory/         Candidate/approved memory lifecycle (shell)
@@ -674,7 +675,7 @@ graph LR
 | [`docs/07_TEST_EVALUATION_STRATEGY.md`](docs/07_TEST_EVALUATION_STRATEGY.md)     | Test layers, evaluation suites, quality gates                          |
 | [`docs/08_REQUIREMENTS_TRACEABILITY.md`](docs/08_REQUIREMENTS_TRACEABILITY.md)   | Requirement-to-task and requirement-to-test trace                      |
 | [`docs/09_EXTERNAL_TECHNICAL_BASIS.md`](docs/09_EXTERNAL_TECHNICAL_BASIS.md)     | External references and technology rationale                           |
-| [`planning/backlog.yaml`](planning/backlog.yaml)                                 | Machine-readable task graph (50 tasks, 8 phases)                       |
+| [`planning/backlog.yaml`](planning/backlog.yaml)                                 | Machine-readable task graph (64 tasks, 8 phases)                       |
 | [`planning/status.yaml`](planning/status.yaml)                                   | Execution state — update only after verification passes                |
 | [`api/openapi.yaml`](api/openapi.yaml)                                           | API contract — 37 operations across auth, workspace, upload, retrieval |
 
@@ -753,5 +754,5 @@ pnpm security:dependencies   # npm audit for known CVEs
   <br/>
   <sub>Built with strict TypeScript · PostgreSQL + pgvector · Redis · Fastify · Next.js</sub>
   <br/>
-  <sub>23 of 64 tasks complete · P0 ✓ · P1 ✓ · P2 ✓</sub>
+  <sub>29 of 64 tasks complete · P0 ✓ · P1 ✓ · P2 ✓</sub>
 </div>
