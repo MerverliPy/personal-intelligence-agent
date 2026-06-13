@@ -44,10 +44,7 @@ export interface CreateCitationInput {
  * Creates a citation scoped to the given workspace.
  * Verification status is always set to 'PENDING' on insert.
  */
-export async function createCitation(
-  pool: Pool,
-  input: CreateCitationInput,
-): Promise<CitationRow> {
+export async function createCitation(pool: Pool, input: CreateCitationInput): Promise<CitationRow> {
   const result = await pool.query<DbCitation>(
     `INSERT INTO citations
        (workspace_id, model_run_id, assistant_message_id, chunk_id,

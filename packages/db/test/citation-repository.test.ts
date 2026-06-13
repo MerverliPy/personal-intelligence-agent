@@ -6,19 +6,9 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import type { Pool } from 'pg';
 import { setupTestDatabase, teardownTestDatabase } from './helpers.js';
 import { runMigrations, defaultMigrationsDir } from '../src/migrate.js';
-import {
-  createConversation,
-  type ConversationRow,
-} from '../src/conversations.js';
-import {
-  createMessage,
-  type PersistedMessage,
-} from '../src/messages.js';
-import {
-  createModelRun,
-  completeModelRun,
-  type ModelRunRow,
-} from '../src/runs.js';
+import { createConversation, type ConversationRow } from '../src/conversations.js';
+import { createMessage, type PersistedMessage } from '../src/messages.js';
+import { createModelRun, completeModelRun, type ModelRunRow } from '../src/runs.js';
 import {
   createCitation,
   getCitationsForMessage,
@@ -105,7 +95,9 @@ describe('createCitation', () => {
   it('creates a citation with all required fields', async () => {
     const { workspaceId, userId } = await createWorkspaceAndUser(pool);
     const { conversationId, messageId } = await createConversationAndMessage(
-      pool, workspaceId, userId,
+      pool,
+      workspaceId,
+      userId,
     );
     const run = await createRunInWorkspace(pool, workspaceId, conversationId, userId, messageId);
     await completeModelRun(pool, workspaceId, run.id, {
@@ -138,7 +130,9 @@ describe('createCitation', () => {
   it('sets verificationStatus to PENDING by default', async () => {
     const { workspaceId, userId } = await createWorkspaceAndUser(pool);
     const { conversationId, messageId } = await createConversationAndMessage(
-      pool, workspaceId, userId,
+      pool,
+      workspaceId,
+      userId,
     );
     const run = await createRunInWorkspace(pool, workspaceId, conversationId, userId, messageId);
     await completeModelRun(pool, workspaceId, run.id, {
@@ -170,7 +164,9 @@ describe('getCitationsForMessage', () => {
   it('returns citations for a given message', async () => {
     const { workspaceId, userId } = await createWorkspaceAndUser(pool);
     const { conversationId, messageId } = await createConversationAndMessage(
-      pool, workspaceId, userId,
+      pool,
+      workspaceId,
+      userId,
     );
     const run = await createRunInWorkspace(pool, workspaceId, conversationId, userId, messageId);
     await completeModelRun(pool, workspaceId, run.id, {
@@ -211,7 +207,9 @@ describe('getCitationsForMessage', () => {
   it('returns empty array when no citations exist', async () => {
     const { workspaceId, userId } = await createWorkspaceAndUser(pool);
     const { conversationId, messageId } = await createConversationAndMessage(
-      pool, workspaceId, userId,
+      pool,
+      workspaceId,
+      userId,
     );
 
     const citations = await getCitationsForMessage(pool, workspaceId, messageId);
@@ -227,7 +225,9 @@ describe('getCitationsForModelRun', () => {
   it('returns citations for a given model run', async () => {
     const { workspaceId, userId } = await createWorkspaceAndUser(pool);
     const { conversationId, messageId } = await createConversationAndMessage(
-      pool, workspaceId, userId,
+      pool,
+      workspaceId,
+      userId,
     );
     const run = await createRunInWorkspace(pool, workspaceId, conversationId, userId, messageId);
     await completeModelRun(pool, workspaceId, run.id, {

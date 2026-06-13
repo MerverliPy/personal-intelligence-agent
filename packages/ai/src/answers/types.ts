@@ -46,12 +46,7 @@ export interface Recommendation {
 }
 
 /** A part of a structured answer — sourced claim or unsupported part. */
-export type AnswerPart =
-  | SourcedClaim
-  | Inference
-  | Assumption
-  | Estimate
-  | Recommendation;
+export type AnswerPart = SourcedClaim | Inference | Assumption | Estimate | Recommendation;
 
 /** A structured answer containing distinguished claim categories. */
 export interface StructuredAnswer {

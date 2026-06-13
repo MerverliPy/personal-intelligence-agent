@@ -28,11 +28,7 @@ import type { EvidenceItem, CompilerInput } from '../context/index.js';
 import { renderPrompt } from '../prompts/renderer.js';
 import { TEMPLATE as ANSWER_PROMPT_TEMPLATE } from '../prompts/prompts/conversation.answer.js';
 import { mapDbRoleToGateway } from './role-mapping.js';
-import {
-  buildCitations,
-  buildEvidenceMap,
-  StreamingCitationParser,
-} from '@pia/knowledge';
+import { buildCitations, buildEvidenceMap, StreamingCitationParser } from '@pia/knowledge';
 import type { Citation } from '@pia/contracts';
 import type {
   OrchestratorSseEvent,
@@ -246,7 +242,8 @@ export class AssistantOrchestrator {
         const insufficientMessage = await createMessage(this.pool, workspaceId, {
           conversationId,
           role: 'ASSISTANT',
-          content: "I don't have sufficient information to answer that question based on the available documents.",
+          content:
+            "I don't have sufficient information to answer that question based on the available documents.",
           createdBy: null,
         });
 
