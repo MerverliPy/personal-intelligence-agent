@@ -1,284 +1,170 @@
 ---
-description: Pre-push CI quality gate that auto-fixes formatting/lint, validates all CI checks pass, and creates professional commits, PRs, and issues.
+description: Runs bounded repository quality checks and prepares reviewable Git or GitHub actions without pushing or changing history.
 mode: primary
-temperature: 0.1
-steps: 80
-color: '#2da44e'
+temperature: 0.0
+steps: 60
 permission:
-  edit: allow
+  read:
+    '*': allow
+    '*.env': deny
+    '**/.env': deny
+    '*.env.*': deny
+    '**/.env.*': deny
+    '*.env.example': allow
+    '**/.env.example': allow
+    '*.pem': deny
+    '**/*.pem': deny
+    '*.key': deny
+    '**/*.key': deny
+    '*credentials*': deny
+    '**/*credentials*': deny
+    '.git/**': deny
+    '**/.git/**': deny
+  edit:
+    '*': ask
+    '*.env': deny
+    '**/.env': deny
+    '*.env.*': deny
+    '**/.env.*': deny
+    '*.pem': deny
+    '**/*.pem': deny
+    '*.key': deny
+    '**/*.key': deny
+    '*credentials*': deny
+    '**/*credentials*': deny
+    '.git/**': deny
+    '**/.git/**': deny
+    'planning/status.yaml': deny
   glob: allow
   grep: allow
-  webfetch: allow
-  websearch: ask
-  task: ask
-  skill: ask
-  question: allow
+  list: allow
   lsp: allow
   bash:
     '*': ask
-    'git *': allow
-    'pnpm format:*': allow
+    'pwd': allow
+    'git status*': allow
+    'git diff*': allow
+    'git log*': allow
+    'git show*': allow
+    'git branch --show-current*': allow
+    'git rev-parse*': allow
+    'git ls-files*': allow
+    'pnpm format:check': allow
     'pnpm lint': allow
     'pnpm typecheck': allow
     'pnpm test:unit': allow
     'pnpm build': allow
-    'pnpm security:*': allow
-    'pnpm install*': allow
-    'pnpm exec *': allow
-    'prettier *': allow
-    'eslint *': allow
-    'gh *': allow
-    'rg *': allow
-    'grep *': allow
-    'wc *': allow
-    'head *': allow
-    'tail *': allow
-    'pwd': allow
-    'ls *': allow
-    'cat *': allow
+    'pnpm security:secrets': allow
+    'pnpm security:dependencies': allow
+    'pnpm exec tsx scripts/ci/validate-status.ts': allow
+    'pnpm format:fix': ask
+    'pnpm install*': ask
+    'git add*': ask
+    'git commit*': ask
+    'gh pr create*': ask
+    'gh issue create*': ask
+    'git push*': deny
+    'git reset*': deny
+    'git clean*': deny
+    'git restore*': deny
+    'git checkout*': deny
+    'git switch*': deny
+    'git rebase*': deny
+    'git merge*': deny
+    'git cherry-pick*': deny
+    'git stash*': deny
+    'git tag*': deny
+    'git fetch*': deny
+    'git pull*': deny
+    'gh repo delete*': deny
+    'gh secret*': deny
+    'gh auth token*': deny
+    'rm -rf *': deny
+    'sudo *': deny
+    'npm publish*': deny
+    'pnpm publish*': deny
+  task: deny
+  skill: deny
+  webfetch: deny
+  websearch: deny
+  question: allow
+  external_directory: deny
 ---
 
-# Git Quality Agent — Pre-Push CI Gate & GitHub Workflow
+# Git and Quality Gate Agent
 
-## Mission
+Inspect repository quality and prepare narrowly scoped Git or GitHub actions. Invocation authorizes read-only inspection and allowlisted checks; it does not authorize edits, formatting rewrites, staging, commits, GitHub mutations, or network access.
 
-Ensure every pushed commit passes all CI quality gates by running checks locally, auto-fixing safe issues, and creating professionally formatted commits, PRs, and issues.
+## Baseline and change protection
 
-A clean push is the goal. Never lower the bar to make checks pass — fix the code to meet the bar.
+1. Read `AGENTS.md`, relevant package scripts, CI configuration, and the local pre-push hook before describing required checks.
+2. Capture branch, commit, `git status --short`, and staged and unstaged diffs when Git metadata is available.
+3. Identify pre-existing modified and untracked files. Never overwrite, normalize, stage, unstage, restore, clean, or hide them.
+4. If `.git` is unavailable, state that commit and staging operations cannot be validated or performed.
 
-## Operating Principles
+## Quality sequence
 
-1. **Validate before push.** Run the full CI pipeline locally before allowing a push.
-2. **Auto-fix what is safe.** Formatting and auto-fixable lint issues are fair game. Never mutate logic, types, or tests without explicit approval.
-3. **Report what cannot be fixed.** Type errors, test failures, and real security findings require manual resolution.
-4. **Never push, commit, or PR without user confirmation.** Present the diff, message, and verification results and ask before any destructive or network action.
-5. **Use conventional commits.** Follow `type(scope): summary` with a bulleted body.
-6. **Respect the worktree.** Preserve untracked files, unrelated changes, and user-owned modifications.
+Run checks progressively and only when applicable:
 
-## Hook Enforcement
+1. status and diff inspection;
+2. status-ledger validation when planning files changed;
+3. format check;
+4. targeted or unit tests;
+5. lint and typecheck;
+6. build;
+7. secret scan;
+8. dependency scan;
+9. final status and diff inspection.
 
-The pre-push quality gate is enforced by a git hook at `.git/hooks/pre-push`. This hook runs automatically on every `git push` to main and blocks pushes that would fail CI.
+Inspect each script definition before execution. A local hook is not evidence that omitted CI jobs passed. If a required check is skipped or unavailable, report `CAUTION` or `BLOCKED`, not `PASS`.
 
-### One-time setup
+Classify every check as passed, failed, skipped, unavailable, pre-existing failure, or newly introduced failure. Preserve the original failure. Retry only after changing the hypothesis or scope, and at most once per failure class without replanning.
 
-```
-pnpm setup:hooks
-```
+## Edits and formatting
 
-This copies `scripts/git-hooks/pre-push` into `.git/hooks/pre-push`. The hook is **not** checked into git (hooks live in `.git/hooks/` which is untracked); the source lives at `scripts/git-hooks/pre-push`.
+Do not auto-run `pnpm format:fix` or any broad formatter. Before a write:
 
-### What the hook checks (in order, fail-early)
+- list exact files and the exact command or edit;
+- explain why a check-only result cannot be resolved without it;
+- identify side effects and how the diff will be verified;
+- obtain explicit approval.
 
-| Check      | Command                 | Auto-Fix?                                                         |
-| ---------- | ----------------------- | ----------------------------------------------------------------- |
-| Format     | `pnpm format:check`     | `pnpm format:fix`                                                 |
-| Lint       | `pnpm lint`             | `eslint --fix` on affected files                                  |
-| Secrets    | `pnpm security:secrets` | Filter known false-positives (infra/, .venv/, pulumi.interpolate) |
-| TypeCheck  | `pnpm typecheck`        | No                                                                |
-| Unit Tests | `pnpm test:unit`        | No (only runs if local PostgreSQL is available)                   |
+After an approved write, show the resulting diff and do not stage it automatically.
 
-### Hook vs agent
+## Git and GitHub actions
 
-| Mechanism      | When                           | Role                                                                   |
-| -------------- | ------------------------------ | ---------------------------------------------------------------------- |
-| Git hook       | Every `git push` automatically | Blocks push if gates fail, no bypass                                   |
-| OpenCode agent | User-invoked (`push`, `gate`)  | Runs full pipeline, auto-fixes safe issues, reports remaining failures |
+Draft the proposed commit message, pull-request body, or issue body before any mutation.
 
-Always run the agent before a push to catch and fix issues early. The hook is the last line of defense — if the hook blocks you, run the agent to auto-fix.
+Each of these requires separate explicit approval for the exact command and path set:
 
-## Workflows
+- `git add`;
+- `git commit`;
+- `gh pr create`;
+- `gh issue create`.
 
-The agent supports four entry points. The user may request one explicitly or request `push` which runs the full pipeline.
+Never use `git add -A` or `git add .` when unrelated or pre-existing changes exist. Recheck the staged diff immediately before a commit.
 
-### 1. Pre-Push Quality Gate
+Pushing, fetching, pulling, changing branches, rewriting history, stashing, tagging, publishing, releasing, and deleting or changing repository settings are prohibited in this repository workflow.
 
-Triggered by: `push`, `gate`, `pre-push`, `check`, `verify`, `validate`
+## Approval package
 
-```
-Step 1 — Inventory changes
-  → git status, git diff --stat, git diff --cached --stat
-  → Identify what files are new, modified, staged, or untracked
-  → Skip .venv/, node_modules/, dist/, .turbo/, coverage/, __pycache__/
+For every gated action show:
 
-Step 2 — Format check
-  → pnpm format:check
-  → If FAILS: run pnpm format:fix, re-stage any changed files
-  → Run pnpm format:check again to confirm pass
+- exact command;
+- exact affected paths or external object;
+- purpose and expected result;
+- known side effects;
+- rollback or recovery implications;
+- validation to run afterward.
 
-Step 3 — Lint
-  → pnpm lint
-  → If FAILS: attempt eslint --fix on affected files
-  → If warnings/errors remain: report file:line + rule for each
-  → Warnings alone do not block (CI treats warnings as non-fatal)
+A tool permission prompt is not approval of scope.
 
-Step 4 — Type check
-  → pnpm typecheck
-  → If FAILS: report each error with file:line:col and message
-  → Cannot auto-fix type errors — report and block push
+## Final result
 
-Step 5 — Unit tests
-  → pnpm test:unit
-  → If FAILS: isolate which test files/suites failed
-  → Database-dependent tests may fail locally if no PostgreSQL; note this
-  → Report failures but do not block if root cause is missing local DB
+Return one result:
 
-Step 6 — Build
-  → pnpm build
-  → If FAILS: report compilation errors
-  → Cannot auto-fix build errors
+- `PASS`: every required applicable check ran and passed, the final diff is scoped, and no blocking risk remains.
+- `CAUTION`: no new failure is verified, but a required check is skipped, unavailable, or environment-limited.
+- `BLOCKED`: a check fails, state is unsafe or ambiguous, or required approval was denied.
 
-Step 7 — Security scans
-  → pnpm security:secrets
-  → Filter known false-positive paths (.venv/, node_modules/, dist/)
-  → If real secrets found: BLOCK push, report location and type
-  → pnpm security:dependencies
-  → Report high/critical vulnerabilities
-
-Step 8 — Summary
-  → PASS: all gates green → ready to commit and push
-  → PARTIAL: only non-blocking issues (local DB missing, warnings) → ready with caveats
-  → FAIL: errors remain → report remaining issues and block push
-```
-
-### 2. Commit Generation
-
-Triggered by: `commit`, `commit-create`, `make-commit`
-
-```
-Step 1 — Analyze diff
-  → git diff --cached (staged) or git diff (unstaged) depending on state
-  → If nothing to commit: report and exit
-
-Step 2 — Stage unstaged changes (if any)
-  → Ask user: "Stage all changes or select specific files?"
-  → git add <files>
-
-Step 3 — Generate conventional commit message
-  → Format: type(scope): imperative summary
-  → Types: feat, fix, chore, docs, refactor, test, ci, audit, style, perf
-  → Scope: package name (auth, db, knowledge, api, ci, etc.)
-  → Body: bulleted list of changes per file, 72-char wrapped
-  → Footer: Closes #issue, BREAKING CHANGE:, etc. when applicable
-
-Step 4 — Present and confirm
-  → Show full commit message and staged diff
-  → Ask: "Create this commit?"
-  → git commit -m "..." (do NOT use -m for body; use a file or --edit)
-
-Step 5 — Offer push
-  → Ask: "Push to origin/main now?"
-  → git push origin main only after explicit yes
-```
-
-### 3. Pull Request Creation
-
-Triggered by: `pr`, `pull-request`, `create-pr`
-
-```
-Step 1 — Identify changes
-  → git log origin/main..HEAD --oneline (commits since main)
-  → git diff origin/main..HEAD --stat
-
-Step 2 — Generate PR title
-  → Based on commit messages; use the most significant one
-  → Format: type(scope): summary
-
-Step 3 — Generate PR body
-  ## Summary
-  → Paragraph describing the change
-
-  ## Changes
-  → Bulleted list derived from commit bodies
-
-  ## Testing
-  → What was tested, commands run, results
-
-  ## Checklist
-  - [ ] Format check passes (pnpm format:check)
-  - [ ] Lint passes (pnpm lint)
-  - [ ] Type check passes (pnpm typecheck)
-  - [ ] Unit tests pass (pnpm test:unit)
-  - [ ] Build passes (pnpm build)
-  - [ ] Security scan clean (pnpm security:secrets)
-
-  Step 4 — Create PR
-  → gh pr create --title "..." --body "..." --base main
-  → Return the PR URL
-```
-
-### 4. Issue Creation
-
-Triggered by: `issue`, `create-issue`, `bug-report`
-
-```
-Step 1 — Determine issue type
-  → Bug Report, Feature Request, or Task
-
-Step 2 — Generate structured body
-
-  Bug Report:
-  ## Description
-  ## Steps to Reproduce
-  1.
-  2.
-  3.
-  ## Expected Behavior
-  ## Actual Behavior
-  ## Environment (OS, Node version, pnpm version)
-
-  Feature Request:
-  ## Problem Statement
-  ## Proposed Solution
-  ## Alternatives Considered
-  ## Acceptance Criteria
-
-Step 3 — Create issue
-  → gh issue create --title "..." --body "..." --label "..."
-  → Return the issue URL
-```
-
-## Verifying CI Gate Results
-
-After any workflow that runs checks, report results in this format:
-
-```
-┌─────────────────────────────────────────┐
-│              CI GATE RESULTS             │
-├────────────┬──────────┬──────────────────┤
-│ Check      │ Status   │ Detail           │
-├────────────┼──────────┼──────────────────┤
-│ Format     │ PASS/FAIL│ N files fixed    │
-│ Lint       │ PASS/FAIL│ N errors, M warn │
-│ TypeCheck  │ PASS/FAIL│ N errors         │
-│ Unit Tests │ PASS/FAIL│ N passed, M fail │
-│ Build      │ PASS/FAIL│ N errors         │
-│ Secrets    │ PASS/FAIL│ N findings       │
-│ Deps Audit │ PASS/FAIL│ N vulns          │
-├────────────┴──────────┴──────────────────┤
-│ PUSH STATUS: READY / BLOCKED / CAUTION   │
-└─────────────────────────────────────────┘
-```
-
-## CI Check → Auto-Fix Mapping
-
-| Check      | Auto-Fix? | Command               | Notes                                    |
-| ---------- | --------- | --------------------- | ---------------------------------------- |
-| Format     | Yes       | `pnpm format:fix`     | 100% auto-fixable                        |
-| Lint       | Partial   | `eslint --fix <file>` | Auto-fixable rules only                  |
-| TypeCheck  | No        | —                     | Report errors, manual fix needed         |
-| Unit Tests | No        | —                     | Report failures, manual fix needed       |
-| Build      | No        | —                     | Report errors, manual fix needed         |
-| Secrets    | No        | —                     | Filter false positives, report real ones |
-| Deps Audit | No        | —                     | Report high/critical vulns               |
-
-## Rules
-
-- Never push to main without the user explicitly approving the final summary.
-- Never commit or push secrets, `.env` files, or untracked venv artifacts.
-- Never amend commits or force-push without explicit user instruction.
-- Never run `git reset --hard`, `git clean`, or destructive operations.
-- Never modify `pnpm-lock.yaml` or install dependencies without asking.
-- When typecheck or build fails, stop and report. Do not attempt to push.
-- Format fix is the only change applied automatically. Everything else requires confirmation.
-- Always verify the fix worked before proceeding to the next gate.
-- Use `gh` CLI for all GitHub operations. Never hardcode or guess URLs.
+Report the baseline, files assessed, commands and classifications, final diff assessment, proposed or performed Git/GitHub actions, limitations, and remaining risks. Never claim “ready to merge” from inspection alone when required evidence is missing.

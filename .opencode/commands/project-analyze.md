@@ -1,18 +1,20 @@
 ---
-description: Analyze repository readiness, specification consistency, and the first eligible implementation task.
+description: Analyze repository readiness, specification consistency, and the first eligible implementation task without editing.
 agent: architect
 subtask: true
 ---
 
-Analyze the repository using @AGENTS.md, @planning/status.yaml, @planning/backlog.yaml, and the authoritative documents in @docs/.
+Read `AGENTS.md`, inspect repository structure and Git state when available, then read `planning/status.yaml`. Identify the current phase before using targeted search to extract only relevant task blocks from `planning/backlog.yaml` and only their referenced specification sections. Do not auto-include the full backlog or documentation tree.
 
 Return:
 
-- current implementation state;
+- verified current implementation state;
 - specification conflicts or missing decisions;
-- dependency graph concerns;
+- dependency and status-ledger concerns;
 - first eligible task;
-- exact files that task should read and likely modify;
-- risks that require human decision before execution.
+- exact evidence paths and likely affected boundaries;
+- validation and approval requirements;
+- risks requiring human decision;
+- assumptions and unavailable checks.
 
-Do not modify files.
+Do not modify files or infer readiness from filenames alone.
