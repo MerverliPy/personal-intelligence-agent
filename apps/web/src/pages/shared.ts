@@ -41,6 +41,8 @@ export const sharedCss = `
   .badge-processing { background: #dbeafe; color: #1e40af; }
   .badge-failed { background: #fee2e2; color: #991b1b; }
   .badge-quarantined { background: #fef3c7; color: #92400e; }
+  .badge-cancelled { background: #fef3c7; color: #92400e; }
+  .badge-interrupted { background: #fee2e2; color: #991b1b; }
   .badge-uploaded { background: #f3e8ff; color: #6b21a8; }
   .badge-pending { background: #f3f4f6; color: #374151; }
   form { margin-bottom: 1.5rem; }
@@ -132,7 +134,7 @@ export function pageShell({
   title: string;
   workspaceId: string;
   workspaceName: string;
-  tabActive: 'documents' | 'upload' | 'search' | null;
+  tabActive: 'documents' | 'upload' | 'search' | 'conversations' | null;
   bodyHtml: string;
   bodyScript: string;
 }): string {
@@ -151,6 +153,7 @@ export function pageShell({
         ${makeTab('Documents', `/app/workspaces/${workspaceId}/documents`, tabActive === 'documents')}
         ${makeTab('Upload', `/app/workspaces/${workspaceId}/upload`, tabActive === 'upload')}
         ${makeTab('Search', `/app/workspaces/${workspaceId}/search`, tabActive === 'search')}
+        ${makeTab('Conversations', `/app/workspaces/${workspaceId}/conversations`, tabActive === 'conversations')}
       </div>`;
   }
 
