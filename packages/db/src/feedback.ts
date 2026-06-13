@@ -16,7 +16,8 @@ export type FeedbackCategory =
   | 'INCOMPLETE'
   | 'CITATION_ISSUE'
   | 'STYLE_ISSUE'
-  | 'UNSAFE';
+  | 'UNSAFE'
+  | 'FREE_TEXT';
 
 export interface FeedbackRow {
   id: string;
@@ -29,6 +30,8 @@ export interface FeedbackRow {
   notes: string | null;
   suggestedFailureClass: string | null;
   classificationConfidence: number | null;
+  /** Retrieval trace IDs linked to this feedback (populated on read). */
+  retrievalTraceIds: string[];
   createdAt: string;
 }
 
@@ -63,7 +66,9 @@ export async function createFeedback(pool: Pool, input: CreateFeedbackInput): Pr
       input.classificationConfidence ?? null,
     ],
   );
-  return toFeedbackRow(result.rows[0]!);
+  const row = toFeedbackRow(result.rows[0]!);
+  row.retrievalTraceIds = [];
+  return row;
 }
 
 export async function getFeedbackForMessage(
@@ -78,7 +83,11 @@ export async function getFeedbackForMessage(
      ORDER BY created_at DESC`,
     [workspaceId, messageId],
   );
-  return result.rows.map(toFeedbackRow);
+  const rows = result.rows.map(toFeedbackRow);
+  if (rows.length === 0) return rows;
+  const ids = rows.map((r) => r.id);
+  await hydrateRetrievalTraceIds(pool, workspaceId, rows, ids);
+  return rows;
 }
 
 export async function getFeedback(
@@ -93,12 +102,66 @@ export async function getFeedback(
     [feedbackId, workspaceId],
   );
   if (result.rows.length === 0) return null;
-  return toFeedbackRow(result.rows[0]!);
+  const row = toFeedbackRow(result.rows[0]!);
+  await hydrateRetrievalTraceIds(pool, workspaceId, [row], [row.id]);
+  return row;
+}
+
+/**
+ * Updates the suggestion columns on a feedback row.
+ *
+ * Per FR-FBK-003: the classification is stored as a suggestion with
+ * confidence. This function is the only path that writes those columns
+ * after the row exists. It is a no-op when both fields are null.
+ */
+export async function setFeedbackSuggestion(
+  pool: Pool,
+  workspaceId: string,
+  feedbackId: string,
+  suggestedFailureClass: FailureClass | null,
+  classificationConfidence: number | null,
+): Promise<void> {
+  if (suggestedFailureClass === null && classificationConfidence === null) return;
+  await pool.query(
+    `UPDATE feedback
+     SET suggested_failure_class = $3,
+         classification_confidence = $4
+     WHERE id = $1 AND workspace_id = $2`,
+    [feedbackId, workspaceId, suggestedFailureClass, classificationConfidence],
+  );
 }
 
 // ---------------------------------------------------------------------------
 // Internal helpers
 // ---------------------------------------------------------------------------
+
+/**
+ * Hydrates `retrievalTraceIds` on a batch of feedback rows in a single
+ * round-trip. Rows are mutated in place. No-op when the input is empty.
+ */
+async function hydrateRetrievalTraceIds(
+  pool: Pool,
+  workspaceId: string,
+  rows: FeedbackRow[],
+  feedbackIds: string[],
+): Promise<void> {
+  if (rows.length === 0) return;
+  const traceResult = await pool.query<{ feedback_id: string; retrieval_trace_id: string }>(
+    `SELECT feedback_id, retrieval_trace_id
+     FROM feedback_retrieval_traces
+     WHERE workspace_id = $1 AND feedback_id = ANY($2::uuid[])`,
+    [workspaceId, feedbackIds],
+  );
+  const byFeedback = new Map<string, string[]>();
+  for (const r of traceResult.rows) {
+    const list = byFeedback.get(r.feedback_id) ?? [];
+    list.push(r.retrieval_trace_id);
+    byFeedback.set(r.feedback_id, list);
+  }
+  for (const row of rows) {
+    row.retrievalTraceIds = byFeedback.get(row.id) ?? [];
+  }
+}
 
 type DbFeedback = {
   id: string;
@@ -126,6 +189,7 @@ function toFeedbackRow(row: DbFeedback): FeedbackRow {
     notes: row.notes,
     suggestedFailureClass: row.suggested_failure_class,
     classificationConfidence: row.classification_confidence,
+    retrievalTraceIds: [],
     createdAt: row.created_at,
   };
 }

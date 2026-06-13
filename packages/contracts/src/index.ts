@@ -518,7 +518,8 @@ export type FeedbackCategory =
   | 'INCOMPLETE'
   | 'CITATION_ISSUE'
   | 'STYLE_ISSUE'
-  | 'UNSAFE';
+  | 'UNSAFE'
+  | 'FREE_TEXT';
 
 /** Request to submit feedback against a message. */
 export interface CreateFeedbackRequest {
@@ -528,6 +529,27 @@ export interface CreateFeedbackRequest {
   notes?: string | null;
   suggested_failure_class?: string | null;
   classification_confidence?: number | null;
+  /**
+   * Retrieval trace IDs that contributed evidence to the model's answer.
+   * Application-layer validated against `model_run_retrieval_traces`.
+   * Optional; omitted when the user does not have trace data.
+   */
+  retrieval_trace_ids?: string[] | null;
+}
+
+/**
+ * A failure-classification suggestion computed by the classifier.
+ *
+ * Per FR-FBK-003: stored as a suggestion with confidence.
+ * Per FR-FBK-004: never auto-applied to production behavior.
+ */
+export interface FeedbackSuggestion {
+  /** Failure class code, or null when the feedback does not imply a failure. */
+  category: string | null;
+  /** Confidence in [0, 1]. 0 when `category` is null. */
+  confidence: number;
+  /** Human-readable rationale for the suggestion. */
+  rationale: string;
 }
 
 /** A feedback resource. */
@@ -542,5 +564,15 @@ export interface Feedback {
   notes: string | null;
   suggested_failure_class: string | null;
   classification_confidence: number | null;
+  /** Retrieval trace IDs linked to this feedback. */
+  retrieval_trace_ids: string[];
   created_at: string;
+}
+
+/**
+ * Submission response: the feedback resource plus the classifier
+ * suggestion that was stored on the row.
+ */
+export interface FeedbackSubmission extends Feedback {
+  suggestion: FeedbackSuggestion;
 }

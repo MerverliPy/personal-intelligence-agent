@@ -90,3 +90,20 @@ export type {
   SseResponseCompletedEvent,
   SseRunFailedEvent,
 } from './assistant/index.js';
+
+// ---------------------------------------------------------------------------
+// Feedback (P3-T08)
+// ---------------------------------------------------------------------------
+
+export {
+  FEEDBACK_CATEGORIES,
+  isFeedbackCategory,
+  categoryToFailureClass,
+  classify,
+  submitFeedback,
+  type FeedbackCategory,
+  type FeedbackSuggestion,
+  type CategoryToFailureClassResult,
+  type SubmitFeedbackInput,
+  type SubmitFeedbackResult,
+} from './feedback/index.js';

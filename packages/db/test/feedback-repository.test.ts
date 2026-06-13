@@ -115,6 +115,21 @@ describe('createFeedback', () => {
     expect(fb.modelRunId).toBe(runId);
     expect(fb.category).toBe('CITATION_ISSUE');
   });
+
+  it('accepts the FREE_TEXT category (FR-FBK-001)', async () => {
+    const { workspaceId, userId, messageId } = await createWorkspaceUserAndMessage(pool);
+
+    const fb = await createFeedback(pool, {
+      workspaceId,
+      messageId,
+      submittedBy: userId,
+      category: 'FREE_TEXT',
+      correction: 'The answer should reference the Q3 financial report.',
+    });
+
+    expect(fb.category).toBe('FREE_TEXT');
+    expect(fb.correction).toContain('Q3 financial report');
+  });
 });
 
 describe('getFeedbackForMessage', () => {

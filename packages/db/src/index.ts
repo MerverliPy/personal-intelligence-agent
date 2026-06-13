@@ -8,6 +8,15 @@ export {
 } from './migrate.js';
 export { getWorkspaceMembership, getProjectMembership } from './membership.js';
 
+// Re-export the failure classification taxonomy so downstream packages
+// (notably @pia/ai) can depend on @pia/db alone for the taxonomy.
+export {
+  FAILURE_CLASSIFICATION,
+  FAILURE_CLASSIFICATION_LABELS,
+  isValidFailureClass,
+  type FailureClass,
+} from '@pia/domain';
+
 // Conversations
 export {
   createConversation,
@@ -61,7 +70,17 @@ export {
   createFeedback,
   getFeedbackForMessage,
   getFeedback,
+  setFeedbackSuggestion,
   type FeedbackRow,
   type FeedbackCategory,
   type CreateFeedbackInput,
 } from './feedback.js';
+
+// Feedback retrieval-trace links
+export {
+  addFeedbackRetrievalTraces,
+  getFeedbackRetrievalTraces,
+  deleteFeedbackRetrievalTraces,
+  MAX_FEEDBACK_RETRIEVAL_TRACES,
+  type FeedbackRetrievalTraceRow,
+} from './feedback-retrieval-traces.js';
