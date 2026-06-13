@@ -17,7 +17,7 @@ hybrid retrieval, and governed persistent memory.
 | -------------------- | ------ | ---------------------------------------------------- |
 | `@pia/api`           | Active | Fastify API server with auth, workspaces, uploads    |
 | `@pia/worker`        | Active | Background job consumer with outbox polling          |
-| `@pia/web`           | Active | Next.js frontend                                    |
+| `@pia/web`           | Active | Next.js frontend                                     |
 | `@pia/auth`          | Active | OIDC client, JWT sessions, RBAC, identity resolution |
 | `@pia/config`        | Active | Typed env-var config with Redacted secret handling   |
 | `@pia/contracts`     | Active | Shared API types, error envelopes, pagination        |

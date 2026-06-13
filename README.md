@@ -44,16 +44,16 @@ preserving cryptographic provenance, workspace-level access control, and a compl
 > **30 of 64 tasks complete** across 8 phases. Phases P0, P1, and P2 are fully delivered and verified.
 > P3 is the next active phase.
 
-| Phase | Name                               |        Progress        |    Gate    |
-| :---: | ---------------------------------- | :--------------------: | :--------: |
-|  P0   | 🏗️ Engineering Foundation          |  ████████████ **6/6**  |  ✅ DONE   |
-|  P1   | 🔐 Identity, Tenancy & Platform    |  ████████████ **7/7**  |  ✅ DONE   |
-|  P2   | 📚 Knowledge Ingestion & Retrieval | ████████████ **10/10** |  ✅ DONE   |
-|  P3   | 💬 Conversational Assistant        | ████████░░░ **7/10**  | 🔄 In Progress |
-|  P4   | 🧠 Governed Persistent Memory      |  ░░░░░░░░░░░░ **0/7**  | ⏳ Planned |
-|  P5   | ⚡ Tool Gateway & Approvals        |  ░░░░░░░░░░░░ **0/8**  | ⏳ Planned |
-|  P6   | 📊 Portable Evaluation             |  ░░░░░░░░░░░░ **0/8**  | ⏳ Planned |
-|  P7   | 🚀 Production Hardening            |  ░░░░░░░░░░░░ **0/8**  | ⏳ Planned |
+| Phase | Name                               |        Progress        |      Gate      |
+| :---: | ---------------------------------- | :--------------------: | :------------: |
+|  P0   | 🏗️ Engineering Foundation          |  ████████████ **6/6**  |    ✅ DONE     |
+|  P1   | 🔐 Identity, Tenancy & Platform    |  ████████████ **7/7**  |    ✅ DONE     |
+|  P2   | 📚 Knowledge Ingestion & Retrieval | ████████████ **10/10** |    ✅ DONE     |
+|  P3   | 💬 Conversational Assistant        |  ████████░░░ **7/10**  | 🔄 In Progress |
+|  P4   | 🧠 Governed Persistent Memory      |  ░░░░░░░░░░░░ **0/7**  |   ⏳ Planned   |
+|  P5   | ⚡ Tool Gateway & Approvals        |  ░░░░░░░░░░░░ **0/8**  |   ⏳ Planned   |
+|  P6   | 📊 Portable Evaluation             |  ░░░░░░░░░░░░ **0/8**  |   ⏳ Planned   |
+|  P7   | 🚀 Production Hardening            |  ░░░░░░░░░░░░ **0/8**  |   ⏳ Planned   |
 
 ### 🔄 Currently In Progress
 
@@ -535,7 +535,7 @@ pnpm dev
 
 | Service                  | URL                     | Credentials (dev only)      |
 | ------------------------ | ----------------------- | --------------------------- |
-| PostgreSQL 17 + pgvector | `localhost:5432`        | `pia` / `pia-dev`     |
+| PostgreSQL 17 + pgvector | `localhost:5432`        | `pia` / `pia-dev`           |
 | Redis 7                  | `localhost:6379`        | None                        |
 | MinIO API                | `localhost:9000`        | `minioadmin` / `minioadmin` |
 | MinIO Console            | `http://localhost:9001` | Same as above               |
