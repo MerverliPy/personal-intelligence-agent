@@ -71,7 +71,10 @@ function makeChunkRow(overrides: Record<string, unknown> = {}) {
 /**
  * Creates a mock pool that responds with the given chunk and version rows.
  */
-function mockPool(opts: { chunkRows?: Record<string, unknown>[]; versionRows?: Record<string, unknown>[] }) {
+function mockPool(opts: {
+  chunkRows?: Record<string, unknown>[];
+  versionRows?: Record<string, unknown>[];
+}) {
   return {
     query: vi.fn().mockImplementation(async (sql: string, params: unknown[]) => {
       const sqlStr = String(sql);
@@ -309,10 +312,7 @@ describe('verifyCitations — locator boundary failures', () => {
       chunkRows: [makeChunkRow()],
       versionRows: [makeVersionRow({ extraction_metadata: { pageCount: 3 } })],
     });
-    const input = makeInput(
-      [makeCitation({ sourceLocator: { page: 10 } })],
-      makeEvidenceMap(),
-    );
+    const input = makeInput([makeCitation({ sourceLocator: { page: 10 } })], makeEvidenceMap());
     const result = await verifyCitations(pool, input);
 
     expect(result.allValid).toBe(false);
@@ -384,10 +384,7 @@ describe('verifyCitations — locator boundary failures', () => {
       chunkRows: [makeChunkRow()],
       versionRows: [makeVersionRow()],
     });
-    const input = makeInput(
-      [makeCitation({ sourceLocator: {} })],
-      makeEvidenceMap(),
-    );
+    const input = makeInput([makeCitation({ sourceLocator: {} })], makeEvidenceMap());
     const result = await verifyCitations(pool, input);
 
     expect(result.allValid).toBe(true);
@@ -423,10 +420,7 @@ describe('verifyCitations — adversarial inputs', () => {
       chunkRows: [makeChunkRow()],
       versionRows: [makeVersionRow({ extraction_metadata: { pageCount: 10 } })],
     });
-    const input = makeInput(
-      [makeCitation({ sourceLocator: { page: -1 } })],
-      makeEvidenceMap(),
-    );
+    const input = makeInput([makeCitation({ sourceLocator: { page: -1 } })], makeEvidenceMap());
     const result = await verifyCitations(pool, input);
 
     // Negative page is not > pageCount, so it passes the boundary check
@@ -439,10 +433,7 @@ describe('verifyCitations — adversarial inputs', () => {
       chunkRows: [makeChunkRow()],
       versionRows: [makeVersionRow({ extraction_metadata: { pageCount: 10 } })],
     });
-    const input = makeInput(
-      [makeCitation({ sourceLocator: { page: 999999 } })],
-      makeEvidenceMap(),
-    );
+    const input = makeInput([makeCitation({ sourceLocator: { page: 999999 } })], makeEvidenceMap());
     const result = await verifyCitations(pool, input);
 
     expect(result.allValid).toBe(false);

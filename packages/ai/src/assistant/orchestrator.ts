@@ -29,7 +29,12 @@ import type { EvidenceItem, CompilerInput } from '../context/index.js';
 import { renderPrompt } from '../prompts/renderer.js';
 import { TEMPLATE as ANSWER_PROMPT_TEMPLATE } from '../prompts/prompts/conversation.answer.js';
 import { mapDbRoleToGateway } from './role-mapping.js';
-import { buildCitations, buildEvidenceMap, StreamingCitationParser, verifyCitations } from '@pia/knowledge';
+import {
+  buildCitations,
+  buildEvidenceMap,
+  StreamingCitationParser,
+  verifyCitations,
+} from '@pia/knowledge';
 import type { VerifiableCitation, VerifierInput } from '@pia/knowledge';
 import type { Citation } from '@pia/contracts';
 import type {
@@ -468,7 +473,8 @@ export class AssistantOrchestrator {
             sequence: sequence++,
             error: {
               code: 'VERIFICATION_FAILED',
-              message: 'Citation verification failed. The answer contains citations that could not be validated.',
+              message:
+                'Citation verification failed. The answer contains citations that could not be validated.',
               request_id: runId,
             },
           };

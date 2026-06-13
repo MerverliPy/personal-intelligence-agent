@@ -49,10 +49,7 @@ type DbVersionRow = {
 // Query helpers
 // ---------------------------------------------------------------------------
 
-async function getChunkRow(
-  pool: Pool,
-  chunkId: string,
-): Promise<DbChunkRow | null> {
+async function getChunkRow(pool: Pool, chunkId: string): Promise<DbChunkRow | null> {
   const result = await pool.query<DbChunkRow>(
     `SELECT id, workspace_id, document_id, document_version_id, ordinal, content_hash, locator
      FROM document_chunks
@@ -63,10 +60,7 @@ async function getChunkRow(
   return result.rows[0]!;
 }
 
-async function getVersionRow(
-  pool: Pool,
-  versionId: string,
-): Promise<DbVersionRow | null> {
+async function getVersionRow(pool: Pool, versionId: string): Promise<DbVersionRow | null> {
   const result = await pool.query<DbVersionRow>(
     `SELECT id, workspace_id, document_id, status, is_current, extraction_metadata
      FROM document_versions

@@ -129,8 +129,11 @@ export interface VerifierInput {
   /** The persisted citations to verify. */
   readonly citations: readonly VerifiableCitation[];
   /** The evidence map from generation-time retrieval (chunkId → evidence). */
-  readonly evidenceMap: ReadonlyMap<string, {
-    readonly chunkId: string;
-    readonly documentVersionId: string;
-  }>;
+  readonly evidenceMap: ReadonlyMap<
+    string,
+    {
+      readonly chunkId: string;
+      readonly documentVersionId: string;
+    }
+  >;
 }
