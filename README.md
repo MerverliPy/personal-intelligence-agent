@@ -41,7 +41,7 @@ preserving cryptographic provenance, workspace-level access control, and a compl
 ## 🗺️ Delivery Roadmap
 
 > [!NOTE]
-> **30 of 64 tasks complete** across 8 phases. Phases P0, P1, and P2 are fully delivered and verified.
+> **32 of 64 tasks complete** across 8 phases. Phases P0, P1, and P2 are fully delivered and verified.
 > P3 is the next active phase.
 
 | Phase | Name                               |        Progress        |      Gate      |
@@ -49,7 +49,7 @@ preserving cryptographic provenance, workspace-level access control, and a compl
 |  P0   | 🏗️ Engineering Foundation          |  ████████████ **6/6**  |    ✅ DONE     |
 |  P1   | 🔐 Identity, Tenancy & Platform    |  ████████████ **7/7**  |    ✅ DONE     |
 |  P2   | 📚 Knowledge Ingestion & Retrieval | ████████████ **10/10** |    ✅ DONE     |
-|  P3   | 💬 Conversational Assistant        |  ████████░░░ **7/10**  | 🔄 In Progress |
+|  P3   | 💬 Conversational Assistant        |  █████████░░ **9/10**  | 🔄 In Progress |
 |  P4   | 🧠 Governed Persistent Memory      |  ░░░░░░░░░░░░ **0/7**  |   ⏳ Planned   |
 |  P5   | ⚡ Tool Gateway & Approvals        |  ░░░░░░░░░░░░ **0/8**  |   ⏳ Planned   |
 |  P6   | 📊 Portable Evaluation             |  ░░░░░░░░░░░░ **0/8**  |   ⏳ Planned   |
@@ -57,7 +57,7 @@ preserving cryptographic provenance, workspace-level access control, and a compl
 
 ### 🔄 Currently In Progress
 
-**P3 — Conversational Assistant** is in progress (7 of 10 tasks complete). P3-T01 through P3-T07 are verified and delivered, covering the model gateway, prompt registry, context compiler, conversation persistence, assistant orchestration, grounded citations, and citation verification.
+**P3 — Conversational Assistant** is in progress (9 of 10 tasks complete). P3-T01 through P3-T09 are verified and delivered, covering the model gateway, prompt registry, context compiler, conversation persistence, assistant orchestration, grounded citations, citation verification, feedback classification, and the conversational UI.
 
 <details>
 <summary>📋 <strong>View full P3–P7 roadmap</strong> (34 remaining tasks)</summary>
@@ -93,7 +93,7 @@ A deterministic, installable monorepo with strict TypeScript across 14 packages 
 ```bash
 pnpm install --frozen-lockfile
 pnpm build              # 17/17 packages
-pnpm typecheck          # 27/27 tasks
+pnpm typecheck          # 29/29 tasks
 pnpm lint               # 0 errors
 pnpm test:unit          # All non-DB tests pass
 pnpm format:check       # Prettier-compliant
@@ -521,7 +521,7 @@ pnpm dev
 | ---------------------------- | -------------------------------------------- |
 | `pnpm dev`                   | Start API and worker in development mode     |
 | `pnpm build`                 | Build all 17 packages/apps                   |
-| `pnpm typecheck`             | Strict TypeScript validation (27 tasks)      |
+| `pnpm typecheck`             | Strict TypeScript validation (29 tasks)      |
 | `pnpm lint`                  | ESLint across workspace                      |
 | `pnpm test:unit`             | Vitest unit tests                            |
 | `pnpm test:integration`      | Integration tests (requires PostgreSQL)      |
