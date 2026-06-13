@@ -184,3 +184,18 @@ export type {
 export { buildCitations, buildEvidenceMap } from './citations/builder.js';
 
 export { StreamingCitationParser, type ProvisionalCitation } from './citations/streaming-parser.js';
+
+// ---------------------------------------------------------------------------
+// Verification (P3-T07)
+// ---------------------------------------------------------------------------
+
+export type {
+  VerificationStatus,
+  VerificationReasonCode,
+  CitationVerification,
+  VerificationResult,
+  VerifierInput,
+  VerifiableCitation,
+} from './verification/types.js';
+
+export { verifyCitations } from './verification/verifier.js';

@@ -51,6 +51,7 @@ export {
   createCitation,
   getCitationsForMessage,
   getCitationsForModelRun,
+  updateCitationVerification,
   type CitationRow,
   type CreateCitationInput,
 } from './citations.js';

@@ -21,6 +21,7 @@ import {
   completeModelRun,
   getModelRun,
   createCitation,
+  updateCitationVerification,
 } from '@pia/db';
 import { compileContext, DEFAULT_COMPACTION_POLICY } from '../context/index.js';
 import type { ModelGateway } from '../gateway/index.js';
@@ -28,7 +29,8 @@ import type { EvidenceItem, CompilerInput } from '../context/index.js';
 import { renderPrompt } from '../prompts/renderer.js';
 import { TEMPLATE as ANSWER_PROMPT_TEMPLATE } from '../prompts/prompts/conversation.answer.js';
 import { mapDbRoleToGateway } from './role-mapping.js';
-import { buildCitations, buildEvidenceMap, StreamingCitationParser } from '@pia/knowledge';
+import { buildCitations, buildEvidenceMap, StreamingCitationParser, verifyCitations } from '@pia/knowledge';
+import type { VerifiableCitation, VerifierInput } from '@pia/knowledge';
 import type { Citation } from '@pia/contracts';
 import type {
   OrchestratorSseEvent,
@@ -387,6 +389,7 @@ export class AssistantOrchestrator {
 
       // --- Persist citations ---
       const persistedCitations: Citation[] = [];
+      const verifiableCitations: VerifiableCitation[] = [];
       for (const citeInput of citationResult.citations) {
         const row = await createCitation(this.pool, {
           workspaceId: citeInput.workspaceId,
@@ -409,6 +412,68 @@ export class AssistantOrchestrator {
           claim_text: citeInput.claimText,
           verification_status: row.verificationStatus,
         });
+        verifiableCitations.push({
+          id: row.id,
+          chunkId: row.chunkId,
+          documentVersionId: row.documentVersionId,
+          sourceLocator: row.sourceLocator,
+        });
+      }
+
+      // --- Verify citations (P3-T07) ---
+      if (verifiableCitations.length > 0) {
+        const verifierInput: VerifierInput = {
+          workspaceId,
+          modelRunId: runId,
+          citations: verifiableCitations,
+          evidenceMap,
+        };
+
+        const verificationResult = await verifyCitations(this.pool, verifierInput);
+
+        // Update each citation's verification_status
+        for (const vr of verificationResult.results) {
+          const updated = await updateCitationVerification(
+            this.pool,
+            workspaceId,
+            vr.citationId,
+            vr.status,
+          );
+          // Sync verification_status back into the SSE-ready citation array
+          const pc = persistedCitations.find((c) => c.id === vr.citationId);
+          if (pc) {
+            pc.verification_status = updated.verificationStatus;
+          }
+        }
+
+        // If any critical check failed, abort normal completion (FR-CIT-002, FR-CIT-003)
+        if (!verificationResult.allValid) {
+          const invalidReasons = verificationResult.results
+            .filter((r) => r.status !== 'VALID')
+            .map((r) => `${r.citationId}: ${r.reason ?? r.status}`)
+            .join('; ');
+
+          await completeModelRun(this.pool, workspaceId, runId, {
+            status: 'FAILED',
+            assistantMessageId: assistantMessage.id,
+            inputTokens: gatewayUsage.promptTokens,
+            outputTokens: gatewayUsage.completionTokens,
+            latencyMs: Date.now() - startTime,
+            errorCode: 'VERIFICATION_FAILED',
+            errorSafeMessage: truncateSafe(`Citation verification failed: ${invalidReasons}`),
+          });
+
+          yield {
+            type: 'run.failed',
+            sequence: sequence++,
+            error: {
+              code: 'VERIFICATION_FAILED',
+              message: 'Citation verification failed. The answer contains citations that could not be validated.',
+              request_id: runId,
+            },
+          };
+          return;
+        }
       }
 
       // --- Complete the run ---

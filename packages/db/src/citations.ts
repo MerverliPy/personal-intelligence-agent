@@ -101,6 +101,35 @@ export async function getCitationsForModelRun(
   return result.rows.map(toCitationRow);
 }
 
+/**
+ * Updates the verification_status on a citation.
+ *
+ * Called by P3-T07 verifier to transition from PENDING → VALID / INVALID_*.
+ * The update is scoped to workspace for multi-tenant isolation.
+ */
+export async function updateCitationVerification(
+  pool: Pool,
+  workspaceId: string,
+  citationId: string,
+  verificationStatus: string,
+): Promise<CitationRow> {
+  const result = await pool.query<DbCitation>(
+    `UPDATE citations
+     SET verification_status = $3
+     WHERE id = $1 AND workspace_id = $2
+     RETURNING *`,
+    [citationId, workspaceId, verificationStatus],
+  );
+
+  if (result.rows.length === 0) {
+    throw new Error(
+      `Citation not found or wrong workspace: id=${citationId}, workspace=${workspaceId}`,
+    );
+  }
+
+  return toCitationRow(result.rows[0]!);
+}
+
 // ---------------------------------------------------------------------------
 // Internal helpers
 // ---------------------------------------------------------------------------
