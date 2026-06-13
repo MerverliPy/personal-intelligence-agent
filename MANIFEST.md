@@ -8,7 +8,7 @@ hybrid retrieval, and governed persistent memory.
 
 - **Tracked files:** 411
 - **Phase:** P0, P1, P2 complete; P3 in progress; P4-P7 not started
-- **Backlog tasks:** 64 defined, 29 completed, 0 failed verification
+- **Backlog tasks:** 64 defined, 30 completed, 0 failed verification
 - **Baseline:** `main` @ `485b16a`
 
 ## Package Inventory
