@@ -45,3 +45,12 @@ export {
   type ModelRunStatus,
   type CreateModelRunInput,
 } from './runs.js';
+
+// Citations
+export {
+  createCitation,
+  getCitationsForMessage,
+  getCitationsForModelRun,
+  type CitationRow,
+  type CreateCitationInput,
+} from './citations.js';

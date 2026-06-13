@@ -169,3 +169,18 @@ export {
 } from './retrieval/fusion.js';
 export type { RetrievalServiceConfig } from './retrieval/retrieval-service.js';
 export { RetrievalService } from './retrieval/retrieval-service.js';
+
+// ---------------------------------------------------------------------------
+// Citations (P3-T06)
+// ---------------------------------------------------------------------------
+
+export type {
+  Citation,
+  CreateCitationInput,
+  EvidenceLookup,
+  CitationBuildResult,
+} from './citations/types.js';
+
+export { buildCitations, buildEvidenceMap } from './citations/builder.js';
+
+export { StreamingCitationParser, type ProvisionalCitation } from './citations/streaming-parser.js';

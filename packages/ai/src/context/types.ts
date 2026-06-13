@@ -51,6 +51,10 @@ export interface EvidenceItem {
   readonly documentVersionId: string;
   readonly chunkId: string;
   readonly score: number;
+  /** Structural locator within the document version. */
+  readonly locator: Record<string, unknown>;
+  /** Retrieval trace identifier for provenance (FR-CIT-002). */
+  readonly retrievalTraceId: string;
   /** Optional sensitivity classification for policy-based exclusion. */
   readonly sensitivity?: SensitivityClass;
 }

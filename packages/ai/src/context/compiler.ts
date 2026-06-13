@@ -175,7 +175,8 @@ function assembleEvidence(
       return makeExcluded('RETRIEVED_EVIDENCE', '', 'SENSITIVITY_POLICY', source, version, i);
     }
 
-    return makeIncluded('RETRIEVED_EVIDENCE', item.text, 'ABOVE_THRESHOLD', source, version, i);
+    const taggedContent = `<evidence_chunk id="${item.chunkId}">\n${item.text}\n</evidence_chunk>`;
+    return makeIncluded('RETRIEVED_EVIDENCE', taggedContent, 'ABOVE_THRESHOLD', source, version, i);
   });
 }
 

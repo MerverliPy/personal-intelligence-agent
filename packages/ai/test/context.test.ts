@@ -30,6 +30,8 @@ function makeEvidence(overrides: Partial<EvidenceItem> = {}): EvidenceItem {
     documentVersionId: 'v1',
     chunkId: 'chk-1',
     score: 0.9,
+    locator: { page: 1 },
+    retrievalTraceId: 'trace-1',
     ...overrides,
   };
 }

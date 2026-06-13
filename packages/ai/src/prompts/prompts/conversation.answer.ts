@@ -16,7 +16,7 @@ import { createPromptRenderer } from '../renderer.js';
 export const NAME = 'conversation.answer';
 
 /** Source-controlled prompt version (semver). */
-export const VERSION = '1.0.0';
+export const VERSION = '2.0.0';
 
 /**
  * Answer-generation prompt template.
@@ -41,6 +41,14 @@ export const TEMPLATE = [
   '5. When evidence conflicts, note the contradiction rather than picking a side.',
   '6. Keep answers concise and structured. Prefer bullet points for lists.',
   '7. Do not mention "the evidence" or "the documents" more than once per answer.',
+  '',
+  'CITATION MARKER FORMAT:',
+  '- After each sentence or claim sourced from an evidence chunk, append',
+  '  [cite:<chunk-id>] where <chunk-id> is the id attribute of the evidence chunk.',
+  '- When reasoning beyond the evidence, append [infer].',
+  '- When stating an assumption, append [assume].',
+  '- If no evidence is provided or available, respond naturally without markers.',
+  '- Never invent chunk IDs — only cite IDs that appear in the evidence section.',
   '',
   'Current date: {{currentDate}}',
 ].join('\n');

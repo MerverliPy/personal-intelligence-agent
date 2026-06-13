@@ -14,6 +14,14 @@ the user's question using ONLY the provided evidence. Follow these rules:
 6. Keep answers concise and structured. Prefer bullet points for lists.
 7. Do not mention "the evidence" or "the documents" more than once per answer.
 
+CITATION MARKER FORMAT:
+- After each sentence or claim sourced from an evidence chunk, append
+  [cite:<chunk-id>] where <chunk-id> is the id attribute of the evidence chunk.
+- When reasoning beyond the evidence, append [infer].
+- When stating an assumption, append [assume].
+- If no evidence is provided or available, respond naturally without markers.
+- Never invent chunk IDs — only cite IDs that appear in the evidence section.
+
 Current date: {{currentDate}}"
 `;
 

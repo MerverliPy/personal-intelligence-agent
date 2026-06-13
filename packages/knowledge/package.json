@@ -16,7 +16,7 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
-    "test:unit": "vitest run test/state-machine.test.ts test/ingestion-workflow.test.ts test/parsing.test.ts test/chunking.test.ts test/embedding-provider.test.ts test/embedding.test.ts test/retrieval.test.ts",
+    "test:unit": "vitest run test/state-machine.test.ts test/ingestion-workflow.test.ts test/parsing.test.ts test/chunking.test.ts test/embedding-provider.test.ts test/embedding.test.ts test/retrieval.test.ts test/citation-builder.test.ts",
     "test:integration": "vitest run test/integration.test.ts"
   },
   "dependencies": {

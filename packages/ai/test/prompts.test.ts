@@ -483,7 +483,7 @@ describe('answerPrompt', () => {
   });
 
   it('has a version string', () => {
-    expect(answerPrompt.version).toBe('1.0.0');
+    expect(answerPrompt.version).toBe('2.0.0');
   });
 
   it('has a non-empty template', () => {
@@ -510,7 +510,7 @@ describe('answerPrompt', () => {
     expect(result.message.content).toContain('2026-06-12');
     // Provenance is attached
     expect(result.provenance.promptName).toBe('conversation.answer');
-    expect(result.provenance.promptVersion).toBe('1.0.0');
+    expect(result.provenance.promptVersion).toBe('2.0.0');
   });
 
   it('renders evidence with untrusted demarcation', () => {

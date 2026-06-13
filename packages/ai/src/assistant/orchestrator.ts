@@ -20,11 +20,20 @@ import {
   startStreaming,
   completeModelRun,
   getModelRun,
+  createCitation,
 } from '@pia/db';
 import { compileContext, DEFAULT_COMPACTION_POLICY } from '../context/index.js';
 import type { ModelGateway } from '../gateway/index.js';
 import type { EvidenceItem, CompilerInput } from '../context/index.js';
+import { renderPrompt } from '../prompts/renderer.js';
+import { TEMPLATE as ANSWER_PROMPT_TEMPLATE } from '../prompts/prompts/conversation.answer.js';
 import { mapDbRoleToGateway } from './role-mapping.js';
+import {
+  buildCitations,
+  buildEvidenceMap,
+  StreamingCitationParser,
+} from '@pia/knowledge';
+import type { Citation } from '@pia/contracts';
 import type {
   OrchestratorSseEvent,
   OrchestratorRunOptions,
@@ -35,7 +44,7 @@ import type {
  * Default prompt name and version used when not overridden in config.
  */
 const DEFAULT_PROMPT_NAME = 'conversation.answer';
-const DEFAULT_PROMPT_VERSION = '1.0.0';
+const DEFAULT_PROMPT_VERSION = '2.0.0';
 const DEFAULT_PROVIDER = 'fake';
 const DEFAULT_MODEL = 'fake-v1';
 
@@ -232,6 +241,38 @@ export class AssistantOrchestrator {
         );
       }
 
+      // --- Insufficient evidence check ---
+      if (retrievalEnabled && evidence.length === 0) {
+        const insufficientMessage = await createMessage(this.pool, workspaceId, {
+          conversationId,
+          role: 'ASSISTANT',
+          content: "I don't have sufficient information to answer that question based on the available documents.",
+          createdBy: null,
+        });
+
+        await completeModelRun(this.pool, workspaceId, runId, {
+          status: 'COMPLETED',
+          assistantMessageId: insufficientMessage.id,
+          inputTokens: 0,
+          outputTokens: 0,
+          latencyMs: Date.now() - startTime,
+        });
+
+        yield {
+          type: 'response.completed',
+          sequence: sequence++,
+          message_id: insufficientMessage.id,
+          usage: {
+            prompt_tokens: 0,
+            completion_tokens: 0,
+            total_tokens: 0,
+          },
+          citations: [],
+          insufficient_evidence: true,
+        };
+        return;
+      }
+
       // --- Context compilation ---
       const existingMessages = await getConversationMessages(
         this.pool,
@@ -246,9 +287,16 @@ export class AssistantOrchestrator {
           content: m.content,
         }));
 
+      const renderedPrompt = renderPrompt(
+        ANSWER_PROMPT_TEMPLATE,
+        { context: { currentDate: new Date().toISOString().slice(0, 10) } },
+        { name: this.promptName, version: this.promptVersion },
+      );
+
       const compilerInput: CompilerInput = {
         mode,
         userRequest: effectiveUserContent,
+        prompt: renderedPrompt,
         ...(evidence.length > 0 ? { evidence } : {}),
         ...(historyMessages.length > 0 ? { conversationHistory: historyMessages } : {}),
         tokenBudget: { maxTokens: 8000 },
@@ -260,6 +308,10 @@ export class AssistantOrchestrator {
       // --- Stream from gateway ---
       let fullResponse = '';
       let gatewayUsage = { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
+
+      // Build evidence map for citation builder + streaming parser
+      const evidenceMap = buildEvidenceMap(evidence);
+      const citationParser = new StreamingCitationParser(evidenceMap);
 
       for await (const event of this.gateway.stream(
         { messages: compilerOutput.messages },
@@ -273,6 +325,20 @@ export class AssistantOrchestrator {
               sequence: sequence++,
               text: event.content,
             };
+
+            // Feed delta to streaming citation parser
+            for (const prov of citationParser.feed(event.content)) {
+              yield {
+                type: 'citation.provisional',
+                sequence: sequence++,
+                citation_id: prov.chunkId,
+                source: {
+                  chunk_id: prov.chunkId,
+                  document_version_id: prov.documentVersionId,
+                  source_locator: prov.sourceLocator,
+                },
+              };
+            }
             break;
           case 'error':
             throw new Error(event.error.message ?? 'Model gateway error');
@@ -304,13 +370,49 @@ export class AssistantOrchestrator {
         }
       }
 
-      // --- Persist assistant message ---
+      // --- Flush streaming parser for any remaining buffered text ---
+      citationParser.flush();
+
+      // --- Build citations from the full response ---
+      const citationResult = buildCitations(fullResponse, evidenceMap, {
+        workspaceId,
+        modelRunId: runId,
+        assistantMessageId: '', // placeholder — persist message first
+      });
+
+      // --- Persist assistant message with cleaned text (markers stripped) ---
       const assistantMessage = await createMessage(this.pool, workspaceId, {
         conversationId,
         role: 'ASSISTANT',
-        content: fullResponse,
+        content: citationResult.cleanedText,
         createdBy: null,
       });
+
+      // --- Persist citations ---
+      const persistedCitations: Citation[] = [];
+      for (const citeInput of citationResult.citations) {
+        const row = await createCitation(this.pool, {
+          workspaceId: citeInput.workspaceId,
+          modelRunId: citeInput.modelRunId,
+          assistantMessageId: assistantMessage.id,
+          chunkId: citeInput.chunkId,
+          documentVersionId: citeInput.documentVersionId,
+          sourceLocator: citeInput.sourceLocator,
+          claimStart: citeInput.claimStart,
+          claimEnd: citeInput.claimEnd,
+          claimText: citeInput.claimText,
+        });
+        persistedCitations.push({
+          id: row.id,
+          chunk_id: row.chunkId,
+          document_version_id: row.documentVersionId,
+          source_locator: row.sourceLocator,
+          claim_start: row.claimStart,
+          claim_end: row.claimEnd,
+          claim_text: citeInput.claimText,
+          verification_status: row.verificationStatus,
+        });
+      }
 
       // --- Complete the run ---
       await completeModelRun(this.pool, workspaceId, runId, {
@@ -330,7 +432,7 @@ export class AssistantOrchestrator {
           completion_tokens: gatewayUsage.completionTokens,
           total_tokens: gatewayUsage.totalTokens,
         },
-        citations: [],
+        citations: persistedCitations,
       };
     } catch (err) {
       // --- Safe error handling ---
@@ -391,6 +493,8 @@ export class AssistantOrchestrator {
         documentVersionId: r.documentVersionId,
         chunkId: r.chunkId,
         score: r.fusedScore,
+        locator: r.locator,
+        retrievalTraceId: r.retrievalTraceId,
       }));
     } catch {
       // Retrieval failure should not block the conversation

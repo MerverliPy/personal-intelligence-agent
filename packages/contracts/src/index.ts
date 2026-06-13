@@ -436,12 +436,31 @@ export interface SseResponseDeltaEvent {
   text: string;
 }
 
+/** A citation linking a claim to an evidence chunk, exposed via SSE. */
+export interface Citation {
+  id: string;
+  chunk_id: string;
+  document_version_id: string;
+  source_locator: Record<string, unknown>;
+  claim_start: number | null;
+  claim_end: number | null;
+  claim_text: string;
+  verification_status: string;
+}
+
+/** Source metadata for a provisional citation event during streaming. */
+export interface CitationProvisionalSource {
+  chunk_id: string;
+  document_version_id: string;
+  source_locator: Record<string, unknown>;
+}
+
 /** SSE event for a provisional citation reference. */
 export interface SseCitationProvisionalEvent {
   type: 'citation.provisional';
   sequence: number;
   citation_id: string;
-  source: Record<string, unknown>;
+  source: CitationProvisionalSource;
 }
 
 /** SSE event for an approval that blocks further progress. */
@@ -462,7 +481,9 @@ export interface SseResponseCompletedEvent {
     completion_tokens: number;
     total_tokens: number;
   };
-  citations: unknown[];
+  citations: Citation[];
+  /** Set to true when no evidence was available to answer the query. */
+  insufficient_evidence?: boolean;
 }
 
 /** SSE event signalling a failed run. */
