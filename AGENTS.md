@@ -52,6 +52,17 @@ Build the Personal Intelligence and Action Engine according to the authoritative
 - Do not rewrite acceptance criteria to match an implementation.
 - Do not silently change architecture decisions; create an ADR proposal instead.
 
+## Documentation maintenance
+
+- Use `@repository-docs` or `/docs-update` for evidence-driven documentation maintenance.
+- Runtime behavior, passing tests, public interfaces, active configuration, enabled implementation, and reviewed delivery evidence outrank existing prose.
+- `planning/status.yaml` is the delivery-state ledger; `planning/backlog.yaml` defines planned scope and does not establish current feature availability.
+- The documentation agent may apply low-risk factual, link, path, command, example, terminology, navigation, README, and MANIFEST corrections.
+- Documentation deletion, move/rename, major README restructuring, policy or compatibility changes, published release-history changes, major information-architecture changes, and commits require explicit approval.
+- The documentation agent must not modify implementation, planning records, API contracts, schemas, migrations, workflows, agent configuration, or repository instructions.
+- Repository scripts must be inspected and explicitly approved before execution; unavailable checks are reported as `Not run`.
+- Every documentation run must report changed paths, evidence, validation, blockers, gated actions, and a proposed commit message.
+
 ## Run-record format
 
 Each `planning/runs/<TASK-ID>.md` must contain:
