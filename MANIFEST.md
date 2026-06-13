@@ -6,10 +6,10 @@ hybrid retrieval, and governed persistent memory.
 
 ## Current State (2026-06-13)
 
-- **Tracked files:** 417
+- **Tracked files:** 442
 - **Phase:** P0, P1, P2 complete; P3 in progress; P4-P7 not started
 - **Backlog tasks:** 64 defined, 32 completed, 0 failed verification
-- **Baseline:** `main` @ `cbfe773`
+- **Baseline:** `main` @ `96f23d3`
 
 ## Package Inventory
 

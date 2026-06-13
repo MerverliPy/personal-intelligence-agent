@@ -60,7 +60,7 @@ preserving cryptographic provenance, workspace-level access control, and a compl
 **P3 — Conversational Assistant** is in progress (9 of 10 tasks complete). P3-T01 through P3-T09 are verified and delivered, covering the model gateway, prompt registry, context compiler, conversation persistence, assistant orchestration, grounded citations, citation verification, feedback classification, and the conversational UI.
 
 <details>
-<summary>📋 <strong>View full P3–P7 roadmap</strong> (34 remaining tasks)</summary>
+<summary>📋 <strong>View full P3–P7 roadmap</strong> (32 remaining tasks)</summary>
 
 **P3 — Conversational Assistant** (10 tasks): Provider-neutral model gateway, prompt registry, context compiler, conversation persistence, assistant orchestration, grounded citations, citation verifier, feedback classification, conversational UI, end-to-end evaluation suites.
 
@@ -754,5 +754,5 @@ pnpm security:dependencies   # npm audit for known CVEs
   <br/>
   <sub>Built with strict TypeScript · PostgreSQL + pgvector · Redis · Fastify · Next.js</sub>
   <br/>
-  <sub>30 of 64 tasks complete · P0 ✓ · P1 ✓ · P2 ✓</sub>
+  <sub>32 of 64 tasks complete · P0 ✓ · P1 ✓ · P2 ✓</sub>
 </div>
