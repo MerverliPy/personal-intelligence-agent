@@ -49,3 +49,11 @@ __pycache__/
 
 # Mobile UI redesign backup of pre-redesign files (intentionally untracked)
 /.ui-redesign/backup/
+
+# Mobile UI redesign device-validation pre-flight per-session runtime
+# (PIDs, log files, trycloudflare URLs — all change every session;
+# the canonical URL is also recorded in planning/runs/<run-id>.md;
+# actual evidence .png/.mp4/.txt files are NOT ignored)
+/.ui-redesign/evidence/devices/*.pid
+/.ui-redesign/evidence/devices/*.log
+/.ui-redesign/evidence/devices/*.url
