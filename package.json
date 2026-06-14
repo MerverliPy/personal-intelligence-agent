@@ -16,13 +16,18 @@
     "ci:check": "bash scripts/ci/check-all.sh",
     "db:migrate:test": "pnpm --filter @pia/db db:migrate:test",
     "test:integration": "turbo run test:integration",
-    "eval:retrieval": "pnpm --filter @pia/evals eval:retrieval"
+    "eval:retrieval": "pnpm --filter @pia/evals eval:retrieval",
+    "eval:answers": "pnpm --filter @pia/evals eval:answers",
+    "test:e2e": "vitest run --config test/e2e/vitest.config.ts",
+    "test:security": "vitest run --config test/security/vitest.config.ts"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.0",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
     "eslint": "^8.57.0",
+    "pg": "^8.13.0",
     "prettier": "^3.4.0",
     "tsx": "^4.22.4",
     "turbo": "^2.3.0",

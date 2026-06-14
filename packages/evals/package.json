@@ -17,7 +17,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
     "test:unit": "vitest run",
-    "eval:retrieval": "tsx ../../evals/retrieval/run.ts"
+    "eval:retrieval": "tsx ../../evals/retrieval/run.ts",
+    "eval:answers": "tsx ../../evals/answers/run.ts"
   },
   "dependencies": {
     "@pia/db": "workspace:*",

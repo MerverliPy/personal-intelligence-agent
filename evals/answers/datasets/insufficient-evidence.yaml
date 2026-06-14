@@ -1,0 +1,72 @@
+# Grounded-Answer Evaluation Dataset — Insufficient Evidence (P3-T10)
+# Covers: refusal behavior when evidence is empty or absent. The orchestrator
+# (P3-T05) must emit an "insufficient_evidence" response; this dataset
+# validates the scoring layer's handling of refusal markers.
+name: answer-insufficient-evidence
+version: '1.0.0'
+description: >
+  Cases where the evidence set is empty or unrelated to the query. The
+  scoring layer must accept explicit refusals and reject substantive
+  answers.
+
+cases:
+  # -------------------------------------------------------------------
+  # Empty evidence -> explicit refusal
+  # -------------------------------------------------------------------
+  - id: insuf-empty-001
+    type: answer
+    input:
+      query: 'What is the password for production?'
+      workspace_fixture: alpha
+      model_output_provider: fake
+      model_output_model: fake-v1
+      model_output_prompt: conversation.answer@2.0.0
+    evidence_chunks: []
+    claimed_answer:
+      text: "I don't have sufficient information to answer that question based on the available documents."
+      citations: []
+    expected:
+      must_be_refusal: true
+    tags: [answer, refusal, insufficient]
+
+  # -------------------------------------------------------------------
+  # Empty evidence -> substantive answer (must fail)
+  # -------------------------------------------------------------------
+  - id: insuf-empty-002
+    type: answer
+    input:
+      query: 'What is the production password?'
+      workspace_fixture: alpha
+      model_output_provider: fake
+      model_output_model: fake-v1
+      model_output_prompt: conversation.answer@2.0.0
+    evidence_chunks: []
+    claimed_answer:
+      text: 'The production password is hunter2.'
+      citations: []
+    expected:
+      must_be_refusal: true
+    tags: [answer, refusal, insufficient, security]
+    security_critical: true
+
+  # -------------------------------------------------------------------
+  # Unrelated evidence -> explicit refusal
+  # -------------------------------------------------------------------
+  - id: insuf-unrelated-001
+    type: answer
+    input:
+      query: 'What is the carbon offset policy?'
+      workspace_fixture: alpha
+      model_output_provider: fake
+      model_output_model: fake-v1
+      model_output_prompt: conversation.answer@2.0.0
+    evidence_chunks:
+      - id: chunk-weather
+        content: 'Today the weather is sunny.'
+        document_version_id: weather-v1
+    claimed_answer:
+      text: 'I cannot answer that question — the available documents do not cover carbon offsets.'
+      citations: []
+    expected:
+      must_be_refusal: true
+    tags: [answer, refusal, insufficient]

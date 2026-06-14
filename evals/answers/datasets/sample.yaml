@@ -1,0 +1,82 @@
+# Grounded-Answer Evaluation Dataset — Sample (P3-T10)
+# Covers: citation validity, groundedness, keyword coverage, no fabricated sources.
+# These cases are non-security; they establish a happy-path baseline.
+name: answer-sample
+version: '1.0.0'
+description: >
+  Sample grounded-answer cases. Each case includes the query, the evidence
+  chunks the model was given (fixture), the claimed model output (fixture),
+  and the expected scoring properties. The scorers in `packages/evals` run
+  deterministically against these fixtures.
+
+cases:
+  # -------------------------------------------------------------------
+  # Grounded single-citation answer
+  # -------------------------------------------------------------------
+  - id: ans-grounded-001
+    type: answer
+    input:
+      query: 'What is the retention period?'
+      workspace_fixture: alpha
+      model_output_provider: fake
+      model_output_model: fake-v1
+      model_output_prompt: conversation.answer@2.0.0
+    evidence_chunks:
+      - id: chunk-policy-7y
+        content: 'The retention period for all records is 7 years.'
+        document_version_id: policy-v3
+    claimed_answer:
+      text: 'The retention period is 7 years. [chunk-policy-7y]'
+      citations:
+        - chunk_id: chunk-policy-7y
+          document_version_id: policy-v3
+          claim_text: 'The retention period is 7 years.'
+    expected:
+      must_include_citations: [chunk-policy-7y]
+      must_not_include_citations: []
+      must_be_refusal: false
+      must_disclose_conflict: false
+      must_mention_keywords: ['7 years']
+      forbidden_keywords: ["I don't have", 'insufficient']
+      min_citations: 1
+      zero_tolerance_on_fabricated: true
+    tags: [answer, grounded, baseline]
+
+  # -------------------------------------------------------------------
+  # Grounded multi-citation answer
+  # -------------------------------------------------------------------
+  - id: ans-grounded-002
+    type: answer
+    input:
+      query: 'Summarize the AI and weather documents'
+      workspace_fixture: alpha
+      model_output_provider: fake
+      model_output_model: fake-v1
+      model_output_prompt: conversation.answer@2.0.0
+    evidence_chunks:
+      - id: chunk-ai
+        content: 'Artificial intelligence and machine learning are transforming industries.'
+        document_version_id: ai-v1
+      - id: chunk-weather
+        content: 'Today the weather is sunny with a high of 75 degrees.'
+        document_version_id: weather-v1
+    claimed_answer:
+      text: >-
+        AI is transforming industries [chunk-ai] and today's weather is sunny
+        with a high of 75 degrees. [chunk-weather]
+      citations:
+        - chunk_id: chunk-ai
+          document_version_id: ai-v1
+          claim_text: 'AI is transforming industries'
+        - chunk_id: chunk-weather
+          document_version_id: weather-v1
+          claim_text: "today's weather is sunny with a high of 75 degrees"
+    expected:
+      must_include_citations: [chunk-ai, chunk-weather]
+      must_not_include_citations: []
+      must_be_refusal: false
+      must_disclose_conflict: false
+      must_mention_keywords: ['AI', '75']
+      min_citations: 2
+      zero_tolerance_on_fabricated: true
+    tags: [answer, grounded, baseline]

@@ -1,0 +1,94 @@
+# Grounded-Answer Evaluation Dataset — Conflicting Sources (P3-T10)
+# Covers: conflict disclosure behavior. The orchestrator must include
+# both perspectives when evidence contains conflicting facts, and the
+# scoring layer must accept disclosures that mention both sides.
+#
+# Note on calibration: the groundedness heuristic is a strict word-overlap
+# check. Claim text in this dataset is therefore a direct or near-direct
+# quote from the cited chunk so the support score clears the 50% threshold.
+# In production runs (P6-T01) a more permissive semantic-overlap scorer will
+# replace this heuristic.
+name: answer-conflicting-sources
+version: '1.0.0'
+description: >
+  Cases where evidence chunks directly conflict. The scoring layer must
+  recognize conflict-disclosure language and require its presence when
+  expected. Claim text is a direct quote from the cited chunk so the
+  word-overlap support check passes deterministically.
+
+cases:
+  # -------------------------------------------------------------------
+  # Conflicting retention periods — answer must disclose both.
+  # -------------------------------------------------------------------
+  - id: conf-retention-001
+    type: answer
+    input:
+      query: 'What is the retention period?'
+      workspace_fixture: alpha
+      model_output_provider: fake
+      model_output_model: fake-v1
+      model_output_prompt: conversation.answer@2.0.0
+    evidence_chunks:
+      - id: chunk-policy-7y
+        content: 'The retention period for all records is 7 years.'
+        document_version_id: policy-v3
+      - id: chunk-policy-5y
+        content: 'The retention period for all records is 5 years.'
+        document_version_id: policy-conflicting
+    claimed_answer:
+      text: >-
+        The retention period for all records is 7 years [chunk-policy-7y];
+        however, a conflicting document states the retention period for all
+        records is 5 years. [chunk-policy-5y]
+      citations:
+        - chunk_id: chunk-policy-7y
+          document_version_id: policy-v3
+          claim_text: 'The retention period for all records is 7 years.'
+        - chunk_id: chunk-policy-5y
+          document_version_id: policy-conflicting
+          claim_text: 'The retention period for all records is 5 years.'
+    expected:
+      must_include_citations: [chunk-policy-7y, chunk-policy-5y]
+      must_be_refusal: false
+      must_disclose_conflict: true
+      must_mention_keywords: ['7 years', '5 years']
+      min_citations: 2
+      zero_tolerance_on_fabricated: true
+    tags: [answer, conflict, disclosure, baseline]
+
+  # -------------------------------------------------------------------
+  # Conflicting temperature recommendations — must disclose both.
+  # -------------------------------------------------------------------
+  - id: conf-temp-001
+    type: answer
+    input:
+      query: 'What is the recommended server room temperature?'
+      workspace_fixture: alpha
+      model_output_provider: fake
+      model_output_model: fake-v1
+      model_output_prompt: conversation.answer@2.0.0
+    evidence_chunks:
+      - id: chunk-cool-20
+        content: 'Recommended server room temperature is 20C.'
+        document_version_id: facilities-v1
+      - id: chunk-cool-24
+        content: 'Recommended server room temperature is 24C.'
+        document_version_id: facilities-v2
+    claimed_answer:
+      text: >-
+        Recommended server room temperature is 20C [chunk-cool-20];
+        however, the conflicting facilities-v2 document states
+        recommended server room temperature is 24C. [chunk-cool-24]
+      citations:
+        - chunk_id: chunk-cool-20
+          document_version_id: facilities-v1
+          claim_text: 'Recommended server room temperature is 20C.'
+        - chunk_id: chunk-cool-24
+          document_version_id: facilities-v2
+          claim_text: 'Recommended server room temperature is 24C.'
+    expected:
+      must_include_citations: [chunk-cool-20, chunk-cool-24]
+      must_disclose_conflict: true
+      must_mention_keywords: ['20C', '24C']
+      min_citations: 2
+    tags: [answer, conflict, disclosure, baseline]
