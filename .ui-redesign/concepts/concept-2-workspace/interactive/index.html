@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Concept 2 — Workspace</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-screen="documents">
+
+  <div class="dynamic-island" aria-hidden="true"></div>
+
+  <div id="network-banner" class="network-banner" role="status" aria-live="polite" hidden>
+    <span class="network-banner__dot" aria-hidden="true"></span>
+    <span class="network-banner__text">You're offline. Some actions are disabled.</span>
+  </div>
+
+  <div class="app">
+
+    <header class="app-header" role="banner">
+      <button id="avatar-btn" class="app-header__avatar" aria-label="Workspace: PIA Workspace. Tap to switch." aria-haspopup="dialog" aria-expanded="false">
+        <span class="app-header__avatar-letter">P</span>
+      </button>
+      <div class="app-header__title" id="header-title">Documents</div>
+      <button class="app-header__icon-btn" aria-label="Settings">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="2.5"/>
+          <path d="M11 2v2M11 18v2M2 11h2M18 11h2M4.93 4.93l1.41 1.41M15.66 15.66l1.41 1.41M4.93 17.07l1.41-1.41M15.66 6.34l1.41-1.41"/>
+        </svg>
+      </button>
+    </header>
+
+    <main class="app-main" id="main" role="main">
+
+      <!-- ====== SCREEN: Documents (default landing) ====== -->
+      <section class="screen" data-screen="documents" aria-labelledby="documents-h">
+        <h2 id="documents-h" class="visually-hidden">Documents</h2>
+        <p class="screen__lead">12 documents · workspace inventory</p>
+        <ul class="card-list" id="document-list" aria-label="Documents">
+          <li class="card" tabindex="0" data-document-id="d-001">
+            <div class="card__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#2563EB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 2h8l4 4v12a0 0 0 0 1 0 0H4a0 0 0 0 1 0 0V2z"/>
+                <path d="M12 2v4h4"/>
+              </svg>
+            </div>
+            <div class="card__body">
+              <div class="card__title">Q3 2026 Risk Summary</div>
+              <div class="card__meta">
+                <span class="status-badge" data-state="READY">Ready</span>
+                <span>·</span>
+                <span>INTERNAL</span>
+                <span>·</span>
+                <span>v3</span>
+                <span>·</span>
+                <span>2.1 MB</span>
+              </div>
+            </div>
+            <span class="card__chevron" aria-hidden="true">›</span>
+          </li>
+          <li class="card" tabindex="0" data-document-id="d-002">
+            <div class="card__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#2563EB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 2h8l4 4v12a0 0 0 0 1 0 0H4a0 0 0 0 1 0 0V2z"/>
+                <path d="M12 2v4h4"/>
+              </svg>
+            </div>
+            <div class="card__body">
+              <div class="card__title">Onboarding Handbook</div>
+              <div class="card__meta">
+                <span class="status-badge" data-state="INGESTING">Processing</span>
+                <span>·</span>
+                <span>INTERNAL</span>
+                <span>·</span>
+                <span>v1</span>
+              </div>
+              <div class="card__progress" aria-label="Ingesting 47 percent" role="progressbar" aria-valuenow="47" aria-valuemin="0" aria-valuemax="100">
+                <span class="card__progress-bar" style="width: 47%"></span>
+              </div>
+            </div>
+            <span class="card__chevron" aria-hidden="true">›</span>
+          </li>
+          <li class="card" tabindex="0" data-document-id="d-003">
+            <div class="card__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#2563EB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 2h8l4 4v12a0 0 0 0 1 0 0H4a0 0 0 0 1 0 0V2z"/>
+                <path d="M12 2v4 h4"/>
+              </svg>
+            </div>
+            <div class="card__body">
+              <div class="card__title">Customer Churn Analysis</div>
+              <div class="card__meta">
+                <span class="status-badge" data-state="READY">Ready</span>
+                <span>·</span>
+                <span>CONFIDENTIAL</span>
+                <span>·</span>
+                <span>v1</span>
+                <span>·</span>
+                <span>4.6 MB</span>
+              </div>
+            </div>
+            <span class="card__chevron" aria-hidden="true">›</span>
+          </li>
+          <li class="card" tabindex="0" data-document-id="d-004">
+            <div class="card__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#991B1B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 2h8l4 4v12a0 0 0 0 1 0 0H4a0 0 0 0 1 0 0V2z"/>
+                <path d="M12 2v4h4"/>
+                <path d="M8 11l4 4M12 11l-4 4"/>
+              </svg>
+            </div>
+            <div class="card__body">
+              <div class="card__title">Pricing Research Notes</div>
+              <div class="card__meta">
+                <span class="status-badge" data-state="FAILED">Failed</span>
+                <span>·</span>
+                <span>INTERNAL</span>
+                <span>·</span>
+                <span>v1</span>
+              </div>
+            </div>
+            <span class="card__chevron" aria-hidden="true">›</span>
+          </li>
+          <li class="card" tabindex="0" data-document-id="d-005">
+            <div class="card__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#2563EB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 2h8l4 4v12a0 0 0 0 1 0 0H4a0 0 0 0 1 0 0V2z"/>
+                <path d="M12 2v4h4"/>
+              </svg>
+            </div>
+            <div class="card__body">
+              <div class="card__title">Vendor Security Questionnaire</div>
+              <div class="card__meta">
+                <span class="status-badge" data-state="UPLOADED">Uploaded</span>
+                <span>·</span>
+                <span>HIGHLY_CONFIDENTIAL</span>
+                <span>·</span>
+                <span>v1</span>
+              </div>
+            </div>
+            <span class="card__chevron" aria-hidden="true">›</span>
+          </li>
+        </ul>
+        <button class="fab fab--blue" id="fab-document" aria-label="Upload document">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </button>
+      </section>
+
+      <!-- ====== SCREEN: Search ====== -->
+      <section class="screen" data-screen="search" hidden aria-labelledby="search-h">
+        <h2 id="search-h" class="visually-hidden">Search</h2>
+        <form class="search-form" role="search" aria-label="Document search">
+          <label for="query-input" class="visually-hidden">Search your documents</label>
+          <div class="search-form__row">
+            <svg class="search-form__icon" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#6B6B68" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+              <circle cx="8" cy="8" r="5"/>
+              <line x1="12" y1="12" x2="16" y2="16"/>
+            </svg>
+            <input type="search" id="query-input" name="query" placeholder="Search workspace documents" autocomplete="off" maxlength="10000" required>
+          </div>
+        </form>
+        <p class="screen__lead">3 results for "retention"</p>
+        <ul class="card-list" id="search-results" aria-label="Search results">
+          <li class="card card--result" tabindex="0">
+            <div class="card__rank">1</div>
+            <div class="card__body">
+              <p class="card__excerpt">The retention period for all records is 7 years.</p>
+              <div class="card__meta">
+                <span class="status-badge" data-state="READY">Ready</span>
+                <span>·</span>
+                <span>page 1</span>
+                <span>·</span>
+                <span>Fuse 0.943</span>
+              </div>
+            </div>
+          </li>
+          <li class="card card--result" tabindex="0">
+            <div class="card__rank">2</div>
+            <div class="card__body">
+              <p class="card__excerpt">Artificial intelligence and machine learning are transforming industries.</p>
+              <div class="card__meta">
+                <span class="status-badge" data-state="READY">Ready</span>
+                <span>·</span>
+                <span>page 4</span>
+                <span>·</span>
+                <span>Fuse 0.871</span>
+              </div>
+            </div>
+          </li>
+          <li class="card card--result" tabindex="0">
+            <div class="card__rank">3</div>
+            <div class="card__body">
+              <p class="card__excerpt">Today the weather is sunny with a high of 75 degrees.</p>
+              <div class="card__meta">
+                <span class="status-badge" data-state="READY">Ready</span>
+                <span>·</span>
+                <span>page 1</span>
+                <span>·</span>
+                <span>Fuse 0.812</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ====== SCREEN: Conversations ====== -->
+      <section class="screen" data-screen="conversations" hidden aria-labelledby="conversations-h">
+        <h2 id="conversations-h" class="visually-hidden">Conversations</h2>
+        <p class="screen__lead">5 recent conversations</p>
+        <ul class="card-list" id="conversation-list" aria-label="Conversations">
+          <li class="card" tabindex="0" data-conversation-id="c-001" data-mode="RESEARCH">
+            <div class="card__icon card__icon--accent" aria-hidden="true">R</div>
+            <div class="card__body">
+              <div class="card__title">Q3 2026 risk summary</div>
+              <div class="card__meta">
+                <span class="status-badge status-badge--mode" data-mode="RESEARCH">Research</span>
+                <span>·</span>
+                <time datetime="2026-06-13T14:22:00Z">14:22</time>
+                <span>·</span>
+                <span>3 citations</span>
+              </div>
+            </div>
+            <span class="card__chevron" aria-hidden="true">›</span>
+          </li>
+          <li class="card" tabindex="0" data-conversation-id="c-002" data-mode="ASK">
+            <div class="card__icon card__icon--accent" aria-hidden="true">A</div>
+            <div class="card__body">
+              <div class="card__title">What is the retention period?</div>
+              <div class="card__meta">
+                <span class="status-badge status-badge--mode" data-mode="ASK">Ask</span>
+                <span>·</span>
+                <time datetime="2026-06-13T11:08:00Z">11:08</time>
+                <span>·</span>
+                <span>2 citations</span>
+              </div>
+            </div>
+            <span class="card__chevron" aria-hidden="true">›</span>
+          </li>
+          <li class="card" tabindex="0" data-conversation-id="c-003" data-mode="ANALYZE">
+            <div class="card__icon card__icon--accent" aria-hidden="true">A</div>
+            <div class="card__body">
+              <div class="card__title">Compare AI and weather sources</div>
+              <div class="card__meta">
+                <span class="status-badge status-badge--mode" data-mode="ANALYZE">Analyze</span>
+                <span>·</span>
+                <time datetime="2026-06-12T18:45:00Z">Yesterday</time>
+                <span>·</span>
+                <span>2 citations</span>
+              </div>
+            </div>
+            <span class="card__chevron" aria-hidden="true">›</span>
+          </li>
+          <li class="card" tabindex="0" data-conversation-id="c-004" data-mode="PLAN">
+            <div class="card__icon card__icon--accent" aria-hidden="true">P</div>
+            <div class="card__body">
+              <div class="card__title">Onboarding plan for new curators</div>
+              <div class="card__meta">
+                <span class="status-badge status-badge--mode" data-mode="PLAN">Plan</span>
+                <span>·</span>
+                <time datetime="2026-06-11T09:12:00Z">2d ago</time>
+              </div>
+            </div>
+            <span class="card__chevron" aria-hidden="true">›</span>
+          </li>
+        </ul>
+        <button class="fab fab--blue" id="fab-conversation" aria-label="New conversation">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </button>
+      </section>
+
+      <!-- ====== SCREEN: Workspace (peer tab) ====== -->
+      <section class="screen" data-screen="workspace" hidden aria-labelledby="workspace-h">
+        <h2 id="workspace-h" class="visually-hidden">Workspaces</h2>
+        <p class="screen__lead">3 workspaces · PIA Workspace is current</p>
+        <ul class="card-list" id="workspace-list" aria-label="Available workspaces">
+          <li class="card card--workspace card--active" tabindex="0" data-workspace-id="ws-001">
+            <div class="card__icon card__icon--xl" aria-hidden="true">P</div>
+            <div class="card__body">
+              <div class="card__title">PIA Workspace</div>
+              <div class="card__meta">
+                <span>Owner</span>
+                <span>·</span>
+                <span>12 documents</span>
+                <span>·</span>
+                <span>5 conversations</span>
+              </div>
+            </div>
+            <span class="card__check" aria-label="Current workspace">✓</span>
+          </li>
+          <li class="card card--workspace" tabindex="0" data-workspace-id="ws-002">
+            <div class="card__icon card__icon--xl" aria-hidden="true">A</div>
+            <div class="card__body">
+              <div class="card__title">Alpha Compliance</div>
+              <div class="card__meta">
+                <span>Admin</span>
+                <span>·</span>
+                <span>3 documents</span>
+                <span>·</span>
+                <span>1 conversation</span>
+              </div>
+            </div>
+          </li>
+          <li class="card card--workspace" tabindex="0" data-workspace-id="ws-003">
+            <div class="card__icon card__icon--xl" aria-hidden="true">R</div>
+            <div class="card__body">
+              <div class="card__title">Research Lab</div>
+              <div class="card__meta">
+                <span>Member</span>
+                <span>·</span>
+                <span>0 documents</span>
+                <span>·</span>
+                <span>0 conversations</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <p class="screen__footnote">Sign out <span class="muted">— Sign out from the desktop app for now.</span></p>
+      </section>
+
+      <!-- ====== SCREEN: Conversation detail ====== -->
+      <section class="screen" data-screen="conversation-detail" hidden aria-labelledby="thread-h">
+        <h2 id="thread-h" class="visually-hidden">Conversation</h2>
+        <button class="back-btn" id="back-btn" aria-label="Back to conversations">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 5L7 11L14 17"/>
+          </svg>
+        </button>
+        <div class="thread" id="message-thread" role="log" aria-live="polite" aria-relevant="additions">
+          <article class="message message-user" data-message-id="m-001">
+            <div class="message__content">What is the retention period?</div>
+          </article>
+          <article class="message message-assistant" data-message-id="m-002">
+            <div class="message__content">
+              The retention period is 7 years
+              <button class="cite-pill" data-citation-id="cite-001" aria-label="Citation 1 of 2, claims: The retention period is 7 years, button">1</button>.
+              This applies to all records ingested under the standard policy
+              <button class="cite-pill" data-citation-id="cite-002" aria-label="Citation 2 of 2, claims: AI and weather summary, button">2</button>.
+            </div>
+            <div class="message__meta">
+              <span class="status-badge" data-state="COMPLETED">Completed</span>
+              <button class="feedback-link">Feedback</button>
+            </div>
+          </article>
+        </div>
+
+        <form class="composer" id="message-form" aria-label="Send a message">
+          <label for="message-input" class="visually-hidden">Your message</label>
+          <textarea id="message-input" name="content" rows="1" placeholder="Message" autocomplete="off" maxlength="10000"></textarea>
+          <button type="submit" class="send-btn send-btn--blue" aria-label="Send">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="currentColor" aria-hidden="true">
+              <path d="M3 11l16-7-7 16-2-7-7-2z"/>
+            </svg>
+          </button>
+        </form>
+      </section>
+
+    </main>
+
+    <!-- 4-tab bottom bar -->
+    <nav class="tab-bar tab-bar--4" role="navigation" aria-label="Primary">
+      <button class="tab" data-tab="documents" aria-current="page">
+        <svg class="tab__icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 3h8l4 4v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/>
+          <path d="M14 3v4h4"/>
+          <path d="M9 12h7M9 15h5"/>
+        </svg>
+        <span class="tab__label">Documents</span>
+      </button>
+      <button class="tab" data-tab="search">
+        <svg class="tab__icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="6"/>
+          <line x1="16" y1="16" x2="20" y2="20"/>
+        </svg>
+        <span class="tab__label">Search</span>
+      </button>
+      <button class="tab" data-tab="conversations">
+        <svg class="tab__icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-4 3v-3H6a2 2 0 0 1-2-2V7z"/>
+        </svg>
+        <span class="tab__label">Conversations</span>
+      </button>
+      <button class="tab" data-tab="workspace">
+        <svg class="tab__icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3l9 5-9 5-9-5 9-5z"/>
+          <path d="M3 13l9 5 9-5"/>
+        </svg>
+        <span class="tab__label">Workspace</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- Citation bottom sheet -->
+  <div class="sheet" id="citation-sheet" hidden>
+    <div class="sheet__backdrop" data-close="citation-sheet" aria-hidden="true"></div>
+    <div class="sheet__panel" role="dialog" aria-modal="true" aria-labelledby="citation-sheet-title">
+      <div class="sheet__handle" aria-hidden="true"></div>
+      <span class="sheet__eyebrow" id="citation-sheet-eyebrow">Citation 1 of 2</span>
+      <h2 class="sheet__title" id="citation-sheet-title">Source</h2>
+      <dl class="citation-meta">
+        <dt>Source</dt><dd>policy-v3</dd>
+        <dt>Locator</dt><dd>page 1</dd>
+        <dt>Verification</dt><dd>VERIFIED</dd>
+      </dl>
+      <h3 class="citation-claim-h">Claim</h3>
+      <blockquote class="citation-claim" id="citation-claim-text">The retention period is 7 years.</blockquote>
+      <button class="citation-open-btn citation-open-btn--blue" type="button">Open source</button>
+    </div>
+  </div>
+
+  <!-- New-conversation mode sheet -->
+  <div class="sheet" id="mode-sheet" hidden>
+    <div class="sheet__backdrop" data-close="mode-sheet" aria-hidden="true"></div>
+    <div class="sheet__panel" role="dialog" aria-modal="true" aria-labelledby="mode-sheet-title">
+      <div class="sheet__handle" aria-hidden="true"></div>
+      <h2 id="mode-sheet-title" class="sheet__title">New conversation</h2>
+      <ul class="mode-list" role="radiogroup" aria-label="Conversation mode">
+        <li><button class="mode-row" role="radio" aria-checked="true" data-mode="ASK"><span class="mode-row__name">Ask</span><span class="mode-row__desc">Direct question</span></button></li>
+        <li><button class="mode-row" role="radio" data-mode="RESEARCH"><span class="mode-row__name">Research</span><span class="mode-row__desc">Multi-source investigation</span></button></li>
+        <li><button class="mode-row" role="radio" data-mode="ANALYZE"><span class="mode-row__name">Analyze</span><span class="mode-row__desc">Evaluate evidence</span></button></li>
+        <li><button class="mode-row" role="radio" data-mode="PLAN"><span class="mode-row__name">Plan</span><span class="mode-row__desc">Define work</span></button></li>
+        <li><button class="mode-row" role="radio" data-mode="EXECUTE"><span class="mode-row__name">Execute</span><span class="mode-row__desc">Perform authorized work</span></button></li>
+        <li><button class="mode-row" role="radio" data-mode="LEARN"><span class="mode-row__name">Learn</span><span class="mode-row__desc">Improve future performance</span></button></li>
+      </ul>
+    </div>
+  </div>
+
+  <aside class="dev-controls" id="dev-controls" aria-label="Prototype controls (non-product)">
+    <header class="dev-controls__h">Evidence toggles</header>
+    <label class="dev-controls__row"><input type="checkbox" id="toggle-offline"> Offline (T6)</label>
+    <label class="dev-controls__row"><input type="checkbox" id="toggle-dark"> Dark mode</label>
+    <label class="dev-controls__row"><input type="checkbox" id="toggle-reduce-motion"> Reduce motion</label>
+    <label class="dev-controls__row"><input type="checkbox" id="toggle-ax5"> AX5 (Larger Text)</label>
+    <button type="button" class="dev-controls__btn" id="reset-zoom">Reset viewport</button>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 393 852" width="393" height="852" font-family="-apple-system, system-ui, sans-serif">
+  <!-- Background -->
+  <rect width="393" height="852" fill="#FAFAF7"/>
+
+  <!-- iPhone safe-area outline (very faint) -->
+  <rect x="0" y="0" width="393" height="852" fill="none" stroke="#E5E5E2" stroke-width="0.5"/>
+
+  <!-- Dynamic Island (124x37pt centered, 11pt from top) -->
+  <rect x="134.5" y="11" width="124" height="37" rx="18.5" fill="#000000"/>
+
+  <!-- Top header (height 44pt + safe area top 47pt) -->
+  <line x1="0" y1="91" x2="393" y2="91" stroke="#E5E5E2" stroke-width="0.5"/>
+  <!-- Avatar (32pt, left) -->
+  <circle cx="24" cy="62" r="16" fill="#000000"/>
+  <text x="24" y="68" font-size="16" font-weight="600" fill="#FAFAF7" text-anchor="middle">P</text>
+  <!-- Title (centered) -->
+  <text x="196.5" y="68" font-size="22" font-weight="600" fill="#000000" text-anchor="middle">Conversations</text>
+
+  <!-- Conversation list rows -->
+  <!-- Row 1 -->
+  <g transform="translate(0, 95)">
+    <rect x="0" y="0" width="393" height="76" fill="#FAFAF7"/>
+    <text x="16" y="28" font-size="17" font-weight="500" fill="#000000">Q3 2026 risk summary</text>
+    <text x="16" y="52" font-size="13" fill="#6B6B68">
+      <tspan font-weight="600" fill="#6B6B68">Research</tspan>
+      <tspan dx="6" fill="#9B9B98">·</tspan>
+      <tspan dx="6">14:22</tspan>
+    </text>
+    <text x="377" y="44" font-size="22" font-weight="300" fill="#9B9B98" text-anchor="end">›</text>
+    <line x1="0" y1="76" x2="393" y2="76" stroke="#E5E5E2" stroke-width="0.5"/>
+  </g>
+  <!-- Row 2 -->
+  <g transform="translate(0, 171)">
+    <text x="16" y="28" font-size="17" font-weight="500" fill="#000000">What is the retention period?</text>
+    <text x="16" y="52" font-size="13" fill="#6B6B68">
+      <tspan font-weight="600" fill="#6B6B68">Ask</tspan>
+      <tspan dx="6" fill="#9B9B98">·</tspan>
+      <tspan dx="6">11:08</tspan>
+    </text>
+    <text x="377" y="44" font-size="22" font-weight="300" fill="#9B9B98" text-anchor="end">›</text>
+    <line x1="0" y1="76" x2="393" y2="76" stroke="#E5E5E2" stroke-width="0.5"/>
+  </g>
+  <!-- Row 3 -->
+  <g transform="translate(0, 247)">
+    <text x="16" y="28" font-size="17" font-weight="500" fill="#000000">Compare AI and weather sources</text>
+    <text x="16" y="52" font-size="13" fill="#6B6B68">
+      <tspan font-weight="600" fill="#6B6B68">Analyze</tspan>
+      <tspan dx="6" fill="#9B9B98">·</tspan>
+      <tspan dx="6">Yesterday</tspan>
+    </text>
+    <text x="377" y="44" font-size="22" font-weight="300" fill="#9B9B98" text-anchor="end">›</text>
+    <line x1="0" y1="76" x2="393" y2="76" stroke="#E5E5E2" stroke-width="0.5"/>
+  </g>
+  <!-- Row 4 -->
+  <g transform="translate(0, 323)">
+    <text x="16" y="28" font-size="17" font-weight="500" fill="#000000">Onboarding plan for new curators</text>
+    <text x="16" y="52" font-size="13" fill="#6B6B68">
+      <tspan font-weight="600" fill="#6B6B68">Plan</tspan>
+      <tspan dx="6" fill="#9B9B98">·</tspan>
+      <tspan dx="6">2d ago</tspan>
+    </text>
+    <text x="377" y="44" font-size="22" font-weight="300" fill="#9B9B98" text-anchor="end">›</text>
+    <line x1="0" y1="76" x2="393" y2="76" stroke="#E5E5E2" stroke-width="0.5"/>
+  </g>
+  <!-- Row 5 -->
+  <g transform="translate(0, 399)">
+    <text x="16" y="28" font-size="17" font-weight="500" fill="#000000">Capture lessons from feedback batch</text>
+    <text x="16" y="52" font-size="13" fill="#6B6B68">
+      <tspan font-weight="600" fill="#6B6B68">Learn</tspan>
+      <tspan dx="6" fill="#9B9B98">·</tspan>
+      <tspan dx="6">3d ago</tspan>
+    </text>
+    <text x="377" y="44" font-size="22" font-weight="300" fill="#9B9B98" text-anchor="end">›</text>
+    <line x1="0" y1="76" x2="393" y2="76" stroke="#E5E5E2" stroke-width="0.5"/>
+  </g>
+
+  <!-- FAB (56pt black circle, bottom-right) -->
+  <g transform="translate(321, 723)">
+    <circle cx="0" cy="0" r="28" fill="#000000"/>
+    <line x1="0" y1="-12" x2="0" y2="12" stroke="#FAFAF7" stroke-width="2" stroke-linecap="round"/>
+    <line x1="-12" y1="0" x2="12" y2="0" stroke="#FAFAF7" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Bottom tab bar (49pt + safe area 34pt = 83pt) -->
+  <line x1="0" y1="769" x2="393" y2="769" stroke="#E5E5E2" stroke-width="0.5"/>
+  <g transform="translate(0, 769)">
+    <!-- Conversations tab (active, current) -->
+    <rect x="0" y="0" width="131" height="49" fill="none"/>
+    <g transform="translate(65.5, 14)" stroke="#000000" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-19,-6 c0,-1.1 .9,-2 2,-2 h14 a2,2 0 0 1 2,2 v8 a2,2 0 0 1 -2,2 h-9 l-5,4 v-4 h0 a2,2 0 0 1 -2,-2 z"/>
+    </g>
+    <text x="65.5" y="42" font-size="10" font-weight="500" fill="#000000" text-anchor="middle">Conversations</text>
+    <!-- Documents tab -->
+    <rect x="131" y="0" width="131" height="49" fill="none"/>
+    <g transform="translate(196.5, 14)" stroke="#6B6B68" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-7,-10 h6 l4,4 v10 a2,2 0 0 1 -2,2 h-8 a2,2 0 0 1 -2,-2 v-12 a2,2 0 0 1 2,-2 z"/>
+      <path d="M-1,-10 v4 h4"/>
+      <path d="M-5,0 h8 M-5,4 h6"/>
+    </g>
+    <text x="196.5" y="42" font-size="10" font-weight="500" fill="#6B6B68" text-anchor="middle">Documents</text>
+    <!-- Search tab -->
+    <rect x="262" y="0" width="131" height="49" fill="none"/>
+    <g transform="translate(327.5, 14)" stroke="#6B6B68" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="-2" cy="-2" r="6"/>
+      <line x1="2.5" y1="2.5" x2="8" y2="8"/>
+    </g>
+    <text x="327.5" y="42" font-size="10" font-weight="500" fill="#6B6B68" text-anchor="middle">Search</text>
+  </g>
+
+  <!-- Home indicator (5pt × 134pt, centered, 8pt from bottom) -->
+  <rect x="129.5" y="841" width="134" height="5" rx="2.5" fill="#000000"/>
+
+  <!-- Caption -->
+  <text x="16" y="838" font-size="9" fill="#9B9B98">Calm — Conversation list (393×852pt, iPhone 16 Pro)</text>
+</svg>

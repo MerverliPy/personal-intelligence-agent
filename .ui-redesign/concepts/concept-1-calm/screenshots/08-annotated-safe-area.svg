@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 393 852" width="393" height="852" font-family="-apple-system, system-ui, sans-serif">
+  <rect width="393" height="852" fill="#000000"/>
+
+  <!-- Annotation overlay: shows safe-area insets, touch targets, dynamic island -->
+  <!-- Outer 393x852pt frame -->
+  <rect x="0.5" y="0.5" width="392" height="851" fill="none" stroke="#22C55E" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- Dynamic Island outline -->
+  <rect x="134.5" y="11" width="124" height="37" rx="18.5" fill="#000000" stroke="#FACC15" stroke-width="1"/>
+
+  <!-- Safe area top (47pt typical, but using env value) -->
+  <g>
+    <rect x="0" y="0" width="393" height="47" fill="rgba(34,197,94,0.15)"/>
+    <text x="200" y="20" font-size="11" font-weight="700" fill="#22C55E" text-anchor="middle">SAFE AREA TOP (env safe-area-inset-top)</text>
+    <text x="200" y="38" font-size="10" fill="#22C55E" text-anchor="middle">~47pt on iPhone 16 Pro</text>
+  </g>
+
+  <!-- Status bar / Dynamic Island proximity -->
+  <g>
+    <rect x="0" y="47" width="393" height="37" fill="rgba(250,204,21,0.18)"/>
+    <text x="200" y="68" font-size="11" font-weight="700" fill="#FACC15" text-anchor="middle">DYNAMIC ISLAND — keep primary content below 60pt</text>
+  </g>
+
+  <!-- Header band 47-91pt (44pt) -->
+  <g>
+    <rect x="0" y="84" width="393" height="44" fill="rgba(96,165,250,0.18)"/>
+    <text x="200" y="100" font-size="11" font-weight="700" fill="#60A5FA" text-anchor="middle">HEADER (44pt)</text>
+    <text x="200" y="118" font-size="10" fill="#60A5FA" text-anchor="middle">Title centered, avatar at left:8pt</text>
+  </g>
+
+  <!-- Content area -->
+  <rect x="0" y="128" width="393" height="641" fill="rgba(255,255,255,0.04)"/>
+  <text x="200" y="450" font-size="13" font-weight="600" fill="#9CA3AF" text-anchor="middle">MAIN SCROLL CONTENT</text>
+  <text x="200" y="468" font-size="11" fill="#9CA3AF" text-anchor="middle">padding-bottom = tab-bar-h + env(safe-area-inset-bottom)</text>
+
+  <!-- Touch target zone (44pt) for row -->
+  <g>
+    <rect x="16" y="160" width="361" height="60" fill="rgba(244,114,182,0.10)" stroke="#F472B6" stroke-width="1" stroke-dasharray="3 3"/>
+    <text x="32" y="194" font-size="11" font-weight="700" fill="#F472B6">ROW · touch target ≥ 44pt</text>
+  </g>
+
+  <!-- Tab bar band -->
+  <g>
+    <rect x="0" y="769" width="393" height="49" fill="rgba(96,165,250,0.18)"/>
+    <text x="200" y="785" font-size="11" font-weight="700" fill="#60A5FA" text-anchor="middle">TAB BAR (49pt)</text>
+    <text x="200" y="803" font-size="10" fill="#60A5FA" text-anchor="middle">3 tabs · min-touch 44pt</text>
+  </g>
+
+  <!-- Safe area bottom (34pt typical home indicator zone) -->
+  <g>
+    <rect x="0" y="818" width="393" height="34" fill="rgba(34,197,94,0.15)"/>
+    <text x="200" y="836" font-size="11" font-weight="700" fill="#22C55E" text-anchor="middle">SAFE AREA BOTTOM (env safe-area-inset-bottom)</text>
+  </g>
+
+  <!-- FAB position annotation -->
+  <g>
+    <circle cx="349" cy="723" r="28" fill="none" stroke="#A78BFA" stroke-width="1" stroke-dasharray="3 3"/>
+    <text x="349" y="691" font-size="10" font-weight="700" fill="#A78BFA" text-anchor="middle">FAB (56pt)</text>
+    <text x="349" y="767" font-size="9" fill="#A78BFA" text-anchor="middle">right: max(16pt, env(safe-area-inset-right))</text>
+  </g>
+
+  <!-- Side safe area -->
+  <g>
+    <rect x="0" y="84" width="8" height="685" fill="rgba(34,197,94,0.10)"/>
+    <rect x="385" y="84" width="8" height="685" fill="rgba(34,197,94,0.10)"/>
+  </g>
+
+  <text x="196.5" y="34" font-size="10" fill="#9CA3AF" text-anchor="middle">Calm — Annotated safe-area + touch-target overlay (evidence overlay)</text>
+</svg>

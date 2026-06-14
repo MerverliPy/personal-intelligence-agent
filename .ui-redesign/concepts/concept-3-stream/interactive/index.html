@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Concept 3 — Stream</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-screen="conversations">
+
+  <div class="dynamic-island" aria-hidden="true"></div>
+
+  <div id="network-banner" class="network-banner" role="status" aria-live="polite" hidden>
+    <span class="network-banner__dot" aria-hidden="true"></span>
+    <span class="network-banner__text">You're offline. Some actions are disabled.</span>
+  </div>
+
+  <div class="app">
+
+    <header class="app-header" role="banner">
+      <button id="avatar-btn" class="app-header__avatar" aria-label="Workspace: PIA Workspace. Tap to switch." aria-haspopup="dialog" aria-expanded="false">
+        <span class="app-header__avatar-letter">P</span>
+      </button>
+      <div class="app-header__title" id="header-title">Conversations</div>
+    </header>
+
+    <main class="app-main" id="main" role="main">
+
+      <!-- ====== SCREEN: Conversations (default landing) ====== -->
+      <section class="screen" data-screen="conversations" aria-labelledby="conversations-h">
+        <h2 id="conversations-h" class="visually-hidden">Conversations</h2>
+        <ul class="conv-list" id="conversation-list" aria-label="Conversations">
+          <li class="conv" tabindex="0" data-conversation-id="c-001" data-mode="RESEARCH">
+            <div class="conv__row1">
+              <span class="conv__title">Q3 2026 risk summary</span>
+              <time class="conv__time" datetime="2026-06-13T14:22:00Z">14:22</time>
+            </div>
+            <div class="conv__row2">
+              <span class="mode-dot" data-mode="RESEARCH" aria-hidden="true"></span>
+              <span class="conv__mode">Research</span>
+              <span class="conv__sep" aria-hidden="true">·</span>
+              <span class="conv__preview">3 citations · policy, AI, weather</span>
+            </div>
+          </li>
+          <li class="conv conv--active" tabindex="0" data-conversation-id="c-002" data-mode="ASK" aria-current="true">
+            <div class="conv__row1">
+              <span class="conv__title">What is the retention period?</span>
+              <time class="conv__time" datetime="2026-06-13T11:08:00Z">11:08</time>
+            </div>
+            <div class="conv__row2">
+              <span class="mode-dot" data-mode="ASK" aria-hidden="true"></span>
+              <span class="conv__mode">Ask</span>
+              <span class="conv__sep" aria-hidden="true">·</span>
+              <span class="conv__preview">2 citations · policy</span>
+            </div>
+          </li>
+          <li class="conv" tabindex="0" data-conversation-id="c-003" data-mode="ANALYZE">
+            <div class="conv__row1">
+              <span class="conv__title">Compare AI and weather sources</span>
+              <time class="conv__time" datetime="2026-06-12T18:45:00Z">Yesterday</time>
+            </div>
+            <div class="conv__row2">
+              <span class="mode-dot" data-mode="ANALYZE" aria-hidden="true"></span>
+              <span class="conv__mode">Analyze</span>
+              <span class="conv__sep" aria-hidden="true">·</span>
+              <span class="conv__preview">2 citations · AI, weather</span>
+            </div>
+          </li>
+          <li class="conv" tabindex="0" data-conversation-id="c-004" data-mode="PLAN">
+            <div class="conv__row1">
+              <span class="conv__title">Onboarding plan for new curators</span>
+              <time class="conv__time" datetime="2026-06-11T09:12:00Z">2d ago</time>
+            </div>
+            <div class="conv__row2">
+              <span class="mode-dot" data-mode="PLAN" aria-hidden="true"></span>
+              <span class="conv__mode">Plan</span>
+              <span class="conv__sep" aria-hidden="true">·</span>
+              <span class="conv__preview">No citations yet</span>
+            </div>
+          </li>
+          <li class="conv" tabindex="0" data-conversation-id="c-005" data-mode="LEARN">
+            <div class="conv__row1">
+              <span class="conv__title">Capture lessons from feedback batch</span>
+              <time class="conv__time" datetime="2026-06-10T16:30:00Z">3d ago</time>
+            </div>
+            <div class="conv__row2">
+              <span class="mode-dot" data-mode="LEARN" aria-hidden="true"></span>
+              <span class="conv__mode">Learn</span>
+              <span class="conv__sep" aria-hidden="true">·</span>
+              <span class="conv__preview">No citations yet</span>
+            </div>
+          </li>
+        </ul>
+        <button class="fab" id="fab-conversation" aria-label="New conversation">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </button>
+      </section>
+
+      <!-- ====== SCREEN: Conversation detail ====== -->
+      <section class="screen" data-screen="conversation-detail" hidden aria-labelledby="thread-h">
+        <h2 id="thread-h" class="visually-hidden">Conversation</h2>
+        <button class="back-btn" id="back-btn" aria-label="Back to conversations">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 5L7 11L14 17"/>
+          </svg>
+        </button>
+        <div class="thread" id="message-thread" role="log" aria-live="polite" aria-relevant="additions">
+
+          <article class="message message-user" data-message-id="m-001">
+            <div class="message__content">What is the retention period?</div>
+            <div class="message__meta">
+              <time datetime="2026-06-13T11:08:00Z">11:08</time>
+            </div>
+          </article>
+
+          <article class="message message-assistant" data-message-id="m-002">
+            <div class="message__author" aria-hidden="true">PIA · policy-v3</div>
+            <div class="message__content">
+              The retention period is 7 years
+              <button class="cite" data-citation-id="cite-001" aria-label="Citation 1 of 2, claims: The retention period is 7 years, button">[1]</button>.
+              This applies to all records ingested under the standard policy
+              <button class="cite" data-citation-id="cite-002" aria-label="Citation 2 of 2, claims: AI and weather summary, button">[2]</button>.
+            </div>
+            <div class="message__meta">
+              <span class="status-badge" data-state="COMPLETED">Completed</span>
+              <span class="dot" aria-hidden="true">·</span>
+              <span>231 ms</span>
+              <span class="dot" aria-hidden="true">·</span>
+              <button class="feedback-link" aria-label="Submit feedback for this message">Feedback</button>
+            </div>
+          </article>
+
+          <article class="message message-assistant" data-message-id="m-003">
+            <div class="message__author" aria-hidden="true">PIA · ai-v1, weather-v1</div>
+            <div class="message__content">
+              AI is transforming industries
+              <button class="cite" data-citation-id="cite-003" aria-label="Citation 1 of 2, claims: AI is transforming industries, button">[1]</button>
+              and today's weather is sunny with a high of 75 degrees
+              <button class="cite" data-citation-id="cite-004" aria-label="Citation 2 of 2, claims: today's weather is sunny with a high of 75 degrees, button">[2]</button>.
+            </div>
+            <div class="message__meta">
+              <span class="status-badge" data-state="COMPLETED">Completed</span>
+              <span class="dot" aria-hidden="true">·</span>
+              <span>412 ms</span>
+              <span class="dot" aria-hidden="true">·</span>
+              <button class="feedback-link" aria-label="Submit feedback for this message">Feedback</button>
+            </div>
+          </article>
+
+        </div>
+
+        <form class="composer" id="message-form" aria-label="Send a message">
+          <label for="message-input" class="visually-hidden">Your message</label>
+          <textarea id="message-input" name="content" rows="1" placeholder="Ask, research, analyze…" autocomplete="off" maxlength="10000"></textarea>
+          <button type="submit" class="send-btn" aria-label="Send">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="currentColor" aria-hidden="true">
+              <path d="M3 11l16-7-7 16-2-7-7-2z"/>
+            </svg>
+          </button>
+        </form>
+      </section>
+
+      <!-- ====== SCREEN: Documents ====== -->
+      <section class="screen" data-screen="documents" hidden aria-labelledby="documents-h">
+        <h2 id="documents-h" class="visually-hidden">Documents</h2>
+        <ul class="doc-list" id="document-list" aria-label="Documents">
+          <li class="doc" tabindex="0" data-document-id="d-001">
+            <div class="doc__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#2563EB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 2h8l4 4v12H4z"/>
+                <path d="M12 2v4h4"/>
+              </svg>
+            </div>
+            <div class="doc__body">
+              <div class="doc__title">Q3 2026 Risk Summary</div>
+              <div class="doc__meta">
+                <span class="status-badge" data-state="READY">Ready</span>
+                <span class="dot" aria-hidden="true">·</span>
+                <span>INTERNAL</span>
+                <span class="dot" aria-hidden="true">·</span>
+                <span>v3</span>
+              </div>
+            </div>
+          </li>
+          <li class="doc" tabindex="0" data-document-id="d-002">
+            <div class="doc__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#2563EB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 2h8l4 4v12H4z"/>
+                <path d="M12 2v4h4"/>
+              </svg>
+            </div>
+            <div class="doc__body">
+              <div class="doc__title">Onboarding Handbook</div>
+              <div class="doc__meta">
+                <span class="status-badge" data-state="INGESTING">Processing</span>
+                <span class="dot" aria-hidden="true">·</span>
+                <span>INTERNAL</span>
+              </div>
+            </div>
+          </li>
+          <li class="doc" tabindex="0" data-document-id="d-003">
+            <div class="doc__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#2563EB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 2h8l4 4v12H4z"/>
+                <path d="M12 2v4h4"/>
+              </svg>
+            </div>
+            <div class="doc__body">
+              <div class="doc__title">Customer Churn Analysis</div>
+              <div class="doc__meta">
+                <span class="status-badge" data-state="READY">Ready</span>
+                <span class="dot" aria-hidden="true">·</span>
+                <span>CONFIDENTIAL</span>
+              </div>
+            </div>
+          </li>
+          <li class="doc" tabindex="0" data-document-id="d-004">
+            <div class="doc__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#991B1B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 2h8l4 4v12H4z"/>
+                <path d="M12 2v4h4"/>
+                <path d="M8 11l4 4M12 11l-4 4"/>
+              </svg>
+            </div>
+            <div class="doc__body">
+              <div class="doc__title">Pricing Research Notes</div>
+              <div class="doc__meta">
+                <span class="status-badge" data-state="FAILED">Failed</span>
+                <span class="dot" aria-hidden="true">·</span>
+                <span>INTERNAL</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <button class="fab" id="fab-document" aria-label="Upload document">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </button>
+      </section>
+
+      <!-- ====== SCREEN: Search ====== -->
+      <section class="screen" data-screen="search" hidden aria-labelledby="search-h">
+        <h2 id="search-h" class="visually-hidden">Search</h2>
+        <form class="search-form" role="search" aria-label="Document search">
+          <label for="query-input" class="visually-hidden">Search</label>
+          <div class="search-form__row">
+            <input type="search" id="query-input" name="query" placeholder="Search…" autocomplete="off" maxlength="10000" required>
+          </div>
+        </form>
+        <ul class="result-list" id="search-results" aria-label="Search results">
+          <li class="result" tabindex="0">
+            <div class="result__rank">1</div>
+            <div class="result__body">
+              <p class="result__excerpt">The retention period for all records is 7 years.</p>
+              <div class="result__meta">
+                <span>page 1</span>
+                <span class="dot" aria-hidden="true">·</span>
+                <span>0.943</span>
+              </div>
+            </div>
+          </li>
+          <li class="result" tabindex="0">
+            <div class="result__rank">2</div>
+            <div class="result__body">
+              <p class="result__excerpt">Artificial intelligence and machine learning are transforming industries.</p>
+              <div class="result__meta">
+                <span>page 4</span>
+                <span class="dot" aria-hidden="true">·</span>
+                <span>0.871</span>
+              </div>
+            </div>
+          </li>
+          <li class="result" tabindex="0">
+            <div class="result__rank">3</div>
+            <div class="result__body">
+              <p class="result__excerpt">Today the weather is sunny with a high of 75 degrees.</p>
+              <div class="result__meta">
+                <span>page 1</span>
+                <span class="dot" aria-hidden="true">·</span>
+                <span>0.812</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+    </main>
+
+    <!-- 3-tab bottom bar -->
+    <nav class="tab-bar" role="navigation" aria-label="Primary">
+      <button class="tab" data-tab="conversations" aria-current="page">
+        <svg class="tab__icon" viewBox="0 0 28 28" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 9a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3h-9l-5 4v-4H8a3 3 0 0 1-3-3V9z"/>
+        </svg>
+        <span class="tab__label">Conversations</span>
+      </button>
+      <button class="tab" data-tab="documents">
+        <svg class="tab__icon" viewBox="0 0 28 28" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 4h10l4 4v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/>
+          <path d="M18 4v4h4"/>
+          <path d="M10 14h10M10 18h7"/>
+        </svg>
+        <span class="tab__label">Documents</span>
+      </button>
+      <button class="tab" data-tab="search">
+        <svg class="tab__icon" viewBox="0 0 28 28" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="13" cy="13" r="6"/>
+          <line x1="17.5" y1="17.5" x2="22" y2="22"/>
+        </svg>
+        <span class="tab__label">Search</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- Citation sheet -->
+  <div class="sheet" id="citation-sheet" hidden>
+    <div class="sheet__backdrop" data-close="citation-sheet" aria-hidden="true"></div>
+    <div class="sheet__panel" role="dialog" aria-modal="true" aria-labelledby="citation-sheet-title">
+      <div class="sheet__handle" aria-hidden="true"></div>
+      <span class="sheet__eyebrow" id="citation-sheet-eyebrow">Citation 1 of 2</span>
+      <h2 class="sheet__title" id="citation-sheet-title">Source</h2>
+      <dl class="citation-meta">
+        <dt>Source</dt><dd>policy-v3</dd>
+        <dt>Locator</dt><dd>page 1</dd>
+        <dt>Verification</dt><dd>VERIFIED</dd>
+      </dl>
+      <h3 class="citation-claim-h">Claim</h3>
+      <blockquote class="citation-claim" id="citation-claim-text">The retention period is 7 years.</blockquote>
+      <button class="citation-open-btn" type="button">Open source</button>
+    </div>
+  </div>
+
+  <!-- Mode sheet -->
+  <div class="sheet" id="mode-sheet" hidden>
+    <div class="sheet__backdrop" data-close="mode-sheet" aria-hidden="true"></div>
+    <div class="sheet__panel" role="dialog" aria-modal="true" aria-labelledby="mode-sheet-title">
+      <div class="sheet__handle" aria-hidden="true"></div>
+      <h2 id="mode-sheet-title" class="sheet__title">New conversation</h2>
+      <ul class="mode-list" role="radiogroup" aria-label="Conversation mode">
+        <li><button class="mode-row" role="radio" aria-checked="true" data-mode="ASK"><span class="mode-row__name">Ask</span><span class="mode-row__desc">Direct question</span></button></li>
+        <li><button class="mode-row" role="radio" data-mode="RESEARCH"><span class="mode-row__name">Research</span><span class="mode-row__desc">Multi-source investigation</span></button></li>
+        <li><button class="mode-row" role="radio" data-mode="ANALYZE"><span class="mode-row__name">Analyze</span><span class="mode-row__desc">Evaluate evidence</span></button></li>
+        <li><button class="mode-row" role="radio" data-mode="PLAN"><span class="mode-row__name">Plan</span><span class="mode-row__desc">Define work</span></button></li>
+        <li><button class="mode-row" role="radio" data-mode="EXECUTE"><span class="mode-row__name">Execute</span><span class="mode-row__desc">Perform authorized work</span></button></li>
+        <li><button class="mode-row" role="radio" data-mode="LEARN"><span class="mode-row__name">Learn</span><span class="mode-row__desc">Improve future performance</span></button></li>
+      </ul>
+    </div>
+  </div>
+
+  <aside class="dev-controls" id="dev-controls" aria-label="Prototype controls (non-product)">
+    <header class="dev-controls__h">Evidence toggles</header>
+    <label class="dev-controls__row"><input type="checkbox" id="toggle-offline"> Offline (T6)</label>
+    <label class="dev-controls__row"><input type="checkbox" id="toggle-dark"> Dark mode</label>
+    <label class="dev-controls__row"><input type="checkbox" id="toggle-reduce-motion"> Reduce motion</label>
+    <label class="dev-controls__row"><input type="checkbox" id="toggle-ax5"> AX5 (Larger Text)</label>
+    <button type="button" class="dev-controls__btn" id="reset-zoom">Reset viewport</button>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>

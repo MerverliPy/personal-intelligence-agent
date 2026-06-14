@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 393 852" width="393" height="852" font-family="-apple-system, system-ui, sans-serif">
+  <!-- Background -->
+  <rect width="393" height="852" fill="#FFFFFF"/>
+
+  <!-- Dynamic Island (124x37pt centered, 11pt from top) -->
+  <rect x="134.5" y="11" width="124" height="37" rx="18.5" fill="#000000"/>
+
+  <!-- Header (44pt + safe area top 47pt = 91pt bottom of header) -->
+  <line x1="0" y1="91" x2="393" y2="91" stroke="#ECECEC" stroke-width="0.5"/>
+  <!-- Avatar (32pt, left, T4=A) -->
+  <circle cx="24" cy="68" r="16" fill="#2563EB"/>
+  <text x="24" y="74" font-size="16" font-weight="700" fill="white" text-anchor="middle">P</text>
+  <!-- Title (centered) -->
+  <text x="196.5" y="74" font-size="24" font-weight="700" fill="#0A0A0A" text-anchor="middle">Conversations</text>
+
+  <!-- Conversation list rows -->
+  <!-- Row 1: Q3 2026 risk summary (RESEARCH) -->
+  <g transform="translate(0, 95)">
+    <text x="16" y="28" font-size="19" font-weight="600" fill="#0A0A0A">Q3 2026 risk summary</text>
+    <text x="377" y="28" font-size="14" fill="#5C5C5C" text-anchor="end">14:22</text>
+    <g transform="translate(16, 44)">
+      <circle cx="3" cy="6" r="3" fill="#7C3AED"/>
+      <text x="12" y="11" font-size="14" font-weight="600" fill="#5C5C5C">Research</text>
+      <text x="74" y="11" font-size="14" fill="#9C9C9C">·</text>
+      <text x="84" y="11" font-size="14" fill="#5C5C5C">3 citations · policy, AI, weather</text>
+    </g>
+    <line x1="0" y1="76" x2="393" y2="76" stroke="#ECECEC" stroke-width="0.5"/>
+  </g>
+
+  <!-- Row 2: What is the retention period? (ASK) — ACTIVE -->
+  <g transform="translate(0, 171)">
+    <rect x="0" y="0" width="393" height="76" fill="#DBE7FF"/>
+    <text x="16" y="28" font-size="19" font-weight="600" fill="#0A0A0A">What is the retention period?</text>
+    <text x="377" y="28" font-size="14" fill="#5C5C5C" text-anchor="end">11:08</text>
+    <g transform="translate(16, 44)">
+      <circle cx="3" cy="6" r="3" fill="#2563EB"/>
+      <text x="12" y="11" font-size="14" font-weight="600" fill="#5C5C5C">Ask</text>
+      <text x="44" y="11" font-size="14" fill="#9C9C9C">·</text>
+      <text x="54" y="11" font-size="14" fill="#5C5C5C">2 citations · policy</text>
+    </g>
+    <line x1="0" y1="76" x2="393" y2="76" stroke="#ECECEC" stroke-width="0.5"/>
+  </g>
+
+  <!-- Row 3: Compare AI and weather sources (ANALYZE) -->
+  <g transform="translate(0, 247)">
+    <text x="16" y="28" font-size="19" font-weight="600" fill="#0A0A0A">Compare AI and weather sources</text>
+    <text x="377" y="28" font-size="14" fill="#5C5C5C" text-anchor="end">Yesterday</text>
+    <g transform="translate(16, 44)">
+      <circle cx="3" cy="6" r="3" fill="#DB2777"/>
+      <text x="12" y="11" font-size="14" font-weight="600" fill="#5C5C5C">Analyze</text>
+      <text x="68" y="11" font-size="14" fill="#9C9C9C">·</text>
+      <text x="78" y="11" font-size="14" fill="#5C5C5C">2 citations · AI, weather</text>
+    </g>
+    <line x1="0" y1="76" x2="393" y2="76" stroke="#ECECEC" stroke-width="0.5"/>
+  </g>
+
+  <!-- Row 4: Onboarding plan for new curators (PLAN) -->
+  <g transform="translate(0, 323)">
+    <text x="16" y="28" font-size="19" font-weight="600" fill="#0A0A0A">Onboarding plan for new curators</text>
+    <text x="377" y="28" font-size="14" fill="#5C5C5C" text-anchor="end">2d ago</text>
+    <g transform="translate(16, 44)">
+      <circle cx="3" cy="6" r="3" fill="#16A34A"/>
+      <text x="12" y="11" font-size="14" font-weight="600" fill="#5C5C5C">Plan</text>
+      <text x="48" y="11" font-size="14" fill="#9C9C9C">·</text>
+      <text x="58" y="11" font-size="14" fill="#5C5C5C">No citations yet</text>
+    </g>
+    <line x1="0" y1="76" x2="393" y2="76" stroke="#ECECEC" stroke-width="0.5"/>
+  </g>
+
+  <!-- Row 5: Capture lessons from feedback batch (LEARN) -->
+  <g transform="translate(0, 399)">
+    <text x="16" y="28" font-size="19" font-weight="600" fill="#0A0A0A">Capture lessons from feedback batch</text>
+    <text x="377" y="28" font-size="14" fill="#5C5C5C" text-anchor="end">3d ago</text>
+    <g transform="translate(16, 44)">
+      <circle cx="3" cy="6" r="3" fill="#0891B2"/>
+      <text x="12" y="11" font-size="14" font-weight="600" fill="#5C5C5C">Learn</text>
+      <text x="54" y="11" font-size="14" fill="#9C9C9C">·</text>
+      <text x="64" y="11" font-size="14" fill="#5C5C5C">No citations yet</text>
+    </g>
+    <line x1="0" y1="76" x2="393" y2="76" stroke="#ECECEC" stroke-width="0.5"/>
+  </g>
+
+  <!-- FAB (56pt PIA blue, T7=A) — opens mode-of-conversation sheet -->
+  <g transform="translate(321, 723)">
+    <circle cx="0" cy="0" r="28" fill="#2563EB" filter="drop-shadow(0 6pt 20pt rgba(37,99,235,0.36))"/>
+    <line x1="0" y1="-12" x2="0" y2="12" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+    <line x1="-12" y1="0" x2="12" y2="0" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Bottom tab bar (49pt + safe area 34pt = 83pt) -->
+  <line x1="0" y1="769" x2="393" y2="769" stroke="#ECECEC" stroke-width="0.5"/>
+  <g transform="translate(0, 769)">
+    <!-- Conversations tab (active) -->
+    <rect x="0" y="0" width="131" height="49" fill="none"/>
+    <line x1="39" y1="0" x2="92" y2="0" stroke="#2563EB" stroke-width="2" stroke-linecap="round"/>
+    <g transform="translate(65.5, 14)" stroke="#2563EB" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-12,-2 a3,3 0 0 1 3,-3 h18 a3,3 0 0 1 3,3 v8 a3,3 0 0 1 -3,3 h-9 l-5,4 v-4 h-1 a3,3 0 0 1 -3,-3 z"/>
+    </g>
+    <text x="65.5" y="42" font-size="10" font-weight="600" fill="#2563EB" text-anchor="middle">Conversations</text>
+    <!-- Documents tab -->
+    <rect x="131" y="0" width="131" height="49" fill="none"/>
+    <g transform="translate(196.5, 14)" stroke="#5C5C5C" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-7,-10 h6 l4,4 v10 a2,2 0 0 1 -2,2 h-8 a2,2 0 0 1 -2,-2 v-12 a2,2 0 0 1 2,-2 z"/>
+      <path d="M-1,-10 v4 h4"/>
+      <path d="M-5,0 h8 M-5,4 h6"/>
+    </g>
+    <text x="196.5" y="42" font-size="10" font-weight="600" fill="#5C5C5C" text-anchor="middle">Documents</text>
+    <!-- Search tab -->
+    <rect x="262" y="0" width="131" height="49" fill="none"/>
+    <g transform="translate(327.5, 14)" stroke="#5C5C5C" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="-2" cy="-2" r="6"/>
+      <line x1="2.5" y1="2.5" x2="7" y2="7"/>
+    </g>
+    <text x="327.5" y="42" font-size="10" font-weight="600" fill="#5C5C5C" text-anchor="middle">Search</text>
+  </g>
+
+  <!-- Home indicator -->
+  <rect x="129.5" y="841" width="134" height="5" rx="2.5" fill="#000000"/>
+  <text x="16" y="838" font-size="9" fill="#5C5C5C" opacity="0.6">Stream — Conversation list (default landing, T1/T2 = A)</text>
+</svg>

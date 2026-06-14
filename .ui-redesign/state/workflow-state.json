@@ -4,13 +4,24 @@
   "agent": "mobile-ui-orchestrator",
   "adapter_id": "PIA-MUR-ADAPTER-001",
   "updated_at": "2026-06-14T00:00:00Z",
-  "current_state": "PRODUCT_MODEL_APPROVED",
-  "phase": "concept-production",
+  "current_state": "CONCEPT_APPROVED",
+  "phase": "design-contract",
   "blocker_count": 5,
   "open_decision_count": 0,
-  "approved_decision_count": 2,
-  "completed_phases": ["adapter-discovery", "baseline", "product-model"],
-  "active_phase": "concept-production",
+  "approved_decision_count": 3,
+  "completed_phases": ["adapter-discovery", "baseline", "product-model", "concept-production"],
+  "active_phase": "design-contract",
+  "selected_concept": {
+    "id": "PIA-MUR-D-003c",
+    "name": "Stream",
+    "folder": ".ui-redesign/concepts/concept-3-stream/",
+    "default_landing": "Conversations",
+    "tab_count": 3,
+    "tab_set": ["Conversations", "Documents", "Search"],
+    "primary_color": "#2563EB",
+    "citation_chip_style": "footnote-text",
+    "motion_tokens": "CSS variables"
+  },
   "b1_resolution": {
     "resolved_at": "2026-06-14T00:00:00Z",
     "device": "iPhone 16 Pro (or 16 Pro Max) — primary target met",
@@ -49,10 +60,18 @@
       "evidence": ".ui-redesign/reports/PIA-MUR-D-002-product-model.md"
     },
     "concept-production": {
-      "status": "NOT_STARTED",
-      "next_action": "B-1 is now RESOLVED (iPhone 16 Pro available, Tailscale primary, cloudflared authorized). Invoke visual-concept-prototyper specialist (read-only) to produce 2–3 isolated, real-data concept prototypes for the iPhone 16 Pro redesign. Concepts honor the product model (T1=A bottom tab, T2=A single-pane + sheet, T3=A dedicated search tab, T4=A avatar in header, T5=A text-only, T6=A offline banner, T7=A FAB). Orchestrator opens PIA-MUR-D-003 (first concept direction) decision packet for user approval. Concept evaluation can include device evidence on the iPhone 16 Pro."
+      "status": "DONE",
+      "started_at": "2026-06-14T00:00:00Z",
+      "completed_at": "2026-06-14T00:00:00Z",
+      "owner": "mobile-ui-orchestrator (delegated to visual-concept-prototyper)",
+      "decision_id": "PIA-MUR-D-003c (Stream)",
+      "evidence": ".ui-redesign/concepts/concept-1-calm/, .ui-redesign/concepts/concept-2-workspace/, .ui-redesign/concepts/concept-3-stream/, .ui-redesign/reports/PIA-MUR-D-003-concepts.md"
     },
-    "design-contract": {"status": "NOT_STARTED", "note": "No mobile-ui-design-contract command exists; orchestrator must dispatch directly."},
+    "design-contract": {
+      "status": "NOT_STARTED",
+      "next_action": "Invoke design-system-architect specialist (read-only) to draft the design contract for PIA-MUR-D-004, informed by Stream concept (PIA-MUR-D-003c) and the approved product model (PIA-MUR-D-002). Design contract must cover: tokens (color/typography/spacing/motion/safe-area), components (tab bar, sheet, citation chip, FAB, header, status badges, etc.), states (loading/empty/error/offline), motion (CSS variable tokens, reduce-motion, dark mode), accessibility (Dynamic Type AX5, VoiceOver rotor, contrast), safe-area (top Dynamic Island, bottom home indicator), PWA (manifest, theme-color, apple-touch-icon, viewport-fit=cover, service worker scope, CSP). B-2 (missing mobile-ui-design-contract command) acknowledged; orchestrator dispatches directly. Does NOT authorize any product-code, dependency, schema, route, API, auth, infra, or deployment change.",
+      "note": "No mobile-ui-design-contract command exists; orchestrator must dispatch directly."
+    },
     "implementation-contract": {"status": "NOT_STARTED"},
     "implementation": {"status": "NOT_STARTED"},
     "device-validation": {"status": "NOT_STARTED", "note": "Requires physical iPhone 16 Pro (B-1) and bridge confirmation (B-2)."},
@@ -334,6 +353,8 @@
     "baseline_evidence": ".ui-redesign/baseline/REPOSITORY_BASELINE.md (PIA-MUR-D-001)",
     "baseline_http_probes": ".ui-redesign/evidence/automated/http-baseline-probes.json",
     "product_model_proposal": ".ui-redesign/reports/PIA-MUR-D-002-product-model.md (PIA-MUR-D-002, APPROVED)",
+    "concepts_proposal": ".ui-redesign/reports/PIA-MUR-D-003-concepts.md (PIA-MUR-D-003, APPROVED -- PIA-MUR-D-003c Stream selected)",
+    "selected_concept_evidence": ".ui-redesign/concepts/concept-3-stream/",
     "p3_gate_baseline": {
       "unit_tests": "921/921",
       "security_tests": "13/13",

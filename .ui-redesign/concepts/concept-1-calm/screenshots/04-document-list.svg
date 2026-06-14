@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 393 852" width="393" height="852" font-family="-apple-system, system-ui, sans-serif">
+  <rect width="393" height="852" fill="#FAFAF7"/>
+
+  <!-- Dynamic Island -->
+  <rect x="134.5" y="11" width="124" height="37" rx="18.5" fill="#000000"/>
+
+  <!-- Header -->
+  <line x1="0" y1="91" x2="393" y2="91" stroke="#E5E5E2" stroke-width="0.5"/>
+  <circle cx="24" cy="62" r="16" fill="#000000"/>
+  <text x="24" y="68" font-size="16" font-weight="600" fill="#FAFAF7" text-anchor="middle">P</text>
+  <text x="196.5" y="68" font-size="22" font-weight="600" fill="#000000" text-anchor="middle">Documents</text>
+
+  <!-- Row 1: Q3 2026 Risk Summary — READY -->
+  <g transform="translate(0, 95)">
+    <text x="16" y="28" font-size="17" font-weight="500" fill="#000000">Q3 2026 Risk Summary.pdf</text>
+    <g transform="translate(16, 44)">
+      <rect x="0" y="0" width="50" height="22" rx="4" fill="#DCFCE7"/>
+      <text x="25" y="15" font-size="11" font-weight="700" fill="#166534" text-anchor="middle">READY</text>
+      <text x="58" y="15" font-size="13" fill="#6B6B68">INTERNAL</text>
+      <text x="120" y="15" font-size="13" fill="#9B9B98">·</text>
+      <text x="128" y="15" font-size="13" fill="#6B6B68">v3</text>
+    </g>
+    <text x="377" y="44" font-size="22" font-weight="300" fill="#9B9B98" text-anchor="end">›</text>
+    <line x1="0" y1="76" x2="393" y2="76" stroke="#E5E5E2" stroke-width="0.5"/>
+  </g>
+
+  <!-- Row 2: Onboarding — PROCESSING -->
+  <g transform="translate(0, 171)">
+    <text x="16" y="28" font-size="17" font-weight="500" fill="#000000">Onboarding Handbook v3.docx</text>
+    <g transform="translate(16, 44)">
+      <rect x="0" y="0" width="84" height="22" rx="4" fill="#DBEAFE"/>
+      <text x="42" y="15" font-size="11" font-weight="700" fill="#1E40AF" text-anchor="middle">PROCESSING</text>
+      <text x="92" y="15" font-size="13" fill="#6B6B68">INTERNAL</text>
+      <text x="154" y="15" font-size="13" fill="#9B9B98">·</text>
+      <text x="162" y="15" font-size="13" fill="#6B6B68">v1</text>
+    </g>
+    <text x="377" y="44" font-size="22" font-weight="300" fill="#9B9B98" text-anchor="end">›</text>
+    <line x1="0" y1="76" x2="393" y2="76" stroke="#E5E5E2" stroke-width="0.5"/>
+  </g>
+
+  <!-- Row 3: Customer Churn — READY -->
+  <g transform="translate(0, 247)">
+    <text x="16" y="28" font-size="17" font-weight="500" fill="#000000">Customer Churn Analysis.pdf</text>
+    <g transform="translate(16, 44)">
+      <rect x="0" y="0" width="50" height="22" rx="4" fill="#DCFCE7"/>
+      <text x="25" y="15" font-size="11" font-weight="700" fill="#166534" text-anchor="middle">READY</text>
+      <text x="58" y="15" font-size="13" fill="#6B6B68">CONFIDENTIAL</text>
+    </g>
+    <text x="377" y="44" font-size="22" font-weight="300" fill="#9B9B98" text-anchor="end">›</text>
+    <line x1="0" y1="76" x2="393" y2="76" stroke="#E5E5E2" stroke-width="0.5"/>
+  </g>
+
+  <!-- Row 4: Pricing Research — FAILED -->
+  <g transform="translate(0, 323)">
+    <text x="16" y="28" font-size="17" font-weight="500" fill="#000000">Pricing Research Notes.txt</text>
+    <g transform="translate(16, 44)">
+      <rect x="0" y="0" width="56" height="22" rx="4" fill="#FEE2E2"/>
+      <text x="28" y="15" font-size="11" font-weight="700" fill="#991B1B" text-anchor="middle">FAILED</text>
+      <text x="64" y="15" font-size="13" fill="#6B6B68">INTERNAL</text>
+    </g>
+    <text x="377" y="44" font-size="22" font-weight="300" fill="#9B9B98" text-anchor="end">›</text>
+    <line x1="0" y1="76" x2="393" y2="76" stroke="#E5E5E2" stroke-width="0.5"/>
+  </g>
+
+  <!-- Row 5: Vendor Security — UPLOADED -->
+  <g transform="translate(0, 399)">
+    <text x="16" y="28" font-size="17" font-weight="500" fill="#000000">Vendor Security Questionnaire.pdf</text>
+    <g transform="translate(16, 44)">
+      <rect x="0" y="0" width="76" height="22" rx="4" fill="#F3E8FF"/>
+      <text x="38" y="15" font-size="11" font-weight="700" fill="#6B21A8" text-anchor="middle">UPLOADED</text>
+      <text x="84" y="15" font-size="13" fill="#6B6B68">HIGHLY_CONFIDENTIAL</text>
+    </g>
+    <text x="377" y="44" font-size="22" font-weight="300" fill="#9B9B98" text-anchor="end">›</text>
+    <line x1="0" y1="76" x2="393" y2="76" stroke="#E5E5E2" stroke-width="0.5"/>
+  </g>
+
+  <!-- FAB -->
+  <g transform="translate(321, 723)">
+    <circle cx="0" cy="0" r="28" fill="#000000"/>
+    <line x1="0" y1="-12" x2="0" y2="12" stroke="#FAFAF7" stroke-width="2" stroke-linecap="round"/>
+    <line x1="-12" y1="0" x2="12" y2="0" stroke="#FAFAF7" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Tab bar (Documents is active) -->
+  <line x1="0" y1="769" x2="393" y2="769" stroke="#E5E5E2" stroke-width="0.5"/>
+  <g transform="translate(0, 769)">
+    <rect x="0" y="0" width="131" height="49" fill="none"/>
+    <g transform="translate(65.5, 14)" stroke="#6B6B68" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-19,-6 c0,-1.1 .9,-2 2,-2 h14 a2,2 0 0 1 2,2 v8 a2,2 0 0 1 -2,2 h-9 l-5,4 v-4 h0 a2,2 0 0 1 -2,-2 z"/>
+    </g>
+    <text x="65.5" y="42" font-size="10" font-weight="500" fill="#6B6B68" text-anchor="middle">Conversations</text>
+    <rect x="131" y="0" width="131" height="49" fill="none"/>
+    <g transform="translate(196.5, 14)" stroke="#000000" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-7,-10 h6 l4,4 v10 a2,2 0 0 1 -2,2 h-8 a2,2 0 0 1 -2,-2 v-12 a2,2 0 0 1 2,-2 z"/>
+      <path d="M-1,-10 v4 h4"/>
+      <path d="M-5,0 h8 M-5,4 h6"/>
+    </g>
+    <text x="196.5" y="42" font-size="10" font-weight="500" fill="#000000" text-anchor="middle">Documents</text>
+    <rect x="262" y="0" width="131" height="49" fill="none"/>
+    <g transform="translate(327.5, 14)" stroke="#6B6B68" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="-2" cy="-2" r="6"/>
+      <line x1="2.5" y1="2.5" x2="8" y2="8"/>
+    </g>
+    <text x="327.5" y="42" font-size="10" font-weight="500" fill="#6B6B68" text-anchor="middle">Search</text>
+  </g>
+  <rect x="129.5" y="841" width="134" height="5" rx="2.5" fill="#000000"/>
+
+  <text x="16" y="838" font-size="9" fill="#9B9B98">Calm — Document list with status badges (READY / PROCESSING / FAILED / UPLOADED)</text>
+</svg>
