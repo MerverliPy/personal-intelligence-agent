@@ -10,7 +10,8 @@
   "open_decision_count": 0,
   "approved_decision_count": 4,
   "completed_phases": ["adapter-discovery", "baseline", "product-model", "concept-production", "design-contract"],
-  "active_phase": "implementation-contract",
+  "active_phase": "blocked-on-device-preflight",
+  "pause_reason": "User directed the orchestrator to run a device-validation pre-flight before the implementation contract begins (2026-06-14). This will start the cloudflared quick-tunnel, produce a structured iPhone test checklist, and capture device evidence for the Stream concept prototype. UNVERIFIED items (UNVERIFIED-1 <dialog> showModal() focus, UNVERIFIED-2 prefers-reduced-motion in installed PWA, UNVERIFIED-4 touch-target bounding-box sizes, UNVERIFIED-6 prototype pixel-perfect match) will be confirmed on the real iPhone 16 Pro before any source file is touched.",
   "selected_concept": {
     "id": "PIA-MUR-D-003c",
     "name": "Stream",
@@ -76,8 +77,9 @@
       "evidence": ".ui-redesign/contracts/DESIGN_CONTRACT.json (1,031 lines; validates against contracts/design-contract.schema.json); .ui-redesign/contracts/DESIGN_CONTRACT.md (690 lines; 13 sections)"
     },
     "implementation-contract": {
-      "status": "NOT_STARTED",
-      "next_action": "Invoke frontend-implementer specialist (read-only) to draft the implementation contract (PIA-MUR-D-004-IMPL) that maps the approved design contract to specific source files in apps/web/ (CSS tokens, page builders, tab bar, sheets, FAB, citation chip, PWA manifest, service worker) and apps/api/ (any new static asset routes for /manifest.webmanifest, /icon-*.png, /apple-touch-icon.png, /service-worker.js). The implementation contract must include: file-by-file change list with line numbers, atomic commit plan, dependency manifest (none expected; B-6 still pending for Playwright/axe-core), backend/route/auth effects (likely zero; manifest + icons are static assets), PWA service-worker pre-cache list and fetch-failure behavior, CSP observation, atomic rollback plan. Does NOT authorize any source file modification; a separate PIA-MUR-D-004-IMPL approval is required before any code in apps/*/ packages/*/ db/ or infra/ is touched."
+      "status": "PAUSED",
+      "pause_reason": "Device-validation pre-flight in progress (B-1 RESOLVED 2026-06-14; user authorized orchestrator to start cloudflared quick-tunnel). Pre-flight will resolve UNVERIFIED items on the real iPhone 16 Pro before implementation contract begins.",
+      "next_action": "Orchestrator: (1) start cloudflared quick-tunnel to expose http://localhost:3000 as https://<random>.trycloudflare.com; (2) invoke iphone-interaction-specialist to produce a structured test checklist; (3) deliver the checklist + tunnel URL to the user; (4) user executes the checklist on the iPhone 16 Pro and reports findings; (5) orchestrator documents findings, resolves UNVERIFIED items, and surfaces PIA-MUR-D-004-IMPL for approval."
     },
     "implementation": {"status": "NOT_STARTED"},
     "device-validation": {"status": "NOT_STARTED", "note": "Requires physical iPhone 16 Pro (B-1) and bridge confirmation (B-2)."},
