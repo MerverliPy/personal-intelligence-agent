@@ -23,6 +23,45 @@
     "citation_chip_style": "footnote-text",
     "motion_tokens": "CSS variables"
   },
+  "device_validation_preflight": {
+    "started_at": "2026-06-14T21:50:00Z",
+    "status": "in_progress",
+    "bridges_live": {
+      "cloudflared_tunnel": {
+        "url": "https://sig-mardi-experiences-coastal.trycloudflare.com",
+        "target": "http://localhost:3000 (live API)",
+        "pid": 2006185,
+        "log": ".ui-redesign/evidence/devices/cloudflared.log",
+        "use": "HTTPS, installed-PWA, service-worker-required checks"
+      },
+      "tailscale_live_api": {
+        "url": "http://100.81.83.98:3000",
+        "target": "http://localhost:3000 (live API)",
+        "use": "HTTP, fast Safari browser iteration"
+      },
+      "tailscale_prototype": {
+        "url": "http://100.81.83.98:8000",
+        "target": ".ui-redesign/concepts/concept-3-stream/interactive/ (Stream concept prototype)",
+        "pid": 2016765,
+        "log": ".ui-redesign/evidence/devices/prototype-server.log",
+        "use": "HTTP, prototype testing, no SW needed"
+      }
+    },
+    "checklist": "planning/runs/PIA-MUR-D-PREFLIGHT-DEVICE-VALIDATION.md (14 checks DPC-1 through DPC-14)",
+    "expected_resolutions": [
+      "UNVERIFIED-1 (DPC-1 + DPC-2): iOS Safari <dialog>/sheet focus",
+      "UNVERIFIED-2 (DPC-3): reduce-motion in installed PWA",
+      "UNVERIFIED-4 (DPC-4): touch-target bounding-box sizes",
+      "UNVERIFIED-6 (DPC-5): prototype pixel-perfect match"
+    ],
+    "expected_decision_packets": [
+      "PIA-MUR-D-005 (dark-mode contrast, already named)",
+      "PIA-MUR-D-006 (iOS focus fix, already named)",
+      "PIA-MUR-D-007 (reduce-motion PWA, already named)",
+      "PIA-MUR-D-009 (touch-target fix, NEW if DPC-4 fails)",
+      "PIA-MUR-D-010 (visual-fidelity fix, NEW if DPC-5 fails)"
+    ]
+  },
   "b1_resolution": {
     "resolved_at": "2026-06-14T00:00:00Z",
     "device": "iPhone 16 Pro (or 16 Pro Max) — primary target met",
