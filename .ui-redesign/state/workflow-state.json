@@ -4,13 +4,13 @@
   "agent": "mobile-ui-orchestrator",
   "adapter_id": "PIA-MUR-ADAPTER-001",
   "updated_at": "2026-06-14T00:00:00Z",
-  "current_state": "CONCEPT_APPROVED",
-  "phase": "design-contract",
+  "current_state": "DESIGN_CONTRACT_APPROVED",
+  "phase": "implementation-contract",
   "blocker_count": 5,
   "open_decision_count": 0,
-  "approved_decision_count": 3,
-  "completed_phases": ["adapter-discovery", "baseline", "product-model", "concept-production"],
-  "active_phase": "design-contract",
+  "approved_decision_count": 4,
+  "completed_phases": ["adapter-discovery", "baseline", "product-model", "concept-production", "design-contract"],
+  "active_phase": "implementation-contract",
   "selected_concept": {
     "id": "PIA-MUR-D-003c",
     "name": "Stream",
@@ -68,11 +68,17 @@
       "evidence": ".ui-redesign/concepts/concept-1-calm/, .ui-redesign/concepts/concept-2-workspace/, .ui-redesign/concepts/concept-3-stream/, .ui-redesign/reports/PIA-MUR-D-003-concepts.md"
     },
     "design-contract": {
-      "status": "NOT_STARTED",
-      "next_action": "Invoke design-system-architect specialist (read-only) to draft the design contract for PIA-MUR-D-004, informed by Stream concept (PIA-MUR-D-003c) and the approved product model (PIA-MUR-D-002). Design contract must cover: tokens (color/typography/spacing/motion/safe-area), components (tab bar, sheet, citation chip, FAB, header, status badges, etc.), states (loading/empty/error/offline), motion (CSS variable tokens, reduce-motion, dark mode), accessibility (Dynamic Type AX5, VoiceOver rotor, contrast), safe-area (top Dynamic Island, bottom home indicator), PWA (manifest, theme-color, apple-touch-icon, viewport-fit=cover, service worker scope, CSP). B-2 (missing mobile-ui-design-contract command) acknowledged; orchestrator dispatches directly. Does NOT authorize any product-code, dependency, schema, route, API, auth, infra, or deployment change.",
-      "note": "No mobile-ui-design-contract command exists; orchestrator must dispatch directly."
+      "status": "DONE",
+      "started_at": "2026-06-14T00:00:00Z",
+      "completed_at": "2026-06-14T00:00:00Z",
+      "owner": "mobile-ui-orchestrator (delegated to design-system-architect)",
+      "decision_id": "PIA-MUR-D-004",
+      "evidence": ".ui-redesign/contracts/DESIGN_CONTRACT.json (1,031 lines; validates against contracts/design-contract.schema.json); .ui-redesign/contracts/DESIGN_CONTRACT.md (690 lines; 13 sections)"
     },
-    "implementation-contract": {"status": "NOT_STARTED"},
+    "implementation-contract": {
+      "status": "NOT_STARTED",
+      "next_action": "Invoke frontend-implementer specialist (read-only) to draft the implementation contract (PIA-MUR-D-004-IMPL) that maps the approved design contract to specific source files in apps/web/ (CSS tokens, page builders, tab bar, sheets, FAB, citation chip, PWA manifest, service worker) and apps/api/ (any new static asset routes for /manifest.webmanifest, /icon-*.png, /apple-touch-icon.png, /service-worker.js). The implementation contract must include: file-by-file change list with line numbers, atomic commit plan, dependency manifest (none expected; B-6 still pending for Playwright/axe-core), backend/route/auth effects (likely zero; manifest + icons are static assets), PWA service-worker pre-cache list and fetch-failure behavior, CSP observation, atomic rollback plan. Does NOT authorize any source file modification; a separate PIA-MUR-D-004-IMPL approval is required before any code in apps/*/ packages/*/ db/ or infra/ is touched."
+    },
     "implementation": {"status": "NOT_STARTED"},
     "device-validation": {"status": "NOT_STARTED", "note": "Requires physical iPhone 16 Pro (B-1) and bridge confirmation (B-2)."},
     "evidence-bundle": {"status": "NOT_STARTED"},
@@ -355,6 +361,8 @@
     "product_model_proposal": ".ui-redesign/reports/PIA-MUR-D-002-product-model.md (PIA-MUR-D-002, APPROVED)",
     "concepts_proposal": ".ui-redesign/reports/PIA-MUR-D-003-concepts.md (PIA-MUR-D-003, APPROVED -- PIA-MUR-D-003c Stream selected)",
     "selected_concept_evidence": ".ui-redesign/concepts/concept-3-stream/",
+    "design_contract_machine": ".ui-redesign/contracts/DESIGN_CONTRACT.json (PIA-MUR-D-004, APPROVED)",
+    "design_contract_human": ".ui-redesign/contracts/DESIGN_CONTRACT.md (PIA-MUR-D-004, APPROVED)",
     "p3_gate_baseline": {
       "unit_tests": "921/921",
       "security_tests": "13/13",
