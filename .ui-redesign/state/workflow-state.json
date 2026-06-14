@@ -4,13 +4,13 @@
   "agent": "mobile-ui-orchestrator",
   "adapter_id": "PIA-MUR-ADAPTER-001",
   "updated_at": "2026-06-14T00:00:00Z",
-  "current_state": "ADAPTER_APPROVED",
-  "phase": "baseline",
+  "current_state": "BASELINE_CAPTURED",
+  "phase": "product-model",
   "blocker_count": 6,
   "open_decision_count": 0,
   "approved_decision_count": 1,
-  "completed_phases": ["adapter-discovery"],
-  "active_phase": "baseline",
+  "completed_phases": ["adapter-discovery", "baseline"],
+  "active_phase": "product-model",
   "phases": {
     "adapter-discovery": {
       "status": "DONE",
@@ -20,10 +20,17 @@
       "decision_id": "PIA-MUR-D-001"
     },
     "baseline": {
-      "status": "NOT_STARTED",
-      "next_action": "Invoke real-ui-product-tester for desktop responsive screenshot capture; run mobile-ui-status; create design-contract and product-model decisions; do not modify product code."
+      "status": "DONE",
+      "started_at": "2026-06-14T00:00:00Z",
+      "completed_at": "2026-06-14T00:00:00Z",
+      "owner": "mobile-ui-orchestrator",
+      "decision_id": "PIA-MUR-D-001 (carried; baseline is a phase under the same authority)",
+      "evidence": ".ui-redesign/baseline/REPOSITORY_BASELINE.md; .ui-redesign/evidence/automated/http-baseline-probes.json"
     },
-    "product-model": {"status": "NOT_STARTED"},
+    "product-model": {
+      "status": "NOT_STARTED",
+      "next_action": "Invoke product-ux-analyst to produce a real-data product-model recommendation; orchestrator opens PIA-MUR-D-002 decision packet for user approval."
+    },
     "concept-production": {"status": "NOT_STARTED"},
     "design-contract": {"status": "NOT_STARTED", "note": "No mobile-ui-design-contract command exists; orchestrator must dispatch directly."},
     "implementation-contract": {"status": "NOT_STARTED"},
@@ -37,6 +44,9 @@
     "decision_ledger": ".ui-redesign/decisions/DECISION_LEDGER.md",
     "feature_parity_matrix": ".ui-redesign/contracts/FEATURE_PARITY_MATRIX.md",
     "evidence_root": ".ui-redesign/evidence/",
+    "evidence_automated_index": ".ui-redesign/evidence/automated/README.md",
+    "evidence_automated_baseline_http": ".ui-redesign/evidence/automated/http-baseline-probes.json",
+    "baseline_document": ".ui-redesign/baseline/REPOSITORY_BASELINE.md",
     "agents_root": ".opencode/agents/",
     "skills_root": ".opencode/skills/",
     "commands_root": ".opencode/commands/",
@@ -44,8 +54,8 @@
   },
   "git": {
     "branch": "chore/install-mobile-ui-redesign-system",
-    "head_commit": "ef6a910",
-    "head_message": "chore: install mobile UI redesign workflow",
+    "head_commit": "db76db2",
+    "head_message": "chore(redesign): adopt mobile UI redesign adapter (PIA-MUR-D-001)",
     "worktree_clean": false,
     "remote_check": "NOT RUN — orchestrator to verify independently",
     "uncommitted_paths": [
@@ -90,8 +100,8 @@
     "display_name": "Personal Intelligence and Action Engine (PIA)",
     "purpose": "Private, evidence-grounded LLM/agent platform with workspace isolation, OIDC authentication, document ingestion, hybrid retrieval, and governed persistent memory.",
     "phase_status": "P0 ✓ P1 ✓ P2 ✓ P3 ✓ DONE; P4–P7 NOT_STARTED",
-    "tracked_files": 521,
-    "tracked_files_note": "Updated from 467 (per AGENT_HANDOFF.md) to 521 (per `git ls-files | wc -l` on 2026-06-14).",
+    "tracked_files": 522,
+    "tracked_files_note": "Updated from 467 (per AGENT_HANDOFF.md) to 521 (per `git ls-files | wc -l` on 2026-06-14) to 522 (after baseline capture added the new workflow-state.json file).",
     "tasks_total": 64,
     "tasks_done": 33,
     "tasks_in_progress": 0,
