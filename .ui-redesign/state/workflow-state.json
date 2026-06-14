@@ -6,12 +6,24 @@
   "updated_at": "2026-06-14T00:00:00Z",
   "current_state": "PRODUCT_MODEL_APPROVED",
   "phase": "concept-production",
-  "blocker_count": 6,
+  "blocker_count": 5,
   "open_decision_count": 0,
   "approved_decision_count": 2,
   "completed_phases": ["adapter-discovery", "baseline", "product-model"],
-  "active_phase": "blocked-on-B-1",
-  "pause_reason": "User directed the orchestrator to resolve B-1 (physical iPhone 16 Pro availability) before concept-production begins (2026-06-14). Concept-production work would normally start here; it is paused until B-1 is resolved OR the user explicitly directs concept work to proceed without a real device.",
+  "active_phase": "concept-production",
+  "b1_resolution": {
+    "resolved_at": "2026-06-14T00:00:00Z",
+    "device": "iPhone 16 Pro (or 16 Pro Max) — primary target met",
+    "network_path": "Same Tailscale network (100.81.83.98) for HTTP browser testing; cloudflared quick-tunnel (https://<random>.trycloudflare.com) for installed-PWA validation when HTTPS is required",
+    "bridge_authorized": "User authorized orchestrator to run `cloudflared tunnel --no-autoupdate --url http://localhost:3000` when device testing is needed",
+    "implications": [
+      "Primary iPhone 16 Pro acceptance target is now achievable.",
+      "Browser-only validation (Safari at http://100.81.83.98:3000 via Tailscale) is fast and does not require a tunnel.",
+      "Installed-PWA validation (Add to Home Screen + service worker registration) requires HTTPS, which the cloudflared quick-tunnel provides.",
+      "UNVERIFIED product-model claims (e.g., <dialog> showModal() focus on iOS Safari, prefers-reduced-motion in installed PWA mode) can be confirmed by the iPhone-interaction-specialist or real-ui-product-tester against the real device.",
+      "B-1 is now closed."
+    ]
+  },
   "phases": {
     "adapter-discovery": {
       "status": "DONE",
@@ -37,9 +49,8 @@
       "evidence": ".ui-redesign/reports/PIA-MUR-D-002-product-model.md"
     },
     "concept-production": {
-      "status": "PAUSED",
-      "pause_reason": "B-1 (physical iPhone 16 Pro availability UNCONFIRMED) blocks downstream device-validation. User directed orchestrator to resolve B-1 before concept-production (2026-06-14).",
-      "next_action": "User to answer B-1 resolution questions (device availability, network reach, bridge preference). Once B-1 is resolved or user explicitly directs concept work to proceed, invoke visual-concept-prototyper specialist (read-only) to produce 2–3 isolated, real-data concept prototypes. Concepts honor the product model (T1=A bottom tab, T2=A single-pane + sheet, T3=A dedicated search tab, T4=A avatar in header, T5=A text-only, T6=A offline banner, T7=A FAB). Orchestrator opens PIA-MUR-D-003 (first concept direction) decision packet for user approval."
+      "status": "NOT_STARTED",
+      "next_action": "B-1 is now RESOLVED (iPhone 16 Pro available, Tailscale primary, cloudflared authorized). Invoke visual-concept-prototyper specialist (read-only) to produce 2–3 isolated, real-data concept prototypes for the iPhone 16 Pro redesign. Concepts honor the product model (T1=A bottom tab, T2=A single-pane + sheet, T3=A dedicated search tab, T4=A avatar in header, T5=A text-only, T6=A offline banner, T7=A FAB). Orchestrator opens PIA-MUR-D-003 (first concept direction) decision packet for user approval. Concept evaluation can include device evidence on the iPhone 16 Pro."
     },
     "design-contract": {"status": "NOT_STARTED", "note": "No mobile-ui-design-contract command exists; orchestrator must dispatch directly."},
     "implementation-contract": {"status": "NOT_STARTED"},
@@ -374,7 +385,10 @@
       "id": "B-1",
       "title": "Physical iPhone 16 Pro availability UNCONFIRMED",
       "affects": ["device-validation phase", "primary acceptance evidence"],
-      "requires": "User must confirm an iPhone 16 Pro is available with the network reach to load the app (LAN, Tailscale, or cloudflared tunnel)."
+      "requires": "User must confirm an iPhone 16 Pro is available with the network reach to load the app (LAN, Tailscale, or cloudflared tunnel).",
+      "status": "RESOLVED",
+      "resolved_at": "2026-06-14T00:00:00Z",
+      "resolution": "User confirmed iPhone 16 Pro (or 16 Pro Max) is available; iPhone is on the same Tailscale network as the dev host (100.81.83.98); user authorized orchestrator to run cloudflared quick-tunnel when HTTPS-required installed-PWA validation is needed. Primary iPhone 16 Pro acceptance target is now achievable."
     },
     {
       "id": "B-2",
