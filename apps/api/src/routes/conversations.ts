@@ -14,7 +14,15 @@ import { createPool } from '@pia/db';
 import { createConversation, listConversations, getConversation } from '@pia/db';
 import { getModelRun, getMessage } from '@pia/db';
 import type { ConversationMode } from '@pia/db';
-import { fakeModelGateway, fakeModelGatewayConfig, AssistantOrchestrator } from '@pia/ai';
+import {
+  fakeModelGateway,
+  fakeModelGatewayConfig,
+  createOpenAIGateway,
+  AssistantOrchestrator,
+  type ModelGateway,
+  type ModelGatewayConfig,
+} from '@pia/ai';
+import { loadConfig } from '@pia/config';
 import { RetrievalService, fakeEmbeddingProvider, defaultFakeModelConfig } from '@pia/knowledge';
 import {
   createErrorEnvelope,
@@ -65,13 +73,18 @@ const conversationRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
     embeddingModelConfig: defaultFakeModelConfig(),
   });
 
-  // Initialize the orchestrator with fake gateway defaults
+  // Initialize the orchestrator. Selects the model gateway from MODEL_PROVIDER
+  // ("fake" -> in-memory, anything else -> OpenAI-compatible adapter). The
+  // adapter accepts an optional MODEL_BASE_URL override so DeepSeek (or any
+  // other OpenAI-compatible provider) can be routed through the same code path.
+  const { gateway, gatewayConfig } = buildGateway();
+
   const orchestrator = new AssistantOrchestrator({
-    gateway: fakeModelGateway,
+    gateway,
     retrievalService,
     pool,
-    provider: fakeModelGatewayConfig().provider,
-    model: fakeModelGatewayConfig().name,
+    provider: gatewayConfig.provider,
+    model: gatewayConfig.name,
   });
 
   // -----------------------------------------------------------------------
@@ -304,6 +317,10 @@ const conversationRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
 
       try {
         // Phase 2: Stream the full orchestration pipeline
+        // PIA_DISABLE_RETRIEVAL=1 lets the assistant answer without document
+        // evidence, which is useful when testing a model gateway end-to-end
+        // before any documents have been ingested.
+        const disableRetrieval = process.env['PIA_DISABLE_RETRIEVAL'] === '1';
         const eventGenerator = orchestrator.stream({
           workspaceId: ctx.workspaceId,
           conversationId: params.conversation_id,
@@ -312,6 +329,7 @@ const conversationRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
           userContent,
           mode: convRow.mode,
           signal: abortController.signal,
+          ...(disableRetrieval ? { retrievalEnabled: false } : {}),
         });
 
         let sequence = 0;
@@ -336,5 +354,43 @@ const conversationRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
     },
   );
 };
+
+/**
+ * Picks the model gateway and config based on MODEL_PROVIDER.
+ *
+ * - `fake` (default): in-memory canned-response gateway, no network.
+ * - Anything else (`openai`, `deepseek`, etc.): OpenAI-compatible adapter.
+ *   `MODEL_BASE_URL` overrides the API base URL so OpenAI-compatible
+ *   providers (e.g. https://api.deepseek.com/v1) can be used directly.
+ */
+function buildGateway(): { gateway: ModelGateway; gatewayConfig: ModelGatewayConfig } {
+  let config;
+  try {
+    config = loadConfig();
+  } catch {
+    return { gateway: fakeModelGateway, gatewayConfig: fakeModelGatewayConfig() };
+  }
+
+  if (config.model.provider === 'fake') {
+    return { gateway: fakeModelGateway, gatewayConfig: fakeModelGatewayConfig() };
+  }
+
+  const gatewayConfig: ModelGatewayConfig = {
+    provider: config.model.provider,
+    name: config.model.name,
+    apiKey: config.model.apiKey,
+    maxTokens: config.model.maxTokens,
+    temperature: config.model.temperature,
+    timeoutMs: config.model.timeoutMs,
+  };
+
+  const baseURL = process.env['MODEL_BASE_URL'];
+  const gateway = createOpenAIGateway({
+    config: gatewayConfig,
+    ...(baseURL ? { baseURL } : {}),
+  });
+
+  return { gateway, gatewayConfig };
+}
 
 export default conversationRoutes;

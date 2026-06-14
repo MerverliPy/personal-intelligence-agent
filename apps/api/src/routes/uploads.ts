@@ -32,18 +32,21 @@ export interface UploadRouteOptions {
 /**
  * Creates a default storage provider from configuration.
  *
- * In development/test mode falls back to the local in-memory adapter.
- * In production uses S3-compatible storage.
+ * Uses the S3-compatible adapter whenever object storage credentials are
+ * available (any mode), so MinIO works from the browser in development. Falls
+ * back to the local in-memory adapter only when no credentials are configured.
  */
 function defaultStorageProvider(): StorageProvider {
   try {
     const config = loadConfig();
-    if (config.mode === 'production') {
+    const accessKey = config.storage.accessKeyId.expose();
+    const secretKey = config.storage.secretAccessKey.expose();
+    if (accessKey && secretKey) {
       return createS3StorageProvider({
         endpoint: config.storage.endpoint,
         bucket: config.storage.bucket,
-        accessKeyId: config.storage.accessKeyId.expose(),
-        secretAccessKey: config.storage.secretAccessKey.expose(),
+        accessKeyId: accessKey,
+        secretAccessKey: secretKey,
         region: 'us-east-1',
         forcePathStyle: true,
       });
@@ -51,8 +54,7 @@ function defaultStorageProvider(): StorageProvider {
   } catch {
     // Config not available; use local fallback
   }
-  // Development: use in-memory local adapter
-  // NOTE: In a real dev setup, simulateUpload must be called before completion
+  // Fallback: in-memory adapter (no real upload possible from a browser)
   return createLocalStorageProvider().provider;
 }
 

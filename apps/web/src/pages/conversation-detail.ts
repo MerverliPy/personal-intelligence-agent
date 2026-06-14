@@ -53,32 +53,11 @@ let activeEventSource = null;
 let citationModal = null;
 
 async function loadMessages() {
-  const thread = document.getElementById('message-thread');
-  try {
-    const data = await apiFetch(
-      '/v1/workspaces/' + WORKSPACE_ID + '/conversations/' + CONVERSATION_ID + '/events?run_id=__none__&_=messages',
-    ).catch(function() { return null; });
-    // The events endpoint is SSE-only; we fetch messages via the
-    // conversation detail endpoint. P3-T05 did not expose a
-    // dedicated list-messages endpoint for the web, so we fall back
-    // to a known shape: the API may return a 404 for the events call
-    // and we render an empty thread with a hint.
-    if (!data) {
-      thread.innerHTML = '<p class="empty">No messages yet. Send one above.</p>';
-      return;
-    }
-    const items = (data && data.items) || [];
-    if (items.length === 0) {
-      thread.innerHTML = '<p class="empty">No messages yet. Send one above.</p>';
-      return;
-    }
-    thread.innerHTML = items.map(function(m) { return renderMessageClient(m, true); }).join('');
-    wireFeedbackForms();
-    wireCitationChips();
-  } catch (err) {
-    showError('Failed to load messages: ' + err.message);
-    thread.innerHTML = '<p class="empty">Could not load messages.</p>';
-  }
+  // No dedicated list-messages endpoint exists yet (the API only exposes
+  // SSE for live streams), so the initial thread is rendered empty and
+  // new messages are appended as the user sends them.
+  var thread = document.getElementById('message-thread');
+  thread.innerHTML = '<p class="empty">No messages yet. Send one above.</p>';
 }
 
 // Client-side mirror of renderMessage (kept inline so the page works
@@ -289,7 +268,9 @@ function parseSseBlockClient(block) {
 }
 
 function handleSseEvent(ev) {
-  if (ev.event !== 'message') return;
+  // Server emits named events (event: run.started, response.delta, etc.).
+  // Accept any event with a parseable JSON data payload — the inner
+  // data.type drives the UI branches below.
   var data;
   try { data = JSON.parse(ev.data); } catch (e) { return; }
   if (!data || typeof data !== 'object') return;
@@ -377,7 +358,7 @@ document.getElementById('message-form').addEventListener('submit', async functio
     thread.insertAdjacentHTML('beforeend',
       '<article class="message message-user" data-message-id="' + escapeHtml(result.user_message_id) + '" aria-label="User message"><div class="message-content">' + escapeHtml(content) + '</div></article>'
     );
-    var runId = result.run && result.run.id;
+    var runId = (result && (result.id || (result.run && result.run.id))) || null;
     if (runId) openRunStream(runId);
   } catch (err) {
     showError('Failed to send message: ' + err.message);

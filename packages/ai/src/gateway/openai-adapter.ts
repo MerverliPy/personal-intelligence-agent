@@ -31,6 +31,12 @@ export interface OpenAIGatewayOptions {
   readonly config: ModelGatewayConfig;
   /** Optional sensitivity policy for pre-dispatch checks. */
   readonly policy?: SensitivityPolicy;
+  /**
+   * Optional override for the OpenAI-compatible API base URL.
+   * Set this to point at any OpenAI-compatible provider (e.g.
+   * `https://api.deepseek.com/v1`).
+   */
+  readonly baseURL?: string;
 }
 
 /**
@@ -41,12 +47,13 @@ export interface OpenAIGatewayOptions {
  * imports `openai` types directly.
  */
 export function createOpenAIGateway(options: OpenAIGatewayOptions): ModelGateway {
-  const { config, policy } = options;
+  const { config, policy, baseURL } = options;
 
   const client = new OpenAI({
     apiKey: config.apiKey.expose(),
     maxRetries: 0,
     timeout: config.timeoutMs,
+    ...(baseURL ? { baseURL } : {}),
   });
 
   function buildRequestParams(request: GenerationRequest, stream?: boolean) {

@@ -65,7 +65,7 @@ export async function createServer(opts: CreateServerOptions) {
   } = opts;
 
   const app = Fastify({
-    logger: false, // We use @pia/observability logger instead
+    logger: process.env['PIA_DEBUG_HTTP'] === '1' ? { level: 'info' } : false,
     genReqId: () => crypto.randomUUID(),
     trustProxy: mode === 'production',
   });

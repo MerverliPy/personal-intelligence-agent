@@ -8,7 +8,7 @@
 // a conversation to inspect and provide feedback on.
 // ---------------------------------------------------------------------------
 
-import { pageShell, sharedCss, sharedJs } from './shared.js';
+import { pageShell } from './shared.js';
 
 /**
  * Server-rendered HTML for the conversation list page.
@@ -102,6 +102,6 @@ loadConversations();
     workspaceName,
     tabActive: 'conversations',
     bodyHtml,
-    bodyScript: bodyScript + '\n' + sharedCss + '\n' + sharedJs,
+    bodyScript,
   });
 }
