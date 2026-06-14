@@ -37,6 +37,7 @@ import {
 } from '@pia/knowledge';
 import type { VerifiableCitation, VerifierInput } from '@pia/knowledge';
 import type { Citation } from '@pia/contracts';
+import { ModelGatewayError, type ErrorCategory } from '../gateway/index.js';
 import type {
   OrchestratorSseEvent,
   OrchestratorRunOptions,
@@ -344,8 +345,18 @@ export class AssistantOrchestrator {
               };
             }
             break;
-          case 'error':
-            throw new Error(event.error.message ?? 'Model gateway error');
+          case 'error': {
+            // AUD-P3-102: re-throw the original ModelGatewayError so
+            // the catch block can read its `category` and derive a
+            // sanitized safe message. The previous code wrapped the
+            // message in a plain Error, losing the category and
+            // forcing the catch block to expose raw provider text.
+            // The GenerationEvent discriminated union guarantees
+            // `event.error` is a ModelGatewayError, so a direct re-
+            // throw preserves both `category` and the original
+            // `message` (for the observability log in the catch).
+            throw event.error;
+          }
           case 'done':
             gatewayUsage = {
               promptTokens: event.usage.promptTokens,
@@ -503,9 +514,25 @@ export class AssistantOrchestrator {
         citations: persistedCitations,
       };
     } catch (err) {
-      // --- Safe error handling ---
-      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred.';
-      const safeMessage = truncateSafe(errorMessage);
+      // --- Safe error handling (AUD-P3-102) ---
+      // Map the underlying error to a category-derived sanitized
+      // message. The raw provider text is logged to the
+      // observability stream (console.error here; structured logging
+      // arrives in P7) and is NEVER returned to the client.
+      const rawErrorText = err instanceof Error ? err.message : String(err);
+      const safeMessage = safeErrorMessageFor(err);
+      // Truncate the safe message as a final guardrail against
+      // unexpected long strings.
+      const finalSafeMessage = truncateSafe(safeMessage);
+      // Log the raw provider text for debugging. This is the only
+      // place the raw text is preserved; it never reaches the SSE
+      // envelope or the DB `error_safe_message` column.
+      // eslint-disable-next-line no-console
+      console.error(
+        `[orchestrator] provider error: category=${
+          err instanceof ModelGatewayError ? err.category : 'UNKNOWN'
+        }, run_id=${runId}, raw=${rawErrorText}`,
+      );
 
       try {
         await completeModelRun(this.pool, workspaceId, runId, {
@@ -514,7 +541,7 @@ export class AssistantOrchestrator {
           outputTokens: null,
           latencyMs: Date.now() - startTime,
           errorCode: 'MODEL_PROVIDER_UNAVAILABLE',
-          errorSafeMessage: safeMessage,
+          errorSafeMessage: finalSafeMessage,
         });
       } catch (persistErr) {
         // Log but don't expose persistence failures to the client
@@ -526,7 +553,7 @@ export class AssistantOrchestrator {
         sequence: sequence++,
         error: {
           code: 'MODEL_PROVIDER_UNAVAILABLE',
-          message: safeMessage,
+          message: finalSafeMessage,
           request_id: runId,
         },
       };
@@ -580,4 +607,52 @@ function truncateSafe(raw: string): string {
     return raw.slice(0, maxLen) + '...';
   }
   return raw;
+}
+
+/**
+ * Maps a model gateway error to a sanitized user-facing message
+ * (AUD-P3-102). The raw provider text is intentionally NOT
+ * included — the SSE envelope and the DB `error_safe_message`
+ * column carry only the category-derived string. The raw text is
+ * logged separately to the observability stream for debugging.
+ *
+ * For non-`ModelGatewayError` errors, returns a generic safe
+ * message that does not leak implementation details.
+ */
+function safeErrorMessageFor(err: unknown): string {
+  if (err instanceof ModelGatewayError) {
+    return safeMessageForCategory(err.category);
+  }
+  return 'An unexpected error occurred while contacting the model provider.';
+}
+
+/**
+ * Returns a fixed, category-derived safe message for each stable
+ * `ErrorCategory`. The strings are short, do not include any
+ * provider-specific text, and use neutral language. Categories
+ * that imply user action get actionable language; others get a
+ * short factual statement.
+ */
+function safeMessageForCategory(category: ErrorCategory): string {
+  switch (category) {
+    case 'AUTHENTICATION':
+      return 'Authentication with the model provider failed.';
+    case 'RATE_LIMITED':
+      return 'The model provider is currently rate-limited. Please try again shortly.';
+    case 'TIMEOUT':
+      return 'The model request timed out. Please try again.';
+    case 'PROVIDER_UNAVAILABLE':
+      return 'The model provider is currently unavailable. Please try again shortly.';
+    case 'INVALID_REQUEST':
+      return 'The request could not be processed. Please try rephrasing your question.';
+    case 'CONTENT_FILTERED':
+      return 'The response was filtered by the model provider safety policy.';
+    case 'CANCELLED':
+      return 'The run was cancelled.';
+    case 'POLICY_DENIED':
+      return 'The request was denied by policy.';
+    case 'UNKNOWN':
+    default:
+      return 'An unexpected error occurred while contacting the model provider.';
+  }
 }

@@ -18,11 +18,11 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import type { Pool } from 'pg';
 import {
   AssistantOrchestrator,
+  ModelGatewayError,
   type ModelGateway,
   type GenerationRequest,
   type GenerationResult,
   type GenerationEvent,
-  type ModelGatewayError,
   type RetrievalService as RetrievalServiceType,
 } from '@pia/ai';
 import type { RetrievalService, RetrievalResponse, RetrievalResult } from '@pia/knowledge';
@@ -60,11 +60,10 @@ afterAll(async () => {
  * Used to simulate a downstream LLM outage.
  */
 function createFailingGateway(): ModelGateway {
-  const err: ModelGatewayError = {
-    name: 'ModelGatewayError',
-    message: 'upstream connection refused',
-    category: 'PROVIDER_UNAVAILABLE',
-  } as ModelGatewayError;
+  // AUD-P3-102: use the real ModelGatewayError constructor so the
+  // catch block's `instanceof ModelGatewayError` check is true and
+  // the category-derived safe message is used.
+  const err = new ModelGatewayError('upstream connection refused', 'PROVIDER_UNAVAILABLE');
 
   async function generate(_request: GenerationRequest): Promise<GenerationResult> {
     throw err;
@@ -167,22 +166,22 @@ describe('provider-failure graceful degradation (P3-T10 security)', () => {
     expect(failEvent).toBeDefined();
     expect(failEvent?.error?.code).toBe('MODEL_PROVIDER_UNAVAILABLE');
 
-    // The error message is present and truncated to <= 200 chars
+    // The error message is present and bounded in length
     expect(failEvent?.error?.message).toBeDefined();
     expect(failEvent?.error?.message!.length).toBeLessThanOrEqual(200);
 
-    // CURRENT BEHAVIOR: the orchestrator passes the raw provider error
-    // message through (only truncated, not sanitized). This is a known
-    // P4 follow-up — see P3-T10 run record. The provider-specific text
-    // could leak internal infrastructure details. For now, this test
-    // documents the contract: run.failed is emitted with the right code,
-    // and the message is bounded in length.
-    //
-    // When P4+ introduces a sanitized error-message policy, this test
-    // should be updated to assert that the message is the sanitized
-    // safe message, not the raw provider text.
+    // AUD-P3-102: the SSE envelope and the DB `error_safe_message`
+    // carry the category-derived sanitized string, NOT the raw
+    // provider text. The raw provider text is logged to the
+    // observability stream (console.error) for debugging only.
+    const safeMessage = failEvent?.error?.message ?? '';
+    expect(safeMessage).not.toContain('upstream connection refused');
+    expect(safeMessage).toContain('unavailable');
+    // Truncation is the final guardrail — the safe message must be
+    // a short, neutral, category-derived phrase.
+    expect(safeMessage.length).toBeLessThan(200);
 
-    // The run row must be FAILED
+    // The run row must be FAILED with the sanitized safe message
     const runRow = await pool.query<{
       status: string;
       error_code: string | null;
@@ -190,6 +189,9 @@ describe('provider-failure graceful degradation (P3-T10 security)', () => {
     }>(`SELECT status, error_code, error_safe_message FROM model_runs WHERE id = $1`, [runId]);
     expect(runRow.rows[0]?.status).toBe('FAILED');
     expect(runRow.rows[0]?.error_code).toBe('MODEL_PROVIDER_UNAVAILABLE');
+    // The DB column carries the sanitized text, not the raw provider text.
     expect(runRow.rows[0]?.error_safe_message).toBeDefined();
+    expect(runRow.rows[0]?.error_safe_message).not.toContain('upstream connection refused');
+    expect(runRow.rows[0]?.error_safe_message).toContain('unavailable');
   });
 });
