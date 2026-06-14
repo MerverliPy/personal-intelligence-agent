@@ -101,6 +101,7 @@ export {
   categoryToFailureClass,
   classify,
   submitFeedback,
+  MessageNotFoundError,
   type FeedbackCategory,
   type FeedbackSuggestion,
   type CategoryToFailureClassResult,

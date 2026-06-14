@@ -15,8 +15,9 @@
 //   - The classifier is a pure function of the feedback category.
 //     Free-text content is not inspected.
 //   - Workspace authorization is enforced via the `workspace_id`
-//     parameter and the RLS policies on `feedback` and
-//     `feedback_retrieval_traces`.
+//     parameter, the `getMessage` workspace-alignment check below
+//     (AUD-P3-101, defense-in-depth), and the RLS policies on
+//     `feedback` and `feedback_retrieval_traces`.
 // ---------------------------------------------------------------------------
 
 import type { Pool } from 'pg';
@@ -25,11 +26,36 @@ import {
   setFeedbackSuggestion,
   addFeedbackRetrievalTraces,
   getFeedback,
+  getMessage,
   type FeedbackRow,
 } from '@pia/db';
 import type { FailureClass } from '@pia/db';
 import type { FeedbackCategory } from '@pia/contracts';
 import { classify, type FeedbackSuggestion } from './classifier.js';
+
+/**
+ * Thrown when feedback is submitted for a `messageId` that does not
+ * exist in the supplied workspace (AUD-P3-101).
+ *
+ * The FK on `feedback.message_id` checks existence only — it does
+ * not enforce workspace alignment. Without the explicit check in
+ * `submitFeedback`, a direct caller (bypassing the API route) could
+ * insert a feedback row whose `workspace_id` is the caller's but
+ * whose `message_id` belongs to a different workspace.
+ *
+ * This is defense-in-depth on top of the route-layer
+ * `requireWorkspaceContext` check at `apps/api/src/routes/feedback.ts`.
+ */
+export class MessageNotFoundError extends Error {
+  readonly messageId: string;
+  readonly workspaceId: string;
+  constructor(messageId: string, workspaceId: string) {
+    super(`Message ${messageId} not found in workspace ${workspaceId}.`);
+    this.name = 'MessageNotFoundError';
+    this.messageId = messageId;
+    this.workspaceId = workspaceId;
+  }
+}
 
 export interface SubmitFeedbackInput {
   workspaceId: string;
@@ -65,6 +91,19 @@ export async function submitFeedback(
   pool: Pool,
   input: SubmitFeedbackInput,
 ): Promise<SubmitFeedbackResult> {
+  // AUD-P3-101 (P4 pre-flight): verify that the message belongs to
+  // the supplied workspace before inserting feedback. The FK on
+  // feedback.message_id checks existence only — it does not enforce
+  // workspace_id alignment. Without this check, a caller that
+  // bypasses the route layer could insert feedback for a message in
+  // a different workspace (the row would land in the caller's
+  // workspace but reference a foreign message). This is
+  // defense-in-depth on top of the route-layer `requireWorkspaceContext`.
+  const message = await getMessage(pool, input.workspaceId, input.messageId);
+  if (message === null) {
+    throw new MessageNotFoundError(input.messageId, input.workspaceId);
+  }
+
   // 1. Insert the feedback row.
   const row = await createFeedback(pool, {
     workspaceId: input.workspaceId,

@@ -8,4 +8,9 @@ export { categoryToFailureClass, type CategoryToFailureClassResult } from './fai
 
 export { classify, type FeedbackSuggestion } from './classifier.js';
 
-export { submitFeedback, type SubmitFeedbackInput, type SubmitFeedbackResult } from './service.js';
+export {
+  submitFeedback,
+  MessageNotFoundError,
+  type SubmitFeedbackInput,
+  type SubmitFeedbackResult,
+} from './service.js';

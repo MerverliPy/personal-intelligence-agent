@@ -1,30 +1,22 @@
 // ---------------------------------------------------------------------------
-// Security: P3-T08 cross-tenant insert regression test (P3-T10)
+// Security: P3-T08 cross-tenant insert regression test (P3-T10) — FIXED (P4 pre-flight, AUD-P3-101)
 // ---------------------------------------------------------------------------
-// Per the P3-T08 review (`planning/reviews/P3-T08.md`):
-//   PRE_EXISTING: `apps/api/src/routes/feedback.ts:166-181` allows a user
-//   in workspace A to submit feedback for a message UUID in workspace B.
-//   The RLS policy on `feedback.message_id` does not catch the
-//   cross-workspace insert because the message is referenced by UUID
-//   only — the FK does not enforce workspace_id alignment.
+// Originally documented a PRE_EXISTING gap at the API route layer
+// (cross-workspace `messageId` insertion). The fix is now in
+// `packages/ai/src/feedback/service.ts` (AUD-P3-101): the service
+// performs a workspace-alignment check via `getMessage` BEFORE
+// inserting the feedback row, and throws `MessageNotFoundError` if
+// the message does not exist in the supplied workspace.
 //
-// This test DOCUMENTS the gap by asserting the current behavior. The
-// fix is scheduled for P4 (cross-tenant message lookup before insert).
-//
-// IMPORTANT: This is a security REGRESSION TEST, not a fix. It records
-// the gap so that:
-//   1. Future changes that introduce the same gap are caught.
-//   2. Future changes that close the gap can update the assertions.
-//
-// Current state: submitFeedback does NOT verify the message's
-// workspace_id matches the supplied workspaceId. The insert succeeds
-// even when the message belongs to a different workspace. This is a
-// known P4 follow-up.
+// This test now ASSERTS the fix rather than documenting the gap. The
+// service-layer check is defense-in-depth on top of the route-layer
+// `requireWorkspaceContext` check at `apps/api/src/routes/feedback.ts`.
+// If a future change re-introduces the gap, this test will fail.
 // ---------------------------------------------------------------------------
 
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import type { Pool } from 'pg';
-import { submitFeedback } from '@pia/ai';
+import { submitFeedback, MessageNotFoundError } from '@pia/ai';
 import {
   setupSecurityDatabase,
   teardownSecurityDatabase,
@@ -57,8 +49,7 @@ afterAll(async () => {
 
 describe('P3-T08 cross-tenant insert regression (P3-T10 security)', () => {
   it(
-    'documents the PRE_EXISTING gap: submitFeedback inserts feedback for a ' +
-      'message in another workspace (FIX scheduled for P4)',
+    'rejects cross-tenant messageId with MessageNotFoundError (AUD-P3-101 fix)',
     async () => {
       if (!dbAvailable) return;
       if (!pool || !fixtures) throw new Error('Setup did not complete');
@@ -80,33 +71,26 @@ describe('P3-T08 cross-tenant insert regression (P3-T10 security)', () => {
       );
       const otherMessageId = msgRes.rows[0]!.id;
 
-      // A user from ALPHA attempts to submit feedback referencing a message
-      // in the OTHER workspace. The workspaceId passed is alpha; the
-      // messageId belongs to other. As of P3-T08, this insert SUCCEEDS
-      // because the service does not check message workspace alignment.
-      // The fix is scheduled for P4.
-      const result = await submitFeedback(pool, {
-        workspaceId: fixtures.workspaceId,
-        submittedBy: fixtures.userId,
-        messageId: otherMessageId,
-        category: 'POSITIVE',
-      });
+      // A user from ALPHA attempts to submit feedback referencing a
+      // message in the OTHER workspace. The workspaceId passed is
+      // alpha; the messageId belongs to other. The service-layer
+      // check (AUD-P3-101) must throw MessageNotFoundError.
+      await expect(
+        submitFeedback(pool, {
+          workspaceId: fixtures.workspaceId,
+          submittedBy: fixtures.userId,
+          messageId: otherMessageId,
+          category: 'POSITIVE',
+        }),
+      ).rejects.toBeInstanceOf(MessageNotFoundError);
 
-      // The insert succeeded — this IS the gap.
-      expect(result.row.id).toBeDefined();
-      expect(result.row.workspaceId).toBe(fixtures.workspaceId);
-      // But the message it references belongs to the other workspace.
-      // The RLS policy on `messages` is not consulted because the FK is
-      // checked by ID, not by workspace.
-      const messageWorkspace = await pool.query<{ workspace_id: string }>(
-        `SELECT workspace_id FROM messages WHERE id = $1`,
-        [otherMessageId],
+      // Verify no feedback row landed in alpha for the foreign message.
+      const crossRows = await pool.query<{ count: string }>(
+        `SELECT COUNT(*)::text AS count FROM feedback
+         WHERE workspace_id = $1 AND message_id = $2`,
+        [fixtures.workspaceId, otherMessageId],
       );
-      expect(messageWorkspace.rows[0]?.workspace_id).toBe(fixtures.otherWorkspaceId);
-
-      // When the P4 fix lands, this test should be updated to assert
-      // that submitFeedback THROWS with a "message not found" or
-      // "cross-workspace" error.
+      expect(Number(crossRows.rows[0]?.count ?? '0')).toBe(0);
     },
   );
 
