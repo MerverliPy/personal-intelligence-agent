@@ -77,3 +77,24 @@ Each `planning/runs/<TASK-ID>.md` must contain:
 - Security/privacy impact
 - Database/API compatibility impact
 - Remaining risks or follow-up tasks
+
+
+# Mobile UI Redesign Repository Rules
+
+Merge this section into the repository's existing `AGENTS.md`. Do not replace stronger project-specific rules.
+
+## Redesign governance
+
+- Use `mobile-ui-orchestrator` for mobile UI redesign work.
+- Do not modify product code before the repository adapter and baseline are approved.
+- Every design decision requires a recorded approval packet.
+- Do not invent product data or replace unavailable integrations with mocks.
+- Use the real application runtime and real repository data for concepts and acceptance.
+- Treat iPhone 16 Pro portrait Safari and installed-PWA behavior as primary acceptance targets.
+- Treat automated-versus-device disagreements as blockers.
+- Preserve current behavior through tests and the feature-parity matrix.
+- Require approval and security review for every dependency change.
+- Require an approved implementation contract before frontend, backend, routing, API, schema, authentication, infrastructure, or deployment changes.
+- Store redesign artifacts under `.ui-redesign/`.
+- Keep secrets and secret values out of prompts, logs, reports, screenshots, recordings, commits, and pull requests.
+- Use small atomic commits tied to decision and contract IDs.

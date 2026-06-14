@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "evidence-manifest.schema.json",
+  "title": "Redesign Evidence Manifest",
+  "type": "object",
+  "required": [
+    "manifestId",
+    "baselineCommit",
+    "implementationCommit",
+    "automated",
+    "devices",
+    "agreement",
+    "redaction"
+  ],
+  "properties": {
+    "manifestId": {
+      "type": "string"
+    },
+    "baselineCommit": {
+      "type": "string"
+    },
+    "implementationCommit": {
+      "type": "string"
+    },
+    "automated": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "devices": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "device",
+          "environment",
+          "result",
+          "evidence"
+        ],
+        "properties": {
+          "device": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string"
+          },
+          "result": {
+            "enum": [
+              "pass",
+              "fail",
+              "blocked"
+            ]
+          },
+          "evidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "agreement": {
+      "enum": [
+        "agrees",
+        "disagrees",
+        "unresolved"
+      ]
+    },
+    "redaction": {
+      "type": "object",
+      "required": [
+        "reviewed",
+        "secretsPresent"
+      ],
+      "properties": {
+        "reviewed": {
+          "const": true
+        },
+        "secretsPresent": {
+          "const": false
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
