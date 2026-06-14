@@ -16,7 +16,7 @@
   <img src="https://img.shields.io/badge/P0_Foundation-COMPLETE-22C55E?style=for-the-badge&labelColor=166534" alt="P0 Foundation" />
   <img src="https://img.shields.io/badge/P1_Platform-COMPLETE-22C55E?style=for-the-badge&labelColor=166534" alt="P1 Platform" />
   <img src="https://img.shields.io/badge/P2_Knowledge-COMPLETE-22C55E?style=for-the-badge&labelColor=166534" alt="P2 Knowledge" />
-  <img src="https://img.shields.io/badge/P3-Assistant-3B82F6?style=for-the-badge&labelColor=1E40AF" alt="P3 Assistant In Progress" />
+  <img src="https://img.shields.io/badge/P3_Assistant-COMPLETE-22C55E?style=for-the-badge&labelColor=166534" alt="P3 Assistant" />
   <img src="https://img.shields.io/badge/P4--P7-Planned-6B7280?style=for-the-badge&labelColor=374151" alt="P4-P7 Planned" />
 </div>
 
@@ -41,26 +41,26 @@ preserving cryptographic provenance, workspace-level access control, and a compl
 ## 🗺️ Delivery Roadmap
 
 > [!NOTE]
-> **32 of 64 tasks complete** across 8 phases. Phases P0, P1, and P2 are fully delivered and verified.
-> P3 is the next active phase.
+> **33 of 64 tasks complete** across 8 phases. Phases P0, P1, P2, and P3 are fully delivered and verified.
+> P4 is the next active phase.
 
-| Phase | Name                               |        Progress        |      Gate      |
-| :---: | ---------------------------------- | :--------------------: | :------------: |
-|  P0   | 🏗️ Engineering Foundation          |  ████████████ **6/6**  |    ✅ DONE     |
-|  P1   | 🔐 Identity, Tenancy & Platform    |  ████████████ **7/7**  |    ✅ DONE     |
-|  P2   | 📚 Knowledge Ingestion & Retrieval | ████████████ **10/10** |    ✅ DONE     |
-|  P3   | 💬 Conversational Assistant        |  █████████░░ **9/10**  | 🔄 In Progress |
-|  P4   | 🧠 Governed Persistent Memory      |  ░░░░░░░░░░░░ **0/7**  |   ⏳ Planned   |
-|  P5   | ⚡ Tool Gateway & Approvals        |  ░░░░░░░░░░░░ **0/8**  |   ⏳ Planned   |
-|  P6   | 📊 Portable Evaluation             |  ░░░░░░░░░░░░ **0/8**  |   ⏳ Planned   |
-|  P7   | 🚀 Production Hardening            |  ░░░░░░░░░░░░ **0/8**  |   ⏳ Planned   |
+| Phase | Name                               |        Progress        |    Gate    |
+| :---: | ---------------------------------- | :--------------------: | :--------: |
+|  P0   | 🏗️ Engineering Foundation          |  ████████████ **6/6**  |  ✅ DONE   |
+|  P1   | 🔐 Identity, Tenancy & Platform    |  ████████████ **7/7**  |  ✅ DONE   |
+|  P2   | 📚 Knowledge Ingestion & Retrieval | ████████████ **10/10** |  ✅ DONE   |
+|  P3   | 💬 Conversational Assistant        | ████████████ **10/10** |  ✅ DONE   |
+|  P4   | 🧠 Governed Persistent Memory      |  ░░░░░░░░░░░░ **0/7**  | ⏳ Planned |
+|  P5   | ⚡ Tool Gateway & Approvals        |  ░░░░░░░░░░░░ **0/8**  | ⏳ Planned |
+|  P6   | 📊 Portable Evaluation             |  ░░░░░░░░░░░░ **0/8**  | ⏳ Planned |
+|  P7   | 🚀 Production Hardening            |  ░░░░░░░░░░░░ **0/8**  | ⏳ Planned |
 
 ### 🔄 Currently In Progress
 
-**P3 — Conversational Assistant** is in progress (9 of 10 tasks complete). P3-T01 through P3-T09 are verified and delivered, covering the model gateway, prompt registry, context compiler, conversation persistence, assistant orchestration, grounded citations, citation verification, feedback classification, and the conversational UI.
+P3 is the most recently completed phase. **P4 — Governed Persistent Memory** is the next active phase (0 of 7 tasks complete). P3-T01 through P3-T10 are verified and delivered, covering the model gateway, prompt registry, context compiler, conversation persistence, assistant orchestration, grounded citations, citation verification, feedback classification, the conversational UI, and the end-to-end evaluation suites (answer eval harness, e2e upload-to-feedback journey, security cases). See [`planning/runs/P3-GATE.md`](planning/runs/P3-GATE.md) for the phase gate run record.
 
 <details>
-<summary>📋 <strong>View full P3–P7 roadmap</strong> (32 remaining tasks)</summary>
+<summary>📋 <strong>View full P3–P7 roadmap</strong> (31 remaining tasks)</summary>
 
 **P3 — Conversational Assistant** (10 tasks): Provider-neutral model gateway, prompt registry, context compiler, conversation persistence, assistant orchestration, grounded citations, citation verifier, feedback classification, conversational UI, end-to-end evaluation suites.
 
@@ -517,19 +517,23 @@ pnpm dev
 
 ### Core Scripts
 
-| Script                       | What It Does                                 |
-| ---------------------------- | -------------------------------------------- |
-| `pnpm dev`                   | Start API and worker in development mode     |
-| `pnpm build`                 | Build all 17 packages/apps                   |
-| `pnpm typecheck`             | Strict TypeScript validation (29 tasks)      |
-| `pnpm lint`                  | ESLint across workspace                      |
-| `pnpm test:unit`             | Vitest unit tests                            |
-| `pnpm test:integration`      | Integration tests (requires PostgreSQL)      |
-| `pnpm format:check`          | Verify Prettier formatting                   |
-| `pnpm format:fix`            | Auto-fix formatting                          |
-| `pnpm security:secrets`      | Scan for secrets in git history and files    |
-| `pnpm security:dependencies` | Audit dependencies for known vulnerabilities |
-| `pnpm ci:check`              | Full local CI simulation                     |
+| Script                       | What It Does                                                |
+| ---------------------------- | ----------------------------------------------------------- |
+| `pnpm dev`                   | Start API and worker in development mode                    |
+| `pnpm build`                 | Build all 17 packages/apps                                  |
+| `pnpm typecheck`             | Strict TypeScript validation (29 tasks)                     |
+| `pnpm lint`                  | ESLint across workspace                                     |
+| `pnpm test:unit`             | Vitest unit tests                                           |
+| `pnpm test:integration`      | Integration tests (requires PostgreSQL)                     |
+| `pnpm test:e2e`              | Upload-to-feedback end-to-end journey (requires PostgreSQL) |
+| `pnpm test:security`         | Security suites — citation, injection, provider failure     |
+| `pnpm eval:retrieval`        | Portable retrieval evaluation harness (P2-T10)              |
+| `pnpm eval:answers`          | Grounded-answer evaluation harness (P3-T10)                 |
+| `pnpm format:check`          | Verify Prettier formatting                                  |
+| `pnpm format:fix`            | Auto-fix formatting                                         |
+| `pnpm security:secrets`      | Scan for secrets in git history and files                   |
+| `pnpm security:dependencies` | Audit dependencies for known vulnerabilities                |
+| `pnpm ci:check`              | Full local CI simulation                                    |
 
 ### Local Services
 
@@ -754,5 +758,5 @@ pnpm security:dependencies   # npm audit for known CVEs
   <br/>
   <sub>Built with strict TypeScript · PostgreSQL + pgvector · Redis · Fastify · Next.js</sub>
   <br/>
-  <sub>32 of 64 tasks complete · P0 ✓ · P1 ✓ · P2 ✓</sub>
+  <sub>33 of 64 tasks complete · P0 ✓ · P1 ✓ · P2 ✓ · P3 ✓</sub>
 </div>

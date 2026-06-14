@@ -7,9 +7,9 @@ hybrid retrieval, and governed persistent memory.
 ## Current State (2026-06-13)
 
 - **Tracked files:** 442
-- **Phase:** P0, P1, P2 complete; P3 in progress; P4-P7 not started
-- **Backlog tasks:** 64 defined, 32 completed, 0 failed verification
-- **Baseline:** `main` @ `96f23d3`
+- **Phase:** P0, P1, P2, P3 complete; P4-P7 not started
+- **Backlog tasks:** 64 defined, 33 completed, 0 failed verification
+- **Baseline:** `main` @ `dd84116`
 
 ## Package Inventory
 
@@ -35,14 +35,20 @@ hybrid retrieval, and governed persistent memory.
 
 ## Key Artifacts
 
-| Path                        | Purpose                                                   |
-| --------------------------- | --------------------------------------------------------- |
-| `docs/00-09_*.md`           | Authoritative specifications (PRD through external basis) |
-| `planning/backlog.yaml`     | Machine-readable task graph (64 tasks, 8 phase gates)     |
-| `planning/status.yaml`      | Execution state tracker                                   |
-| `planning/runs/`            | Per-task run records with verification evidence           |
-| `api/openapi.yaml`          | API contract (37 operations)                              |
-| `db/schema.sql`             | Reference PostgreSQL/pgvector schema                      |
-| `db/migrations/`            | Versioned forward migrations                              |
-| `.github/workflows/ci.yaml` | CI quality gates and security checks                      |
-| `compose.yaml`              | Local development dependencies (pgvector, Redis, MinIO)   |
+| Path                        | Purpose                                                        |
+| --------------------------- | -------------------------------------------------------------- |
+| `docs/00-09_*.md`           | Authoritative specifications (PRD through external basis)      |
+| `docs/adr/`                 | Architecture decision records (path-boundary, etc.)            |
+| `planning/backlog.yaml`     | Machine-readable task graph (64 tasks, 8 phase gates)          |
+| `planning/status.yaml`      | Execution state tracker                                        |
+| `planning/runs/`            | Per-task run records with verification evidence                |
+| `planning/reviews/`         | Independent reviewer verdicts and gate reviews                 |
+| `evals/retrieval/`          | Retrieval evaluation CLI and datasets (P2-T10)                 |
+| `evals/answers/`            | Grounded-answer evaluation CLI and datasets (P3-T10)           |
+| `test/e2e/`                 | End-to-end journey tests (upload → feedback, P3-T10)           |
+| `test/security/`            | Security suite (citation, injection, provider failure, P3-T10) |
+| `api/openapi.yaml`          | API contract (37 operations)                                   |
+| `db/schema.sql`             | Reference PostgreSQL/pgvector schema                           |
+| `db/migrations/`            | Versioned forward migrations                                   |
+| `.github/workflows/ci.yaml` | CI quality gates and security checks                           |
+| `compose.yaml`              | Local development dependencies (pgvector, Redis, MinIO)        |
