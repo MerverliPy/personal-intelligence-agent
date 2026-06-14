@@ -10,7 +10,8 @@
   "open_decision_count": 0,
   "approved_decision_count": 2,
   "completed_phases": ["adapter-discovery", "baseline", "product-model"],
-  "active_phase": "concept-production",
+  "active_phase": "blocked-on-B-1",
+  "pause_reason": "User directed the orchestrator to resolve B-1 (physical iPhone 16 Pro availability) before concept-production begins (2026-06-14). Concept-production work would normally start here; it is paused until B-1 is resolved OR the user explicitly directs concept work to proceed without a real device.",
   "phases": {
     "adapter-discovery": {
       "status": "DONE",
@@ -36,8 +37,9 @@
       "evidence": ".ui-redesign/reports/PIA-MUR-D-002-product-model.md"
     },
     "concept-production": {
-      "status": "NOT_STARTED",
-      "next_action": "Invoke visual-concept-prototyper specialist (read-only) to produce 2–3 isolated, real-data concept prototypes for the iPhone 16 Pro redesign. Concepts honor the product model (T1=A bottom tab, T2=A single-pane + sheet, T3=A dedicated search tab, T4=A avatar in header, T5=A text-only, T6=A offline banner, T7=A FAB). Orchestrator opens PIA-MUR-D-003 (first concept direction) decision packet for user approval."
+      "status": "PAUSED",
+      "pause_reason": "B-1 (physical iPhone 16 Pro availability UNCONFIRMED) blocks downstream device-validation. User directed orchestrator to resolve B-1 before concept-production (2026-06-14).",
+      "next_action": "User to answer B-1 resolution questions (device availability, network reach, bridge preference). Once B-1 is resolved or user explicitly directs concept work to proceed, invoke visual-concept-prototyper specialist (read-only) to produce 2–3 isolated, real-data concept prototypes. Concepts honor the product model (T1=A bottom tab, T2=A single-pane + sheet, T3=A dedicated search tab, T4=A avatar in header, T5=A text-only, T6=A offline banner, T7=A FAB). Orchestrator opens PIA-MUR-D-003 (first concept direction) decision packet for user approval."
     },
     "design-contract": {"status": "NOT_STARTED", "note": "No mobile-ui-design-contract command exists; orchestrator must dispatch directly."},
     "implementation-contract": {"status": "NOT_STARTED"},
