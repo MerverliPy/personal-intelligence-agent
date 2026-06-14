@@ -4,13 +4,13 @@
   "agent": "mobile-ui-orchestrator",
   "adapter_id": "PIA-MUR-ADAPTER-001",
   "updated_at": "2026-06-14T00:00:00Z",
-  "current_state": "BASELINE_CAPTURED",
-  "phase": "product-model",
+  "current_state": "PRODUCT_MODEL_APPROVED",
+  "phase": "concept-production",
   "blocker_count": 6,
   "open_decision_count": 0,
-  "approved_decision_count": 1,
-  "completed_phases": ["adapter-discovery", "baseline"],
-  "active_phase": "product-model",
+  "approved_decision_count": 2,
+  "completed_phases": ["adapter-discovery", "baseline", "product-model"],
+  "active_phase": "concept-production",
   "phases": {
     "adapter-discovery": {
       "status": "DONE",
@@ -28,10 +28,17 @@
       "evidence": ".ui-redesign/baseline/REPOSITORY_BASELINE.md; .ui-redesign/evidence/automated/http-baseline-probes.json"
     },
     "product-model": {
-      "status": "NOT_STARTED",
-      "next_action": "Invoke product-ux-analyst to produce a real-data product-model recommendation; orchestrator opens PIA-MUR-D-002 decision packet for user approval."
+      "status": "DONE",
+      "started_at": "2026-06-14T00:00:00Z",
+      "completed_at": "2026-06-14T00:00:00Z",
+      "owner": "mobile-ui-orchestrator (delegated to product-ux-analyst)",
+      "decision_id": "PIA-MUR-D-002",
+      "evidence": ".ui-redesign/reports/PIA-MUR-D-002-product-model.md"
     },
-    "concept-production": {"status": "NOT_STARTED"},
+    "concept-production": {
+      "status": "NOT_STARTED",
+      "next_action": "Invoke visual-concept-prototyper specialist (read-only) to produce 2–3 isolated, real-data concept prototypes for the iPhone 16 Pro redesign. Concepts honor the product model (T1=A bottom tab, T2=A single-pane + sheet, T3=A dedicated search tab, T4=A avatar in header, T5=A text-only, T6=A offline banner, T7=A FAB). Orchestrator opens PIA-MUR-D-003 (first concept direction) decision packet for user approval."
+    },
     "design-contract": {"status": "NOT_STARTED", "note": "No mobile-ui-design-contract command exists; orchestrator must dispatch directly."},
     "implementation-contract": {"status": "NOT_STARTED"},
     "implementation": {"status": "NOT_STARTED"},
@@ -309,8 +316,11 @@
   ],
   "evidence": {
     "pre_p3_closure_run": "planning/runs/P3-GATE.md:42-56",
-    "audit_handoff": "AGENT_HANDOFF.md (modified at 2026-06-13, 539 lines diff: +263/-276)",
+    "audit_handoff": "AGENT_HANDOFF.md (modified at 2023-06-13, 539 lines diff: +263/-276)",
     "phase_status_ledger": "planning/status.yaml",
+    "baseline_evidence": ".ui-redesign/baseline/REPOSITORY_BASELINE.md (PIA-MUR-D-001)",
+    "baseline_http_probes": ".ui-redesign/evidence/automated/http-baseline-probes.json",
+    "product_model_proposal": ".ui-redesign/reports/PIA-MUR-D-002-product-model.md (PIA-MUR-D-002, APPROVED)",
     "p3_gate_baseline": {
       "unit_tests": "921/921",
       "security_tests": "13/13",
