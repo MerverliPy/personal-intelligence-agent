@@ -48,51 +48,48 @@ afterAll(async () => {
 }, 30_000);
 
 describe('P3-T08 cross-tenant insert regression (P3-T10 security)', () => {
-  it(
-    'rejects cross-tenant messageId with MessageNotFoundError (AUD-P3-101 fix)',
-    async () => {
-      if (!dbAvailable) return;
-      if (!pool || !fixtures) throw new Error('Setup did not complete');
+  it('rejects cross-tenant messageId with MessageNotFoundError (AUD-P3-101 fix)', async () => {
+    if (!dbAvailable) return;
+    if (!pool || !fixtures) throw new Error('Setup did not complete');
 
-      // Create a message in the OTHER workspace
-      const convRes = await pool.query<{ id: string }>(
-        `INSERT INTO conversations (id, workspace_id, project_id, title, mode, sensitivity, created_by)
+    // Create a message in the OTHER workspace
+    const convRes = await pool.query<{ id: string }>(
+      `INSERT INTO conversations (id, workspace_id, project_id, title, mode, sensitivity, created_by)
          VALUES (gen_random_uuid(), $1, NULL, 'other conv', 'ASK', 'INTERNAL', $2)
          RETURNING id`,
-        [fixtures.otherWorkspaceId, fixtures.otherUserId],
-      );
-      const otherConvId = convRes.rows[0]!.id;
+      [fixtures.otherWorkspaceId, fixtures.otherUserId],
+    );
+    const otherConvId = convRes.rows[0]!.id;
 
-      const msgRes = await pool.query<{ id: string }>(
-        `INSERT INTO messages (id, workspace_id, conversation_id, role, content, created_by)
+    const msgRes = await pool.query<{ id: string }>(
+      `INSERT INTO messages (id, workspace_id, conversation_id, role, content, created_by)
          VALUES (gen_random_uuid(), $1, $2, 'USER', 'foreign message', $3)
          RETURNING id`,
-        [fixtures.otherWorkspaceId, otherConvId, fixtures.otherUserId],
-      );
-      const otherMessageId = msgRes.rows[0]!.id;
+      [fixtures.otherWorkspaceId, otherConvId, fixtures.otherUserId],
+    );
+    const otherMessageId = msgRes.rows[0]!.id;
 
-      // A user from ALPHA attempts to submit feedback referencing a
-      // message in the OTHER workspace. The workspaceId passed is
-      // alpha; the messageId belongs to other. The service-layer
-      // check (AUD-P3-101) must throw MessageNotFoundError.
-      await expect(
-        submitFeedback(pool, {
-          workspaceId: fixtures.workspaceId,
-          submittedBy: fixtures.userId,
-          messageId: otherMessageId,
-          category: 'POSITIVE',
-        }),
-      ).rejects.toBeInstanceOf(MessageNotFoundError);
+    // A user from ALPHA attempts to submit feedback referencing a
+    // message in the OTHER workspace. The workspaceId passed is
+    // alpha; the messageId belongs to other. The service-layer
+    // check (AUD-P3-101) must throw MessageNotFoundError.
+    await expect(
+      submitFeedback(pool, {
+        workspaceId: fixtures.workspaceId,
+        submittedBy: fixtures.userId,
+        messageId: otherMessageId,
+        category: 'POSITIVE',
+      }),
+    ).rejects.toBeInstanceOf(MessageNotFoundError);
 
-      // Verify no feedback row landed in alpha for the foreign message.
-      const crossRows = await pool.query<{ count: string }>(
-        `SELECT COUNT(*)::text AS count FROM feedback
+    // Verify no feedback row landed in alpha for the foreign message.
+    const crossRows = await pool.query<{ count: string }>(
+      `SELECT COUNT(*)::text AS count FROM feedback
          WHERE workspace_id = $1 AND message_id = $2`,
-        [fixtures.workspaceId, otherMessageId],
-      );
-      expect(Number(crossRows.rows[0]?.count ?? '0')).toBe(0);
-    },
-  );
+      [fixtures.workspaceId, otherMessageId],
+    );
+    expect(Number(crossRows.rows[0]?.count ?? '0')).toBe(0);
+  });
 
   it('submitFeedback accepts a message in the same workspace (sanity check)', async () => {
     if (!dbAvailable) return;
