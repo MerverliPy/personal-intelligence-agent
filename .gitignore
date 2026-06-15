@@ -57,3 +57,12 @@ __pycache__/
 /.ui-redesign/evidence/devices/*.pid
 /.ui-redesign/evidence/devices/*.log
 /.ui-redesign/evidence/devices/*.url
+
+# Mobile UI redesign pre-flight Playwright harness (PIA-MUR-D-016)
+/apps/web/test/preflight/test-results/
+/apps/web/test/preflight/playwright-report/
+/apps/web/test/preflight/blob-report/
+/apps/web/test/preflight/playwright/.cache/
+/.ui-redesign/evidence/preflight/*.diff.png
+# (per-DPC JSON, axe-report.json, and small PNGs are NOT ignored;
+# large PNG diffs > 100 KB are excluded)

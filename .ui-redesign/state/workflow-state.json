@@ -6,11 +6,11 @@
   "updated_at": "2026-06-14T00:00:00Z",
   "current_state": "DESIGN_CONTRACT_APPROVED",
   "phase": "implementation-contract",
-  "blocker_count": 5,
-  "open_decision_count": 0,
-  "approved_decision_count": 4,
+  "blocker_count": 4,
+  "open_decision_count": 1,
+  "approved_decision_count": 5,
   "completed_phases": ["adapter-discovery", "baseline", "product-model", "concept-production", "design-contract"],
-  "active_phase": "blocked-on-device-preflight",
+  "active_phase": "tooling-preflight",
   "pause_reason": "User directed the orchestrator to run a device-validation pre-flight before the implementation contract begins (2026-06-14). This will start the cloudflared quick-tunnel, produce a structured iPhone test checklist, and capture device evidence for the Stream concept prototype. UNVERIFIED items (UNVERIFIED-1 <dialog> showModal() focus, UNVERIFIED-2 prefers-reduced-motion in installed PWA, UNVERIFIED-4 touch-target bounding-box sizes, UNVERIFIED-6 prototype pixel-perfect match) will be confirmed on the real iPhone 16 Pro before any source file is touched.",
   "selected_concept": {
     "id": "PIA-MUR-D-003c",
@@ -83,6 +83,12 @@
       "owner": "mobile-ui-orchestrator",
       "decision_id": "PIA-MUR-D-001"
     },
+    "tooling-preflight": {
+      "status": "IN_PROGRESS",
+      "started_at": "2026-06-14T00:00:00Z",
+      "owner": "mobile-ui-orchestrator (delegated to real-ui-product-tester, accessibility-performance-validator, iphone-interaction-specialist)",
+      "decision_id": "PIA-MUR-D-016 (APPROVED with overrides)"
+    },
     "baseline": {
       "status": "DONE",
       "started_at": "2026-06-14T00:00:00Z",
@@ -117,8 +123,15 @@
     },
     "implementation-contract": {
       "status": "PAUSED",
-      "pause_reason": "Device-validation pre-flight in progress (B-1 RESOLVED 2026-06-14; user authorized orchestrator to start cloudflared quick-tunnel). Pre-flight will resolve UNVERIFIED items on the real iPhone 16 Pro before implementation contract begins.",
-      "next_action": "Orchestrator: (1) start cloudflared quick-tunnel to expose http://localhost:3000 as https://<random>.trycloudflare.com; (2) invoke iphone-interaction-specialist to produce a structured test checklist; (3) deliver the checklist + tunnel URL to the user; (4) user executes the checklist on the iPhone 16 Pro and reports findings; (5) orchestrator documents findings, resolves UNVERIFIED items, and surfaces PIA-MUR-D-004-IMPL for approval."
+      "pause_reason": "PIA-MUR-D-016 (automated pre-flight tooling) approved; PIA-MUR-D-017 (install step) open. Implementation contract is paused until the automated pre-flight report is delivered.",
+      "next_action": "After PIA-MUR-D-017 is approved and the harness runs, surface the automated pre-flight report + manual DPC-11 handoff. After pre-flight closes, draft PIA-MUR-D-004-IMPL (implementation contract)."
+    },
+    "tooling-preflight": {
+      "status": "IN_PROGRESS",
+      "started_at": "2026-06-14T00:00:00Z",
+      "owner": "mobile-ui-orchestrator (delegated to real-ui-product-tester, accessibility-performance-validator, iphone-interaction-specialist)",
+      "decision_id": "PIA-MUR-D-016 (APPROVED with overrides)",
+      "next_action": "PIA-MUR-D-016 acceptance: add @playwright/test + @axe-core/playwright to apps/web/devDependencies; create apps/web/test/preflight/ skeleton (playwright.config.ts + run-preflight.ts + README); add pnpm preflight:install + pnpm preflight:device scripts to root package.json; commit. Then open PIA-MUR-D-017 for the actual install step (pnpm install + npx playwright install chromium webkit)."
     },
     "implementation": {"status": "NOT_STARTED"},
     "device-validation": {"status": "NOT_STARTED", "note": "Requires physical iPhone 16 Pro (B-1) and bridge confirmation (B-2)."},
@@ -136,7 +149,7 @@
     "agents_root": ".opencode/agents/",
     "skills_root": ".opencode/skills/",
     "commands_root": ".opencode/commands/",
-    "open_decisions": []
+    "open_decisions": ["PIA-MUR-D-017"]
   },
   "git": {
     "branch": "chore/install-mobile-ui-redesign-system",
@@ -404,6 +417,9 @@
     "selected_concept_evidence": ".ui-redesign/concepts/concept-3-stream/",
     "design_contract_machine": ".ui-redesign/contracts/DESIGN_CONTRACT.json (PIA-MUR-D-004, APPROVED)",
     "design_contract_human": ".ui-redesign/contracts/DESIGN_CONTRACT.md (PIA-MUR-D-004, APPROVED)",
+    "preflight_harness": "apps/web/test/preflight/ (PIA-MUR-D-016 APPROVED with overrides; PIA-MUR-D-017 OPEN)",
+    "preflight_evidence_dir": ".ui-redesign/evidence/preflight/ (PIA-MUR-D-016; will be populated after PIA-MUR-D-017 install)",
+    "preflight_docs": "docs/PREFLIGHT.md (PIA-MUR-D-016)",
     "p3_gate_baseline": {
       "unit_tests": "921/921",
       "security_tests": "13/13",
@@ -486,9 +502,12 @@
     },
     {
       "id": "B-6",
-      "title": "Dependency-approval policy for Playwright + axe-core not yet established",
-      "affects": ["device-validation automation", "G7 automated-evidence gate"],
-      "requires": "Approve adding Playwright + axe-core as a new dependency (security review per AGENTS.md), or define an alternative for automated a11y/visual evidence."
+      "title": "Playwright + axe-core dependency-approval policy",
+      "affects": ["G7 automated-evidence gate"],
+      "requires": "User must decide whether to add Playwright + axe-core as a new dependency (with security review per AGENTS.md), or define an alternative for automated a11y/visual evidence.",
+      "status": "RESOLVED",
+      "resolved_at": "2026-06-14T00:00:00Z",
+      "resolution": "PIA-MUR-D-016 approved: @playwright/test@^1.49.0 and @axe-core/playwright@^4.10.0 added to apps/web/devDependencies (dev-only; no production runtime impact). PIA-MUR-D-017 (install step) opened separately for the actual binary download + lockfile update."
     }
   ],
   "first_approval_request": {
