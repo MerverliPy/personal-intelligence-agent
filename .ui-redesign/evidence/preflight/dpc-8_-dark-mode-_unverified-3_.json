@@ -5,55 +5,55 @@
     {
       "title": "auto-switches to dark when prefers-color-scheme: dark",
       "status": "FAIL",
-      "durationMs": 291,
+      "durationMs": 507,
       "errors": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"rgb(\u001b[7m10, 10, 10\u001b[27m)\"\u001b[39m\nReceived: \u001b[31m\"rgb(\u001b[7m255, 255, 255\u001b[27m)\"\u001b[39m"
+        "Error: body backgroundColor should be rgb(10, 10, 10) in dark mode; got rgb(255, 255, 255)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"rgb(\u001b[7m10, 10, 10\u001b[27m)\"\u001b[39m\nReceived: \u001b[31m\"rgb(\u001b[7m255, 255, 255\u001b[27m)\"\u001b[39m"
       ]
     },
     {
       "title": "light mode default",
       "status": "PASS",
-      "durationMs": 223,
+      "durationMs": 477,
       "errors": []
     },
     {
       "title": "manual dev toggle: clicking #toggle-dark flips theme",
       "status": "PASS",
-      "durationMs": 321,
+      "durationMs": 374,
       "errors": []
     },
     {
       "title": "axe color-contrast: no critical violations in dark mode",
       "status": "PASS",
-      "durationMs": 1080,
+      "durationMs": 1176,
       "errors": []
     },
     {
       "title": "auto-switches to dark when prefers-color-scheme: dark",
       "status": "FAIL",
-      "durationMs": 331,
+      "durationMs": 859,
       "errors": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"rgb(\u001b[7m10, 10, 10\u001b[27m)\"\u001b[39m\nReceived: \u001b[31m\"rgb(\u001b[7m255, 255, 255\u001b[27m)\"\u001b[39m"
+        "Error: body backgroundColor should be rgb(10, 10, 10) in dark mode; got rgb(255, 255, 255)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"rgb(\u001b[7m10, 10, 10\u001b[27m)\"\u001b[39m\nReceived: \u001b[31m\"rgb(\u001b[7m255, 255, 255\u001b[27m)\"\u001b[39m"
       ]
     },
     {
       "title": "light mode default",
       "status": "PASS",
-      "durationMs": 272,
+      "durationMs": 727,
       "errors": []
     },
     {
       "title": "manual dev toggle: clicking #toggle-dark flips theme",
       "status": "PASS",
-      "durationMs": 326,
+      "durationMs": 756,
       "errors": []
     },
     {
       "title": "axe color-contrast: no critical violations in dark mode",
       "status": "PASS",
-      "durationMs": 1112,
+      "durationMs": 1624,
       "errors": []
     }
   ],
-  "timestamp": "2026-06-15T15:06:48.766Z"
+  "timestamp": "2026-06-15T17:24:07.641Z"
 }

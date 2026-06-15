@@ -53,12 +53,15 @@ const SCREENS: Screen[] = [
 test.describe('DPC-5: pixel-perfect match (UNVERIFIED-6)', () => {
   for (const screen of SCREENS) {
     test(`${screen.id}: prototype renders (visual diff vs SVG is manual)`, async ({ page }) => {
-      await page.goto(PROTOTYPE_URL);
+      await page.goto(PROTOTYPE_URL, { waitUntil: 'networkidle' });
       await screen.prototypeAction(page);
-      await page.waitForTimeout(200);
-      const buf = await page.screenshot();
-      // Verify the prototype actually rendered (non-empty buffer)
-      expect(buf.byteLength).toBeGreaterThan(1000);
+      // Wait for layout/paint to settle
+      await page.waitForLoadState('networkidle');
+      await page.waitForTimeout(500);
+      const buf = await page.screenshot({ fullPage: false, type: 'png' });
+      // Verify the prototype actually rendered (non-empty buffer; ~3KB+
+      // for a 393x852pt page with real content)
+      expect(buf.byteLength, `${screen.id} screenshot should be > 3KB`).toBeGreaterThan(3000);
       // Record the screenshot as evidence (committed in test-results/)
       await test.info().attach(`${screen.id}-screenshot`, { body: buf, contentType: 'image/png' });
       // Also record the SVG byte size for the manual diff

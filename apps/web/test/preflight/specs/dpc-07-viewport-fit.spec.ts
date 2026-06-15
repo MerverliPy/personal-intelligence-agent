@@ -16,12 +16,17 @@ test.describe('DPC-7: viewport-fit=cover', () => {
     expect(content).toContain('viewport-fit=cover');
   });
 
-  test('iPhone 16 Pro viewport is 393x852pt', async ({ page }) => {
+  test('iPhone 16 Pro viewport is 393x852pt (CSS pixels)', async ({ page }) => {
+    // The custom device profile in playwright.config.ts sets
+    // viewport: { width: 393, height: 852 } for iPhone 16 Pro.
+    // Playwright's page.viewportSize() reports CSS pixels (not
+    // device pixels); at deviceScaleFactor=3 the physical screen
+    // is 1179x2556.
     const size = page.viewportSize();
-    expect(size).not.toBeNull();
+    expect(size, 'viewport size should be defined').not.toBeNull();
     if (size) {
-      expect(size.width).toBe(393);
-      expect(size.height).toBe(852);
+      expect(size.width, `viewport width should be 393pt; got ${size.width}`).toBe(393);
+      expect(size.height, `viewport height should be 852pt; got ${size.height}`).toBe(852);
     }
   });
 });

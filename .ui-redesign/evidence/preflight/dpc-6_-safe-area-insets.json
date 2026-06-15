@@ -3,37 +3,37 @@
   "result": "FAIL",
   "subTests": [
     {
-      "title": "header clears Dynamic Island (>= 59pt top padding)",
+      "title": "Dynamic Island clearance is at least 59pt from the viewport top",
       "status": "FAIL",
-      "durationMs": 300,
+      "durationMs": 334,
       "errors": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m59\u001b[39m\nReceived:    \u001b[31m0\u001b[39m"
+        "Error: dynamic-island.top should be < 5pt; got 14.65625\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m5\u001b[39m\nReceived:   \u001b[31m14.65625\u001b[39m"
       ]
     },
     {
-      "title": "tab bar includes home-indicator clearance",
+      "title": "tab bar is at the bottom of the viewport with no overflow",
       "status": "FAIL",
-      "durationMs": 308,
+      "durationMs": 310,
       "errors": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m"
+        "Error: tab bar bottom should be <= viewport height\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m853\u001b[39m\nReceived:    \u001b[31m1136\u001b[39m"
       ]
     },
     {
-      "title": "header clears Dynamic Island (>= 59pt top padding)",
+      "title": "Dynamic Island clearance is at least 59pt from the viewport top",
       "status": "FAIL",
-      "durationMs": 312,
+      "durationMs": 698,
       "errors": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m59\u001b[39m\nReceived:    \u001b[31m0\u001b[39m"
+        "Error: dynamic-island.top should be < 5pt; got 14.65625\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m5\u001b[39m\nReceived:   \u001b[31m14.65625\u001b[39m"
       ]
     },
     {
-      "title": "tab bar includes home-indicator clearance",
+      "title": "tab bar is at the bottom of the viewport with no overflow",
       "status": "FAIL",
-      "durationMs": 303,
+      "durationMs": 710,
       "errors": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m"
+        "Error: tab bar bottom should be <= viewport height\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m853\u001b[39m\nReceived:    \u001b[31m1136\u001b[39m"
       ]
     }
   ],
-  "timestamp": "2026-06-15T15:06:48.766Z"
+  "timestamp": "2026-06-15T17:24:07.641Z"
 }

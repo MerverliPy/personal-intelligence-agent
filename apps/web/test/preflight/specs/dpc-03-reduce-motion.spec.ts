@@ -23,8 +23,10 @@ test.describe('DPC-3: reduce-motion in installed PWA (UNVERIFIED-2)', () => {
       const panel = document.querySelector('.sheet__panel');
       return getComputedStyle(panel ?? document.body).transitionDuration;
     });
-    // Should be ~0.01ms (not 280ms) per the design contract
-    expect(duration).toMatch(/0\.01m?s|0s/);
+    // Should be 0.01ms (the design contract's reduce-motion value).
+    // Browsers report this as either "0.01ms", "0s", or in
+    // scientific notation "1e-05s". All are valid.
+    expect(duration).toMatch(/1e-05s|0\.01m?s|0s/);
   });
 
   test('Safari browser: sheet animates with reduce-motion OFF (default)', async ({ page }) => {
@@ -35,7 +37,9 @@ test.describe('DPC-3: reduce-motion in installed PWA (UNVERIFIED-2)', () => {
       const panel = document.querySelector('.sheet__panel');
       return getComputedStyle(panel ?? document.body).transitionDuration;
     });
-    // Should be 280ms (the design contract's --motion-sheet)
-    expect(duration).toMatch(/0\.28s|280m?s/);
+    // Should be 280ms (the design contract's --motion-sheet).
+    // Browsers may report "0.28s", "280ms", or "0.28s, 0.28s, ..." for
+    // multiple properties.
+    expect(duration).toMatch(/0?\.28s|280m?s/);
   });
 });

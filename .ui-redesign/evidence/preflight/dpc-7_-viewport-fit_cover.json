@@ -1,35 +1,31 @@
 {
   "dpcId": "DPC-7: viewport-fit=cover",
-  "result": "FAIL",
+  "result": "PASS",
   "subTests": [
     {
       "title": "viewport meta has viewport-fit=cover",
       "status": "PASS",
-      "durationMs": 223,
+      "durationMs": 332,
       "errors": []
     },
     {
-      "title": "iPhone 16 Pro viewport is 393x852pt",
-      "status": "FAIL",
-      "durationMs": 184,
-      "errors": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m393\u001b[39m\nReceived: \u001b[31m1280\u001b[39m"
-      ]
+      "title": "iPhone 16 Pro viewport is 393x852pt (CSS pixels)",
+      "status": "PASS",
+      "durationMs": 171,
+      "errors": []
     },
     {
       "title": "viewport meta has viewport-fit=cover",
       "status": "PASS",
-      "durationMs": 234,
+      "durationMs": 619,
       "errors": []
     },
     {
-      "title": "iPhone 16 Pro viewport is 393x852pt",
-      "status": "FAIL",
-      "durationMs": 184,
-      "errors": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m393\u001b[39m\nReceived: \u001b[31m1280\u001b[39m"
-      ]
+      "title": "iPhone 16 Pro viewport is 393x852pt (CSS pixels)",
+      "status": "PASS",
+      "durationMs": 408,
+      "errors": []
     }
   ],
-  "timestamp": "2026-06-15T15:06:48.766Z"
+  "timestamp": "2026-06-15T17:24:07.641Z"
 }

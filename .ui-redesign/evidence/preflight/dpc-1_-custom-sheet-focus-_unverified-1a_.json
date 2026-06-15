@@ -5,7 +5,7 @@
     {
       "title": "focus moves into the sheet on open",
       "status": "FAIL",
-      "durationMs": 471,
+      "durationMs": 532,
       "errors": [
         "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
       ]
@@ -13,25 +13,25 @@
     {
       "title": "Tab cycles within the sheet",
       "status": "BLOCKED",
-      "durationMs": 408,
+      "durationMs": 458,
       "errors": []
     },
     {
       "title": "Esc closes the sheet",
       "status": "PASS",
-      "durationMs": 385,
+      "durationMs": 448,
       "errors": []
     },
     {
       "title": "backdrop tap closes the sheet",
       "status": "PASS",
-      "durationMs": 401,
+      "durationMs": 438,
       "errors": []
     },
     {
       "title": "focus moves into the sheet on open",
       "status": "FAIL",
-      "durationMs": 478,
+      "durationMs": 1124,
       "errors": [
         "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
       ]
@@ -39,21 +39,21 @@
     {
       "title": "Tab cycles within the sheet",
       "status": "BLOCKED",
-      "durationMs": 404,
+      "durationMs": 954,
       "errors": []
     },
     {
       "title": "Esc closes the sheet",
       "status": "PASS",
-      "durationMs": 416,
+      "durationMs": 955,
       "errors": []
     },
     {
       "title": "backdrop tap closes the sheet",
       "status": "PASS",
-      "durationMs": 418,
+      "durationMs": 945,
       "errors": []
     }
   ],
-  "timestamp": "2026-06-15T15:06:48.766Z"
+  "timestamp": "2026-06-15T17:24:07.640Z"
 }

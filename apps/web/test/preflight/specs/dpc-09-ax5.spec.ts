@@ -13,11 +13,13 @@ import { test, expect, PROTOTYPE_URL } from './helpers';
 test.describe('DPC-9: AX5 Dynamic Type', () => {
   test('body text scales to ~34pt when AX5 toggle is on', async ({ page }) => {
     await page.goto(PROTOTYPE_URL);
+    // The AX5 toggle is INSIDE the dev-controls panel; do NOT hide
+    // dev-controls here or the test can't find the toggle.
     const beforeSize = await page.evaluate(() => {
       const body = document.body;
       return parseFloat(getComputedStyle(body).fontSize);
     });
-    await page.locator('#toggle-ax5').check();
+    await page.locator('#toggle-ax5').check({ force: true });
     const afterSize = await page.evaluate(() => {
       const body = document.body;
       return parseFloat(getComputedStyle(body).fontSize);
@@ -28,7 +30,7 @@ test.describe('DPC-9: AX5 Dynamic Type', () => {
 
   test('tab bar still functional at AX5 (no clipped labels)', async ({ page }) => {
     await page.goto(PROTOTYPE_URL);
-    await page.locator('#toggle-ax5').check();
+    await page.locator('#toggle-ax5').check({ force: true });
     const tabs = await page.locator('.tab').all();
     for (const tab of tabs) {
       const box = await tab.boundingBox();
