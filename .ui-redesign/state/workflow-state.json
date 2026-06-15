@@ -129,11 +129,12 @@
       "next_action": "User reviews pre-flight report; opens PIA-MUR-D-009 (NEW) for DPC-4 touch-target fix; decides on harness refinements (DPC-3 regex, DPC-5 buffer, DPC-7 viewport, DPC-6/8 investigation). After that, draft PIA-MUR-D-004-IMPL (implementation contract)."
     },
     "tooling-preflight": {
-      "status": "IN_PROGRESS",
+      "status": "DONE",
       "started_at": "2026-06-14T00:00:00Z",
+      "completed_at": "2026-06-15T15:06:48Z",
       "owner": "mobile-ui-orchestrator (delegated to real-ui-product-tester, accessibility-performance-validator, iphone-interaction-specialist)",
-      "decision_id": "PIA-MUR-D-016 (APPROVED with overrides)",
-      "next_action": "PIA-MUR-D-016 acceptance: add @playwright/test + @axe-core/playwright to apps/web/devDependencies; create apps/web/test/preflight/ skeleton (playwright.config.ts + run-preflight.ts + README); add pnpm preflight:install + pnpm preflight:device scripts to root package.json; commit. Then open PIA-MUR-D-017 for the actual install step (pnpm install + npx playwright install chromium webkit)."
+      "decision_id": "PIA-MUR-D-016 (APPROVED with overrides) + PIA-MUR-D-017 (APPROVED)",
+      "evidence": ".ui-redesign/evidence/preflight/dpc-{01..14}.json (13 files) + dpc-summary.json"
     },
     "implementation": {"status": "NOT_STARTED"},
     "device-validation": {"status": "NOT_STARTED", "note": "Requires physical iPhone 16 Pro (B-1) and bridge confirmation (B-2)."},
