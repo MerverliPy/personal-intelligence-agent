@@ -78,7 +78,6 @@ Each `planning/runs/<TASK-ID>.md` must contain:
 - Database/API compatibility impact
 - Remaining risks or follow-up tasks
 
-
 # Mobile UI Redesign Repository Rules
 
 Merge this section into the repository's existing `AGENTS.md`. Do not replace stronger project-specific rules.

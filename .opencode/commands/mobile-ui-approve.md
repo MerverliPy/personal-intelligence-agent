@@ -2,6 +2,7 @@
 description: Record an explicit decision or contract approval with traceable scope and conditions.
 agent: mobile-ui-orchestrator
 ---
+
 Process this approval instruction:
 
 $ARGUMENTS

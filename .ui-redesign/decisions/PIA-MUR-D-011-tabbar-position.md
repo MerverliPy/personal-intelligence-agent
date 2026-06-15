@@ -29,16 +29,17 @@ This packet authorizes the **prototype-only** CSS fix for the Stream concept pro
 
 ## Materially different alternatives
 
-| Alternative | Description | Trade-offs |
-|---|---|---|
-| **A. `position: fixed; bottom: 0`** on `.tab-bar` | Standard iOS PWA pattern. The tab bar always stays at the viewport bottom regardless of content height. | **Recommended.** Matches the design contract §8 and the iOS HIG. |
-| B. Set `body { height: 100vh; overflow: hidden }` and let each `.screen` scroll independently | More complex; each screen would need its own scroll container. | Reject. More moving parts; doesn't fix the iOS-installation concerns. |
-| C. Keep `position: absolute` and add `body { max-height: 100dvh; overflow-y: scroll }` | Forces the body to be viewport-height, with internal scroll. | Reject. iOS Safari fights with `100dvh` due to the dynamic UI chrome (URL bar). |
-| D. Accept the issue, document it, and fix in the implementation contract | Defers the fix. | Reject. The prototype is the demo; it should match the design contract. |
+| Alternative                                                                                   | Description                                                                                             | Trade-offs                                                                      |
+| --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| **A. `position: fixed; bottom: 0`** on `.tab-bar`                                             | Standard iOS PWA pattern. The tab bar always stays at the viewport bottom regardless of content height. | **Recommended.** Matches the design contract §8 and the iOS HIG.                |
+| B. Set `body { height: 100vh; overflow: hidden }` and let each `.screen` scroll independently | More complex; each screen would need its own scroll container.                                          | Reject. More moving parts; doesn't fix the iOS-installation concerns.           |
+| C. Keep `position: absolute` and add `body { max-height: 100dvh; overflow-y: scroll }`        | Forces the body to be viewport-height, with internal scroll.                                            | Reject. iOS Safari fights with `100dvh` due to the dynamic UI chrome (URL bar). |
+| D. Accept the issue, document it, and fix in the implementation contract                      | Defers the fix.                                                                                         | Reject. The prototype is the demo; it should match the design contract.         |
 
 ## Recommendation
 
 **A.** Specifically:
+
 - Change `.tab-bar` from `position: absolute` to `position: fixed; bottom: 0; left: 0; right: 0;`.
 - The existing `height: var(--tab-bar-safe)` and `padding-bottom: env(safe-area-inset-bottom, 0px)` already handle the height and home-indicator clearance.
 - The FAB's `bottom: calc(var(--tab-bar-safe) + 16pt)` (line 308) will still work correctly because the tab bar is now a fixed element and the FAB is also fixed.

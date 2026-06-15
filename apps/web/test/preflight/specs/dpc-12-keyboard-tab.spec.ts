@@ -36,7 +36,8 @@ test.describe('DPC-12: external keyboard Tab order (PARTIALLY_VERIFIED)', () => 
     await page.goto(PROTOTYPE_URL);
     const positives = await page.evaluate(() => {
       const all = document.querySelectorAll('[tabindex]');
-      return Array.from(all).filter((el) => parseInt(el.getAttribute('tabindex') ?? '0', 10) > 0).length;
+      return Array.from(all).filter((el) => parseInt(el.getAttribute('tabindex') ?? '0', 10) > 0)
+        .length;
     });
     expect(positives).toBe(0);
   });

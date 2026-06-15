@@ -19,8 +19,14 @@ export { expect };
  * Tag set: WCAG 2.2 AA + AAA-where-practical.
  */
 export async function axeScan(page: import('@playwright/test').Page) {
-  const builder = new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice']);
+  const builder = new AxeBuilder({ page }).withTags([
+    'wcag2a',
+    'wcag2aa',
+    'wcag21a',
+    'wcag21aa',
+    'wcag22aa',
+    'best-practice',
+  ]);
   const results = await builder.analyze();
   return results.violations;
 }
@@ -41,7 +47,9 @@ export async function openCitationSheet(page: import('@playwright/test').Page) {
   });
   // Navigate to a conversation first
   await page.locator('#conversation-list .conv').first().click({ force: true });
-  await page.waitForSelector('.screen[data-screen="conversation-detail"]:not([hidden])', { timeout: 2000 });
+  await page.waitForSelector('.screen[data-screen="conversation-detail"]:not([hidden])', {
+    timeout: 2000,
+  });
   // Click the first citation chip
   await page.locator('.cite').first().click({ force: true });
   await page.waitForSelector('#citation-sheet:not([hidden])', { timeout: 2000 });

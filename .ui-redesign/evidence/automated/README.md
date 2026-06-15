@@ -7,9 +7,9 @@ content may be included.
 
 ## Files
 
-| File | Captured at | Source | Redaction |
-|---|---|---|---|
-| `http-baseline-probes.json` | 2026-06-14 | orchestrator `curl` probes (no auth) | request_ids redacted; placeholder workspace IDs used; no session data |
+| File                        | Captured at | Source                               | Redaction                                                             |
+| --------------------------- | ----------- | ------------------------------------ | --------------------------------------------------------------------- |
+| `http-baseline-probes.json` | 2026-06-14  | orchestrator `curl` probes (no auth) | request_ids redacted; placeholder workspace IDs used; no session data |
 
 ## Redaction rules
 

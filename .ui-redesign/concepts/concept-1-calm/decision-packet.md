@@ -10,29 +10,30 @@
 
 ## Evidence (real-data, no fabrication)
 
-| Element | Source | Verified by |
-|---|---|---|
-| Workspace name "PIA Workspace" | `apps/api/src/routes/web.ts:108` shell placeholder; only workspace-shell value present in baseline | static read |
-| Conversation modes ASK / RESEARCH / ANALYZE / PLAN / EXECUTE / LEARN | `apps/web/src/pages/conversation-list.ts:25-30` | static read |
-| Document statuses READY / PROCESSING / FAILED / UPLOADED / PENDING / QUARANTINED | `apps/web/src/pages/document-list.ts:99-103` + `apps/web/src/pages/shared.ts:40-47` | static read |
-| Citation chip shape `[N]` and chip-rendering function | `apps/web/src/pages/conversation-detail.ts:100-104` | static read |
-| Run-state badge mapping | `apps/web/src/pages/conversation-detail.ts:330-338` | static read |
-| Feedback category list (8 values) | `apps/web/src/pages/conversation-detail.ts:84` + `packages/contracts/src/index.ts:514-522` | static read |
-| Sample assistant text (retention period) | `evals/answers/datasets/sample.yaml:29` | static read |
-| Multi-citation sample (AI + weather) | `evals/answers/datasets/sample.yaml:65-66` | static read |
-| Document-version statuses | `packages/contracts/src/index.ts:216-224` | static read |
-| Sensitivity classes (PUBLIC / INTERNAL / CONFIDENTIAL / HIGHLY_CONFIDENTIAL / REGULATED / PROHIBITED) | `packages/contracts/src/index.ts:207-213` | static read |
-| Upload constraints (50 MB, PDF/DOCX/TXT) | `apps/web/src/pages/upload.ts:23, 27` | static read |
-| Source-locator rendering (`page N` vs `position N`) | `apps/web/src/pages/conversation-detail.ts:167-172` | static read |
-| 393×852pt viewport + safe-area meta | `apps/web/src/pages/shared.ts:164` (lacks `viewport-fit=cover`; will need update) | static read |
-| iPhone 16 Pro dynamic-island 124×37pt centered 11pt from top | iOS HIG + Apple developer docs | external standard |
-| Live runtime on :3000 | `.ui-redesign/evidence/automated/http-baseline-probes.json` | HTTP probe |
+| Element                                                                                               | Source                                                                                             | Verified by       |
+| ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------------- |
+| Workspace name "PIA Workspace"                                                                        | `apps/api/src/routes/web.ts:108` shell placeholder; only workspace-shell value present in baseline | static read       |
+| Conversation modes ASK / RESEARCH / ANALYZE / PLAN / EXECUTE / LEARN                                  | `apps/web/src/pages/conversation-list.ts:25-30`                                                    | static read       |
+| Document statuses READY / PROCESSING / FAILED / UPLOADED / PENDING / QUARANTINED                      | `apps/web/src/pages/document-list.ts:99-103` + `apps/web/src/pages/shared.ts:40-47`                | static read       |
+| Citation chip shape `[N]` and chip-rendering function                                                 | `apps/web/src/pages/conversation-detail.ts:100-104`                                                | static read       |
+| Run-state badge mapping                                                                               | `apps/web/src/pages/conversation-detail.ts:330-338`                                                | static read       |
+| Feedback category list (8 values)                                                                     | `apps/web/src/pages/conversation-detail.ts:84` + `packages/contracts/src/index.ts:514-522`         | static read       |
+| Sample assistant text (retention period)                                                              | `evals/answers/datasets/sample.yaml:29`                                                            | static read       |
+| Multi-citation sample (AI + weather)                                                                  | `evals/answers/datasets/sample.yaml:65-66`                                                         | static read       |
+| Document-version statuses                                                                             | `packages/contracts/src/index.ts:216-224`                                                          | static read       |
+| Sensitivity classes (PUBLIC / INTERNAL / CONFIDENTIAL / HIGHLY_CONFIDENTIAL / REGULATED / PROHIBITED) | `packages/contracts/src/index.ts:207-213`                                                          | static read       |
+| Upload constraints (50 MB, PDF/DOCX/TXT)                                                              | `apps/web/src/pages/upload.ts:23, 27`                                                              | static read       |
+| Source-locator rendering (`page N` vs `position N`)                                                   | `apps/web/src/pages/conversation-detail.ts:167-172`                                                | static read       |
+| 393×852pt viewport + safe-area meta                                                                   | `apps/web/src/pages/shared.ts:164` (lacks `viewport-fit=cover`; will need update)                  | static read       |
+| iPhone 16 Pro dynamic-island 124×37pt centered 11pt from top                                          | iOS HIG + Apple developer docs                                                                     | external standard |
+| Live runtime on :3000                                                                                 | `.ui-redesign/evidence/automated/http-baseline-probes.json`                                        | HTTP probe        |
 
 ## Problem
 
 The Personal Intelligence and Action Engine is currently a server-rendered HTML shell with inline token-less CSS (`apps/web/src/pages/shared.ts:8-66`), no PWA assets, no mobile-first layout, and no bottom navigation. On iPhone 16 Pro the `<table>`-based lists do not reflow at 393pt, the citation `<dialog>` is not thumb-reachable, the top "tab-bar" of 4 horizontal anchors is squeezed by the Dynamic Island, and `JSON.stringify(locator)` leaks debug content into search results (`PIA-MUR-D-002` §4).
 
 We need a concept that:
+
 1. Honors T1–T7 from the approved product model without inventing new IA.
 2. Respects the iPhone 16 Pro safe-area, touch-target, and Dynamic Island constraints as primary acceptance.
 3. Is realistic to implement using only the existing API contracts (`api/openapi.yaml`) and shared types (`packages/contracts/src/index.ts`).
@@ -44,7 +45,7 @@ We need a concept that:
 - All 10 acceptance criteria A1–A10 from `PIA-MUR-D-002` §10 acknowledged.
 - 6 blockers B-1–B-6 acknowledged (none block concept-production).
 - 17 out-of-scope items from `PIA-MUR-D-002` §7 acknowledged; in-scope items 14 (`JSON.stringify(locator)`) and 15 (`window.confirm()`) noted for the design contract.
-- 393×852pt portrait viewport; env(safe-area-inset-*) required.
+- 393×852pt portrait viewport; env(safe-area-inset-\*) required.
 - Concepts are visual prototypes only; no product code modified.
 
 ## Materially different alternatives (the other two concepts)

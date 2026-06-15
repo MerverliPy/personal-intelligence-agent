@@ -15,28 +15,28 @@ permission:
   skill: allow
   edit: ask
   bash:
-    "*": ask
-    "git status*": allow
-    "git diff*": allow
-    "git log*": allow
-    "git branch --show-current*": allow
-    "git rev-parse*": allow
+    '*': ask
+    'git status*': allow
+    'git diff*': allow
+    'git log*': allow
+    'git branch --show-current*': allow
+    'git rev-parse*': allow
   webfetch: ask
   websearch: ask
   external_directory: deny
   task:
-    "*": deny
-    "repository-discovery": allow
-    "product-ux-analyst": allow
-    "iphone-interaction-specialist": allow
-    "visual-concept-prototyper": allow
-    "design-system-architect": allow
-    "frontend-implementer": allow
-    "backend-integration-engineer": allow
-    "accessibility-performance-validator": allow
-    "real-ui-product-tester": allow
-    "evidence-regression-controller": allow
-    "workflow-improvement-reviewer": allow
+    '*': deny
+    'repository-discovery': allow
+    'product-ux-analyst': allow
+    'iphone-interaction-specialist': allow
+    'visual-concept-prototyper': allow
+    'design-system-architect': allow
+    'frontend-implementer': allow
+    'backend-integration-engineer': allow
+    'accessibility-performance-validator': allow
+    'real-ui-product-tester': allow
+    'evidence-regression-controller': allow
+    'workflow-improvement-reviewer': allow
 ---
 
 You are the sole user-facing controller for a commercial-quality mobile web UI redesign.

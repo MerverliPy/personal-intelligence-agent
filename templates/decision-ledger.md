@@ -2,23 +2,23 @@
 
 ## Open decisions
 
-| ID | Category | Problem | Status | Dependencies |
-|---|---|---|---|---|
+| ID  | Category | Problem | Status | Dependencies |
+| --- | -------- | ------- | ------ | ------------ |
 
 ## Approved decisions
 
-| ID | Selected alternative | Conditions | Approved by | Approved at | Implemented by commits |
-|---|---|---|---|---|---|
+| ID  | Selected alternative | Conditions | Approved by | Approved at | Implemented by commits |
+| --- | -------------------- | ---------- | ----------- | ----------- | ---------------------- |
 
 ## Rejected decisions
 
-| ID | Rejection reason | Replacement |
-|---|---|---|
+| ID  | Rejection reason | Replacement |
+| --- | ---------------- | ----------- |
 
 ## Revised or superseded decisions
 
-| ID | Replaced by | Reason |
-|---|---|---|
+| ID  | Replaced by | Reason |
+| --- | ----------- | ------ |
 
 ## Rules
 

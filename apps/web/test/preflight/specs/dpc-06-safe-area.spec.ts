@@ -41,10 +41,16 @@ test.describe('DPC-6: safe-area insets', () => {
       // The design uses `top: calc(11pt + env(safe-area-inset-top, 0px))`,
       // so in headless (env = 0) the island is at top: 11pt. Allow up
       // to 20pt to accommodate this intentional margin.
-      expect(measurement.islandTop, `dynamic-island.top should be < 20pt; got ${measurement.islandTop}`).toBeLessThan(20);
+      expect(
+        measurement.islandTop,
+        `dynamic-island.top should be < 20pt; got ${measurement.islandTop}`,
+      ).toBeLessThan(20);
       // The dynamic-island's bottom edge should be at least 59pt from
       // the viewport top (the iPhone 16 Pro Dynamic Island height)
-      expect(measurement.islandBottom, `dynamic-island.bottom should be >= 59pt; got ${measurement.islandBottom}`).toBeGreaterThanOrEqual(58);
+      expect(
+        measurement.islandBottom,
+        `dynamic-island.bottom should be >= 59pt; got ${measurement.islandBottom}`,
+      ).toBeGreaterThanOrEqual(58);
     }
   });
 
@@ -66,7 +72,10 @@ test.describe('DPC-6: safe-area insets', () => {
     if (measurement) {
       // The tab bar's bottom must be at or above the viewport bottom
       // (i.e. it's not overflowing the viewport)
-      expect(measurement.tabBarTop + measurement.tabBarHeight, `tab bar bottom should be <= viewport height`).toBeLessThanOrEqual(measurement.viewportHeight + 1);
+      expect(
+        measurement.tabBarTop + measurement.tabBarHeight,
+        `tab bar bottom should be <= viewport height`,
+      ).toBeLessThanOrEqual(measurement.viewportHeight + 1);
       // Tab bar should be near the bottom of the viewport
       const gap = measurement.viewportHeight - (measurement.tabBarTop + measurement.tabBarHeight);
       expect(gap, `tab bar should be near the bottom; gap is ${gap}pt`).toBeLessThan(40);

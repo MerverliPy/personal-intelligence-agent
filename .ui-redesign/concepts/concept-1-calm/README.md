@@ -53,18 +53,18 @@ Calm trades:
 
 All real-data shapes are sourced from the existing repository:
 
-| Element | Source |
-|---|---|
-| Workspace name placeholder | `apps/api/src/routes/web.ts:108` (the "No workspaces yet…" empty state) |
-| Conversation modes | `apps/web/src/pages/conversation-list.ts:25-30` |
-| Citation chip shape `[N]` | `apps/web/src/pages/conversation-detail.ts:100-104` |
-| Citation modal `<dialog>` | `apps/web/src/pages/conversation-detail.ts:45` |
-| Run-state badge map | `apps/web/src/pages/conversation-detail.ts:330-338` |
-| Document status badge classes | `apps/web/src/pages/shared.ts:40-47` + `apps/web/src/pages/document-list.ts:99-103` |
-| Feedback category list | `apps/web/src/pages/conversation-detail.ts:84` (mirrors `packages/contracts/src/index.ts:514-522`) |
-| Assistant text fixture | `evals/answers/datasets/sample.yaml:29` ("The retention period is 7 years.") |
-| Multi-citation fixture | `evals/answers/datasets/sample.yaml:65-66` |
-| Document title fixture | `evals/answers/datasets/sample.yaml:26, 58, 61` (policy, AI, weather) |
+| Element                       | Source                                                                                             |
+| ----------------------------- | -------------------------------------------------------------------------------------------------- |
+| Workspace name placeholder    | `apps/api/src/routes/web.ts:108` (the "No workspaces yet…" empty state)                            |
+| Conversation modes            | `apps/web/src/pages/conversation-list.ts:25-30`                                                    |
+| Citation chip shape `[N]`     | `apps/web/src/pages/conversation-detail.ts:100-104`                                                |
+| Citation modal `<dialog>`     | `apps/web/src/pages/conversation-detail.ts:45`                                                     |
+| Run-state badge map           | `apps/web/src/pages/conversation-detail.ts:330-338`                                                |
+| Document status badge classes | `apps/web/src/pages/shared.ts:40-47` + `apps/web/src/pages/document-list.ts:99-103`                |
+| Feedback category list        | `apps/web/src/pages/conversation-detail.ts:84` (mirrors `packages/contracts/src/index.ts:514-522`) |
+| Assistant text fixture        | `evals/answers/datasets/sample.yaml:29` ("The retention period is 7 years.")                       |
+| Multi-citation fixture        | `evals/answers/datasets/sample.yaml:65-66`                                                         |
+| Document title fixture        | `evals/answers/datasets/sample.yaml:26, 58, 61` (policy, AI, weather)                              |
 
 ## Non-goals (explicitly deferred to design-contract)
 

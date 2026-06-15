@@ -3,19 +3,10 @@
   "$id": "performance-budget.schema.json",
   "title": "Mobile Performance Budget",
   "type": "object",
-  "required": [
-    "status",
-    "baseline",
-    "budgets",
-    "physicalDevice"
-  ],
+  "required": ["status", "baseline", "budgets", "physicalDevice"],
   "properties": {
     "status": {
-      "enum": [
-        "proposed",
-        "approved",
-        "superseded"
-      ]
+      "enum": ["proposed", "approved", "superseded"]
     },
     "baseline": {
       "type": "object"
@@ -25,21 +16,13 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": [
-          "metric",
-          "threshold",
-          "comparison",
-          "environment"
-        ],
+        "required": ["metric", "threshold", "comparison", "environment"],
         "properties": {
           "metric": {
             "type": "string"
           },
           "threshold": {
-            "type": [
-              "number",
-              "string"
-            ]
+            "type": ["number", "string"]
           },
           "comparison": {
             "enum": [
@@ -59,10 +42,7 @@
     },
     "physicalDevice": {
       "type": "object",
-      "required": [
-        "required",
-        "device"
-      ],
+      "required": ["required", "device"],
       "properties": {
         "required": {
           "const": true

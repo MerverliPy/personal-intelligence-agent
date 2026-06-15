@@ -72,19 +72,19 @@ This list identifies lines in the existing source files that the **design contra
 
 All durations and curves honor `prefers-reduced-motion: reduce` (set to `0.01ms`). Stream is the **most reduce-motion-aware** of the three concepts: every animation explicitly defines a fallback to `0.01ms`; the sheet slide-up uses a CSS variable (`--motion-sheet`) so a single token change disables all sheets.
 
-| Element | Property | Duration | Easing | Notes |
-|---|---|---:|---|---|
-| Tab switch (active state) | color, fill | 100ms | `linear` | Tab text/icon color transitions between `--fg-muted` and `--accent`. The 2pt top accent bar repaints on tab switch. |
-| Row press | background | 80ms | `ease-out` | Tap-state highlight on `.conv` and `.doc` rows. |
-| Row press release | background | 200ms | `ease-in-out` | Return to default. |
-| FAB press | transform: scale | 100ms | `ease-out` | Scale 1.0 → 0.94. |
-| FAB release | transform: scale | 200ms | `ease-in-out` | Back to 1.0. |
-| Sheet open | transform: translateY | **280ms** | `cubic-bezier(0.32, 0.72, 0, 1)` | From `100%` to `0`. iOS-native sheet curve. **Stream uses a longer 280ms (vs Calm's 250ms) to give the signature slide a more deliberate feel.** |
-| Sheet close | transform: translateY | 240ms | `cubic-bezier(0.32, 0.72, 0, 1)` | Reverse. |
-| Backdrop fade | opacity | 200ms | `ease` | 0 → 0.4 alpha. |
-| Network banner appear | transform: translateY | 220ms | `cubic-bezier(0.32, 0.72, 0, 1)` | Slides from -100% to 0. |
-| Citation chip underline reveal | transform: scaleX | 200ms | `ease` | The footnote `[N]` underline animates from `scaleX(0.5)` to `scaleX(1)` on `:hover`/`:focus-visible`. |
-| Streamed text reveal | n/a | 0ms | n/a | No character-by-character reveal; the entire delta is appended in a single frame (mirrors `appendAssistantDelta` at `conversation-detail.ts:305-318`). |
+| Element                        | Property              |  Duration | Easing                           | Notes                                                                                                                                                  |
+| ------------------------------ | --------------------- | --------: | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Tab switch (active state)      | color, fill           |     100ms | `linear`                         | Tab text/icon color transitions between `--fg-muted` and `--accent`. The 2pt top accent bar repaints on tab switch.                                    |
+| Row press                      | background            |      80ms | `ease-out`                       | Tap-state highlight on `.conv` and `.doc` rows.                                                                                                        |
+| Row press release              | background            |     200ms | `ease-in-out`                    | Return to default.                                                                                                                                     |
+| FAB press                      | transform: scale      |     100ms | `ease-out`                       | Scale 1.0 → 0.94.                                                                                                                                      |
+| FAB release                    | transform: scale      |     200ms | `ease-in-out`                    | Back to 1.0.                                                                                                                                           |
+| Sheet open                     | transform: translateY | **280ms** | `cubic-bezier(0.32, 0.72, 0, 1)` | From `100%` to `0`. iOS-native sheet curve. **Stream uses a longer 280ms (vs Calm's 250ms) to give the signature slide a more deliberate feel.**       |
+| Sheet close                    | transform: translateY |     240ms | `cubic-bezier(0.32, 0.72, 0, 1)` | Reverse.                                                                                                                                               |
+| Backdrop fade                  | opacity               |     200ms | `ease`                           | 0 → 0.4 alpha.                                                                                                                                         |
+| Network banner appear          | transform: translateY |     220ms | `cubic-bezier(0.32, 0.72, 0, 1)` | Slides from -100% to 0.                                                                                                                                |
+| Citation chip underline reveal | transform: scaleX     |     200ms | `ease`                           | The footnote `[N]` underline animates from `scaleX(0.5)` to `scaleX(1)` on `:hover`/`:focus-visible`.                                                  |
+| Streamed text reveal           | n/a                   |       0ms | n/a                              | No character-by-character reveal; the entire delta is appended in a single frame (mirrors `appendAssistantDelta` at `conversation-detail.ts:305-318`). |
 
 ## Reduced-motion behavior
 

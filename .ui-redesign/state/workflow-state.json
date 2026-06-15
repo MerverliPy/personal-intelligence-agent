@@ -9,7 +9,15 @@
   "blocker_count": 4,
   "open_decision_count": 0,
   "approved_decision_count": 10,
-  "completed_phases": ["adapter-discovery", "baseline", "product-model", "concept-production", "design-contract", "tooling-preflight", "implementation-contract"],
+  "completed_phases": [
+    "adapter-discovery",
+    "baseline",
+    "product-model",
+    "concept-production",
+    "design-contract",
+    "tooling-preflight",
+    "implementation-contract"
+  ],
   "active_phase": "implementation-commit-1",
   "pause_reason": "User directed the orchestrator to run a device-validation pre-flight before the implementation contract begins (2026-06-14). This will start the cloudflared quick-tunnel, produce a structured iPhone test checklist, and capture device evidence for the Stream concept prototype. UNVERIFIED items (UNVERIFIED-1 <dialog> showModal() focus, UNVERIFIED-2 prefers-reduced-motion in installed PWA, UNVERIFIED-4 touch-target bounding-box sizes, UNVERIFIED-6 prototype pixel-perfect match) will be confirmed on the real iPhone 16 Pro before any source file is touched.",
   "selected_concept": {
@@ -145,10 +153,13 @@
       "decision_id": "PIA-MUR-D-016 (APPROVED with overrides) + PIA-MUR-D-017 (APPROVED)",
       "evidence": ".ui-redesign/evidence/preflight/dpc-{01..14}.json (13 files) + dpc-summary.json"
     },
-    "implementation": {"status": "NOT_STARTED"},
-    "device-validation": {"status": "NOT_STARTED", "note": "Requires physical iPhone 16 Pro (B-1) and bridge confirmation (B-2)."},
-    "evidence-bundle": {"status": "NOT_STARTED"},
-    "delivery": {"status": "NOT_STARTED"}
+    "implementation": { "status": "NOT_STARTED" },
+    "device-validation": {
+      "status": "NOT_STARTED",
+      "note": "Requires physical iPhone 16 Pro (B-1) and bridge confirmation (B-2)."
+    },
+    "evidence-bundle": { "status": "NOT_STARTED" },
+    "delivery": { "status": "NOT_STARTED" }
   },
   "artifacts": {
     "adapter_proposal": ".ui-redesign/adapter/REPOSITORY_ADAPTER.md",
@@ -241,9 +252,18 @@
       "root_redirect": "GET / returns 302 to /app"
     },
     "datastores": {
-      "postgresql": {"host": "127.0.0.1:5432", "process_pid": 978, "image": "pgvector/pgvector:pg17"},
-      "redis": {"host": "127.0.0.1:6379", "process_pid": 198199, "image": "redis:7-alpine"},
-      "minio": {"host": "0.0.0.0:9000", "console": "0.0.0.0:9001", "process_pid": 199086, "image": "minio/minio:latest"}
+      "postgresql": {
+        "host": "127.0.0.1:5432",
+        "process_pid": 978,
+        "image": "pgvector/pgvector:pg17"
+      },
+      "redis": { "host": "127.0.0.1:6379", "process_pid": 198199, "image": "redis:7-alpine" },
+      "minio": {
+        "host": "0.0.0.0:9000",
+        "console": "0.0.0.0:9001",
+        "process_pid": 199086,
+        "image": "minio/minio:latest"
+      }
     },
     "host_networks": {
       "tailscale": "100.81.83.98/32 on tailscale0 (active)",
@@ -286,23 +306,50 @@
     "location": "apps/api/",
     "framework": "Fastify 5.8.5 + fastify-plugin 6",
     "routes": [
-      "auth.ts", "workspaces.ts", "documents.ts", "uploads.ts",
-      "retrieval.ts", "conversations.ts", "feedback.ts", "health.ts",
-      "web.ts", "web-documents.ts", "web-conversations.ts"
+      "auth.ts",
+      "workspaces.ts",
+      "documents.ts",
+      "uploads.ts",
+      "retrieval.ts",
+      "conversations.ts",
+      "feedback.ts",
+      "health.ts",
+      "web.ts",
+      "web-documents.ts",
+      "web-conversations.ts"
     ],
     "plugins": [
-      "audit.ts", "auth.ts", "correlation.ts", "error-handler.ts",
-      "idempotency.ts", "rate-limit.ts", "request-id.ts",
-      "security.ts", "workspace-context.ts"
+      "audit.ts",
+      "auth.ts",
+      "correlation.ts",
+      "error-handler.ts",
+      "idempotency.ts",
+      "rate-limit.ts",
+      "request-id.ts",
+      "security.ts",
+      "workspace-context.ts"
     ],
-    "persistence_dependencies": ["@pia/db (pg pool, migrations, repositories)", "@pia/storage (S3/MinIO adapter)"],
+    "persistence_dependencies": [
+      "@pia/db (pg pool, migrations, repositories)",
+      "@pia/storage (S3/MinIO adapter)"
+    ],
     "openapi_contract": "api/openapi.yaml (37 operations per MANIFEST)"
   },
   "shared_packages": [
-    "@pia/auth", "@pia/config", "@pia/contracts", "@pia/db", "@pia/domain",
-    "@pia/audit", "@pia/observability", "@pia/storage", "@pia/jobs",
-    "@pia/knowledge", "@pia/evals", "@pia/ai",
-    "@pia/memory (shell — P4)", "@pia/tools (shell — P5)"
+    "@pia/auth",
+    "@pia/config",
+    "@pia/contracts",
+    "@pia/db",
+    "@pia/domain",
+    "@pia/audit",
+    "@pia/observability",
+    "@pia/storage",
+    "@pia/jobs",
+    "@pia/knowledge",
+    "@pia/evals",
+    "@pia/ai",
+    "@pia/memory (shell — P4)",
+    "@pia/tools (shell — P5)"
   ],
   "documentation": {
     "specs_root": "docs/00_PRODUCT_REQUIREMENTS.md through docs/09_EXTERNAL_TECHNICAL_BASIS.md",
@@ -312,30 +359,76 @@
     "known_drift": "AGENT_HANDOFF.md still labels @pia/web as 'Next.js App Router frontend' — code is plain TypeScript HTML string builders (low-risk factual correction)"
   },
   "commands": {
-    "install": {"command": "pnpm install", "mutates": true, "approval": "required"},
-    "install_frozen": {"command": "pnpm install --frozen-lockfile", "mutates": false, "approval": "allowed"},
-    "build": {"command": "pnpm build", "mutates": "maybe", "approval": "required"},
-    "typecheck": {"command": "pnpm typecheck", "mutates": false, "approval": "allowed"},
-    "lint": {"command": "pnpm lint", "mutates": false, "approval": "allowed"},
-    "test:unit": {"command": "pnpm test:unit", "mutates": false, "approval": "allowed"},
-    "test:integration": {"command": "pnpm test:integration", "mutates": "maybe", "approval": "required"},
-    "test:e2e": {"command": "pnpm test:e2e", "mutates": "maybe", "approval": "required"},
-    "test:security": {"command": "pnpm test:security", "mutates": "maybe", "approval": "required"},
-    "eval:retrieval": {"command": "pnpm eval:retrieval", "mutates": "maybe", "approval": "required"},
-    "eval:answers": {"command": "pnpm eval:answers", "mutates": "maybe", "approval": "required"},
-    "format:check": {"command": "pnpm format:check", "mutates": false, "approval": "allowed"},
-    "format:fix": {"command": "pnpm format:fix", "mutates": true, "approval": "required"},
-    "security:secrets": {"command": "pnpm security:secrets", "mutates": false, "approval": "allowed"},
-    "security:dependencies": {"command": "pnpm security:dependencies", "mutates": false, "approval": "allowed"},
-    "db:migrate:test": {"command": "pnpm db:migrate:test", "mutates": true, "approval": "required"},
-    "ci:check": {"command": "pnpm ci:check", "mutates": "maybe", "approval": "required"},
-    "start_deps": {"command": "./scripts/dev/start-deps.sh", "mutates": true, "approval": "required", "note": "Currently deps are already up; do not re-run unless torn down."},
-    "stop_deps": {"command": "./scripts/dev/stop-deps.sh", "mutates": "maybe", "approval": "required"},
-    "teardown_deps": {"command": "./scripts/dev/teardown-deps.sh", "mutates": true, "approval": "required", "note": "Destructive; per opencode.jsonc 'docker compose down -v*' is ask."}
+    "install": { "command": "pnpm install", "mutates": true, "approval": "required" },
+    "install_frozen": {
+      "command": "pnpm install --frozen-lockfile",
+      "mutates": false,
+      "approval": "allowed"
+    },
+    "build": { "command": "pnpm build", "mutates": "maybe", "approval": "required" },
+    "typecheck": { "command": "pnpm typecheck", "mutates": false, "approval": "allowed" },
+    "lint": { "command": "pnpm lint", "mutates": false, "approval": "allowed" },
+    "test:unit": { "command": "pnpm test:unit", "mutates": false, "approval": "allowed" },
+    "test:integration": {
+      "command": "pnpm test:integration",
+      "mutates": "maybe",
+      "approval": "required"
+    },
+    "test:e2e": { "command": "pnpm test:e2e", "mutates": "maybe", "approval": "required" },
+    "test:security": {
+      "command": "pnpm test:security",
+      "mutates": "maybe",
+      "approval": "required"
+    },
+    "eval:retrieval": {
+      "command": "pnpm eval:retrieval",
+      "mutates": "maybe",
+      "approval": "required"
+    },
+    "eval:answers": { "command": "pnpm eval:answers", "mutates": "maybe", "approval": "required" },
+    "format:check": { "command": "pnpm format:check", "mutates": false, "approval": "allowed" },
+    "format:fix": { "command": "pnpm format:fix", "mutates": true, "approval": "required" },
+    "security:secrets": {
+      "command": "pnpm security:secrets",
+      "mutates": false,
+      "approval": "allowed"
+    },
+    "security:dependencies": {
+      "command": "pnpm security:dependencies",
+      "mutates": false,
+      "approval": "allowed"
+    },
+    "db:migrate:test": {
+      "command": "pnpm db:migrate:test",
+      "mutates": true,
+      "approval": "required"
+    },
+    "ci:check": { "command": "pnpm ci:check", "mutates": "maybe", "approval": "required" },
+    "start_deps": {
+      "command": "./scripts/dev/start-deps.sh",
+      "mutates": true,
+      "approval": "required",
+      "note": "Currently deps are already up; do not re-run unless torn down."
+    },
+    "stop_deps": {
+      "command": "./scripts/dev/stop-deps.sh",
+      "mutates": "maybe",
+      "approval": "required"
+    },
+    "teardown_deps": {
+      "command": "./scripts/dev/teardown-deps.sh",
+      "mutates": true,
+      "approval": "required",
+      "note": "Destructive; per opencode.jsonc 'docker compose down -v*' is ask."
+    }
   },
   "dev_deps_stack": {
     "compose_file": "compose.yaml",
-    "compose_services": ["postgres (pgvector/pgvector:pg17)", "redis:7-alpine", "minio/minio:latest"],
+    "compose_services": [
+      "postgres (pgvector/pgvector:pg17)",
+      "redis:7-alpine",
+      "minio/minio:latest"
+    ],
     "start_script": "scripts/dev/start-deps.sh",
     "stop_script": "scripts/dev/stop-deps.sh",
     "teardown_script": "scripts/dev/teardown-deps.sh"
@@ -346,7 +439,9 @@
     "auth_method": "OIDC (Keycloak) with fake provider in dev (`createFakeOidcClient`, `InMemoryLoginTransactionStore`); dev bypass returns `sub=dev-user-1, email=dev@localhost`",
     "read_write_authority": "User identity and workspace membership derived from JWT session; workspace_id propagated via `requireWorkspaceContext`",
     "sensitive_fields": [
-      "session cookies", "OIDC tokens", "embedding vectors (sensitivity_class-gated)",
+      "session cookies",
+      "OIDC tokens",
+      "embedding vectors (sensitivity_class-gated)",
       "user-submitted documents and free-text feedback"
     ],
     "redaction_policy": "Provider errors truncated to 200 chars (orchestrator:524-532); logger redaction in @pia/observability; classifier signature explicitly does not inspect free-text feedback (P3-T08 security hardening)",
@@ -402,21 +497,72 @@
     }
   },
   "protected_areas": {
-    "authentication": {"paths": ["apps/api/src/routes/auth.ts", "apps/api/src/plugins/auth.ts", "packages/auth/src/"], "approval": "separate"},
-    "authorization": {"paths": ["packages/domain/src/", "packages/db/src/membership*"], "approval": "separate"},
-    "public_api": {"paths": ["api/openapi.yaml", "apps/api/src/routes/"], "approval": "separate"},
-    "database_schema": {"paths": ["db/schema.sql", "db/migrations/"], "approval": "separate"},
-    "infrastructure": {"paths": ["infra/", "compose.yaml", ".github/workflows/"], "approval": "separate"},
-    "deployment": {"paths": ["apps/*/Dockerfile", ".github/workflows/"], "approval": "separate"},
-    "existing_tests": {"paths": ["apps/*/test/", "test/e2e/", "test/security/", "packages/*/test/"], "approval": "contract (no silent removal)"},
-    "credentials": {"paths": [".env", ".env.*", "*.pem", "*.key", "*credentials*", ".opencode/run-logs/cookies.txt"], "approval": "NEVER read or modify"}
+    "authentication": {
+      "paths": [
+        "apps/api/src/routes/auth.ts",
+        "apps/api/src/plugins/auth.ts",
+        "packages/auth/src/"
+      ],
+      "approval": "separate"
+    },
+    "authorization": {
+      "paths": ["packages/domain/src/", "packages/db/src/membership*"],
+      "approval": "separate"
+    },
+    "public_api": { "paths": ["api/openapi.yaml", "apps/api/src/routes/"], "approval": "separate" },
+    "database_schema": { "paths": ["db/schema.sql", "db/migrations/"], "approval": "separate" },
+    "infrastructure": {
+      "paths": ["infra/", "compose.yaml", ".github/workflows/"],
+      "approval": "separate"
+    },
+    "deployment": { "paths": ["apps/*/Dockerfile", ".github/workflows/"], "approval": "separate" },
+    "existing_tests": {
+      "paths": ["apps/*/test/", "test/e2e/", "test/security/", "packages/*/test/"],
+      "approval": "contract (no silent removal)"
+    },
+    "credentials": {
+      "paths": [
+        ".env",
+        ".env.*",
+        "*.pem",
+        "*.key",
+        "*credentials*",
+        ".opencode/run-logs/cookies.txt"
+      ],
+      "approval": "NEVER read or modify"
+    }
   },
   "device_matrix_initial": [
-    {"env": "iPhone 16 Pro Safari portrait", "priority": "primary", "required": true, "blocker": "B-1"},
-    {"env": "iPhone 16 Pro installed PWA portrait", "priority": "primary", "required": true, "blocker": "B-1"},
-    {"env": "iPhone 16 Pro iOS Chrome portrait", "priority": "secondary", "required": true, "blocker": "B-1"},
-    {"env": "iPhone 15 / 14 / 13 / SE compatibility", "priority": "compatibility", "required": true, "blocker": "B-1"},
-    {"env": "Desktop responsive browser (Chromium, Firefox, Safari) — automated", "priority": "compatibility", "required": true, "note": "No browser-automation tool installed; Playwright + axe-core would be new dependencies requiring separate approval."}
+    {
+      "env": "iPhone 16 Pro Safari portrait",
+      "priority": "primary",
+      "required": true,
+      "blocker": "B-1"
+    },
+    {
+      "env": "iPhone 16 Pro installed PWA portrait",
+      "priority": "primary",
+      "required": true,
+      "blocker": "B-1"
+    },
+    {
+      "env": "iPhone 16 Pro iOS Chrome portrait",
+      "priority": "secondary",
+      "required": true,
+      "blocker": "B-1"
+    },
+    {
+      "env": "iPhone 15 / 14 / 13 / SE compatibility",
+      "priority": "compatibility",
+      "required": true,
+      "blocker": "B-1"
+    },
+    {
+      "env": "Desktop responsive browser (Chromium, Firefox, Safari) — automated",
+      "priority": "compatibility",
+      "required": true,
+      "note": "No browser-automation tool installed; Playwright + axe-core would be new dependencies requiring separate approval."
+    }
   ],
   "evidence": {
     "pre_p3_closure_run": "planning/runs/P3-GATE.md:42-56",

@@ -26,15 +26,16 @@ This packet authorizes the **prototype-only** CSS fixes for the Stream concept p
 
 ## Materially different alternatives
 
-| Alternative | Description | Trade-offs |
-|---|---|---|
-| **A. Increase padding to meet 44×44pt** | Add 6pt transparent padding to the avatar (32→44). Add `min-width: 44pt; min-height: 44pt; padding: 13pt 4pt` to the citation chip. | **Recommended.** No semantic change; meets HIG; preserves visual design. |
-| B. Accept 32pt for the avatar as an exception | Apple's HIG allows 32pt for header buttons in some contexts. Document the exception. | Reject. Inconsistent with the design contract; 44pt is iOS 16 Pro standard. |
-| C. Redesign the avatar as a non-target | Make the avatar non-interactive (remove `<button>` wrapper; use `<div>`). Move the workspace switcher to a different location. | Reject. Loses the T4 = A decision (top-left avatar in header for workspace switcher). |
+| Alternative                                   | Description                                                                                                                         | Trade-offs                                                                            |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| **A. Increase padding to meet 44×44pt**       | Add 6pt transparent padding to the avatar (32→44). Add `min-width: 44pt; min-height: 44pt; padding: 13pt 4pt` to the citation chip. | **Recommended.** No semantic change; meets HIG; preserves visual design.              |
+| B. Accept 32pt for the avatar as an exception | Apple's HIG allows 32pt for header buttons in some contexts. Document the exception.                                                | Reject. Inconsistent with the design contract; 44pt is iOS 16 Pro standard.           |
+| C. Redesign the avatar as a non-target        | Make the avatar non-interactive (remove `<button>` wrapper; use `<div>`). Move the workspace switcher to a different location.      | Reject. Loses the T4 = A decision (top-left avatar in header for workspace switcher). |
 
 ## Recommendation
 
 **A.** Specifically:
+
 - `.app-header__avatar`: add `padding: 6pt` (or set `min-width: 44pt; min-height: 44pt; box-sizing: content-box;`).
 - `.citation-chip`: change `min-width: 18pt; min-height: 24pt` to `min-width: 44pt; min-height: 44pt` and adjust inner padding to preserve the 16pt visible glyph.
 

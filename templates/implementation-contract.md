@@ -29,7 +29,7 @@ Each dependency requires a separate approved dependency record.
 ## Implementation phases
 
 | Phase | Scope | Files | Tests | Commit intent | Approval dependency |
-|---|---|---|---|---|---|
+| ----- | ----- | ----- | ----- | ------------- | ------------------- |
 
 ## Test plan
 

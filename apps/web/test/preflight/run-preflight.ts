@@ -24,8 +24,5 @@ const baseConfig = (await import('./playwright.config.js')).default;
 export default defineConfig({
   ...baseConfig,
   testDir: './specs',
-  reporter: [
-    ...(baseConfig.reporter ?? []),
-    ['./run-preflight-reporter.ts'],
-  ],
+  reporter: [...(baseConfig.reporter ?? []), ['./run-preflight-reporter.ts']],
 });

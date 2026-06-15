@@ -96,7 +96,9 @@ test.describe('DPC-4: touch targets (UNVERIFIED-4)', () => {
     expect(box).not.toBeNull();
     if (box) {
       const meets = box.width >= MIN_TOUCH && box.height >= MIN_TOUCH;
-      expect(meets, `citation chip ${box.width}x${box.height}pt must be >= ${MIN_TOUCH}pt`).toBe(true);
+      expect(meets, `citation chip ${box.width}x${box.height}pt must be >= ${MIN_TOUCH}pt`).toBe(
+        true,
+      );
     }
   });
 });

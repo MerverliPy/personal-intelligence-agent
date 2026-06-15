@@ -12,28 +12,103 @@
   },
   "public_routes": [
     { "path": "/", "status": 302, "location": "/app", "content_type": null },
-    { "path": "/app", "status": 200, "content_type": "text/html; charset=utf-8", "size_bytes": 4538 },
-    { "path": "/health/live", "status": 200, "content_type": "application/json; charset=utf-8", "size_bytes": 18 },
-    { "path": "/health/ready", "status": 200, "content_type": "application/json; charset=utf-8", "size_bytes": 35, "body": "{\"status\":\"ok\",\"checks\":{\"database\":\"ok\"}}" }
+    {
+      "path": "/app",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "size_bytes": 4538
+    },
+    {
+      "path": "/health/live",
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "size_bytes": 18
+    },
+    {
+      "path": "/health/ready",
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "size_bytes": 35,
+      "body": "{\"status\":\"ok\",\"checks\":{\"database\":\"ok\"}}"
+    }
   ],
   "workspace_routes_unauthenticated_placeholder_id": [
-    { "path": "/app/workspaces/ws-baseline-probe/documents", "status": 200, "content_type": "text/html; charset=utf-8", "size_bytes": 11491, "note": "shell rendered; workspace existence is validated client-side via /v1/* which returns 401 unauthenticated" },
-    { "path": "/app/workspaces/ws-baseline-probe/documents/d-baseline-probe", "status": 200, "content_type": "text/html; charset=utf-8", "size_bytes": null, "note": "shell rendered; client-side hydration" },
-    { "path": "/app/workspaces/ws-baseline-probe/upload", "status": 200, "content_type": "text/html; charset=utf-8", "size_bytes": 13574 },
-    { "path": "/app/workspaces/ws-baseline-probe/search", "status": 200, "content_type": "text/html; charset=utf-8", "size_bytes": 13892 },
-    { "path": "/app/workspaces/ws-baseline-probe/conversations", "status": 200, "content_type": "text/html; charset=utf-8", "size_bytes": 10882 },
-    { "path": "/app/workspaces/ws-baseline-probe/conversations/c-baseline-probe", "status": 200, "content_type": "text/html; charset=utf-8", "size_bytes": 21841 }
+    {
+      "path": "/app/workspaces/ws-baseline-probe/documents",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "size_bytes": 11491,
+      "note": "shell rendered; workspace existence is validated client-side via /v1/* which returns 401 unauthenticated"
+    },
+    {
+      "path": "/app/workspaces/ws-baseline-probe/documents/d-baseline-probe",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "size_bytes": null,
+      "note": "shell rendered; client-side hydration"
+    },
+    {
+      "path": "/app/workspaces/ws-baseline-probe/upload",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "size_bytes": 13574
+    },
+    {
+      "path": "/app/workspaces/ws-baseline-probe/search",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "size_bytes": 13892
+    },
+    {
+      "path": "/app/workspaces/ws-baseline-probe/conversations",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "size_bytes": 10882
+    },
+    {
+      "path": "/app/workspaces/ws-baseline-probe/conversations/c-baseline-probe",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "size_bytes": 21841
+    }
   ],
   "api_routes": [
-    { "path": "/v1/me", "status": 401, "content_type": "application/json; charset=utf-8", "envelope": "{\"error\":{\"code\":\"UNAUTHORIZED\",\"message\":\"Authentication required.\",\"request_id\":\"<redacted>\"}}" },
-    { "path": "/v1/workspaces", "status": 401, "content_type": "application/json; charset=utf-8", "envelope": "{\"error\":{\"code\":\"UNAUTHORIZED\",\"message\":\"Authentication required.\",\"request_id\":\"<redacted>\"}}" },
-    { "path": "/v1/workspaces/ws-baseline-probe/documents", "status": 401, "content_type": "application/json; charset=utf-8" },
-    { "path": "/v1/workspaces/ws-baseline-probe/conversations", "status": 401, "content_type": "application/json; charset=utf-8" },
-    { "path": "/openapi.yaml", "status": 404, "content_type": "application/json; charset=utf-8", "note": "OpenAPI contract exists at api/openapi.yaml on disk; not served from /openapi.yaml" }
+    {
+      "path": "/v1/me",
+      "status": 401,
+      "content_type": "application/json; charset=utf-8",
+      "envelope": "{\"error\":{\"code\":\"UNAUTHORIZED\",\"message\":\"Authentication required.\",\"request_id\":\"<redacted>\"}}"
+    },
+    {
+      "path": "/v1/workspaces",
+      "status": 401,
+      "content_type": "application/json; charset=utf-8",
+      "envelope": "{\"error\":{\"code\":\"UNAUTHORIZED\",\"message\":\"Authentication required.\",\"request_id\":\"<redacted>\"}}"
+    },
+    {
+      "path": "/v1/workspaces/ws-baseline-probe/documents",
+      "status": 401,
+      "content_type": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/v1/workspaces/ws-baseline-probe/conversations",
+      "status": 401,
+      "content_type": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/openapi.yaml",
+      "status": 404,
+      "content_type": "application/json; charset=utf-8",
+      "note": "OpenAPI contract exists at api/openapi.yaml on disk; not served from /openapi.yaml"
+    }
   ],
   "auth_routes": [
     { "path": "/auth/login", "status": 302, "note": "redirects to OIDC provider" },
-    { "path": "/auth/callback", "status": 400, "note": "expected 400 for direct callback without state" },
+    {
+      "path": "/auth/callback",
+      "status": 400,
+      "note": "expected 400 for direct callback without state"
+    },
     { "path": "/auth/logout", "status": 404, "note": "not implemented" }
   ],
   "pwa_assets": [

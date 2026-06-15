@@ -2,11 +2,11 @@
 
 The product model (`PIA-MUR-D-002`) does not specify a default landing tab. The three concepts propose three different answers:
 
-| Concept | Default landing | Rationale |
-|---|---|---|
-| 1 — Calm | Conversations | Treats "ask the AI" as the primary action; matches Stream. |
+| Concept       | Default landing          | Rationale                                                                              |
+| ------------- | ------------------------ | -------------------------------------------------------------------------------------- |
+| 1 — Calm      | Conversations            | Treats "ask the AI" as the primary action; matches Stream.                             |
 | 2 — Workspace | **Documents** (proposed) | Treats the workspace as an "inventory" — the user sees what is in the workspace first. |
-| 3 — Stream | Conversations | Treats "ask the AI" as the primary action; matches Calm. |
+| 3 — Stream    | Conversations            | Treats "ask the AI" as the primary action; matches Calm.                               |
 
 The user must pick a default landing before the design-contract phase. The decision is recorded in `FEATURE_PARITY_MATRIX.md` and propagated to the implementation.
 

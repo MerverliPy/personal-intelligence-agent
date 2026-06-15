@@ -25,7 +25,12 @@ interface Screen {
 }
 
 const SCREENS: Screen[] = [
-  { id: '01-conversation-list', prototypeAction: async (p) => { /* default landing */ } },
+  {
+    id: '01-conversation-list',
+    prototypeAction: async (p) => {
+      /* default landing */
+    },
+  },
   {
     id: '02-conversation-detail',
     prototypeAction: async (p) => {
@@ -39,8 +44,18 @@ const SCREENS: Screen[] = [
       await p.locator('.cite').first().click();
     },
   },
-  { id: '04-document-list', prototypeAction: async (p) => { await p.locator('.tab[data-tab="documents"]').click(); } },
-  { id: '05-search-results', prototypeAction: async (p) => { await p.locator('.tab[data-tab="search"]').click(); } },
+  {
+    id: '04-document-list',
+    prototypeAction: async (p) => {
+      await p.locator('.tab[data-tab="documents"]').click();
+    },
+  },
+  {
+    id: '05-search-results',
+    prototypeAction: async (p) => {
+      await p.locator('.tab[data-tab="search"]').click();
+    },
+  },
   {
     id: '06-offline-state',
     prototypeAction: async (p) => {
@@ -67,7 +82,9 @@ test.describe('DPC-5: pixel-perfect match (UNVERIFIED-6)', () => {
       // Also record the SVG byte size for the manual diff
       const svgPath = path.join(SCREENSHOTS_DIR, `${screen.id}.svg`);
       const svgBuf = fs.readFileSync(svgPath);
-      await test.info().attach(`${screen.id}-svg-spec`, { body: svgBuf, contentType: 'image/svg+xml' });
+      await test
+        .info()
+        .attach(`${screen.id}-svg-spec`, { body: svgBuf, contentType: 'image/svg+xml' });
     });
   }
 });

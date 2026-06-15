@@ -15,12 +15,12 @@ This contract translates the approved Stream concept (`PIA-MUR-D-003c`, APPROVED
 
 ### Decisions translated
 
-| ID | What it decided | Status | Source |
-|---|---|---|---|
-| `PIA-MUR-D-001` | Repository adapter + baseline phase authorization | APPROVED 2026-06-14 | `.ui-redesign/adapter/REPOSITORY_ADAPTER.md` |
-| `PIA-MUR-D-002` | Product model (T1=A bottom tab, T2=A bottom-sheet citation, T3=A Search tab, T4=A header avatar, T5=A text-only composer, T6=A network banner, T7=A FAB) | APPROVED 2026-06-14 | `.ui-redesign/reports/PIA-MUR-D-002-product-model.md` |
-| `PIA-MUR-D-003` | Concept pick (selects Stream over Calm and Workspace) | APPROVED 2026-06-14 | `.ui-redesign/decisions/DECISION_LEDGER.md` |
-| `PIA-MUR-D-003c` | Stream concept (single PIA blue accent, footnote-style citation chips, sheet-heavy navigation, conversation-first) | APPROVED 2026-06-14 | `.ui-redesign/concepts/concept-3-stream/` |
+| ID               | What it decided                                                                                                                                          | Status              | Source                                                |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ----------------------------------------------------- |
+| `PIA-MUR-D-001`  | Repository adapter + baseline phase authorization                                                                                                        | APPROVED 2026-06-14 | `.ui-redesign/adapter/REPOSITORY_ADAPTER.md`          |
+| `PIA-MUR-D-002`  | Product model (T1=A bottom tab, T2=A bottom-sheet citation, T3=A Search tab, T4=A header avatar, T5=A text-only composer, T6=A network banner, T7=A FAB) | APPROVED 2026-06-14 | `.ui-redesign/reports/PIA-MUR-D-002-product-model.md` |
+| `PIA-MUR-D-003`  | Concept pick (selects Stream over Calm and Workspace)                                                                                                    | APPROVED 2026-06-14 | `.ui-redesign/decisions/DECISION_LEDGER.md`           |
+| `PIA-MUR-D-003c` | Stream concept (single PIA blue accent, footnote-style citation chips, sheet-heavy navigation, conversation-first)                                       | APPROVED 2026-06-14 | `.ui-redesign/concepts/concept-3-stream/`             |
 
 ### Target
 
@@ -54,21 +54,21 @@ All values are sourced from the Stream prototype (`.ui-redesign/concepts/concept
 
 ### 2.1 Color tokens
 
-| Token | Light | Dark | Notes / source |
-|---|---|---|---|
-| `--bg` | `#FFFFFF` | `#0A0A0A` | Surface |
-| `--fg` | `#0A0A0A` | `#F5F5F5` | Body text |
-| `--fg-muted` | `#5C5C5C` | `#A0A0A0` | Captions, secondary text |
-| `--fg-subtle` | `#9C9C9C` | `#6C6C6C` | Tertiary, hairline-on-bg |
-| `--divider` | `#ECECEC` | `#1F1F1F` | Hairline dividers (0.5pt) |
-| `--accent` | `#2563EB` | `#3B82F6` | **Single PIA blue accent** (Stream signature) |
-| `--accent-pressed` | `#1D4ED8` | `#2563EB` | Pressed state of accent |
-| `--accent-fg` | `#FFFFFF` | `#FFFFFF` | Foreground on accent surface |
-| `--selection` | `#DBE7FF` | `#1E3A5C` | Active row, selected state |
-| `--success` | `#16A34A` | `#16A34A` | Status semantic |
-| `--warning` | `#D97706` | `#D97706` | Status semantic |
-| `--danger` | `#DC2626` | `#DC2626` | Status semantic |
-| `--backdrop` | `rgba(0,0,0,0.4)` | `rgba(0,0,0,0.6)` | Sheet backdrop |
+| Token              | Light             | Dark              | Notes / source                                |
+| ------------------ | ----------------- | ----------------- | --------------------------------------------- |
+| `--bg`             | `#FFFFFF`         | `#0A0A0A`         | Surface                                       |
+| `--fg`             | `#0A0A0A`         | `#F5F5F5`         | Body text                                     |
+| `--fg-muted`       | `#5C5C5C`         | `#A0A0A0`         | Captions, secondary text                      |
+| `--fg-subtle`      | `#9C9C9C`         | `#6C6C6C`         | Tertiary, hairline-on-bg                      |
+| `--divider`        | `#ECECEC`         | `#1F1F1F`         | Hairline dividers (0.5pt)                     |
+| `--accent`         | `#2563EB`         | `#3B82F6`         | **Single PIA blue accent** (Stream signature) |
+| `--accent-pressed` | `#1D4ED8`         | `#2563EB`         | Pressed state of accent                       |
+| `--accent-fg`      | `#FFFFFF`         | `#FFFFFF`         | Foreground on accent surface                  |
+| `--selection`      | `#DBE7FF`         | `#1E3A5C`         | Active row, selected state                    |
+| `--success`        | `#16A34A`         | `#16A34A`         | Status semantic                               |
+| `--warning`        | `#D97706`         | `#D97706`         | Status semantic                               |
+| `--danger`         | `#DC2626`         | `#DC2626`         | Status semantic                               |
+| `--backdrop`       | `rgba(0,0,0,0.4)` | `rgba(0,0,0,0.6)` | Sheet backdrop                                |
 
 **Source for light values:** `.ui-redesign/concepts/concept-3-stream/interactive/styles.css:11-20`
 **Source for dark values:** `.ui-redesign/concepts/concept-3-stream/interactive/styles.css:57-78` (two blocks: `@media (prefers-color-scheme: dark)` and `.theme-dark`)
@@ -77,43 +77,43 @@ All values are sourced from the Stream prototype (`.ui-redesign/concepts/concept
 
 Status colors are **semantic** and stay constant across themes. The Stream prototype follows iOS-native behavior: status pills remain color-coded even in dark mode. Only the surface tokens (`--bg`, `--fg`, `--divider`) invert.
 
-| Status | Background | Foreground |
-|---|---|---|
-| `READY` / `COMPLETED` | `#DCFCE7` | `#166534` |
-| `INGESTING` / `PROCESSING` / `STREAMING` | `#DBEAFE` | `#1E40AF` |
-| `FAILED` / `INTERRUPTED` | `#FEE2E2` | `#991B1B` |
-| `QUARANTINED` / `CANCELLED` | `#FEF3C7` | `#92400E` |
-| `UPLOADED` | `#F3E8FF` | `#6B21A8` |
-| `PENDING` / `CREATED` | `#F3F4F6` | `#374151` |
+| Status                                   | Background | Foreground |
+| ---------------------------------------- | ---------- | ---------- |
+| `READY` / `COMPLETED`                    | `#DCFCE7`  | `#166534`  |
+| `INGESTING` / `PROCESSING` / `STREAMING` | `#DBEAFE`  | `#1E40AF`  |
+| `FAILED` / `INTERRUPTED`                 | `#FEE2E2`  | `#991B1B`  |
+| `QUARANTINED` / `CANCELLED`              | `#FEF3C7`  | `#92400E`  |
+| `UPLOADED`                               | `#F3E8FF`  | `#6B21A8`  |
+| `PENDING` / `CREATED`                    | `#F3F4F6`  | `#374151`  |
 
 **Source:** `.ui-redesign/concepts/concept-3-stream/interactive/styles.css:26-38` + `.ui-redesign/concepts/concept-3-stream/interactive/styles.css:253-261` + `apps/web/src/pages/shared.ts:40-47` (existing baseline) + `apps/web/src/pages/conversation-detail.ts:330-338` (run-state badge map). `CANCELLED` and `INTERRUPTED` are inherited from the baseline badge classes; `COMPLETED` and `STREAMING` are the additional states from the run-state badge map.
 
 #### 2.1.2 Mode-dot tokens (one color per ConversationMode)
 
-| Mode | Color |
-|---|---|
-| `ASK` | `#2563EB` |
+| Mode       | Color     |
+| ---------- | --------- |
+| `ASK`      | `#2563EB` |
 | `RESEARCH` | `#7C3AED` |
-| `ANALYZE` | `#DB2777` |
-| `PLAN` | `#16A34A` |
-| `EXECUTE` | `#EA580C` |
-| `LEARN` | `#0891B2` |
+| `ANALYZE`  | `#DB2777` |
+| `PLAN`     | `#16A34A` |
+| `EXECUTE`  | `#EA580C` |
+| `LEARN`    | `#0891B2` |
 
 **Source:** `.ui-redesign/concepts/concept-3-stream/interactive/styles.css:216-221`. All 6 values map to `ConversationMode` at `packages/contracts/src/index.ts:347`.
 
 ### 2.2 Typography tokens
 
-| Token | Default | AX5 (Larger Text) | Notes |
-|---|---|---|---|
-| Font family | `-apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", "Helvetica Neue", sans-serif` | (same) | Native iOS system font; no font fetch |
-| `--t-body` | 19pt | 34pt | Conversation thread, list rows |
-| `--t-caption` | 14pt | 24pt | Time, meta, sheet eyebrows |
-| `--t-section` | 24pt | 42pt | Header title, sheet title |
-| `--t-large` | 32pt | 56pt | Reserved for large title (currently unused in prototype) |
-| `--t-tab` | 10pt | 16pt | Bottom tab labels |
-| Line height (body) | 1.42 | 1.42 | -- |
-| Line height (display) | 1.2 | 1.2 | -- |
-| Weights | 400, 500, 600, 700 | (same) | -- |
+| Token                 | Default                                                                                     | AX5 (Larger Text) | Notes                                                    |
+| --------------------- | ------------------------------------------------------------------------------------------- | ----------------- | -------------------------------------------------------- |
+| Font family           | `-apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", "Helvetica Neue", sans-serif` | (same)            | Native iOS system font; no font fetch                    |
+| `--t-body`            | 19pt                                                                                        | 34pt              | Conversation thread, list rows                           |
+| `--t-caption`         | 14pt                                                                                        | 24pt              | Time, meta, sheet eyebrows                               |
+| `--t-section`         | 24pt                                                                                        | 42pt              | Header title, sheet title                                |
+| `--t-large`           | 32pt                                                                                        | 56pt              | Reserved for large title (currently unused in prototype) |
+| `--t-tab`             | 10pt                                                                                        | 16pt              | Bottom tab labels                                        |
+| Line height (body)    | 1.42                                                                                        | 1.42              | --                                                       |
+| Line height (display) | 1.2                                                                                         | 1.2               | --                                                       |
+| Weights               | 400, 500, 600, 700                                                                          | (same)            | --                                                       |
 
 **Source:** `.ui-redesign/concepts/concept-3-stream/interactive/styles.css:48-55` and `.ui-redesign/concepts/concept-3-stream/interactive/styles.css:95-101` (AX5 multiplier).
 
@@ -121,43 +121,43 @@ Status colors are **semantic** and stay constant across themes. The Stream proto
 
 ### 2.3 Spacing tokens (4pt grid)
 
-| Token | Value |
-|---|---|
-| `--s-1` | 4pt |
-| `--s-2` | 8pt |
-| `--s-3` | 12pt |
-| `--s-4` | 16pt |
-| `--s-5` | 20pt |
-| `--s-6` | 24pt |
-| `--s-8` | 32pt |
-| `--s-10` | 40pt |
-| `--s-12` | 48pt |
+| Token    | Value |
+| -------- | ----- |
+| `--s-1`  | 4pt   |
+| `--s-2`  | 8pt   |
+| `--s-3`  | 12pt  |
+| `--s-4`  | 16pt  |
+| `--s-5`  | 20pt  |
+| `--s-6`  | 24pt  |
+| `--s-8`  | 32pt  |
+| `--s-10` | 40pt  |
+| `--s-12` | 48pt  |
 
 **Source:** Derived from Stream prototype spacing values used throughout `styles.css` (padding, margin, gap declarations).
 
 ### 2.4 Shape tokens
 
-| Token | Value | Used by |
-|---|---|---|
-| `--r-sm` | 8pt | Small surfaces (chips, feedback banner) |
-| `--r-md` | 12pt | Search input, message input |
-| `--r-lg` | 16pt | Large surfaces (sheet panel, future cards) |
-| `--r-pill` | 9999pt | Selected tab indicator (square top, square bottom — actually 2pt in Stream) |
-| `--r-circle` | 50% | FAB, avatar, send button, mode dot |
-| Row corners | 0pt | All list rows (sharp; iOS-native list aesthetic) |
-| Sheet panel top corners | 14pt | `.sheet__panel` (close to `--r-lg`; matches iOS native sheet) |
+| Token                   | Value  | Used by                                                                     |
+| ----------------------- | ------ | --------------------------------------------------------------------------- |
+| `--r-sm`                | 8pt    | Small surfaces (chips, feedback banner)                                     |
+| `--r-md`                | 12pt   | Search input, message input                                                 |
+| `--r-lg`                | 16pt   | Large surfaces (sheet panel, future cards)                                  |
+| `--r-pill`              | 9999pt | Selected tab indicator (square top, square bottom — actually 2pt in Stream) |
+| `--r-circle`            | 50%    | FAB, avatar, send button, mode dot                                          |
+| Row corners             | 0pt    | All list rows (sharp; iOS-native list aesthetic)                            |
+| Sheet panel top corners | 14pt   | `.sheet__panel` (close to `--r-lg`; matches iOS native sheet)               |
 
 **Source:** `.ui-redesign/concepts/concept-3-stream/interactive/styles.css:264-302` (tabs use 2pt radius on the active indicator; FAB and avatar use 50%).
 
 ### 2.5 Elevation tokens
 
-| Token | Value | Used by |
-|---|---|---|
-| `--shadow-1` | `0 1pt 2pt rgba(0, 0, 0, 0.08)` | Reserved (not heavily used in Stream) |
-| `--shadow-2` | `0 2pt 8pt rgba(0, 0, 0, 0.12)` | Reserved (not heavily used in Stream) |
-| `--fab-shadow` | `0 6pt 20pt rgba(37, 99, 235, 0.36)` | FAB default |
-| `--fab-shadow-pressed` | `0 2pt 6pt rgba(37, 99, 235, 0.24)` | FAB pressed (scale 0.94) |
-| Hairline divider | `0.5pt solid var(--divider)` | Tab bar top, list row bottom, composer top, header bottom |
+| Token                  | Value                                | Used by                                                   |
+| ---------------------- | ------------------------------------ | --------------------------------------------------------- |
+| `--shadow-1`           | `0 1pt 2pt rgba(0, 0, 0, 0.08)`      | Reserved (not heavily used in Stream)                     |
+| `--shadow-2`           | `0 2pt 8pt rgba(0, 0, 0, 0.12)`      | Reserved (not heavily used in Stream)                     |
+| `--fab-shadow`         | `0 6pt 20pt rgba(37, 99, 235, 0.36)` | FAB default                                               |
+| `--fab-shadow-pressed` | `0 2pt 6pt rgba(37, 99, 235, 0.24)`  | FAB pressed (scale 0.94)                                  |
+| Hairline divider       | `0.5pt solid var(--divider)`         | Tab bar top, list row bottom, composer top, header bottom |
 
 **Source:** `.ui-redesign/concepts/concept-3-stream/interactive/styles.css:320-325` (FAB).
 
@@ -165,14 +165,14 @@ Status colors are **semantic** and stay constant across themes. The Stream proto
 
 ### 2.6 Motion tokens
 
-| Token | Value | Notes |
-|---|---|---|
-| `--motion-fast` | 120ms | Short transitions (tab color, row press) |
-| `--motion-base` | 200ms | Standard transitions (fade, citation underline) |
-| `--motion-slow` | 280ms | Slow transitions (sheet slide-up) |
-| `--motion-sheet` | 280ms | Sheet slide-up (Stream signature) |
-| `--motion-fade` | 200ms | Backdrop fade, network banner |
-| `--motion-ease` | `cubic-bezier(0.32, 0.72, 0, 1)` | iOS-native "sharp out" curve |
+| Token            | Value                            | Notes                                           |
+| ---------------- | -------------------------------- | ----------------------------------------------- |
+| `--motion-fast`  | 120ms                            | Short transitions (tab color, row press)        |
+| `--motion-base`  | 200ms                            | Standard transitions (fade, citation underline) |
+| `--motion-slow`  | 280ms                            | Slow transitions (sheet slide-up)               |
+| `--motion-sheet` | 280ms                            | Sheet slide-up (Stream signature)               |
+| `--motion-fade`  | 200ms                            | Backdrop fade, network banner                   |
+| `--motion-ease`  | `cubic-bezier(0.32, 0.72, 0, 1)` | iOS-native "sharp out" curve                    |
 
 **Source:** `.ui-redesign/concepts/concept-3-stream/interactive/styles.css:22-24` (core) + PIA-MUR-D-002 §5 guidance for the `--motion-fast` / `--motion-base` / `--motion-slow` scale.
 
@@ -180,19 +180,19 @@ Status colors are **semantic** and stay constant across themes. The Stream proto
 
 ### 2.7 Safe-area and dynamic-viewport tokens
 
-| Token | Value | Used by |
-|---|---|---|
-| `--tab-bar-h` | 49pt | Tab bar height |
-| `--tab-bar-safe` | `calc(49pt + env(safe-area-inset-bottom, 0px))` | Tab bar height including home indicator |
-| `--header-h` | 44pt | Header content height |
-| `--composer-h` | 56pt | Composer (Send button) |
-| `--fab-size` | 56pt | FAB |
-| `--touch-min` | 44pt | Minimum tap target (HIG) |
-| Top of header | `max(env(safe-area-inset-top, 0px), 59pt)` | Dynamic Island clearance |
-| Bottom of tab bar | `49pt + env(safe-area-inset-bottom, 0px)` | Home indicator clearance |
-| FAB position | `bottom: var(--tab-bar-safe) + 16pt; right: max(16pt, env(safe-area-inset-right, 0px))` | Bottom-right, safe-area-cleared |
-| Viewport meta | `<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">` | Edge-to-edge layout |
-| Viewport height | `100dvh` (with `100vh` fallback) | Dynamic viewport units for keyboard + URL bar |
+| Token             | Value                                                                                        | Used by                                       |
+| ----------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `--tab-bar-h`     | 49pt                                                                                         | Tab bar height                                |
+| `--tab-bar-safe`  | `calc(49pt + env(safe-area-inset-bottom, 0px))`                                              | Tab bar height including home indicator       |
+| `--header-h`      | 44pt                                                                                         | Header content height                         |
+| `--composer-h`    | 56pt                                                                                         | Composer (Send button)                        |
+| `--fab-size`      | 56pt                                                                                         | FAB                                           |
+| `--touch-min`     | 44pt                                                                                         | Minimum tap target (HIG)                      |
+| Top of header     | `max(env(safe-area-inset-top, 0px), 59pt)`                                                   | Dynamic Island clearance                      |
+| Bottom of tab bar | `49pt + env(safe-area-inset-bottom, 0px)`                                                    | Home indicator clearance                      |
+| FAB position      | `bottom: var(--tab-bar-safe) + 16pt; right: max(16pt, env(safe-area-inset-right, 0px))`      | Bottom-right, safe-area-cleared               |
+| Viewport meta     | `<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">` | Edge-to-edge layout                           |
+| Viewport height   | `100dvh` (with `100vh` fallback)                                                             | Dynamic viewport units for keyboard + URL bar |
 
 **Source:** `.ui-redesign/concepts/concept-3-stream/interactive/styles.css:40-46` + `.ui-redesign/concepts/concept-3-stream/interactive/index.html:5` (viewport meta).
 
@@ -277,25 +277,25 @@ For each component: **anatomy, variants, states, behavior, a11y, motion, safe-ar
 
 ### 4.1 Component summary table
 
-| # | Component | Source (Stream prototype) | Touches baseline file |
-|---|---|---|---|
-| 1 | Bottom Tab Bar | `index.html:293-315` + `styles.css:264-302` | `apps/web/src/pages/shared.ts:60-62` (delete top tab-bar); `apps/api/src/routes/web.ts:126-192` (add bottom tab bar) |
-| 2 | Top App Bar | `index.html:20-25` + `styles.css:145-179` | `apps/web/src/pages/shared.ts:126-192` |
-| 3 | Bottom Sheet (slide-up) | `index.html:320-352` + `styles.css:347-377` | `apps/web/src/pages/conversation-detail.ts:45` (wrap existing `<dialog>` in sheet) |
-| 4 | Full-Screen Sheet | (Brief; not in prototype) | `apps/web/src/pages/document-detail.ts:158-170` (replace `window.confirm`) |
-| 5 | Citation Chip (footnote) | `index.html:122-124` + `styles.css:471-500` | `apps/web/src/pages/conversation-detail.ts:100-104` (KEEP `[N]` shape; update CSS to footnote style) |
-| 6 | FAB | `index.html:94-98` + `styles.css:305-325` | `apps/web/src/pages/conversation-list.ts:22-35` (delete New conversation form); `apps/web/src/pages/document-list.ts:18-21` (delete +Upload button) |
-| 7 | Status Badge | `styles.css:243-261` | `apps/web/src/pages/shared.ts:39-47` (keep tokens; add STREAMING, COMPLETED, INTERRUPTED aliases) |
-| 8 | Message Bubble | `index.html:111-150` + `styles.css:429-468` | `apps/web/src/pages/conversation-detail.ts:25-46` (KEEP; align with Stream) |
-| 9 | Mode-of-Conversation Sheet | `index.html:337-352` + `styles.css:406-426` | `apps/web/src/pages/conversation-list.ts:25-30` (REPLACE `<select>`) |
-| 10 | File Picker Sheet (Upload) | (Brief; not in prototype) | `apps/web/src/pages/document-list.ts:18-21` (REPLACE with FAB trigger) |
-| 11 | Search Input | `index.html:247-252` + `styles.css:561-579` | `apps/web/src/pages/search.ts:13-156` (re-flow to sticky single-row) |
-| 12 | Result Card | `index.html:253-287` + `styles.css:581-594` | `apps/web/src/pages/search.ts:131-137` (DELETE `JSON.stringify(locator)`; collapse score-bar trio) |
-| 13 | Empty State | (Brief; not in prototype) | per-screen additions to `conversation-list.ts`, `document-list.ts`, `search.ts` |
-| 14 | Error State (Inline Banner) | (Brief; not in prototype) | `apps/web/src/pages/shared.ts:92-94` (sanitize `request_id` out) |
-| 15 | Offline Banner | `index.html:13-16` + `styles.css:327-345` | `apps/web/src/pages/shared.ts:186-189` (add online/offline listeners) |
-| 16 | Loading Skeleton | (Brief; not in prototype) | per-screen additions |
-| 17 | Network-Required Splash | (Brief; not in prototype) | `apps/api/src/routes/web.ts:126-192` (pageShell adds splash) |
+| #   | Component                   | Source (Stream prototype)                   | Touches baseline file                                                                                                                               |
+| --- | --------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Bottom Tab Bar              | `index.html:293-315` + `styles.css:264-302` | `apps/web/src/pages/shared.ts:60-62` (delete top tab-bar); `apps/api/src/routes/web.ts:126-192` (add bottom tab bar)                                |
+| 2   | Top App Bar                 | `index.html:20-25` + `styles.css:145-179`   | `apps/web/src/pages/shared.ts:126-192`                                                                                                              |
+| 3   | Bottom Sheet (slide-up)     | `index.html:320-352` + `styles.css:347-377` | `apps/web/src/pages/conversation-detail.ts:45` (wrap existing `<dialog>` in sheet)                                                                  |
+| 4   | Full-Screen Sheet           | (Brief; not in prototype)                   | `apps/web/src/pages/document-detail.ts:158-170` (replace `window.confirm`)                                                                          |
+| 5   | Citation Chip (footnote)    | `index.html:122-124` + `styles.css:471-500` | `apps/web/src/pages/conversation-detail.ts:100-104` (KEEP `[N]` shape; update CSS to footnote style)                                                |
+| 6   | FAB                         | `index.html:94-98` + `styles.css:305-325`   | `apps/web/src/pages/conversation-list.ts:22-35` (delete New conversation form); `apps/web/src/pages/document-list.ts:18-21` (delete +Upload button) |
+| 7   | Status Badge                | `styles.css:243-261`                        | `apps/web/src/pages/shared.ts:39-47` (keep tokens; add STREAMING, COMPLETED, INTERRUPTED aliases)                                                   |
+| 8   | Message Bubble              | `index.html:111-150` + `styles.css:429-468` | `apps/web/src/pages/conversation-detail.ts:25-46` (KEEP; align with Stream)                                                                         |
+| 9   | Mode-of-Conversation Sheet  | `index.html:337-352` + `styles.css:406-426` | `apps/web/src/pages/conversation-list.ts:25-30` (REPLACE `<select>`)                                                                                |
+| 10  | File Picker Sheet (Upload)  | (Brief; not in prototype)                   | `apps/web/src/pages/document-list.ts:18-21` (REPLACE with FAB trigger)                                                                              |
+| 11  | Search Input                | `index.html:247-252` + `styles.css:561-579` | `apps/web/src/pages/search.ts:13-156` (re-flow to sticky single-row)                                                                                |
+| 12  | Result Card                 | `index.html:253-287` + `styles.css:581-594` | `apps/web/src/pages/search.ts:131-137` (DELETE `JSON.stringify(locator)`; collapse score-bar trio)                                                  |
+| 13  | Empty State                 | (Brief; not in prototype)                   | per-screen additions to `conversation-list.ts`, `document-list.ts`, `search.ts`                                                                     |
+| 14  | Error State (Inline Banner) | (Brief; not in prototype)                   | `apps/web/src/pages/shared.ts:92-94` (sanitize `request_id` out)                                                                                    |
+| 15  | Offline Banner              | `index.html:13-16` + `styles.css:327-345`   | `apps/web/src/pages/shared.ts:186-189` (add online/offline listeners)                                                                               |
+| 16  | Loading Skeleton            | (Brief; not in prototype)                   | per-screen additions                                                                                                                                |
+| 17  | Network-Required Splash     | (Brief; not in prototype)                   | `apps/api/src/routes/web.ts:126-192` (pageShell adds splash)                                                                                        |
 
 ### 4.2 Source-file change evidence (read-only inspection)
 
@@ -330,16 +330,16 @@ Key change points:
 
 The full machine-readable inventory is in `DESIGN_CONTRACT.json` (`states` array). The 8 required states:
 
-| State | Contract | A11y | Motion |
-|---|---|---|---|
-| **loading** | Skeleton for ≤ 1s; persistent skeleton (no spinner) for > 1s; cancellable operations show Cancel | `role="status"` `aria-label="Loading…"` `aria-live="polite"` | 1.5s pulse opacity 0.6 → 1.0 → 0.6; reduced-motion: static |
-| **empty** | Centered icon (48pt) + headline (24pt 700 weight) + 1-line subtext (19pt) + primary CTA (44pt min-height) | h2 headline; CTA accessible name; `aria-live="polite"` on first paint | Fade-in 200ms ease; reduced-motion: instant |
-| **error** | Inline red banner with code (uppercase) + sanitized 1-line message; retry button; **NEVER show `request_id`** | `role="alert"` `aria-live="assertive"` | Fade-in 200ms ease; reduced-motion: instant |
-| **offline** | Persistent top banner below Dynamic Island; disables destructive actions (FAB, Send, Retry Ingestion, Delete) at 40% opacity; resubmits use idempotency keys (NFR-REL-002) | `role="status"` `aria-live="polite"`; disabled controls have `aria-disabled="true"` | Slide-in 220ms cubic-bezier(0.32, 0.72, 0, 1); reduced-motion: instant |
-| **pressed** | 8% darker background on rows (var(--divider)); scale 0.94 on FAB; release on touchend | Visual only; no ARIA change | Row press 80ms ease-out; FAB press 100ms ease-out |
-| **focus** | 2pt `--accent` outline + 2pt offset (FAB uses 3pt white outline); visible on `:focus-visible` only (keyboard) | `:focus-visible` selector; never `:focus` alone | Instant |
-| **disabled** | 40% opacity; `pointer-events: none`; `aria-disabled="true"` | `aria-disabled="true"` on buttons; `disabled` attribute on form controls; VoiceOver announces "dimmed" | N/A |
-| **success** | Inline checkmark + 1-line text; auto-dismiss after 3s (or on next user action) | `role="status"` `aria-live="polite"` | Fade-in 200ms ease; auto-dismiss fade-out 200ms ease after 3s |
+| State        | Contract                                                                                                                                                                   | A11y                                                                                                   | Motion                                                                 |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| **loading**  | Skeleton for ≤ 1s; persistent skeleton (no spinner) for > 1s; cancellable operations show Cancel                                                                           | `role="status"` `aria-label="Loading…"` `aria-live="polite"`                                           | 1.5s pulse opacity 0.6 → 1.0 → 0.6; reduced-motion: static             |
+| **empty**    | Centered icon (48pt) + headline (24pt 700 weight) + 1-line subtext (19pt) + primary CTA (44pt min-height)                                                                  | h2 headline; CTA accessible name; `aria-live="polite"` on first paint                                  | Fade-in 200ms ease; reduced-motion: instant                            |
+| **error**    | Inline red banner with code (uppercase) + sanitized 1-line message; retry button; **NEVER show `request_id`**                                                              | `role="alert"` `aria-live="assertive"`                                                                 | Fade-in 200ms ease; reduced-motion: instant                            |
+| **offline**  | Persistent top banner below Dynamic Island; disables destructive actions (FAB, Send, Retry Ingestion, Delete) at 40% opacity; resubmits use idempotency keys (NFR-REL-002) | `role="status"` `aria-live="polite"`; disabled controls have `aria-disabled="true"`                    | Slide-in 220ms cubic-bezier(0.32, 0.72, 0, 1); reduced-motion: instant |
+| **pressed**  | 8% darker background on rows (var(--divider)); scale 0.94 on FAB; release on touchend                                                                                      | Visual only; no ARIA change                                                                            | Row press 80ms ease-out; FAB press 100ms ease-out                      |
+| **focus**    | 2pt `--accent` outline + 2pt offset (FAB uses 3pt white outline); visible on `:focus-visible` only (keyboard)                                                              | `:focus-visible` selector; never `:focus` alone                                                        | Instant                                                                |
+| **disabled** | 40% opacity; `pointer-events: none`; `aria-disabled="true"`                                                                                                                | `aria-disabled="true"` on buttons; `disabled` attribute on form controls; VoiceOver announces "dimmed" | N/A                                                                    |
+| **success**  | Inline checkmark + 1-line text; auto-dismiss after 3s (or on next user action)                                                                                             | `role="status"` `aria-live="polite"`                                                                   | Fade-in 200ms ease; auto-dismiss fade-out 200ms ease after 3s          |
 
 ---
 
@@ -355,19 +355,19 @@ The full machine-readable inventory is in `DESIGN_CONTRACT.json` (`states` array
 
 ### 6.1 Element timing reference
 
-| Element | Property | Duration | Easing |
-|---|---|---:|---|
-| Tab switch (selected) | color, fill | 100ms | linear |
-| Row press in | background | 80ms | ease-out |
-| Row press out | background | 200ms | ease-in-out |
-| FAB press in | transform: scale 1.0 → 0.94 | 100ms | ease-out |
-| FAB press out | transform: scale | 200ms | ease-in-out |
-| Sheet open | transform: translateY 100% → 0 | 280ms | cubic-bezier(0.32, 0.72, 0, 1) |
-| Sheet close | transform: translateY 0 → 100% | 240ms | cubic-bezier(0.32, 0.72, 0, 1) |
-| Backdrop fade | opacity 0 → 0.4 | 200ms | ease |
-| Network banner in | transform: translateY -100% → 0 | 220ms | cubic-bezier(0.32, 0.72, 0, 1) |
-| Citation chip underline | transform: scaleX 0.5 → 1 | 200ms | ease |
-| Streamed text reveal | (n/a) | 0ms | n/a (single-frame append) |
+| Element                 | Property                        | Duration | Easing                         |
+| ----------------------- | ------------------------------- | -------: | ------------------------------ |
+| Tab switch (selected)   | color, fill                     |    100ms | linear                         |
+| Row press in            | background                      |     80ms | ease-out                       |
+| Row press out           | background                      |    200ms | ease-in-out                    |
+| FAB press in            | transform: scale 1.0 → 0.94     |    100ms | ease-out                       |
+| FAB press out           | transform: scale                |    200ms | ease-in-out                    |
+| Sheet open              | transform: translateY 100% → 0  |    280ms | cubic-bezier(0.32, 0.72, 0, 1) |
+| Sheet close             | transform: translateY 0 → 100%  |    240ms | cubic-bezier(0.32, 0.72, 0, 1) |
+| Backdrop fade           | opacity 0 → 0.4                 |    200ms | ease                           |
+| Network banner in       | transform: translateY -100% → 0 |    220ms | cubic-bezier(0.32, 0.72, 0, 1) |
+| Citation chip underline | transform: scaleX 0.5 → 1       |    200ms | ease                           |
+| Streamed text reveal    | (n/a)                           |      0ms | n/a (single-frame append)      |
 
 ### 6.2 Banned animations
 
@@ -413,12 +413,12 @@ The full machine-readable inventory is in `DESIGN_CONTRACT.json` (`states` array
 
 ### 7.5 Live regions
 
-| Region | Role | aria-live | Source |
-|---|---|---|---|
-| Message thread | `log` | `polite` | `apps/web/src/pages/conversation-detail.ts:40` (baseline) |
-| Network banner | `status` | `polite` | Stream prototype |
-| Error banner | `alert` | `assertive` | WCAG 4.1.3 |
-| Feedback status | (none) | `polite` on `<output>` | `apps/web/src/pages/conversation-detail.ts:96` (baseline) |
+| Region          | Role     | aria-live              | Source                                                    |
+| --------------- | -------- | ---------------------- | --------------------------------------------------------- |
+| Message thread  | `log`    | `polite`               | `apps/web/src/pages/conversation-detail.ts:40` (baseline) |
+| Network banner  | `status` | `polite`               | Stream prototype                                          |
+| Error banner    | `alert`  | `assertive`            | WCAG 4.1.3                                                |
+| Feedback status | (none)   | `polite` on `<output>` | `apps/web/src/pages/conversation-detail.ts:96` (baseline) |
 
 ### 7.6 Landmarks
 
@@ -492,12 +492,12 @@ Served at `/manifest.webmanifest`.
 ### 9.2 Required `<head>` tags
 
 ```html
-<meta name="theme-color" content="#2563EB">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<link rel="manifest" href="/manifest.webmanifest">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#2563EB" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 ```
 
 ### 9.3 Service worker (behavior, not implementation)
@@ -526,14 +526,14 @@ Served at `/manifest.webmanifest`.
 
 ### 10.1 Real-data sources
 
-| Source | Path | Used for |
-|---|---|---|
-| Captured baseline | `.ui-redesign/baseline/REPOSITORY_BASELINE.md` | Runtime evidence, PWA and mobile evidence, security headers |
-| HTTP probes | `.ui-redesign/evidence/automated/http-baseline-probes.json` | Public routes, workspace routes, API routes, auth routes, PWA assets, HTML evidence |
-| Source files | `apps/web/src/pages/*.ts`, `apps/api/src/routes/web*.ts` | Existing CSS, layouts, run-state badge map, feedback form, citation chip shape |
-| Contracts | `packages/contracts/src/index.ts` | `ConversationMode` (L347), `FeedbackCategory` (L514-522), `Citation` (L440-449), `ModelRunStatusApi` |
-| OpenAPI | `api/openapi.yaml` | 37 operations |
-| Eval fixtures | `evals/answers/datasets/sample.yaml` | Retention period claim (L29), AI/weather summary multi-citation (L65-66) |
+| Source            | Path                                                        | Used for                                                                                             |
+| ----------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Captured baseline | `.ui-redesign/baseline/REPOSITORY_BASELINE.md`              | Runtime evidence, PWA and mobile evidence, security headers                                          |
+| HTTP probes       | `.ui-redesign/evidence/automated/http-baseline-probes.json` | Public routes, workspace routes, API routes, auth routes, PWA assets, HTML evidence                  |
+| Source files      | `apps/web/src/pages/*.ts`, `apps/api/src/routes/web*.ts`    | Existing CSS, layouts, run-state badge map, feedback form, citation chip shape                       |
+| Contracts         | `packages/contracts/src/index.ts`                           | `ConversationMode` (L347), `FeedbackCategory` (L514-522), `Citation` (L440-449), `ModelRunStatusApi` |
+| OpenAPI           | `api/openapi.yaml`                                          | 37 operations                                                                                        |
+| Eval fixtures     | `evals/answers/datasets/sample.yaml`                        | Retention period claim (L29), AI/weather summary multi-citation (L65-66)                             |
 
 ### 10.2 Error envelope sanitization
 
@@ -553,12 +553,12 @@ Mock data is not allowed for acceptance evidence. If real data is unavailable (D
 
 This contract is a translation of approved decisions, not a new design.
 
-| Decision ID | What it decided | Status | Source |
-|---|---|---|---|
-| `PIA-MUR-D-001` | Repository adapter + baseline phase authorization | APPROVED 2026-06-14 | `.ui-redesign/adapter/REPOSITORY_ADAPTER.md` |
-| `PIA-MUR-D-002` | Product model (T1–T7 = A; A1–A10 acknowledged; 17 out-of-scope items acknowledged) | APPROVED 2026-06-14 | `.ui-redesign/reports/PIA-MUR-D-002-product-model.md` |
-| `PIA-MUR-D-003` | Concept pick (selects Stream over Calm and Workspace) | APPROVED 2026-06-14 | `.ui-redesign/decisions/DECISION_LEDGER.md` |
-| `PIA-MUR-D-003c` | Stream concept (single PIA blue accent, footnote-style citation chips, sheet-heavy navigation, conversation-first) | APPROVED 2026-06-14 | `.ui-redesign/concepts/concept-3-stream/` |
+| Decision ID      | What it decided                                                                                                    | Status              | Source                                                |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------- | ----------------------------------------------------- |
+| `PIA-MUR-D-001`  | Repository adapter + baseline phase authorization                                                                  | APPROVED 2026-06-14 | `.ui-redesign/adapter/REPOSITORY_ADAPTER.md`          |
+| `PIA-MUR-D-002`  | Product model (T1–T7 = A; A1–A10 acknowledged; 17 out-of-scope items acknowledged)                                 | APPROVED 2026-06-14 | `.ui-redesign/reports/PIA-MUR-D-002-product-model.md` |
+| `PIA-MUR-D-003`  | Concept pick (selects Stream over Calm and Workspace)                                                              | APPROVED 2026-06-14 | `.ui-redesign/decisions/DECISION_LEDGER.md`           |
+| `PIA-MUR-D-003c` | Stream concept (single PIA blue accent, footnote-style citation chips, sheet-heavy navigation, conversation-first) | APPROVED 2026-06-14 | `.ui-redesign/concepts/concept-3-stream/`             |
 
 **The `decisionIds` array in `DESIGN_CONTRACT.json` includes all four:** `["PIA-MUR-D-001", "PIA-MUR-D-002", "PIA-MUR-D-003", "PIA-MUR-D-003c"]` (per schema requirement).
 
@@ -641,44 +641,44 @@ These items are **not** open decisions requiring a `PIA-MUR-D-005+` packet. They
 2. Or are out of redesign scope per approved decisions
 3. Or are implementation-contract concerns (not design-contract)
 
-| ID | Title | Owner | Status |
-|---|---|---|---|
-| `PIA-MUR-D-005-candidate` | Dark-mode color-contrast verification for status badges | device-validation (B-6) | Acknowledged in PIA-MUR-D-003c UNVERIFIED items; not blocking this gate |
-| `PIA-MUR-D-006-candidate` | iOS 16 Pro Safari `<dialog>` `showModal()` focus-management verification | device-validation (B-1 resolved) | Acknowledged in PIA-MUR-D-002 §6; not blocking this gate |
-| `PIA-MUR-D-007-candidate` | `prefers-reduced-motion` in installed PWA mode | device-validation (B-1 resolved) | Acknowledged in PIA-MUR-D-002 §5 #13; not blocking this gate |
-| `PIA-MUR-D-008-candidate` | `POST /v1/me/active-workspace` endpoint for workspace switcher | PIA team / API owner | Out of redesign scope per PIA-MUR-D-002 §7; design contract specifies the UX; implementation contract does not implement the endpoint |
+| ID                        | Title                                                                    | Owner                            | Status                                                                                                                                |
+| ------------------------- | ------------------------------------------------------------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `PIA-MUR-D-005-candidate` | Dark-mode color-contrast verification for status badges                  | device-validation (B-6)          | Acknowledged in PIA-MUR-D-003c UNVERIFIED items; not blocking this gate                                                               |
+| `PIA-MUR-D-006-candidate` | iOS 16 Pro Safari `<dialog>` `showModal()` focus-management verification | device-validation (B-1 resolved) | Acknowledged in PIA-MUR-D-002 §6; not blocking this gate                                                                              |
+| `PIA-MUR-D-007-candidate` | `prefers-reduced-motion` in installed PWA mode                           | device-validation (B-1 resolved) | Acknowledged in PIA-MUR-D-002 §5 #13; not blocking this gate                                                                          |
+| `PIA-MUR-D-008-candidate` | `POST /v1/me/active-workspace` endpoint for workspace switcher           | PIA team / API owner             | Out of redesign scope per PIA-MUR-D-002 §7; design contract specifies the UX; implementation contract does not implement the endpoint |
 
 ### Blocker status (from PIA-MUR-D-001)
 
-| ID | Title | Status |
-|---|---|---|
-| B-1 | Physical iPhone 16 Pro availability | **RESOLVED 2026-06-14** (per `.ui-redesign/state/workflow-state.json#b1_resolution`); downstream device-validation is unblocked |
-| B-2 | `mobile-ui-design-contract` command missing | Acknowledged; orchestrator dispatches directly to `design-system-architect` |
-| B-3 | `.opencode/run-logs/cookies.txt` real session cookie | Mitigated by defensive `.gitignore`; never read, never committed |
-| B-4 | `opencode.json` vs `opencode.jsonc` ambiguity | Separate ADR (not blocking this gate) |
-| B-5 | `AGENT_HANDOFF.md` mislabels `@pia/web` as Next.js | Low-risk docs (not blocking this gate) |
-| B-6 | Playwright + axe-core dependency-approval policy | Affects G7 gate; not blocking this design-contract gate |
+| ID  | Title                                                | Status                                                                                                                          |
+| --- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| B-1 | Physical iPhone 16 Pro availability                  | **RESOLVED 2026-06-14** (per `.ui-redesign/state/workflow-state.json#b1_resolution`); downstream device-validation is unblocked |
+| B-2 | `mobile-ui-design-contract` command missing          | Acknowledged; orchestrator dispatches directly to `design-system-architect`                                                     |
+| B-3 | `.opencode/run-logs/cookies.txt` real session cookie | Mitigated by defensive `.gitignore`; never read, never committed                                                                |
+| B-4 | `opencode.json` vs `opencode.jsonc` ambiguity        | Separate ADR (not blocking this gate)                                                                                           |
+| B-5 | `AGENT_HANDOFF.md` mislabels `@pia/web` as Next.js   | Low-risk docs (not blocking this gate)                                                                                          |
+| B-6 | Playwright + axe-core dependency-approval policy     | Affects G7 gate; not blocking this design-contract gate                                                                         |
 
 ### Design-contract fixes (in-scope, from PIA-MUR-D-002 §7)
 
-| Item | Addressed in this contract |
-|---|---|
+| Item                                                            | Addressed in this contract                                                            |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
 | Item 14: `search.ts:131` `JSON.stringify(locator)` debug string | `result-card` component renders `page N` only (per `evidence/source-file-changes.md`) |
-| Item 15: `document-detail.ts:159` `window.confirm()` for delete | `full-screen-sheet` component replaces with destructive confirm |
+| Item 15: `document-detail.ts:159` `window.confirm()` for delete | `full-screen-sheet` component replaces with destructive confirm                       |
 
 ---
 
 ## What requires user approval (PIA-MUR-D-004 approval packet summary)
 
-| Field | Value |
-|---|---|
-| **Contract ID** | `PIA-MUR-D-004` |
-| **Status** | `proposed` |
-| **Approver** | user (explicit approval required) |
-| **Approves** | The translation of approved Stream concept (`PIA-MUR-D-003c`) and approved product model (`PIA-MUR-D-002`) into a complete, machine-readable + human-readable design system |
-| **Does NOT approve** | Any product code change (`apps/web/`, `apps/api/`, `apps/worker/`, `packages/*/`), dependency addition, schema change, route change, API contract change, auth/authz change, infrastructure change, or deployment change |
-| **Next phase on approval** | `implementation-contract` (PIA-MUR-D-004-IMPL), requiring a separate approval packet |
-| **Required pre-approvals for the next phase** | (1) Approve PIA-MUR-D-004 as `proposed → approved`; (2) confirm any unblocker changes (none required for this gate) |
+| Field                                         | Value                                                                                                                                                                                                                    |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Contract ID**                               | `PIA-MUR-D-004`                                                                                                                                                                                                          |
+| **Status**                                    | `proposed`                                                                                                                                                                                                               |
+| **Approver**                                  | user (explicit approval required)                                                                                                                                                                                        |
+| **Approves**                                  | The translation of approved Stream concept (`PIA-MUR-D-003c`) and approved product model (`PIA-MUR-D-002`) into a complete, machine-readable + human-readable design system                                              |
+| **Does NOT approve**                          | Any product code change (`apps/web/`, `apps/api/`, `apps/worker/`, `packages/*/`), dependency addition, schema change, route change, API contract change, auth/authz change, infrastructure change, or deployment change |
+| **Next phase on approval**                    | `implementation-contract` (PIA-MUR-D-004-IMPL), requiring a separate approval packet                                                                                                                                     |
+| **Required pre-approvals for the next phase** | (1) Approve PIA-MUR-D-004 as `proposed → approved`; (2) confirm any unblocker changes (none required for this gate)                                                                                                      |
 
 **To approve,** the user should run (or have the orchestrator run) the equivalent of: record `PIA-MUR-D-004` as `proposed → approved` in `.ui-redesign/decisions/DECISION_LEDGER.md` with the approved-at timestamp and (optionally) a one-line rationale. On `ACCEPTED`, the next phase is `implementation-contract`. On `REVISED`, the user supplies revisions and this contract is regenerated to address them. On `REJECTED`, the user picks a different concept or product model direction.
 

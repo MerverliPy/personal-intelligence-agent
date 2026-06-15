@@ -2,18 +2,18 @@
 
 All durations and curves honor `prefers-reduced-motion: reduce` (set to `0.01ms`).
 
-| Element | Property | Duration | Easing | Notes |
-|---|---|---:|---|---|
-| Tab switch (active state) | color, fill | 100ms | `linear` | Tab text/icon color transitions between `--fg-muted` and `--fg`. |
-| Row press | background | 80ms | `ease-out` | Tap-state highlight on rows. |
-| Row press release | background | 200ms | `ease-in-out` | Return to default. |
-| FAB press | transform: scale | 100ms | `ease-out` | Scale 1.0 → 0.94. |
-| FAB release | transform: scale | 200ms | `ease-in-out` | Back to 1.0. |
-| Sheet open | transform: translateY | 250ms | `cubic-bezier(0.32, 0.72, 0, 1)` | From `100%` to `0`. iOS-native sheet curve. |
-| Sheet close | transform: translateY | 220ms | `cubic-bezier(0.32, 0.72, 0, 1)` | Reverse. |
-| Backdrop fade | opacity | 200ms | `ease` | 0 → 0.4 alpha. |
-| Network banner appear | transform: translateY | 220ms | `cubic-bezier(0.32, 0.72, 0, 1)` | Slides from -100% to 0. |
-| Streamed text reveal | n/a | 0ms | n/a | No character-by-character reveal; the entire delta is appended in a single frame (mirrors `appendAssistantDelta` at `conversation-detail.ts:305-318`). |
+| Element                   | Property              | Duration | Easing                           | Notes                                                                                                                                                  |
+| ------------------------- | --------------------- | -------: | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Tab switch (active state) | color, fill           |    100ms | `linear`                         | Tab text/icon color transitions between `--fg-muted` and `--fg`.                                                                                       |
+| Row press                 | background            |     80ms | `ease-out`                       | Tap-state highlight on rows.                                                                                                                           |
+| Row press release         | background            |    200ms | `ease-in-out`                    | Return to default.                                                                                                                                     |
+| FAB press                 | transform: scale      |    100ms | `ease-out`                       | Scale 1.0 → 0.94.                                                                                                                                      |
+| FAB release               | transform: scale      |    200ms | `ease-in-out`                    | Back to 1.0.                                                                                                                                           |
+| Sheet open                | transform: translateY |    250ms | `cubic-bezier(0.32, 0.72, 0, 1)` | From `100%` to `0`. iOS-native sheet curve.                                                                                                            |
+| Sheet close               | transform: translateY |    220ms | `cubic-bezier(0.32, 0.72, 0, 1)` | Reverse.                                                                                                                                               |
+| Backdrop fade             | opacity               |    200ms | `ease`                           | 0 → 0.4 alpha.                                                                                                                                         |
+| Network banner appear     | transform: translateY |    220ms | `cubic-bezier(0.32, 0.72, 0, 1)` | Slides from -100% to 0.                                                                                                                                |
+| Streamed text reveal      | n/a                   |      0ms | n/a                              | No character-by-character reveal; the entire delta is appended in a single frame (mirrors `appendAssistantDelta` at `conversation-detail.ts:305-318`). |
 
 ## Reduced-motion behavior
 

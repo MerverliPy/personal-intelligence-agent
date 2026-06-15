@@ -10,13 +10,13 @@ permission:
   grep: allow
   list: allow
   edit:
-    "*": deny
-    ".ui-redesign/reports/workflow-improvement-proposal.md": ask
+    '*': deny
+    '.ui-redesign/reports/workflow-improvement-proposal.md': ask
   bash:
-    "*": ask
-    "git diff*": allow
-    "git log*": allow
-    "git status*": allow
+    '*': ask
+    'git diff*': allow
+    'git log*': allow
+    'git status*': allow
   webfetch: ask
   websearch: ask
   skill: allow

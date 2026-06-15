@@ -18,12 +18,19 @@ Physical device:
 ## iPhone 16 Pro defects
 
 ### Viewport and safe areas
+
 ### Navigation and reachability
+
 ### Touch targets
+
 ### Keyboard and forms
+
 ### Motion and reduced motion
+
 ### Installed-PWA behavior
+
 ### Browser chrome and dynamic viewport
+
 ### Real-data loading and failure states
 
 ## Accessibility baseline

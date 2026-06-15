@@ -10,17 +10,17 @@ permission:
   grep: allow
   list: allow
   edit:
-    "*": deny
-    ".ui-redesign/evidence/**": ask
-    ".ui-redesign/reports/**": ask
-    ".ui-redesign/handoffs/**": ask
-    ".ui-redesign/baseline/**": ask
+    '*': deny
+    '.ui-redesign/evidence/**': ask
+    '.ui-redesign/reports/**': ask
+    '.ui-redesign/handoffs/**': ask
+    '.ui-redesign/baseline/**': ask
   bash:
-    "*": ask
-    "git status*": allow
-    "git diff*": allow
-    "git log*": allow
-    "git rev-parse*": allow
+    '*': ask
+    'git status*': allow
+    'git diff*': allow
+    'git log*': allow
+    'git rev-parse*': allow
   webfetch: deny
   websearch: deny
   skill: allow

@@ -15,22 +15,22 @@ harness for the iPhone 16 Pro mobile UI redesign.
 Runs the 14 DPCs (device pre-flight checks) from
 `planning/runs/PIA-MUR-D-PREFLIGHT-DEVICE-VALIDATION.md`:
 
-| DPC | Status | Specialist |
-|---|---|---|
-| DPC-1 (custom sheet focus) | automated | real-ui-product-tester |
-| DPC-2 (native dialog focus) | BLOCKED | (deferred; needs auth) |
-| DPC-3 (reduce-motion PWA) | automated | real-ui-product-tester |
-| DPC-4 (touch targets) | automated | real-ui-product-tester |
-| DPC-5 (pixel-perfect) | automated | real-ui-product-tester |
-| DPC-6 (safe-area) | automated | iphone-interaction-specialist |
-| DPC-7 (viewport-fit=cover) | automated | accessibility-performance-validator |
-| DPC-8 (dark mode contrast) | automated | accessibility-performance-validator |
-| DPC-9 (AX5) | automated | accessibility-performance-validator |
-| DPC-10 (VoiceOver / ARIA) | automated | accessibility-performance-validator |
-| DPC-11 (PWA install + standalone) | PARTIALLY_VERIFIED | iphone-interaction-specialist |
-| DPC-12 (BT keyboard) | automated | iphone-interaction-specialist |
-| DPC-13 (back button) | automated | iphone-interaction-specialist |
-| DPC-14 (offline banner T6) | automated | real-ui-product-tester |
+| DPC                               | Status             | Specialist                          |
+| --------------------------------- | ------------------ | ----------------------------------- |
+| DPC-1 (custom sheet focus)        | automated          | real-ui-product-tester              |
+| DPC-2 (native dialog focus)       | BLOCKED            | (deferred; needs auth)              |
+| DPC-3 (reduce-motion PWA)         | automated          | real-ui-product-tester              |
+| DPC-4 (touch targets)             | automated          | real-ui-product-tester              |
+| DPC-5 (pixel-perfect)             | automated          | real-ui-product-tester              |
+| DPC-6 (safe-area)                 | automated          | iphone-interaction-specialist       |
+| DPC-7 (viewport-fit=cover)        | automated          | accessibility-performance-validator |
+| DPC-8 (dark mode contrast)        | automated          | accessibility-performance-validator |
+| DPC-9 (AX5)                       | automated          | accessibility-performance-validator |
+| DPC-10 (VoiceOver / ARIA)         | automated          | accessibility-performance-validator |
+| DPC-11 (PWA install + standalone) | PARTIALLY_VERIFIED | iphone-interaction-specialist       |
+| DPC-12 (BT keyboard)              | automated          | iphone-interaction-specialist       |
+| DPC-13 (back button)              | automated          | iphone-interaction-specialist       |
+| DPC-14 (offline banner T6)        | automated          | real-ui-product-tester              |
 
 ## How to run
 

@@ -11,6 +11,7 @@
 - **Prototype static server (HTTP, Tailscale):** `http://100.81.83.98:8000` → Stream concept prototype at `.ui-redesign/concepts/concept-3-stream/interactive/`
 
 **Tunnel PIDs (for cleanup):**
+
 - Cloudflared: `2006185` (log: `.ui-redesign/evidence/devices/cloudflared.log`)
 - Prototype server: `2016765` (log: `.ui-redesign/evidence/devices/prototype-server.log`)
 
@@ -20,11 +21,11 @@
 
 ## Bridges (in order of recommendation)
 
-| Bridge | URL | Use for |
-|---|---|---|
-| **Cloudflared (HTTPS)** | `https://sig-mardi-experiences-coastal.trycloudflare.com` | Live API shell, native `<dialog>` baseline, PWA install (Add to Home Screen), service-worker-required checks |
-| **Tailscale (HTTP, live API)** | `http://100.81.83.98:3000` | Fast Safari browser iteration against the live API |
-| **Tailscale (HTTP, prototype)** | `http://100.81.83.98:8000` | Stream concept prototype (most checks) |
+| Bridge                          | URL                                                       | Use for                                                                                                      |
+| ------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **Cloudflared (HTTPS)**         | `https://sig-mardi-experiences-coastal.trycloudflare.com` | Live API shell, native `<dialog>` baseline, PWA install (Add to Home Screen), service-worker-required checks |
+| **Tailscale (HTTP, live API)**  | `http://100.81.83.98:3000`                                | Fast Safari browser iteration against the live API                                                           |
+| **Tailscale (HTTP, prototype)** | `http://100.81.83.98:8000`                                | Stream concept prototype (most checks)                                                                       |
 
 The Tailscale prototype path requires the iPhone to be on the same Tailscale network. Both are live as of 2026-06-14.
 
@@ -36,22 +37,22 @@ For each check, **what to do** / **expected behavior** / **pass criteria** / **i
 
 ### Summary of checks (full template in the checklist report)
 
-| ID | UNVERIFIED | Bridge | What to verify |
-|---|---|---|---|
-| **DPC-1** | UNVERIFIED-1a | Tailscale prototype | Custom sheet focus trap (Tab cycle, Esc, backdrop, swipe-down) on iOS 16 Pro Safari |
-| **DPC-2** | UNVERIFIED-1b | Cloudflared live API | Native `<dialog id="citation-modal">` focus behavior (likely BLOCKED — requires auth) |
-| **DPC-3** | UNVERIFIED-2 | Cloudflared | Reduce-motion in installed PWA (sheet snaps instantly with iOS Reduce Motion ON) |
-| **DPC-4** | UNVERIFIED-4 | Tailscale prototype | Touch-target bounding-box sizes (44pt minimum); 32pt avatar and 18×24pt citation chip likely fail |
-| **DPC-5** | UNVERIFIED-6 | Tailscale prototype | Pixel-perfect match between prototype and SVG screenshots |
-| **DPC-6** | additional | Either | Safe-area insets (Dynamic Island, home indicator) |
-| **DPC-7** | additional | Either | `viewport-fit=cover` edge-to-edge |
-| **DPC-8** | UNVERIFIED-3 | Tailscale prototype | Dark mode (auto + manual toggle); status badge contrast |
-| **DPC-9** | additional | Tailscale prototype | Dynamic Type AX5 (no clipping) |
-| **DPC-10** | additional | Tailscale prototype | VoiceOver rotor (landmarks, headings, citation chip) |
-| **DPC-11** | additional | Cloudflared | PWA install + standalone launch (expected FAIL pre-implementation; in-scope for impl-contract) |
-| **DPC-12** | additional | Tailscale prototype | External keyboard Tab order (BLOCKED if no BT keyboard) |
-| **DPC-13** | additional | Cloudflared | Back button in standalone PWA |
-| **DPC-14** | additional | Tailscale prototype | Network-loss banner (T6) + disabled destructive actions |
+| ID         | UNVERIFIED    | Bridge               | What to verify                                                                                    |
+| ---------- | ------------- | -------------------- | ------------------------------------------------------------------------------------------------- |
+| **DPC-1**  | UNVERIFIED-1a | Tailscale prototype  | Custom sheet focus trap (Tab cycle, Esc, backdrop, swipe-down) on iOS 16 Pro Safari               |
+| **DPC-2**  | UNVERIFIED-1b | Cloudflared live API | Native `<dialog id="citation-modal">` focus behavior (likely BLOCKED — requires auth)             |
+| **DPC-3**  | UNVERIFIED-2  | Cloudflared          | Reduce-motion in installed PWA (sheet snaps instantly with iOS Reduce Motion ON)                  |
+| **DPC-4**  | UNVERIFIED-4  | Tailscale prototype  | Touch-target bounding-box sizes (44pt minimum); 32pt avatar and 18×24pt citation chip likely fail |
+| **DPC-5**  | UNVERIFIED-6  | Tailscale prototype  | Pixel-perfect match between prototype and SVG screenshots                                         |
+| **DPC-6**  | additional    | Either               | Safe-area insets (Dynamic Island, home indicator)                                                 |
+| **DPC-7**  | additional    | Either               | `viewport-fit=cover` edge-to-edge                                                                 |
+| **DPC-8**  | UNVERIFIED-3  | Tailscale prototype  | Dark mode (auto + manual toggle); status badge contrast                                           |
+| **DPC-9**  | additional    | Tailscale prototype  | Dynamic Type AX5 (no clipping)                                                                    |
+| **DPC-10** | additional    | Tailscale prototype  | VoiceOver rotor (landmarks, headings, citation chip)                                              |
+| **DPC-11** | additional    | Cloudflared          | PWA install + standalone launch (expected FAIL pre-implementation; in-scope for impl-contract)    |
+| **DPC-12** | additional    | Tailscale prototype  | External keyboard Tab order (BLOCKED if no BT keyboard)                                           |
+| **DPC-13** | additional    | Cloudflared          | Back button in standalone PWA                                                                     |
+| **DPC-14** | additional    | Tailscale prototype  | Network-loss banner (T6) + disabled destructive actions                                           |
 
 ### Recommended execution order
 
@@ -158,21 +159,22 @@ DPC-14 (offline banner T6): PASS | FAIL
 
 For each UNVERIFIED item, the orchestrator will:
 
-| Item | If PASS | If FAIL | Decision packet that may be opened |
-|---|---|---|---|
-| UNVERIFIED-1 (DPC-1 + DPC-2) | PARTIALLY RESOLVED; impl-contract re-tests DPC-2 | Open PIA-MUR-D-006 (iOS focus fix) | PIA-MUR-D-006 |
-| UNVERIFIED-2 (DPC-3) | RESOLVED | Open PIA-MUR-D-007 (reduce-motion PWA fix) | PIA-MUR-D-007 |
-| UNVERIFIED-4 (DPC-4) | RESOLVED | Open PIA-MUR-D-009 (touch-target fix) | PIA-MUR-D-009 (new) |
-| UNVERIFIED-6 (DPC-5) | RESOLVED | Open PIA-MUR-D-010 (visual-fidelity fix) | PIA-MUR-D-010 (new) |
-| Safe-area (DPC-6/7) | RESOLVED | Open PIA-MUR-D-011 (chrome regression) | PIA-MUR-D-011 (new) |
-| Dark mode (DPC-8) | Open PIA-MUR-D-005 (already named) to formalize dark-mode contrast | Open PIA-MUR-D-005 with contrast fix | PIA-MUR-D-005 (already named) |
-| AX5 (DPC-9) | RESOLVED | Open PIA-MUR-D-012 (AX5 clipping fix) | PIA-MUR-D-012 (new) |
-| VoiceOver (DPC-10) | RESOLVED | Open PIA-MUR-D-013 (ARIA fix) | PIA-MUR-D-013 (new) |
-| PWA install (DPC-11) | Documentation only | In-scope for implementation contract | (no new decision) |
-| BT keyboard (DPC-12/13) | RESOLVED | Open PIA-MUR-D-014 (navigation-behavior fix) | PIA-MUR-D-014 (new) |
-| Offline banner (DPC-14) | RESOLVED | Open PIA-MUR-D-015 (offline-state fix) | PIA-MUR-D-015 (new) |
+| Item                         | If PASS                                                            | If FAIL                                      | Decision packet that may be opened |
+| ---------------------------- | ------------------------------------------------------------------ | -------------------------------------------- | ---------------------------------- |
+| UNVERIFIED-1 (DPC-1 + DPC-2) | PARTIALLY RESOLVED; impl-contract re-tests DPC-2                   | Open PIA-MUR-D-006 (iOS focus fix)           | PIA-MUR-D-006                      |
+| UNVERIFIED-2 (DPC-3)         | RESOLVED                                                           | Open PIA-MUR-D-007 (reduce-motion PWA fix)   | PIA-MUR-D-007                      |
+| UNVERIFIED-4 (DPC-4)         | RESOLVED                                                           | Open PIA-MUR-D-009 (touch-target fix)        | PIA-MUR-D-009 (new)                |
+| UNVERIFIED-6 (DPC-5)         | RESOLVED                                                           | Open PIA-MUR-D-010 (visual-fidelity fix)     | PIA-MUR-D-010 (new)                |
+| Safe-area (DPC-6/7)          | RESOLVED                                                           | Open PIA-MUR-D-011 (chrome regression)       | PIA-MUR-D-011 (new)                |
+| Dark mode (DPC-8)            | Open PIA-MUR-D-005 (already named) to formalize dark-mode contrast | Open PIA-MUR-D-005 with contrast fix         | PIA-MUR-D-005 (already named)      |
+| AX5 (DPC-9)                  | RESOLVED                                                           | Open PIA-MUR-D-012 (AX5 clipping fix)        | PIA-MUR-D-012 (new)                |
+| VoiceOver (DPC-10)           | RESOLVED                                                           | Open PIA-MUR-D-013 (ARIA fix)                | PIA-MUR-D-013 (new)                |
+| PWA install (DPC-11)         | Documentation only                                                 | In-scope for implementation contract         | (no new decision)                  |
+| BT keyboard (DPC-12/13)      | RESOLVED                                                           | Open PIA-MUR-D-014 (navigation-behavior fix) | PIA-MUR-D-014 (new)                |
+| Offline banner (DPC-14)      | RESOLVED                                                           | Open PIA-MUR-D-015 (offline-state fix)       | PIA-MUR-D-015 (new)                |
 
 After all DPCs are reported:
+
 - Orchestrator updates `phases.implementation-contract.pause_reason` in `workflow-state.json`.
 - New `evidence.device-validation` entries added (paths to screenshots, recordings, the user-completed Part B template).
 - New `blockers[]` entries added for any DPC that opens a new decision packet.

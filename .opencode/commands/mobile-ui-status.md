@@ -2,9 +2,11 @@
 description: Report workflow state, approvals, blockers, evidence, commits, and exact next eligible actions.
 agent: mobile-ui-orchestrator
 ---
+
 Read the workflow state, adapter, contracts, decision ledger, Git state, feature-parity matrix, evidence manifest, and open blockers.
 
 Report:
+
 - current state;
 - completed gates;
 - open decisions;

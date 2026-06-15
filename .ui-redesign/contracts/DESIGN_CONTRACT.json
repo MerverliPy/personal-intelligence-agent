@@ -1,12 +1,7 @@
 {
   "contractId": "PIA-MUR-D-004",
   "status": "approved",
-  "decisionIds": [
-    "PIA-MUR-D-001",
-    "PIA-MUR-D-002",
-    "PIA-MUR-D-003",
-    "PIA-MUR-D-003c"
-  ],
+  "decisionIds": ["PIA-MUR-D-001", "PIA-MUR-D-002", "PIA-MUR-D-003", "PIA-MUR-D-003c"],
   "parentDecisions": {
     "PIA-MUR-D-001": "Repository adapter (APPROVED 2026-06-14) — authorizes design-contract phase",
     "PIA-MUR-D-002": "Product model (APPROVED 2026-06-14) — T1=A bottom tab bar, T2=A single-pane with bottom-sheet citation modal, T3=A dedicated Search tab, T4=A top-left avatar in header, T5=A text-only composer, T6=A persistent top network-loss banner, T7=A FAB on Documents/Conversations tabs",
@@ -16,22 +11,13 @@
   "target": {
     "primaryDevice": "iPhone 16 Pro",
     "orientation": "portrait",
-    "environments": [
-      "Safari",
-      "installed PWA",
-      "iOS Chrome"
-    ],
+    "environments": ["Safari", "installed PWA", "iOS Chrome"],
     "logicalViewport": {
       "width": "393pt",
       "height": "852pt",
       "devicePixelRatio": 3
     },
-    "compatibilityDevices": [
-      "iPhone 15",
-      "iPhone 14",
-      "iPhone 13",
-      "iPhone SE (3rd generation)"
-    ],
+    "compatibilityDevices": ["iPhone 15", "iPhone 14", "iPhone 13", "iPhone SE (3rd generation)"],
     "networkRequirement": "online-only",
     "pwaIntent": "Add to Home Screen (Safari → Share → Add to Home Screen)"
   },
@@ -125,12 +111,7 @@
     "typography": {
       "fontFamily": "-apple-system, BlinkMacSystemFont, system-ui, 'SF Pro Text', 'Helvetica Neue', sans-serif",
       "fontFamilySource": "Stream prototype styles.css:48",
-      "weights": [
-        400,
-        500,
-        600,
-        700
-      ],
+      "weights": [400, 500, 600, 700],
       "lineHeight": {
         "body": 1.42,
         "display": 1.2
@@ -406,10 +387,7 @@
         "Back chevron + title (on detail screens; replaces avatar with back-btn)",
         "Title only (when no avatar/back action is meaningful)"
       ],
-      "states": [
-        "default",
-        "pressed (avatar: --accent-pressed scale 0.94)"
-      ],
+      "states": ["default", "pressed (avatar: --accent-pressed scale 0.94)"],
       "behavior": "Avatar tap opens workspace switcher sheet (T4=A); title is the screen name; back chevron pops the in-app navigation stack",
       "accessibility": {
         "role": "banner",
@@ -480,11 +458,7 @@
         "Destructive confirm (e.g., 'Delete document?'): replaces window.confirm() at document-detail.ts:159",
         "Approval (FR-TOOL-004; rare in MVP per PIA-MUR-D-002 §2 F8): consequential tool action approval"
       ],
-      "states": [
-        "hidden (default)",
-        "open",
-        "submitting"
-      ],
+      "states": ["hidden (default)", "open", "submitting"],
       "behavior": "Replaces entire viewport; no tab bar visible; close via Cancel or primary action; focus trap; primary action is destructive (e.g., 'Delete') and uses --danger",
       "accessibility": {
         "panelRole": "alertdialog (destructive variant)",
@@ -510,16 +484,8 @@
         "Transparent tap area: 18pt min-width × 24pt min-height",
         "::after pseudo-element: 0.5pt underline, --accent, scaleX(0.5)"
       ],
-      "variants": [
-        "default",
-        "hover/focus-visible (underline animates to scaleX(1))"
-      ],
-      "states": [
-        "default",
-        "hover",
-        "focus-visible",
-        "active"
-      ],
+      "variants": ["default", "hover/focus-visible (underline animates to scaleX(1))"],
+      "states": ["default", "hover", "focus-visible", "active"],
       "behavior": "Tap opens citation sheet (T2=A); the chip's accessible name includes the claim text ('Citation 1 of N, claims: ...')",
       "accessibility": {
         "role": "button (native <button>)",
@@ -606,10 +572,7 @@
         "div.message__content (word-wrap: break-word, --fg color, 19pt body)",
         "div.message__meta (6pt gap, 14pt caption, --fg-muted): time + run-state badge + duration + feedback link"
       ],
-      "variants": [
-        "user (right-aligned bubble)",
-        "assistant (left-aligned, no bubble)"
-      ],
+      "variants": ["user (right-aligned bubble)", "assistant (left-aligned, no bubble)"],
       "states": [
         "default",
         "streaming (SSE delta appends in single frame; aria-live='polite' announces)"
@@ -644,10 +607,7 @@
         "Default selection: ASK (aria-checked='true')",
         "Selected: text color --accent, 700 weight, '✓ ' prefix on name"
       ],
-      "states": [
-        "unselected (default)",
-        "selected (aria-checked='true')"
-      ],
+      "states": ["unselected (default)", "selected (aria-checked='true')"],
       "behavior": "Tap a row → updates aria-checked on all rows; tap outside or Esc dismisses; on selection, opens new conversation with chosen mode",
       "accessibility": {
         "listRole": "radiogroup",
@@ -671,13 +631,7 @@
         "label + input[type='text'] for title (required)",
         "button[type='submit'] 'Upload' (primary, --accent)"
       ],
-      "states": [
-        "idle",
-        "picking",
-        "uploading (progress)",
-        "success",
-        "error"
-      ],
+      "states": ["idle", "picking", "uploading (progress)", "success", "error"],
       "behavior": "User gestures required for iOS file picker; respects 'Wi-Fi only' cellular choice; 50MB cap (per upload.ts:23); progress bar inline; 'Continue in background' on success",
       "accessibility": {
         "panelRole": "dialog",
@@ -755,9 +709,7 @@
         "No documents: 'Upload a document' CTA (opens upload sheet)",
         "No search results: 'No matches' + subtext suggesting rephrasing"
       ],
-      "states": [
-        "default"
-      ],
+      "states": ["default"],
       "behavior": "Static; CTA opens the appropriate sheet",
       "accessibility": {
         "titleRole": "heading",
@@ -782,10 +734,7 @@
         "Non-blocking: rendered above the content; user can dismiss or retry",
         "Blocking: rendered in a full-screen sheet"
       ],
-      "states": [
-        "default",
-        "dismissed"
-      ],
+      "states": ["default", "dismissed"],
       "behavior": "On error envelope `{error: {code, message, request_id}}`, show only the `code` and a sanitized `message`; NEVER show `request_id` to the user (audit-only); retry button re-issues the request with the same idempotency key",
       "accessibility": {
         "role": "alert",
@@ -804,10 +753,7 @@
         "span.network-banner__dot (8pt × 8pt, --status-failed-fg)",
         "span.network-banner__text (\"You're offline. Some actions are disabled.\")"
       ],
-      "states": [
-        "hidden (default)",
-        "visible (when navigator.onLine === false or 4xx/5xx)"
-      ],
+      "states": ["hidden (default)", "visible (when navigator.onLine === false or 4xx/5xx)"],
       "behavior": "Persistent top banner below Dynamic Island; disables destructive actions (FAB, Send, Retry Ingestion, Delete) at 40% opacity; resubmits use idempotency keys for safety (NFR-REL-002)",
       "accessibility": {
         "role": "status",
@@ -855,10 +801,7 @@
         "div.splash__wordmark ('PIA', 32pt large, 700 weight, --fg)",
         "No marketing copy; no spinner; no progress bar"
       ],
-      "states": [
-        "visible (≤ 200ms on cold launch)",
-        "hidden (after first paint)"
-      ],
+      "states": ["visible (≤ 200ms on cold launch)", "hidden (after first paint)"],
       "behavior": "Shown briefly (≤ 200ms) on cold launch; system-font 'PIA'; no marketing copy; safe-area-cleared; immediately replaced by the app shell (default landing: Conversations)",
       "accessibility": {
         "role": "status",

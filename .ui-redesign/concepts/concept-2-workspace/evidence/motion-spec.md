@@ -2,20 +2,20 @@
 
 All durations and curves honor `prefers-reduced-motion: reduce` (set to `0.01ms`).
 
-| Element | Property | Duration | Easing | Notes |
-|---|---|---:|---|---|
-| Card press | transform: scale | 100ms | `ease-out` | Scale 1.0 → 0.99. Mirrors the standard iOS Mail card press. |
-| Card release | transform: scale | 200ms | `ease-in-out` | Back to 1.0. |
-| Tab switch (active state) | color, fill | 120ms | `ease-out` | Tab text/icon color transitions between `--ink-muted` and `--accent`. |
-| FAB press | transform: scale + box-shadow | 100ms | `ease-out` | Scale 1.0 → 0.94; shadow shrinks. |
-| FAB release | transform: scale + box-shadow | 220ms | `ease-in-out` | Back to 1.0; shadow expands. |
-| Sheet open | transform: translateY | 280ms | `cubic-bezier(0.32, 0.72, 0, 1)` | From `100%` to `0`. Slightly slower than Calm (250ms) to match the card's heavier feel. |
-| Sheet close | transform: translateY | 240ms | `cubic-bezier(0.32, 0.72, 0, 1)` | Reverse. |
-| Backdrop fade | opacity | 200ms | `ease` | 0 → 0.4 alpha. |
-| Network banner appear | transform: translateY | 240ms | `cubic-bezier(0.32, 0.72, 0, 1)` | Slides from -100% to 0. |
-| Progress bar (upload) | width | 300ms | `ease` | During ingestion, the progress bar smoothly grows. |
-| Tab switch screen content | opacity | 100ms | `ease` | Cross-fade between previous and next screens. **UNVERIFIED for `prefers-reduced-motion`.** |
-| Card insertion (list) | transform: translateY + opacity | 220ms | `ease-out` | New cards slide in 8pt and fade. |
+| Element                   | Property                        | Duration | Easing                           | Notes                                                                                      |
+| ------------------------- | ------------------------------- | -------: | -------------------------------- | ------------------------------------------------------------------------------------------ |
+| Card press                | transform: scale                |    100ms | `ease-out`                       | Scale 1.0 → 0.99. Mirrors the standard iOS Mail card press.                                |
+| Card release              | transform: scale                |    200ms | `ease-in-out`                    | Back to 1.0.                                                                               |
+| Tab switch (active state) | color, fill                     |    120ms | `ease-out`                       | Tab text/icon color transitions between `--ink-muted` and `--accent`.                      |
+| FAB press                 | transform: scale + box-shadow   |    100ms | `ease-out`                       | Scale 1.0 → 0.94; shadow shrinks.                                                          |
+| FAB release               | transform: scale + box-shadow   |    220ms | `ease-in-out`                    | Back to 1.0; shadow expands.                                                               |
+| Sheet open                | transform: translateY           |    280ms | `cubic-bezier(0.32, 0.72, 0, 1)` | From `100%` to `0`. Slightly slower than Calm (250ms) to match the card's heavier feel.    |
+| Sheet close               | transform: translateY           |    240ms | `cubic-bezier(0.32, 0.72, 0, 1)` | Reverse.                                                                                   |
+| Backdrop fade             | opacity                         |    200ms | `ease`                           | 0 → 0.4 alpha.                                                                             |
+| Network banner appear     | transform: translateY           |    240ms | `cubic-bezier(0.32, 0.72, 0, 1)` | Slides from -100% to 0.                                                                    |
+| Progress bar (upload)     | width                           |    300ms | `ease`                           | During ingestion, the progress bar smoothly grows.                                         |
+| Tab switch screen content | opacity                         |    100ms | `ease`                           | Cross-fade between previous and next screens. **UNVERIFIED for `prefers-reduced-motion`.** |
+| Card insertion (list)     | transform: translateY + opacity |    220ms | `ease-out`                       | New cards slide in 8pt and fade.                                                           |
 
 ## Reduced-motion behavior
 

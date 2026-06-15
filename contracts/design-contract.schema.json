@@ -24,11 +24,7 @@
       "minLength": 1
     },
     "status": {
-      "enum": [
-        "proposed",
-        "approved",
-        "superseded"
-      ]
+      "enum": ["proposed", "approved", "superseded"]
     },
     "decisionIds": {
       "type": "array",
@@ -39,11 +35,7 @@
     },
     "target": {
       "type": "object",
-      "required": [
-        "primaryDevice",
-        "orientation",
-        "environments"
-      ],
+      "required": ["primaryDevice", "orientation", "environments"],
       "properties": {
         "primaryDevice": {
           "const": "iPhone 16 Pro"
@@ -94,11 +86,7 @@
     },
     "motion": {
       "type": "object",
-      "required": [
-        "adaptive",
-        "userSelectable",
-        "reducedMotion"
-      ],
+      "required": ["adaptive", "userSelectable", "reducedMotion"],
       "properties": {
         "adaptive": {
           "const": true
@@ -114,11 +102,7 @@
     },
     "density": {
       "type": "object",
-      "required": [
-        "progressiveDisclosure",
-        "userSelectable",
-        "screenSpecific"
-      ],
+      "required": ["progressiveDisclosure", "userSelectable", "screenSpecific"],
       "properties": {
         "progressiveDisclosure": {
           "const": true
@@ -134,11 +118,7 @@
     },
     "accessibility": {
       "type": "object",
-      "required": [
-        "minimum",
-        "accessibilityFirst",
-        "aaaWherePractical"
-      ],
+      "required": ["minimum", "accessibilityFirst", "aaaWherePractical"],
       "properties": {
         "minimum": {
           "const": "WCAG 2.2 AA"
@@ -154,10 +134,7 @@
     },
     "pwa": {
       "type": "object",
-      "required": [
-        "networkRequired",
-        "offlineSupported"
-      ],
+      "required": ["networkRequired", "offlineSupported"],
       "properties": {
         "networkRequired": {
           "const": true
@@ -170,11 +147,7 @@
     },
     "dataPolicy": {
       "type": "object",
-      "required": [
-        "realDataRequired",
-        "inventedContentAllowed",
-        "mockAcceptanceAllowed"
-      ],
+      "required": ["realDataRequired", "inventedContentAllowed", "mockAcceptanceAllowed"],
       "properties": {
         "realDataRequired": {
           "const": true

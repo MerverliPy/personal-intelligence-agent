@@ -15,8 +15,8 @@ Data environment:
 
 ## Test cases
 
-| ID | Flow | Expected | Actual | Result | Evidence |
-|---|---|---|---|---|---|
+| ID  | Flow | Expected | Actual | Result | Evidence |
+| --- | ---- | -------- | ------ | ------ | -------- |
 
 ## Required interaction checks
 

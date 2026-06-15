@@ -12,9 +12,9 @@ permission:
   lsp: allow
   edit: deny
   bash:
-    "*": ask
-    "git status*": allow
-    "git diff*": allow
+    '*': ask
+    'git status*': allow
+    'git diff*': allow
   webfetch: ask
   websearch: ask
   skill: allow

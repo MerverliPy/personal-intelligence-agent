@@ -32,12 +32,12 @@ The redesign's product model, concept (Stream), and design contract are approved
 
 ## 4. Materially different alternatives
 
-| Alternative | Description | Trade-offs |
-|---|---|---|
-| **A. Single PR, all changes in one commit** | All 12 atomic steps land in one PR. | **Reject.** Per `AGENTS.md` "small atomic commits tied to decision and contract IDs". One PR makes review impossible and rollback all-or-nothing. |
-| **B. One commit per source file** | Each file gets its own commit. | **Reject.** 12+ files = 12+ commits. Over-fragmented; dependencies between commits are hard to track. |
-| **C. Themed commit groups (8 commits)** | Group related changes into themes: tokens, safe-area, top app bar, bottom tab bar, citation sheet, FAB + mode picker, dark mode / reduce motion, PWA assets. Each commit is a self-contained, reviewable, revertable unit. | **Recommended.** Matches the orchestrator's small-atomic-commits policy. 8 commits are reviewable in < 1 hour each. |
-| D. Defer implementation; ship a docs-only update instead | Don't write code yet; update the design contract with the pre-flight findings and wait. | Reject. The user explicitly asked to draft the implementation contract. |
+| Alternative                                              | Description                                                                                                                                                                                                                | Trade-offs                                                                                                                                        |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **A. Single PR, all changes in one commit**              | All 12 atomic steps land in one PR.                                                                                                                                                                                        | **Reject.** Per `AGENTS.md` "small atomic commits tied to decision and contract IDs". One PR makes review impossible and rollback all-or-nothing. |
+| **B. One commit per source file**                        | Each file gets its own commit.                                                                                                                                                                                             | **Reject.** 12+ files = 12+ commits. Over-fragmented; dependencies between commits are hard to track.                                             |
+| **C. Themed commit groups (8 commits)**                  | Group related changes into themes: tokens, safe-area, top app bar, bottom tab bar, citation sheet, FAB + mode picker, dark mode / reduce motion, PWA assets. Each commit is a self-contained, reviewable, revertable unit. | **Recommended.** Matches the orchestrator's small-atomic-commits policy. 8 commits are reviewable in < 1 hour each.                               |
+| D. Defer implementation; ship a docs-only update instead | Don't write code yet; update the design contract with the pre-flight findings and wait.                                                                                                                                    | Reject. The user explicitly asked to draft the implementation contract.                                                                           |
 
 ## 5. Recommendation
 
@@ -50,6 +50,7 @@ Each commit maps to a specific decision packet and a specific verification comma
 ### Commit 1: `chore(redesign): extract design tokens to shared.ts` (PIA-MUR-D-004)
 
 **Files:**
+
 - `apps/web/src/pages/shared.ts` (the `sharedCss` string at line 8-66; 59 lines)
   - Add a `:root` block at the top with CSS custom properties: `--accent: #2563EB;`, `--bg: #FFFFFF;`, `--fg: #0A0A0A;`, `--fg-muted: #5C5C5C;`, `--divider: #ECECEC;`, `--accent-pressed: #1D4ED8;`, `--selection: #DBE7FF;`, `--t-body: 19pt;`, `--t-caption: 14pt;`, `--t-section: 24pt;`, `--s-1: 4pt;` through `--s-12: 48pt;`, `--r-sm: 8pt;` through `--r-pill: 9999pt;`, `--motion-fast: 120ms;`, `--motion-base: 200ms;`, `--motion-sheet: 280ms;`, `--motion-ease: cubic-bezier(0.32, 0.72, 0, 1);`, `--touch-min: 44pt;`, `--tab-bar-h: 49pt;`.
   - Replace existing inline colors with `var(--accent)`, `var(--bg)`, etc.
@@ -57,12 +58,14 @@ Each commit maps to a specific decision packet and a specific verification comma
   - Add 4pt grid via the spacing scale.
 
 **Verification commands:**
+
 - `pnpm typecheck` (must pass)
 - `pnpm lint` (must pass)
 - `pnpm test:unit` (must pass; 921+ tests)
 - `pnpm format:check` (must pass; no prettier violations)
 
 **Acceptance:**
+
 - The `sharedCss` string in `apps/web/src/pages/shared.ts` contains all 18 design tokens.
 - The existing `apps/web/test/a11y-static.test.ts` still passes (no a11y regression).
 - 0 production-runtime tokens are introduced (all are CSS custom properties in the existing inline style block; no new dependencies).
@@ -70,18 +73,21 @@ Each commit maps to a specific decision packet and a specific verification comma
 ### Commit 2: `feat(redesign): add safe-area insets + viewport-fit=cover` (PIA-MUR-D-004 §8 + PIA-MUR-D-011)
 
 **Files:**
+
 - `apps/api/src/routes/web.ts:25` (the viewport meta)
   - Change `<meta name="viewport" content="width=device-width, initial-scale=1.0">` to `<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">`.
 - `apps/web/src/pages/shared.ts` (the `sharedCss` string)
   - Add `body { padding-top: max(env(safe-area-inset-top, 0px), 59pt); padding-bottom: env(safe-area-inset-bottom, 0px); }` for safe-area.
 
 **Verification commands:**
+
 - `pnpm typecheck` (must pass)
 - `pnpm lint` (must pass)
 - `pnpm test:unit` (must pass)
 - `curl -sI http://localhost:3000/app | grep viewport-fit=cover` (must contain `viewport-fit=cover`)
 
 **Acceptance:**
+
 - The viewport meta has `viewport-fit=cover`.
 - The body has safe-area insets.
 - 0 new dependencies.
@@ -89,6 +95,7 @@ Each commit maps to a specific decision packet and a specific verification comma
 ### Commit 3: `feat(redesign): add bottom tab bar (T1=A)` (PIA-MUR-D-002 + PIA-MUR-D-011)
 
 **Files:**
+
 - `apps/web/src/pages/shared.ts` (the `pageShell` function at line 126-192; 67 lines)
   - Add `<nav class="tab-bar" role="navigation" aria-label="Primary">` with 3 tabs: Conversations, Documents, Search.
   - Each tab: `<button class="tab" data-tab="conversations" aria-current="page">Conversations</button>` (and similarly for documents, search).
@@ -97,12 +104,14 @@ Each commit maps to a specific decision packet and a specific verification comma
   - Add JS to handle tab clicks: set `aria-current="page"` on the clicked tab, remove from others. Navigate to the corresponding screen.
 
 **Verification commands:**
+
 - `pnpm typecheck` (must pass)
 - `pnpm lint` (must pass)
 - `pnpm test:unit` (must pass)
 - `pnpm preflight:device` (DPC-6 should still pass; DPC-7 should still pass; DPC-12 keyboard tab order should still pass)
 
 **Acceptance:**
+
 - The tab bar has 3 tabs (Conversations, Documents, Search).
 - The tab bar is `position: fixed; bottom: 0`.
 - Tab click navigates to the corresponding screen.
@@ -112,6 +121,7 @@ Each commit maps to a specific decision packet and a specific verification comma
 ### Commit 4: `feat(redesign): add top app bar (T4=A) with 44pt avatar` (PIA-MUR-D-002 + PIA-MUR-D-009)
 
 **Files:**
+
 - `apps/web/src/pages/shared.ts` (the `pageShell` function)
   - Add `<header class="app-header" role="banner">` with the avatar button and the page title.
   - The avatar: `<button id="avatar-btn" class="app-header__avatar" aria-label="Workspace: PIA Workspace. Tap to switch." aria-haspopup="dialog" aria-expanded="false">` (44pt × 44pt per PIA-MUR-D-009).
@@ -120,12 +130,14 @@ Each commit maps to a specific decision packet and a specific verification comma
   - Add JS to handle avatar click: open the workspace switcher sheet (or alert in v1).
 
 **Verification commands:**
+
 - `pnpm typecheck` (must pass)
 - `pnpm lint` (must pass)
 - `pnpm test:unit` (must pass)
 - `pnpm preflight:device` (DPC-4 sub-test `avatar meets 44pt` should now pass)
 
 **Acceptance:**
+
 - The header has an avatar button + page title.
 - The avatar measures ≥ 44×44pt.
 - `role="banner"` is set on the header.
@@ -133,6 +145,7 @@ Each commit maps to a specific decision packet and a specific verification comma
 ### Commit 5: `feat(redesign): add network-loss banner (T6=A) + offline detection` (PIA-MUR-D-002 §5)
 
 **Files:**
+
 - `apps/web/src/pages/shared.ts` (the pageShell)
   - Add `<div id="network-banner" class="network-banner" role="status" aria-live="polite" hidden>` with text "You're offline. Some actions are disabled."
   - CSS for `.network-banner`: `position: fixed; top: max(env(safe-area-inset-top), 59pt); left: 0; right: 0; padding: 8pt 16pt; background: var(--danger); color: white; z-index: 50;`
@@ -140,12 +153,14 @@ Each commit maps to a specific decision packet and a specific verification comma
   - Also disable destructive buttons (FAB, Send, etc.) when offline.
 
 **Verification commands:**
+
 - `pnpm typecheck` (must pass)
 - `pnpm lint` (must pass)
 - `pnpm test:unit` (must pass)
 - `pnpm preflight:device` (DPC-14 should still pass)
 
 **Acceptance:**
+
 - The banner appears below the Dynamic Island when offline.
 - FAB and Send are disabled when offline.
 - The banner uses `role="status"` and `aria-live="polite"`.
@@ -153,6 +168,7 @@ Each commit maps to a specific decision packet and a specific verification comma
 ### Commit 6: `feat(redesign): footnote-style citation chip + citation sheet` (PIA-MUR-D-002 + PIA-MUR-D-004 §3.4)
 
 **Files:**
+
 - `apps/web/src/pages/conversation-detail.ts:100-104` (the existing `renderCitationChipClient` function)
   - Change from filled button to footnote-style text chip: remove the button background, change color to `var(--accent)`, add `text-decoration: underline` on `:hover/:focus-visible`.
   - Increase the tap area: add `min-width: 44pt; min-height: 44pt;` (per PIA-MUR-D-009).
@@ -162,12 +178,14 @@ Each commit maps to a specific decision packet and a specific verification comma
   - Add `aria-modal="true"` (already present) and `aria-labelledby="citation-modal-title"` (already present).
 
 **Verification commands:**
+
 - `pnpm typecheck` (must pass)
 - `pnpm lint` (must pass)
 - `pnpm test:unit` (must pass)
 - `pnpm preflight:device` (DPC-1 partially PASS; DPC-4 citation chip sub-test now passes)
 
 **Acceptance:**
+
 - The citation chip is footnote-style (text-only, accent color, underline on hover).
 - The citation chip measures ≥ 44×44pt.
 - The citation modal slides up from the bottom.
@@ -176,6 +194,7 @@ Each commit maps to a specific decision packet and a specific verification comma
 ### Commit 7: `feat(redesign): FAB (T7=A) on Conversations / Documents + mode-of-conversation sheet`
 
 **Files:**
+
 - `apps/web/src/pages/conversation-list.ts` (add `<button class="fab" id="fab-conversation" aria-label="New conversation">` at the bottom)
 - `apps/web/src/pages/document-list.ts` (add `<button class="fab" id="fab-document" aria-label="Upload document">` at the bottom)
 - `apps/web/src/pages/shared.ts` (the pageShell)
@@ -184,12 +203,14 @@ Each commit maps to a specific decision packet and a specific verification comma
   - Add JS to open the sheet on FAB click; pre-select ASK.
 
 **Verification commands:**
+
 - `pnpm typecheck` (must pass)
 - `pnpm lint` (must pass)
 - `pnpm test:unit` (must pass)
 - `pnpm preflight:device` (DPC-4 FAB sub-test still passes; DPC-1 mode sheet focus works)
 
 **Acceptance:**
+
 - The FABs measure ≥ 56×56pt.
 - The FABs open the mode sheet on click.
 - The mode sheet has 6 radio rows.
@@ -197,6 +218,7 @@ Each commit maps to a specific decision packet and a specific verification comma
 ### Commit 8: `feat(redesign): PWA manifest + service worker + theme-color + apple-touch-icon` (PIA-MUR-D-004 §9)
 
 **Files:**
+
 - `apps/web/public/manifest.webmanifest` (NEW)
   ```json
   {
@@ -218,18 +240,31 @@ Each commit maps to a specific decision packet and a specific verification comma
 - `apps/web/public/service-worker.js` (NEW; basic pre-cache + offline fallback)
   ```js
   const CACHE = 'pia-shell-v1';
-  const SHELL_ASSETS = ['/', '/app', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png', '/apple-touch-icon.png', '/styles.css'];
-  self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL_ASSETS))));
-  self.addEventListener('fetch', e => {
+  const SHELL_ASSETS = [
+    '/',
+    '/app',
+    '/manifest.webmanifest',
+    '/icon-192.png',
+    '/icon-512.png',
+    '/apple-touch-icon.png',
+    '/styles.css',
+  ];
+  self.addEventListener('install', (e) =>
+    e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL_ASSETS))),
+  );
+  self.addEventListener('fetch', (e) => {
     if (e.request.method !== 'GET') return;
     if (new URL(e.request.url).pathname.startsWith('/v1/')) return; // let API calls fail
-    e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).catch(() => caches.match('/'))));
+    e.respondWith(
+      caches.match(e.request).then((r) => r || fetch(e.request).catch(() => caches.match('/'))),
+    );
   });
   ```
 - `apps/api/src/routes/web.ts` (add static asset route for `/manifest.webmanifest`, `/icon-*.png`, `/apple-touch-icon.png`, `/service-worker.js`)
 - `apps/web/src/pages/shared.ts` (add `<link rel="manifest" href="/manifest.webmanifest">`, `<meta name="theme-color" content="#2563EB">`, `<meta name="apple-mobile-web-app-capable" content="yes">`, `<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">`, `<link rel="apple-touch-icon" href="/apple-touch-icon.png">` to the `<head>`)
 
 **Verification commands:**
+
 - `pnpm typecheck` (must pass)
 - `pnpm lint` (must pass)
 - `pnpm test:unit` (must pass)
@@ -241,6 +276,7 @@ Each commit maps to a specific decision packet and a specific verification comma
 - `pnpm preflight:device` (DPC-11 PWA install is still PARTIALLY_VERIFIED — manual on real iPhone; the harness confirms `matchMedia('(display-mode: standalone)')` works)
 
 **Acceptance:**
+
 - The manifest is valid JSON and served at `/manifest.webmanifest`.
 - The icons exist at `/icon-192.png`, `/icon-512.png`, `/apple-touch-icon.png`.
 - The service worker is served at `/service-worker.js`.
@@ -253,6 +289,7 @@ Each commit maps to a specific decision packet and a specific verification comma
 Per the orchestrator's mission: "Each commit must reference the decision or contract ID it implements. Atomic commits only."
 
 For each of the 8 commits above, the orchestrator will:
+
 1. Produce a per-commit summary (files changed, verification commands run, evidence).
 2. Surface it to the user for explicit approval.
 3. Wait for the "Approve" response before landing the commit.
@@ -267,6 +304,7 @@ Full rollback (revert all 8 commits) returns the source tree to its pre-PIA-MUR-
 ## 9. Database / API / schema / auth effects
 
 **Zero.** The implementation contract does NOT touch:
+
 - `db/schema.sql` or any migration file
 - `api/openapi.yaml` (no new endpoints)
 - The OIDC auth flow
@@ -278,6 +316,7 @@ The only API-side changes are: serving new static assets at `/manifest.webmanife
 ## 10. Verification strategy
 
 For each commit:
+
 - `pnpm format:check` — must pass (no prettier violations introduced).
 - `pnpm lint` — must pass (no eslint violations introduced).
 - `pnpm typecheck` — must pass (no type errors introduced).
@@ -287,6 +326,7 @@ For each commit:
 - For commits that affect the visual surface: `pnpm preflight:device` — re-run the pre-flight harness; the relevant DPC must continue to PASS.
 
 After all 8 commits:
+
 - `pnpm ci:check` — full CI check.
 - `pnpm eval:retrieval` and `pnpm eval:answers` — must still 11/11 PASS (no regression in retrieval or answer quality).
 - `pnpm test:security` — must still 13/13 PASS.

@@ -16,6 +16,9 @@ test.describe('DPC-2: native <dialog id="citation-modal"> focus (BLOCKED)', () =
     // cookie, which is out of scope for the pre-flight.
     const res = await fetch(`${API_URL}/v1/me`);
     expect(res.status).toBe(401);
-    test.skip(true, 'DPC-2 BLOCKED — requires authenticated session; deferred to implementation-contract');
+    test.skip(
+      true,
+      'DPC-2 BLOCKED — requires authenticated session; deferred to implementation-contract',
+    );
   });
 });

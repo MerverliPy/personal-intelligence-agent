@@ -69,31 +69,31 @@ Approved decision: PIA-MUR-D-001 (see `.ui-redesign/decisions/DECISION_LEDGER.md
 
 ## Commands
 
-| Purpose | Command | Working directory | Mutates files | Approval | Notes |
-|---|---|---|---|---|---|
-| Install | `pnpm install` | repo root | yes | **required** | First-time setup |
-| Install (frozen) | `pnpm install --frozen-lockfile` | repo root | no | allowed | Matches CI; reproducible |
-| Start deps | `./scripts/dev/start-deps.sh` | repo root | yes | **required** | Currently deps are already up |
-| Stop deps | `./scripts/dev/stop-deps.sh` | repo root | maybe | **required** | |
-| Teardown deps | `./scripts/dev/teardown-deps.sh` | repo root | yes | **required** | Destructive; `opencode.jsonc` flags `docker compose down -v*` as ask |
-| Start API (dev) | `pnpm --filter @pia/api dev` (echo stub today) | `apps/api` | no | **required** if network-exposed | Live API already on :3000 (PID 216180) |
-| Build | `pnpm build` (= `turbo run build`) | repo root | maybe | **required** | Apps use echo stubs |
-| Lint | `pnpm lint` | repo root | no | allowed | |
-| Typecheck | `pnpm typecheck` | repo root | no | allowed | |
-| Unit tests | `pnpm test:unit` | repo root | no | allowed | 921 tests, all green per P3-GATE |
-| Integration tests | `pnpm test:integration` | repo root | maybe | **required** | Requires live DB+Redis+MinIO |
-| E2E tests | `pnpm test:e2e` | repo root | maybe | **required** | 1 journey, green per P3-GATE |
-| Security tests | `pnpm test:security` | repo root | maybe | **required** | 13/13, green per P3-GATE |
-| Retrieval eval | `pnpm eval:retrieval` | repo root | maybe | **required** | 11/11, green per P3-GATE |
-| Answer eval | `pnpm eval:answers` | repo root | maybe | **required** | 11/11 evaluated; `exit 2` is by-design for security-critical cases |
-| Format check | `pnpm format:check` | repo root | no | allowed | |
-| Format fix | `pnpm format:fix` | repo root | yes | **required** | |
-| Secret scan | `pnpm security:secrets` | repo root | no | allowed | |
-| Dependency audit | `pnpm security:dependencies` | repo root | no | allowed | |
-| DB migrate (test) | `pnpm db:migrate:test` | repo root | yes | **required** | |
-| CI simulator | `pnpm ci:check` (= `bash scripts/ci/check-all.sh`) | repo root | maybe | **required** | |
-| Bridge to iPhone | `cloudflared tunnel --no-autoupdate --url http://localhost:3000` | repo root or anywhere | no | **required** | Quick-tunnel; output URL goes to evidence |
-| Governance validation | `pnpm exec tsx scripts/ci/validate-status.ts` | repo root | no | allowed | |
+| Purpose               | Command                                                          | Working directory     | Mutates files | Approval                        | Notes                                                                |
+| --------------------- | ---------------------------------------------------------------- | --------------------- | ------------- | ------------------------------- | -------------------------------------------------------------------- |
+| Install               | `pnpm install`                                                   | repo root             | yes           | **required**                    | First-time setup                                                     |
+| Install (frozen)      | `pnpm install --frozen-lockfile`                                 | repo root             | no            | allowed                         | Matches CI; reproducible                                             |
+| Start deps            | `./scripts/dev/start-deps.sh`                                    | repo root             | yes           | **required**                    | Currently deps are already up                                        |
+| Stop deps             | `./scripts/dev/stop-deps.sh`                                     | repo root             | maybe         | **required**                    |                                                                      |
+| Teardown deps         | `./scripts/dev/teardown-deps.sh`                                 | repo root             | yes           | **required**                    | Destructive; `opencode.jsonc` flags `docker compose down -v*` as ask |
+| Start API (dev)       | `pnpm --filter @pia/api dev` (echo stub today)                   | `apps/api`            | no            | **required** if network-exposed | Live API already on :3000 (PID 216180)                               |
+| Build                 | `pnpm build` (= `turbo run build`)                               | repo root             | maybe         | **required**                    | Apps use echo stubs                                                  |
+| Lint                  | `pnpm lint`                                                      | repo root             | no            | allowed                         |                                                                      |
+| Typecheck             | `pnpm typecheck`                                                 | repo root             | no            | allowed                         |                                                                      |
+| Unit tests            | `pnpm test:unit`                                                 | repo root             | no            | allowed                         | 921 tests, all green per P3-GATE                                     |
+| Integration tests     | `pnpm test:integration`                                          | repo root             | maybe         | **required**                    | Requires live DB+Redis+MinIO                                         |
+| E2E tests             | `pnpm test:e2e`                                                  | repo root             | maybe         | **required**                    | 1 journey, green per P3-GATE                                         |
+| Security tests        | `pnpm test:security`                                             | repo root             | maybe         | **required**                    | 13/13, green per P3-GATE                                             |
+| Retrieval eval        | `pnpm eval:retrieval`                                            | repo root             | maybe         | **required**                    | 11/11, green per P3-GATE                                             |
+| Answer eval           | `pnpm eval:answers`                                              | repo root             | maybe         | **required**                    | 11/11 evaluated; `exit 2` is by-design for security-critical cases   |
+| Format check          | `pnpm format:check`                                              | repo root             | no            | allowed                         |                                                                      |
+| Format fix            | `pnpm format:fix`                                                | repo root             | yes           | **required**                    |                                                                      |
+| Secret scan           | `pnpm security:secrets`                                          | repo root             | no            | allowed                         |                                                                      |
+| Dependency audit      | `pnpm security:dependencies`                                     | repo root             | no            | allowed                         |                                                                      |
+| DB migrate (test)     | `pnpm db:migrate:test`                                           | repo root             | yes           | **required**                    |                                                                      |
+| CI simulator          | `pnpm ci:check` (= `bash scripts/ci/check-all.sh`)               | repo root             | maybe         | **required**                    |                                                                      |
+| Bridge to iPhone      | `cloudflared tunnel --no-autoupdate --url http://localhost:3000` | repo root or anywhere | no            | **required**                    | Quick-tunnel; output URL goes to evidence                            |
+| Governance validation | `pnpm exec tsx scripts/ci/validate-status.ts`                    | repo root             | no            | allowed                         |                                                                      |
 
 **Disabled / denied commands (per `opencode.jsonc`):** `git push*`, `git reset*`, `git clean*`, `git restore*`, `git checkout*`, `git switch*`, `git rebase*`, `git merge*`, `git cherry-pick*`, `git stash*`, `rm -rf *`, `sudo *`, `terraform apply/destroy`, `pulumi up/destroy`, `kubectl apply`, `helm upgrade`, `npm/pnpm publish`.
 
@@ -130,18 +130,18 @@ Approved decision: PIA-MUR-D-001 (see `.ui-redesign/decisions/DECISION_LEDGER.md
 
 ## Protected areas
 
-| Area | Paths/interfaces | Reason | Required approval |
-|---|---|---|---|
-| Authentication | `apps/api/src/routes/auth.ts`, `apps/api/src/plugins/auth.ts`, `packages/auth/src/`, `apps/api/src/plugins/cookie.ts` | Identity, session, OIDC flow | **separate** |
-| Authorization | `packages/domain/src/`, `packages/db/src/membership*`, `apps/api/src/plugins/workspace-context.ts` | RBAC, workspace isolation | **separate** |
-| Public API contract | `api/openapi.yaml`, `apps/api/src/routes/*.ts` (except `web*.ts`) | Breaking changes affect all clients | **separate** |
-| Database schema | `db/schema.sql`, `db/migrations/`, `packages/db/src/migrations/` | Forward + rollback reasoning required | **separate** |
-| Infrastructure | `infra/`, `compose.yaml`, `.github/workflows/`, `Dockerfile`s | Provisioning, deploy | **separate** |
-| Deployment | `apps/*/Dockerfile`, `.github/workflows/`, `package.json` `deploy` scripts | Production risk | **separate** |
-| Existing tests | `apps/*/test/`, `test/e2e/`, `test/security/`, `packages/*/test/`, `evals/{retrieval,answers}/` | Baseline protection; no silent removal | **contract** (no silent changes) |
-| Credentials | `.env`, `.env.*`, `*.pem`, `*.key`, `*credentials*`, `.opencode/run-logs/cookies.txt` | Never read, never modify, never include in evidence | **NEVER** |
-| Documentation | `AGENTS.md`, `AGENT_HANDOFF.md`, `README.md`, `MANIFEST.md`, `docs/`, `planning/` | Governance, run records, manifest | per doc-workflow policy |
-| Workflow config | `opencode.json`, `opencode.jsonc`, `.opencode/agents/`, `.opencode/commands/`, `.opencode/skills/`, `.ui-redesign/` | Orchestrator + specialist config | **separate** for any change |
+| Area                | Paths/interfaces                                                                                                      | Reason                                              | Required approval                |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------------------------------- |
+| Authentication      | `apps/api/src/routes/auth.ts`, `apps/api/src/plugins/auth.ts`, `packages/auth/src/`, `apps/api/src/plugins/cookie.ts` | Identity, session, OIDC flow                        | **separate**                     |
+| Authorization       | `packages/domain/src/`, `packages/db/src/membership*`, `apps/api/src/plugins/workspace-context.ts`                    | RBAC, workspace isolation                           | **separate**                     |
+| Public API contract | `api/openapi.yaml`, `apps/api/src/routes/*.ts` (except `web*.ts`)                                                     | Breaking changes affect all clients                 | **separate**                     |
+| Database schema     | `db/schema.sql`, `db/migrations/`, `packages/db/src/migrations/`                                                      | Forward + rollback reasoning required               | **separate**                     |
+| Infrastructure      | `infra/`, `compose.yaml`, `.github/workflows/`, `Dockerfile`s                                                         | Provisioning, deploy                                | **separate**                     |
+| Deployment          | `apps/*/Dockerfile`, `.github/workflows/`, `package.json` `deploy` scripts                                            | Production risk                                     | **separate**                     |
+| Existing tests      | `apps/*/test/`, `test/e2e/`, `test/security/`, `packages/*/test/`, `evals/{retrieval,answers}/`                       | Baseline protection; no silent removal              | **contract** (no silent changes) |
+| Credentials         | `.env`, `.env.*`, `*.pem`, `*.key`, `*credentials*`, `.opencode/run-logs/cookies.txt`                                 | Never read, never modify, never include in evidence | **NEVER**                        |
+| Documentation       | `AGENTS.md`, `AGENT_HANDOFF.md`, `README.md`, `MANIFEST.md`, `docs/`, `planning/`                                     | Governance, run records, manifest                   | per doc-workflow policy          |
+| Workflow config     | `opencode.json`, `opencode.jsonc`, `.opencode/agents/`, `.opencode/commands/`, `.opencode/skills/`, `.ui-redesign/`   | Orchestrator + specialist config                    | **separate** for any change      |
 
 ---
 
@@ -159,14 +159,14 @@ Approved decision: PIA-MUR-D-001 (see `.ui-redesign/decisions/DECISION_LEDGER.md
 
 ## Device matrix
 
-| Environment | Priority | Required status | Notes |
-|---|---:|---|---|
-| iPhone 16 Pro Safari portrait | primary | **mandatory** | UNCONFIRMED physical device (B-1); bridge: cloudflared quick-tunnel |
-| iPhone 16 Pro installed PWA portrait | primary | **mandatory** | UNCONFIRMED physical device (B-1); requires HTTPS (cloudflared provides) |
-| iPhone 16 Pro iOS Chrome portrait | secondary | **mandatory** | UNCONFIRMED (B-1); iOS Chrome is a third-party browser; same viewport/DOM as Safari for our purposes |
-| iPhone 15 / 14 / 13 / SE | compatibility | **mandatory** | UNCONFIRMED (B-1); ensure no iPhone 16 Pro-only assumptions |
+| Environment                                            |      Priority | Required status    | Notes                                                                                                              |
+| ------------------------------------------------------ | ------------: | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| iPhone 16 Pro Safari portrait                          |       primary | **mandatory**      | UNCONFIRMED physical device (B-1); bridge: cloudflared quick-tunnel                                                |
+| iPhone 16 Pro installed PWA portrait                   |       primary | **mandatory**      | UNCONFIRMED physical device (B-1); requires HTTPS (cloudflared provides)                                           |
+| iPhone 16 Pro iOS Chrome portrait                      |     secondary | **mandatory**      | UNCONFIRMED (B-1); iOS Chrome is a third-party browser; same viewport/DOM as Safari for our purposes               |
+| iPhone 15 / 14 / 13 / SE                               | compatibility | **mandatory**      | UNCONFIRMED (B-1); ensure no iPhone 16 Pro-only assumptions                                                        |
 | Desktop responsive browser (Chromium, Firefox, Safari) | compatibility | repository-defined | **No browser binary on host.** Automated validation would require Playwright + axe-core as a new dependency (B-6). |
-| Android Chrome / Samsung Internet | compatibility | optional | Out of scope for v1 of the redesign; not in matrix until v1 ships |
+| Android Chrome / Samsung Internet                      | compatibility | optional           | Out of scope for v1 of the redesign; not in matrix until v1 ships                                                  |
 
 ---
 

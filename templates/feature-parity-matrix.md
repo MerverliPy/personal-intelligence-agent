@@ -4,7 +4,7 @@ Baseline commit:
 Target commit:
 
 | Feature or behavior | Current route/screen | Current evidence | Planned disposition | Decision ID | Automated evidence | Device evidence | Status |
-|---|---|---|---|---|---|---|---|
+| ------------------- | -------------------- | ---------------- | ------------------- | ----------- | ------------------ | --------------- | ------ |
 
 Statuses:
 

@@ -26,11 +26,11 @@ DPC.
 
 Summary:
 
-| Status | Count | DPCs |
-|---|---:|---|
-| Automated (Playwright + axe-core) | 11 | DPC-1, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14 |
-| BLOCKED (deferred) | 1 | DPC-2 (native dialog; needs auth) |
-| PARTIALLY_VERIFIED (manual) | 1 | DPC-11 (PWA install; needs real iPhone) |
+| Status                            | Count | DPCs                                       |
+| --------------------------------- | ----: | ------------------------------------------ |
+| Automated (Playwright + axe-core) |    11 | DPC-1, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14 |
+| BLOCKED (deferred)                |     1 | DPC-2 (native dialog; needs auth)          |
+| PARTIALLY_VERIFIED (manual)       |     1 | DPC-11 (PWA install; needs real iPhone)    |
 
 The automated harness covers 12 of 14. The user does 1 (DPC-11) on
 the real iPhone. 1 (DPC-2) is deferred to the implementation-contract
@@ -89,7 +89,8 @@ apps/web/test/preflight/
 **Out of scope for PIA-MUR-D-016.** A future ADR will decide whether
 the harness runs in CI (`.github/workflows/ci.yaml`); per
 `REPOSITORY_ADAPTER.md`, "Adding browser/E2E to CI requires Playwright
-+ axe-core approval and security review."
+
+- axe-core approval and security review."
 
 ## Rollback
 

@@ -19,7 +19,9 @@ test.describe('DPC-8: dark mode (UNVERIFIED-3)', () => {
     await page.waitForTimeout(200);
     const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
     // Dark mode: --bg is #0A0A0A = rgb(10, 10, 10)
-    expect(bg, `body backgroundColor should be rgb(10, 10, 10) in dark mode; got ${bg}`).toBe('rgb(10, 10, 10)');
+    expect(bg, `body backgroundColor should be rgb(10, 10, 10) in dark mode; got ${bg}`).toBe(
+      'rgb(10, 10, 10)',
+    );
   });
 
   test('light mode default', async ({ page }) => {

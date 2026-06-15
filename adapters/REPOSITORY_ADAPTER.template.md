@@ -45,18 +45,18 @@ Approved at:
 
 ## Commands
 
-| Purpose | Command | Working directory | Mutates files | Approval |
-|---|---|---|---|---|
-| Install |  |  | yes | required |
-| Start |  |  | no | required if network-exposed |
-| Build |  |  | maybe | required |
-| Lint |  |  | no | allowed |
-| Typecheck |  |  | no | allowed |
-| Unit tests |  |  | no | allowed |
-| Integration tests |  |  | maybe | required |
-| E2E tests |  |  | maybe | required |
-| Accessibility |  |  | no | allowed |
-| Performance |  |  | no | allowed |
+| Purpose           | Command | Working directory | Mutates files | Approval                    |
+| ----------------- | ------- | ----------------- | ------------- | --------------------------- |
+| Install           |         |                   | yes           | required                    |
+| Start             |         |                   | no            | required if network-exposed |
+| Build             |         |                   | maybe         | required                    |
+| Lint              |         |                   | no            | allowed                     |
+| Typecheck         |         |                   | no            | allowed                     |
+| Unit tests        |         |                   | no            | allowed                     |
+| Integration tests |         |                   | maybe         | required                    |
+| E2E tests         |         |                   | maybe         | required                    |
+| Accessibility     |         |                   | no            | allowed                     |
+| Performance       |         |                   | no            | allowed                     |
 
 ## Runtime access
 
@@ -82,16 +82,16 @@ Approved at:
 
 ## Protected areas
 
-| Area | Paths/interfaces | Reason | Required approval |
-|---|---|---|---|
-| Authentication |  |  | separate |
-| Authorization |  |  | separate |
-| Public API |  |  | separate |
-| Database schema |  |  | separate |
-| Infrastructure |  |  | separate |
-| Deployment |  |  | separate |
-| Existing tests |  | baseline protection | contract |
-| Other |  |  |  |
+| Area            | Paths/interfaces | Reason              | Required approval |
+| --------------- | ---------------- | ------------------- | ----------------- |
+| Authentication  |                  |                     | separate          |
+| Authorization   |                  |                     | separate          |
+| Public API      |                  |                     | separate          |
+| Database schema |                  |                     | separate          |
+| Infrastructure  |                  |                     | separate          |
+| Deployment      |                  |                     | separate          |
+| Existing tests  |                  | baseline protection | contract          |
+| Other           |                  |                     |                   |
 
 ## Git policy
 
@@ -105,13 +105,13 @@ Approved at:
 
 ## Device matrix
 
-| Environment | Priority | Required status |
-|---|---:|---|
-| iPhone 16 Pro Safari portrait | primary | mandatory |
-| iPhone 16 Pro installed PWA portrait | primary | mandatory |
-| iPhone 16 Pro iOS Chrome portrait | secondary | mandatory |
-| Additional iPhone generation(s) | compatibility | mandatory |
-| Desktop responsive browser(s) | compatibility | repository-defined |
+| Environment                          |      Priority | Required status    |
+| ------------------------------------ | ------------: | ------------------ |
+| iPhone 16 Pro Safari portrait        |       primary | mandatory          |
+| iPhone 16 Pro installed PWA portrait |       primary | mandatory          |
+| iPhone 16 Pro iOS Chrome portrait    |     secondary | mandatory          |
+| Additional iPhone generation(s)      | compatibility | mandatory          |
+| Desktop responsive browser(s)        | compatibility | repository-defined |
 
 ## Approval
 

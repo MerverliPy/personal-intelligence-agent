@@ -12,13 +12,13 @@ permission:
   lsp: allow
   edit: deny
   bash:
-    "*": ask
-    "git status*": allow
-    "git diff*": allow
-    "git log*": allow
-    "git rev-parse*": allow
-    "git branch --show-current*": allow
-    "* --version": allow
+    '*': ask
+    'git status*': allow
+    'git diff*': allow
+    'git log*': allow
+    'git rev-parse*': allow
+    'git branch --show-current*': allow
+    '* --version': allow
   webfetch: ask
   websearch: ask
   skill: allow

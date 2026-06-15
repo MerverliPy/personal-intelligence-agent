@@ -24,8 +24,8 @@ The prototype's CSS does have an `@media (prefers-color-scheme: dark)` rule that
 ```css
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0A0A0A;
-    --fg: #F5F5F5;
+    --bg: #0a0a0a;
+    --fg: #f5f5f5;
     /* ... */
   }
 }
@@ -47,12 +47,12 @@ This packet authorizes the **prototype-only** CSS/JS fix for the Stream concept 
 
 ## Materially different alternatives
 
-| Alternative | Description | Trade-offs |
-|---|---|---|
-| **A. Reorder the CSS rules; use `!important` on the body** | Force the body to use `var(--bg)` with higher specificity. | **Recommended** (pending root cause confirmation). Simple, targeted. |
-| B. Add a `body.theme-dark` class set by app.js when the media query matches | More explicit; the app code controls the theme. | Reject for the prototype; adds JS complexity. Could be appropriate for the production code. |
-| C. Add a manual JS toggle that sets the theme on load (similar to the existing `#toggle-dark` checkbox) | The app already has a manual toggle; add a "auto" mode that respects `prefers-color-scheme` on initial load. | Consider. Cleaner than CSS hacks; the manual toggle already works. |
-| D. Accept the issue; document that dark mode auto-switch only works in WebKit (not Chromium) | File as a known limitation. | Reject. The user expects dark mode to work on both browsers. |
+| Alternative                                                                                             | Description                                                                                                  | Trade-offs                                                                                  |
+| ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| **A. Reorder the CSS rules; use `!important` on the body**                                              | Force the body to use `var(--bg)` with higher specificity.                                                   | **Recommended** (pending root cause confirmation). Simple, targeted.                        |
+| B. Add a `body.theme-dark` class set by app.js when the media query matches                             | More explicit; the app code controls the theme.                                                              | Reject for the prototype; adds JS complexity. Could be appropriate for the production code. |
+| C. Add a manual JS toggle that sets the theme on load (similar to the existing `#toggle-dark` checkbox) | The app already has a manual toggle; add a "auto" mode that respects `prefers-color-scheme` on initial load. | Consider. Cleaner than CSS hacks; the manual toggle already works.                          |
+| D. Accept the issue; document that dark mode auto-switch only works in WebKit (not Chromium)            | File as a known limitation.                                                                                  | Reject. The user expects dark mode to work on both browsers.                                |
 
 ## Recommendation
 

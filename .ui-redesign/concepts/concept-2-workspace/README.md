@@ -54,17 +54,17 @@ Workspace gains:
 
 ## Evidence citations
 
-| Element | Source |
-|---|---|
-| Workspace name placeholder | `apps/api/src/routes/web.ts:108` |
-| Conversation modes | `apps/web/src/pages/conversation-list.ts:25-30` |
-| Citation chip shape `[N]` | `apps/web/src/pages/conversation-detail.ts:100-104` |
-| Run-state badge map | `apps/web/src/pages/conversation-detail.ts:330-338` |
+| Element                       | Source                                                                              |
+| ----------------------------- | ----------------------------------------------------------------------------------- |
+| Workspace name placeholder    | `apps/api/src/routes/web.ts:108`                                                    |
+| Conversation modes            | `apps/web/src/pages/conversation-list.ts:25-30`                                     |
+| Citation chip shape `[N]`     | `apps/web/src/pages/conversation-detail.ts:100-104`                                 |
+| Run-state badge map           | `apps/web/src/pages/conversation-detail.ts:330-338`                                 |
 | Document status badge classes | `apps/web/src/pages/shared.ts:40-47` + `apps/web/src/pages/document-list.ts:99-103` |
-| Feedback category list | `apps/web/src/pages/conversation-detail.ts:84` |
-| Sensitivity classes | `packages/contracts/src/index.ts:207-213` |
-| Sample assistant text | `evals/answers/datasets/sample.yaml:29` |
-| Multi-citation sample | `evals/answers/datasets/sample.yaml:65-66` |
+| Feedback category list        | `apps/web/src/pages/conversation-detail.ts:84`                                      |
+| Sensitivity classes           | `packages/contracts/src/index.ts:207-213`                                           |
+| Sample assistant text         | `evals/answers/datasets/sample.yaml:29`                                             |
+| Multi-citation sample         | `evals/answers/datasets/sample.yaml:65-66`                                          |
 
 ## Non-goals (explicitly deferred to design-contract)
 

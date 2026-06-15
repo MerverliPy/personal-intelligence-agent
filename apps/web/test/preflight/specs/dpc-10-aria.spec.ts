@@ -17,8 +17,8 @@ test.describe('DPC-10: VoiceOver / ARIA (UNVERIFIED via axe)', () => {
   test('axe landmark rules: banner, main, navigation present', async ({ page }) => {
     await page.goto(PROTOTYPE_URL);
     const violations = await axeScan(page);
-    const landmarkViolations = violations.filter((v) =>
-      v.id.startsWith('landmark-') || v.id === 'region',
+    const landmarkViolations = violations.filter(
+      (v) => v.id.startsWith('landmark-') || v.id === 'region',
     );
     expect(landmarkViolations.length, JSON.stringify(landmarkViolations, null, 2)).toBe(0);
   });
@@ -37,7 +37,9 @@ test.describe('DPC-10: VoiceOver / ARIA (UNVERIFIED via axe)', () => {
     expect(headingViolations.length, JSON.stringify(headingViolations, null, 2)).toBe(0);
   });
 
-  test('citation chip has an accessible name (aria-label includes claim text)', async ({ page }) => {
+  test('citation chip has an accessible name (aria-label includes claim text)', async ({
+    page,
+  }) => {
     await page.goto(PROTOTYPE_URL);
     await page.locator('#conversation-list .conv').first().click();
     const chip = page.locator('.cite').first();

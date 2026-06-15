@@ -33,12 +33,7 @@
       "minItems": 2,
       "items": {
         "type": "object",
-        "required": [
-          "device",
-          "environment",
-          "result",
-          "evidence"
-        ],
+        "required": ["device", "environment", "result", "evidence"],
         "properties": {
           "device": {
             "type": "string"
@@ -47,11 +42,7 @@
             "type": "string"
           },
           "result": {
-            "enum": [
-              "pass",
-              "fail",
-              "blocked"
-            ]
+            "enum": ["pass", "fail", "blocked"]
           },
           "evidence": {
             "type": "array",
@@ -65,18 +56,11 @@
       }
     },
     "agreement": {
-      "enum": [
-        "agrees",
-        "disagrees",
-        "unresolved"
-      ]
+      "enum": ["agrees", "disagrees", "unresolved"]
     },
     "redaction": {
       "type": "object",
-      "required": [
-        "reviewed",
-        "secretsPresent"
-      ],
+      "required": ["reviewed", "secretsPresent"],
       "properties": {
         "reviewed": {
           "const": true

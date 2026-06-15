@@ -3,10 +3,7 @@
   "$id": "decision-ledger.schema.json",
   "title": "Design Decision Ledger",
   "type": "object",
-  "required": [
-    "ledgerVersion",
-    "decisions"
-  ],
+  "required": ["ledgerVersion", "decisions"],
   "properties": {
     "ledgerVersion": {
       "type": "string"
@@ -15,26 +12,13 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": [
-          "id",
-          "status",
-          "problem",
-          "alternatives",
-          "selected",
-          "approval"
-        ],
+        "required": ["id", "status", "problem", "alternatives", "selected", "approval"],
         "properties": {
           "id": {
             "type": "string"
           },
           "status": {
-            "enum": [
-              "proposed",
-              "approved",
-              "rejected",
-              "revised",
-              "superseded"
-            ]
+            "enum": ["proposed", "approved", "rejected", "revised", "superseded"]
           },
           "problem": {
             "type": "string"
@@ -47,16 +31,10 @@
             }
           },
           "selected": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "approval": {
-            "type": [
-              "object",
-              "null"
-            ],
+            "type": ["object", "null"],
             "properties": {
               "by": {
                 "type": "string"

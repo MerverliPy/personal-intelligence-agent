@@ -20,7 +20,7 @@ See `PIA-MUR-D-003a` problem statement. Workspace adds: in a multi-tenant produc
 
 - T1=A accepted as a 4-tab variant (Documents / Search / Conversations / Workspace).
 - All other T2–T7 = A.
-- 393×852pt portrait viewport; env(safe-area-inset-*) required.
+- 393×852pt portrait viewport; env(safe-area-inset-\*) required.
 - Concepts are visual prototypes only; no product code modified.
 
 ## Materially different alternatives (the other two concepts)

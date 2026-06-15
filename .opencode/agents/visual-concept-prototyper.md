@@ -11,12 +11,12 @@ permission:
   list: allow
   lsp: allow
   edit:
-    "*": deny
-    ".ui-redesign/concepts/**": ask
+    '*': deny
+    '.ui-redesign/concepts/**': ask
   bash:
-    "*": ask
-    "git status*": allow
-    "git diff*": allow
+    '*': ask
+    'git status*': allow
+    'git diff*': allow
   webfetch: ask
   websearch: ask
   skill: allow

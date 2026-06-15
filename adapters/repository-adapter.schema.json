@@ -22,18 +22,11 @@
       "minLength": 1
     },
     "status": {
-      "enum": [
-        "proposed",
-        "approved",
-        "superseded"
-      ]
+      "enum": ["proposed", "approved", "superseded"]
     },
     "repository": {
       "type": "object",
-      "required": [
-        "name",
-        "baselineCommit"
-      ],
+      "required": ["name", "baselineCommit"],
       "properties": {
         "name": {
           "type": "string"
@@ -46,12 +39,7 @@
     },
     "product": {
       "type": "object",
-      "required": [
-        "purpose",
-        "users",
-        "outcomes",
-        "networkRequired"
-      ],
+      "required": ["purpose", "users", "outcomes", "networkRequired"],
       "properties": {
         "purpose": {
           "type": "string"
@@ -90,10 +78,7 @@
     },
     "realData": {
       "type": "object",
-      "required": [
-        "available",
-        "mockDataAllowed"
-      ],
+      "required": ["available", "mockDataAllowed"],
       "properties": {
         "available": {
           "type": "boolean"
