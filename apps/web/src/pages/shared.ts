@@ -191,6 +191,40 @@ export const sharedCss = `
   .citation-sheet[hidden] { display: none; }
   .citation-sheet__panel { width: 100%; max-width: 480px; max-height: 80vh; overflow-y: auto; background: var(--bg); border-top-left-radius: var(--r-lg); border-top-right-radius: var(--r-lg); padding: var(--s-4); transform: translateY(100%); transition: transform var(--motion-sheet) var(--motion-ease); }
   .citation-sheet:not([hidden]) .citation-sheet__panel { transform: translateY(0); }
+
+  /* PIA-MUR-D-004-IMPL commit 7: FAB (T7=A) + mode-of-conversation
+   * sheet. FAB is 56pt x 56pt; sits above the bottom tab bar. */
+  .fab {
+    position: fixed;
+    bottom: calc(var(--tab-bar-h) + env(safe-area-inset-bottom, 0px) + var(--s-4));
+    right: var(--s-4);
+    width: 56pt;
+    height: 56pt;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-fg);
+    border: 0;
+    font-size: 24pt;
+    font-weight: 700;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4pt 12pt rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 20;
+    padding: 0;
+  }
+  .fab:focus-visible { outline: 2pt solid var(--accent); outline-offset: 2pt; }
+  .fab:disabled { opacity: 0.4; cursor: not-allowed; }
+  .sheet { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; display: flex; align-items: flex-end; justify-content: center; }
+  .sheet[hidden] { display: none; }
+  .sheet__panel { width: 100%; max-width: 480px; max-height: 80vh; overflow-y: auto; background: var(--bg); border-top-left-radius: var(--r-lg); border-top-right-radius: var(--r-lg); padding: var(--s-4); transform: translateY(100%); transition: transform var(--motion-sheet) var(--motion-ease); }
+  .sheet:not([hidden]) .sheet__panel { transform: translateY(0); }
+  .sheet__panel h2 { margin: 0 0 var(--s-3) 0; font-size: 1.1em; }
+  .mode-row { display: block; width: 100%; min-height: var(--touch-min); text-align: left; background: transparent; border: 0; border-bottom: 1px solid var(--border); padding: var(--s-3) var(--s-2); font: inherit; cursor: pointer; }
+  .mode-row:focus-visible { background: var(--bg-elev); }
+  .mode-row:last-child { border-bottom: 0; }
 `;
 
 /**
@@ -266,6 +300,35 @@ function setOffline(offline) {
 window.addEventListener('online',  function () { setOffline(false); });
 window.addEventListener('offline', function () { setOffline(true); });
 setOffline(!navigator.onLine);
+
+/* PIA-MUR-D-004-IMPL commit 7: FAB + mode-of-conversation
+ * sheet (T7=A). The FAB on the Conversations tab opens the
+ * mode sheet; selecting a mode posts to /v1/workspaces/:wid/
+ * conversations and navigates to the new conversation. */
+var modeSheet = document.getElementById('mode-sheet');
+function openModeSheet() { if (modeSheet) modeSheet.hidden = false; }
+function closeModeSheet() { if (modeSheet) modeSheet.hidden = true; }
+if (modeSheet) {
+  modeSheet.addEventListener('click', closeModeSheet);
+  var fabConv = document.getElementById('fab-conversation');
+  if (fabConv) fabConv.addEventListener('click', openModeSheet);
+  modeSheet.querySelectorAll('.mode-row[data-mode]').forEach(function (btn) {
+    btn.addEventListener('click', async function () {
+      var mode = btn.getAttribute('data-mode');
+      try {
+        var c = await apiFetch('/v1/workspaces/' + (window.__piaWorkspaceId || '') + '/conversations', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ mode: mode, title: null }),
+        });
+        window.location.href = '/app/workspaces/' + (window.__piaWorkspaceId || '') + '/conversations/' + c.id;
+      } catch (err) {
+        showError('Failed to create conversation: ' + err.message);
+        closeModeSheet();
+      }
+    });
+  });
+}
 `;
 
 /**
@@ -338,6 +401,18 @@ export function pageShell({
     <div id="error-container"></div>
     <div id="content">
 ${bodyHtml}
+    </div>
+    <div id="mode-sheet" class="sheet" role="dialog" aria-modal="true" aria-labelledby="mode-sheet-title" hidden>
+      <div class="sheet__panel" onclick="event.stopPropagation()">
+        <h2 id="mode-sheet-title">Mode</h2>
+        <button class="mode-row" type="button" data-mode="ASK">Ask</button>
+        <button class="mode-row" type="button" data-mode="RESEARCH">Research</button>
+        <button class="mode-row" type="button" data-mode="ANALYZE">Analyze</button>
+        <button class="mode-row" type="button" data-mode="PLAN">Plan</button>
+        <button class="mode-row" type="button" data-mode="EXECUTE">Execute</button>
+        <button class="mode-row" type="button" data-mode="LEARN">Learn</button>
+        <button class="mode-row" type="button" onclick="document.getElementById('mode-sheet').hidden=true" style="border-bottom:0;color:var(--accent);text-align:center">Cancel</button>
+      </div>
     </div>
   </div>
   <script type="module">

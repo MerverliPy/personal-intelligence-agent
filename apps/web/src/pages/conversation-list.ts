@@ -49,7 +49,8 @@ export function conversationListPage(workspaceId: string, workspaceName: string)
 `;
 
   const bodyScript = `
-const WORKSPACE_ID = ${JSON.stringify(workspaceId)};
+window.__piaWorkspaceId = ${JSON.stringify(workspaceId)};
+const WORKSPACE_ID = window.__piaWorkspaceId;
 
 async function loadConversations() {
   const tbody = document.getElementById('conversation-list-body');
@@ -96,12 +97,19 @@ document.getElementById('new-conversation-form').addEventListener('submit', asyn
 loadConversations();
 `;
 
+  // PIA-MUR-D-004-IMPL commit 7: FAB for "New conversation".
+  // 56pt x 56pt circular button (T7=A). Wired to the mode sheet
+  // (added in shared.ts). Tap opens the mode picker (default ASK).
+  const fabHtml =
+    '<button class="fab" id="fab-conversation" type="button" aria-label="New conversation" data-fab="conversation">+</button>';
+  const bodyHtmlWithFab = bodyHtml.replace('</section>', '</section>' + fabHtml);
+
   return pageShell({
     title: 'Conversations',
     workspaceId,
     workspaceName,
     tabActive: 'conversations',
-    bodyHtml,
+    bodyHtml: bodyHtmlWithFab,
     bodyScript,
   });
 }
