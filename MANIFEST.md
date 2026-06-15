@@ -4,34 +4,34 @@ Personal Intelligence and Action Engine — monorepo for a private, evidence-gro
 LLM/agent platform with workspace isolation, OIDC authentication, document ingestion,
 hybrid retrieval, and governed persistent memory.
 
-## Current State (2026-06-13)
+## Current State (2026-06-15)
 
-- **Tracked files:** 442
+- **Tracked files:** 618
 - **Phase:** P0, P1, P2, P3 complete; P4-P7 not started
 - **Backlog tasks:** 64 defined, 33 completed, 0 failed verification
-- **Baseline:** `main` @ `dd84116`
+- **Baseline:** `main` @ `09d9c77`
 
 ## Package Inventory
 
-| Package              | Status | Purpose                                              |
-| -------------------- | ------ | ---------------------------------------------------- |
-| `@pia/api`           | Active | Fastify API server with auth, workspaces, uploads    |
-| `@pia/worker`        | Active | Background job consumer with outbox polling          |
-| `@pia/web`           | Active | Next.js frontend                                     |
-| `@pia/auth`          | Active | OIDC client, JWT sessions, RBAC, identity resolution |
-| `@pia/config`        | Active | Typed env-var config with Redacted secret handling   |
-| `@pia/contracts`     | Active | Shared API types, error envelopes, pagination        |
-| `@pia/db`            | Active | PostgreSQL pool, migrations, membership queries      |
-| `@pia/domain`        | Active | Authorization types and role hierarchy               |
-| `@pia/jobs`          | Active | Outbox events, consumer, retry policies              |
-| `@pia/knowledge`     | Active | Document repos, ingestion workflow, scan provider    |
-| `@pia/observability` | Active | Structured logger, correlation context, redaction    |
-| `@pia/storage`       | Active | S3 and in-memory storage adapters                    |
-| `@pia/audit`         | Active | Audit event writer, reader, redaction                |
-| `@pia/ai`            | Active | Model gateway, prompt registry, context, assistant   |
-| `@pia/memory`        | Shell  | Future persistent memory (Phase P4)                  |
-| `@pia/tools`         | Shell  | Future tool gateway (Phase P5)                       |
-| `@pia/evals`         | Active | Evaluation framework, runners, scorers               |
+| Package              | Status | Purpose                                                  |
+| -------------------- | ------ | -------------------------------------------------------- |
+| `@pia/api`           | Active | Fastify API server with auth, workspaces, uploads        |
+| `@pia/worker`        | Active | Background job consumer with outbox polling              |
+| `@pia/web`           | Active | TypeScript HTML string builders (server-rendered by API) |
+| `@pia/auth`          | Active | OIDC client, JWT sessions, RBAC, identity resolution     |
+| `@pia/config`        | Active | Typed env-var config with Redacted secret handling       |
+| `@pia/contracts`     | Active | Shared API types, error envelopes, pagination            |
+| `@pia/db`            | Active | PostgreSQL pool, migrations, membership queries          |
+| `@pia/domain`        | Active | Authorization types and role hierarchy                   |
+| `@pia/jobs`          | Active | Outbox events, consumer, retry policies                  |
+| `@pia/knowledge`     | Active | Document repos, ingestion workflow, scan provider        |
+| `@pia/observability` | Active | Structured logger, correlation context, redaction        |
+| `@pia/storage`       | Active | S3 and in-memory storage adapters                        |
+| `@pia/audit`         | Active | Audit event writer, reader, redaction                    |
+| `@pia/ai`            | Active | Model gateway, prompt registry, context, assistant       |
+| `@pia/memory`        | Shell  | Future persistent memory (Phase P4)                      |
+| `@pia/tools`         | Shell  | Future tool gateway (Phase P5)                           |
+| `@pia/evals`         | Active | Evaluation framework, runners, scorers                   |
 
 ## Key Artifacts
 

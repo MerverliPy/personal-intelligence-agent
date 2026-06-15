@@ -558,7 +558,7 @@ Three independently deployable processes share 14 domain packages. Domain logic 
 ```mermaid
 graph LR
     subgraph Applications
-        WEB["🌐 Next.js<br/>Web UI"]
+        WEB["🌐 Web UI<br/>(server-rendered HTML)"]
         API["⚡ Fastify<br/>API Server"]
         WRK["⚙️ Worker<br/>Background Jobs"]
     end
@@ -601,24 +601,24 @@ graph LR
 
 ## 🛠️ Tech Stack
 
-| Layer               | Technology                              | Version          |
-| ------------------- | --------------------------------------- | ---------------- |
-| **Runtime**         | Node.js                                 | 22.22.3          |
-| **Package Manager** | pnpm (workspaces)                       | 9.15.9           |
-| **Language**        | TypeScript (strict)                     | ~5.7.2           |
-| **Build**           | Turborepo                               | ^2.3.0           |
-| **API Server**      | Fastify                                 | Latest           |
-| **Web Frontend**    | Next.js (App Router)                    | Latest           |
-| **Database**        | PostgreSQL + pgvector                   | 17               |
-| **Cache**           | Redis                                   | 7 (Alpine)       |
-| **Object Storage**  | MinIO (S3-compatible)                   | 2024             |
-| **Testing**         | Vitest                                  | ^2.1.0           |
-| **Linting**         | ESLint + typescript-eslint              | ^8.57.0 / ^7.0.0 |
-| **Formatting**      | Prettier                                | ^3.4.0           |
-| **Auth**            | OIDC (Authorization Code + PKCE)        | —                |
-| **AI Gateway**      | Provider-neutral (OpenAI first adapter) | —                |
-| **Observability**   | OpenTelemetry-compatible                | —                |
-| **Infrastructure**  | Docker Compose (dev), Pulumi (prod)     | —                |
+| Layer               | Technology                                        | Version          |
+| ------------------- | ------------------------------------------------- | ---------------- |
+| **Runtime**         | Node.js                                           | 22.22.3          |
+| **Package Manager** | pnpm (workspaces)                                 | 9.15.9           |
+| **Language**        | TypeScript (strict)                               | ~5.7.2           |
+| **Build**           | Turborepo                                         | ^2.3.0           |
+| **API Server**      | Fastify                                           | Latest           |
+| **Web Frontend**    | TypeScript HTML string builders (server-rendered) | —                |
+| **Database**        | PostgreSQL + pgvector                             | 17               |
+| **Cache**           | Redis                                             | 7 (Alpine)       |
+| **Object Storage**  | MinIO (S3-compatible)                             | 2024             |
+| **Testing**         | Vitest                                            | ^2.1.0           |
+| **Linting**         | ESLint + typescript-eslint                        | ^8.57.0 / ^7.0.0 |
+| **Formatting**      | Prettier                                          | ^3.4.0           |
+| **Auth**            | OIDC (Authorization Code + PKCE)                  | —                |
+| **AI Gateway**      | Provider-neutral (OpenAI first adapter)           | —                |
+| **Observability**   | OpenTelemetry-compatible                          | —                |
+| **Infrastructure**  | Docker Compose (dev), Pulumi (prod)               | —                |
 
 ---
 
@@ -631,7 +631,7 @@ graph LR
 /
 ├── apps/
 │   ├── api/            Fastify HTTP/SSE application server
-│   ├── web/            Next.js App Router user interface
+│   ├── web/            TypeScript HTML string builders (server-rendered by API)
 │   └── worker/         Background job consumer
 ├── packages/
 │   ├── ai/             Model gateway, prompt registry, context compiler
@@ -667,21 +667,23 @@ graph LR
 
 ## 📚 Specification Documents
 
-| Document                                                                         | Purpose                                                                |
-| -------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| [`docs/00_PRODUCT_REQUIREMENTS.md`](docs/00_PRODUCT_REQUIREMENTS.md)             | Product vision, user journeys, success criteria                        |
-| [`docs/01_SYSTEM_REQUIREMENTS.md`](docs/01_SYSTEM_REQUIREMENTS.md)               | Functional and nonfunctional requirements                              |
-| [`docs/02_ARCHITECTURE.md`](docs/02_ARCHITECTURE.md)                             | Target architecture, key design decisions, ADR rules                   |
-| [`docs/03_DATA_MODEL.md`](docs/03_DATA_MODEL.md)                                 | Domain entities, lifecycles, retention rules                           |
-| [`docs/04_API_ARCHITECTURE.md`](docs/04_API_ARCHITECTURE.md)                     | API conventions, endpoint design, error handling                       |
-| [`docs/05_SECURITY_GOVERNANCE.md`](docs/05_SECURITY_GOVERNANCE.md)               | Threat model, auth model, approval matrix, incident response           |
-| [`docs/06_PHASED_IMPLEMENTATION_PLAN.md`](docs/06_PHASED_IMPLEMENTATION_PLAN.md) | Human-readable execution plan with phase rationale                     |
-| [`docs/07_TEST_EVALUATION_STRATEGY.md`](docs/07_TEST_EVALUATION_STRATEGY.md)     | Test layers, evaluation suites, quality gates                          |
-| [`docs/08_REQUIREMENTS_TRACEABILITY.md`](docs/08_REQUIREMENTS_TRACEABILITY.md)   | Requirement-to-task and requirement-to-test trace                      |
-| [`docs/09_EXTERNAL_TECHNICAL_BASIS.md`](docs/09_EXTERNAL_TECHNICAL_BASIS.md)     | External references and technology rationale                           |
-| [`planning/backlog.yaml`](planning/backlog.yaml)                                 | Machine-readable task graph (64 tasks, 8 phases)                       |
-| [`planning/status.yaml`](planning/status.yaml)                                   | Execution state — update only after verification passes                |
-| [`api/openapi.yaml`](api/openapi.yaml)                                           | API contract — 37 operations across auth, workspace, upload, retrieval |
+| Document                                                                                 | Purpose                                                                |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| [`docs/00_PRODUCT_REQUIREMENTS.md`](docs/00_PRODUCT_REQUIREMENTS.md)                     | Product vision, user journeys, success criteria                        |
+| [`docs/01_SYSTEM_REQUIREMENTS.md`](docs/01_SYSTEM_REQUIREMENTS.md)                       | Functional and nonfunctional requirements                              |
+| [`docs/02_ARCHITECTURE.md`](docs/02_ARCHITECTURE.md)                                     | Target architecture, key design decisions, ADR rules                   |
+| [`docs/03_DATA_MODEL.md`](docs/03_DATA_MODEL.md)                                         | Domain entities, lifecycles, retention rules                           |
+| [`docs/04_API_ARCHITECTURE.md`](docs/04_API_ARCHITECTURE.md)                             | API conventions, endpoint design, error handling                       |
+| [`docs/05_SECURITY_GOVERNANCE.md`](docs/05_SECURITY_GOVERNANCE.md)                       | Threat model, auth model, approval matrix, incident response           |
+| [`docs/06_PHASED_IMPLEMENTATION_PLAN.md`](docs/06_PHASED_IMPLEMENTATION_PLAN.md)         | Human-readable execution plan with phase rationale                     |
+| [`docs/07_TEST_EVALUATION_STRATEGY.md`](docs/07_TEST_EVALUATION_STRATEGY.md)             | Test layers, evaluation suites, quality gates                          |
+| [`docs/08_REQUIREMENTS_TRACEABILITY.md`](docs/08_REQUIREMENTS_TRACEABILITY.md)           | Requirement-to-task and requirement-to-test trace                      |
+| [`docs/09_EXTERNAL_TECHNICAL_BASIS.md`](docs/09_EXTERNAL_TECHNICAL_BASIS.md)             | External references and technology rationale                           |
+| [`docs/PREFLIGHT.md`](docs/PREFLIGHT.md)                                                 | Mobile UI redesign device-validation pre-flight harness                |
+| [`docs/REPOSITORY_DOCUMENTATION_WORKFLOW.md`](docs/REPOSITORY_DOCUMENTATION_WORKFLOW.md) | Documentation maintainer workflow and commands                         |
+| [`planning/backlog.yaml`](planning/backlog.yaml)                                         | Machine-readable task graph (64 tasks, 8 phases)                       |
+| [`planning/status.yaml`](planning/status.yaml)                                           | Execution state — update only after verification passes                |
+| [`api/openapi.yaml`](api/openapi.yaml)                                                   | API contract — 37 operations across auth, workspace, upload, retrieval |
 
 ---
 
@@ -756,7 +758,7 @@ pnpm security:dependencies   # npm audit for known CVEs
 
 <div align="center">
   <br/>
-  <sub>Built with strict TypeScript · PostgreSQL + pgvector · Redis · Fastify · Next.js</sub>
+  <sub>Built with strict TypeScript · PostgreSQL + pgvector · Redis · Fastify · Server-rendered HTML</sub>
   <br/>
   <sub>33 of 64 tasks complete · P0 ✓ · P1 ✓ · P2 ✓ · P3 ✓</sub>
 </div>
