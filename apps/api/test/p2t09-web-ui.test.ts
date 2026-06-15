@@ -191,10 +191,13 @@ describe('P2-T09: Page content structure', () => {
       method: 'GET',
       url: `/app/workspaces/${WID}/documents`,
     });
+    // PIA-MUR-D-004-IMPL commit 3: document list page has an "Upload"
+    // CTA in the page body (the FAB that opens the upload sheet is
+    // added in commit 7) and a Search tab in the bottom tab bar.
     expect(res.body).toContain('Upload');
-    expect(res.body).toContain('/upload');
+    expect(res.body).toContain('/upload'); // legacy href in the page body
     expect(res.body).toContain('Search');
-    expect(res.body).toContain('/search');
+    expect(res.body).toContain('data-tab="search"'); // new bottom-tab-bar data attribute
   });
 
   it('document detail page has retry and delete controls', async () => {
@@ -267,15 +270,21 @@ describe('P2-T09: Tab navigation', () => {
       method: 'GET',
       url: `/app/workspaces/${WID}/documents`,
     });
-    expect(res.body).toMatch(/class="active".*Documents/);
+    // PIA-MUR-D-004-IMPL commit 3: bottom tab bar uses
+    // aria-current="page" instead of class="active".
+    expect(res.body).toMatch(/aria-current="page"[\s\S]*?Documents/);
   });
 
-  it('upload page has active upload tab', async () => {
+  it('upload page highlights Documents tab (Upload is a sub-page)', async () => {
     const res = await app.inject({
       method: 'GET',
       url: `/app/workspaces/${WID}/upload`,
     });
-    expect(res.body).toMatch(/class="active".*Upload/);
+    // Upload is a sub-page of Documents (the FAB on the Documents
+    // tab opens the upload sheet). The bottom tab bar shows Documents
+    // as active, not Upload (there is no Upload tab in the
+    // mobile-first 3-tab bar).
+    expect(res.body).toMatch(/aria-current="page"[\s\S]*?Documents/);
   });
 
   it('search page has active search tab', async () => {
@@ -283,7 +292,7 @@ describe('P2-T09: Tab navigation', () => {
       method: 'GET',
       url: `/app/workspaces/${WID}/search`,
     });
-    expect(res.body).toMatch(/class="active".*Search/);
+    expect(res.body).toMatch(/aria-current="page"[\s\S]*?Search/);
   });
 
   it('tab bar uses navigation ARIA role', async () => {

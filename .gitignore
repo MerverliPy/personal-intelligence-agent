@@ -43,3 +43,26 @@ __pycache__/
 /apply_cyber_policy_fix.sh
 /benchmark_runner_tui.py
 /benchmark_runner_tui.py.bak.*
+
+# opencode local run logs (may contain session cookies in cookies.txt)
+/.opencode/run-logs/
+
+# Mobile UI redesign backup of pre-redesign files (intentionally untracked)
+/.ui-redesign/backup/
+
+# Mobile UI redesign device-validation pre-flight per-session runtime
+# (PIDs, log files, trycloudflare URLs — all change every session;
+# the canonical URL is also recorded in planning/runs/<run-id>.md;
+# actual evidence .png/.mp4/.txt files are NOT ignored)
+/.ui-redesign/evidence/devices/*.pid
+/.ui-redesign/evidence/devices/*.log
+/.ui-redesign/evidence/devices/*.url
+
+# Mobile UI redesign pre-flight Playwright harness (PIA-MUR-D-016)
+/apps/web/test/preflight/test-results/
+/apps/web/test/preflight/playwright-report/
+/apps/web/test/preflight/blob-report/
+/apps/web/test/preflight/playwright/.cache/
+/.ui-redesign/evidence/preflight/*.diff.png
+# (per-DPC JSON, axe-report.json, and small PNGs are NOT ignored;
+# large PNG diffs > 100 KB are excluded)

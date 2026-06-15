@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "design-contract.schema.json",
+  "title": "Approved Mobile UI Design Contract",
+  "type": "object",
+  "required": [
+    "contractId",
+    "status",
+    "decisionIds",
+    "target",
+    "tokens",
+    "navigation",
+    "components",
+    "states",
+    "motion",
+    "density",
+    "accessibility",
+    "pwa",
+    "dataPolicy"
+  ],
+  "properties": {
+    "contractId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": ["proposed", "approved", "superseded"]
+    },
+    "decisionIds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "target": {
+      "type": "object",
+      "required": ["primaryDevice", "orientation", "environments"],
+      "properties": {
+        "primaryDevice": {
+          "const": "iPhone 16 Pro"
+        },
+        "orientation": {
+          "const": "portrait"
+        },
+        "environments": {
+          "type": "array",
+          "allOf": [
+            {
+              "contains": {
+                "const": "Safari"
+              }
+            },
+            {
+              "contains": {
+                "const": "installed PWA"
+              }
+            },
+            {
+              "contains": {
+                "const": "iOS Chrome"
+              }
+            }
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "tokens": {
+      "type": "object"
+    },
+    "navigation": {
+      "type": "object"
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "states": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "motion": {
+      "type": "object",
+      "required": ["adaptive", "userSelectable", "reducedMotion"],
+      "properties": {
+        "adaptive": {
+          "const": true
+        },
+        "userSelectable": {
+          "const": true
+        },
+        "reducedMotion": {
+          "const": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "density": {
+      "type": "object",
+      "required": ["progressiveDisclosure", "userSelectable", "screenSpecific"],
+      "properties": {
+        "progressiveDisclosure": {
+          "const": true
+        },
+        "userSelectable": {
+          "const": true
+        },
+        "screenSpecific": {
+          "const": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "accessibility": {
+      "type": "object",
+      "required": ["minimum", "accessibilityFirst", "aaaWherePractical"],
+      "properties": {
+        "minimum": {
+          "const": "WCAG 2.2 AA"
+        },
+        "accessibilityFirst": {
+          "const": true
+        },
+        "aaaWherePractical": {
+          "const": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "pwa": {
+      "type": "object",
+      "required": ["networkRequired", "offlineSupported"],
+      "properties": {
+        "networkRequired": {
+          "const": true
+        },
+        "offlineSupported": {
+          "const": false
+        }
+      },
+      "additionalProperties": true
+    },
+    "dataPolicy": {
+      "type": "object",
+      "required": ["realDataRequired", "inventedContentAllowed", "mockAcceptanceAllowed"],
+      "properties": {
+        "realDataRequired": {
+          "const": true
+        },
+        "inventedContentAllowed": {
+          "const": false
+        },
+        "mockAcceptanceAllowed": {
+          "const": false
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,59 @@
+{
+  "dpcId": "DPC-14: offline banner (T6)",
+  "result": "FAIL",
+  "subTests": [
+    {
+      "title": "banner appears below Dynamic Island when offline toggle is on",
+      "status": "PASS",
+      "durationMs": 353,
+      "errors": []
+    },
+    {
+      "title": "FAB is visually disabled (40% opacity) when offline",
+      "status": "PASS",
+      "durationMs": 341,
+      "errors": []
+    },
+    {
+      "title": "Send button is disabled when offline",
+      "status": "FAIL",
+      "durationMs": 389,
+      "errors": [
+        "Error: locator.check: Element is not visible\nCall log:\n\u001b[2m  - waiting for locator('#toggle-offline')\u001b[22m\n\u001b[2m    - locator resolved to <input type=\"checkbox\" id=\"toggle-offline\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n"
+      ]
+    },
+    {
+      "title": "toggling off restores FAB and Send",
+      "status": "PASS",
+      "durationMs": 367,
+      "errors": []
+    },
+    {
+      "title": "banner appears below Dynamic Island when offline toggle is on",
+      "status": "PASS",
+      "durationMs": 724,
+      "errors": []
+    },
+    {
+      "title": "FAB is visually disabled (40% opacity) when offline",
+      "status": "PASS",
+      "durationMs": 630,
+      "errors": []
+    },
+    {
+      "title": "Send button is disabled when offline",
+      "status": "FAIL",
+      "durationMs": 750,
+      "errors": [
+        "Error: locator.check: Element is not visible\nCall log:\n\u001b[2m  - waiting for locator('#toggle-offline')\u001b[22m\n\u001b[2m    - locator resolved to <input type=\"checkbox\" id=\"toggle-offline\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n"
+      ]
+    },
+    {
+      "title": "toggling off restores FAB and Send",
+      "status": "PASS",
+      "durationMs": 782,
+      "errors": []
+    }
+  ],
+  "timestamp": "2026-06-15T22:27:04.555Z"
+}

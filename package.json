@@ -19,7 +19,9 @@
     "eval:retrieval": "pnpm --filter @pia/evals eval:retrieval",
     "eval:answers": "pnpm --filter @pia/evals eval:answers",
     "test:e2e": "vitest run --config test/e2e/vitest.config.ts",
-    "test:security": "vitest run --config test/security/vitest.config.ts"
+    "test:security": "vitest run --config test/security/vitest.config.ts",
+    "preflight:install": "npx playwright install chromium webkit",
+    "preflight:device": "cd apps/web && npx playwright test --config test/preflight/playwright.config.ts"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "performance-budget.schema.json",
+  "title": "Mobile Performance Budget",
+  "type": "object",
+  "required": ["status", "baseline", "budgets", "physicalDevice"],
+  "properties": {
+    "status": {
+      "enum": ["proposed", "approved", "superseded"]
+    },
+    "baseline": {
+      "type": "object"
+    },
+    "budgets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["metric", "threshold", "comparison", "environment"],
+        "properties": {
+          "metric": {
+            "type": "string"
+          },
+          "threshold": {
+            "type": ["number", "string"]
+          },
+          "comparison": {
+            "enum": [
+              "less-than",
+              "less-than-or-equal",
+              "greater-than",
+              "greater-than-or-equal",
+              "no-regression"
+            ]
+          },
+          "environment": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "physicalDevice": {
+      "type": "object",
+      "required": ["required", "device"],
+      "properties": {
+        "required": {
+          "const": true
+        },
+        "device": {
+          "const": "iPhone 16 Pro"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

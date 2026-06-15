@@ -1,0 +1,43 @@
+{
+  "dpcId": "DPC-12: external keyboard Tab order (PARTIALLY_VERIFIED)",
+  "result": "PASS",
+  "subTests": [
+    {
+      "title": "Tab cycles through header -> list -> fab -> tab bar",
+      "status": "PASS",
+      "durationMs": 457,
+      "errors": []
+    },
+    {
+      "title": "no positive tabindex in the prototype",
+      "status": "PASS",
+      "durationMs": 246,
+      "errors": []
+    },
+    {
+      "title": "/ shortcut focuses search input",
+      "status": "PASS",
+      "durationMs": 256,
+      "errors": []
+    },
+    {
+      "title": "Tab cycles through header -> list -> fab -> tab bar",
+      "status": "PASS",
+      "durationMs": 1009,
+      "errors": []
+    },
+    {
+      "title": "no positive tabindex in the prototype",
+      "status": "PASS",
+      "durationMs": 523,
+      "errors": []
+    },
+    {
+      "title": "/ shortcut focuses search input",
+      "status": "PASS",
+      "durationMs": 539,
+      "errors": []
+    }
+  ],
+  "timestamp": "2026-06-15T22:27:04.555Z"
+}

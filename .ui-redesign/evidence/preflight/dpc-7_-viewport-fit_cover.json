@@ -1,0 +1,31 @@
+{
+  "dpcId": "DPC-7: viewport-fit=cover",
+  "result": "PASS",
+  "subTests": [
+    {
+      "title": "viewport meta has viewport-fit=cover",
+      "status": "PASS",
+      "durationMs": 258,
+      "errors": []
+    },
+    {
+      "title": "iPhone 16 Pro viewport is 393x852pt (CSS pixels)",
+      "status": "PASS",
+      "durationMs": 159,
+      "errors": []
+    },
+    {
+      "title": "viewport meta has viewport-fit=cover",
+      "status": "PASS",
+      "durationMs": 636,
+      "errors": []
+    },
+    {
+      "title": "iPhone 16 Pro viewport is 393x852pt (CSS pixels)",
+      "status": "PASS",
+      "durationMs": 415,
+      "errors": []
+    }
+  ],
+  "timestamp": "2026-06-15T22:27:04.555Z"
+}

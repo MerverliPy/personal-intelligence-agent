@@ -1,0 +1,160 @@
+{
+  "evidence_kind": "baseline-http-probes",
+  "captured_at": "2026-06-14T00:00:00Z",
+  "captured_by": "mobile-ui-orchestrator",
+  "redaction_policy": "request_ids and any future session cookies are redacted; placeholder workspace IDs (ws-baseline-probe, d-baseline-probe, c-baseline-probe) are used; no real user data is included.",
+  "host": "http://localhost:3000",
+  "host_evidence": {
+    "api_pid_observed": 216180,
+    "postgres_pid_observed": 978,
+    "cloudflared_version": "2026.3.0",
+    "tailscale_ip": "100.81.83.98/32"
+  },
+  "public_routes": [
+    { "path": "/", "status": 302, "location": "/app", "content_type": null },
+    {
+      "path": "/app",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "size_bytes": 4538
+    },
+    {
+      "path": "/health/live",
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "size_bytes": 18
+    },
+    {
+      "path": "/health/ready",
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "size_bytes": 35,
+      "body": "{\"status\":\"ok\",\"checks\":{\"database\":\"ok\"}}"
+    }
+  ],
+  "workspace_routes_unauthenticated_placeholder_id": [
+    {
+      "path": "/app/workspaces/ws-baseline-probe/documents",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "size_bytes": 11491,
+      "note": "shell rendered; workspace existence is validated client-side via /v1/* which returns 401 unauthenticated"
+    },
+    {
+      "path": "/app/workspaces/ws-baseline-probe/documents/d-baseline-probe",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "size_bytes": null,
+      "note": "shell rendered; client-side hydration"
+    },
+    {
+      "path": "/app/workspaces/ws-baseline-probe/upload",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "size_bytes": 13574
+    },
+    {
+      "path": "/app/workspaces/ws-baseline-probe/search",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "size_bytes": 13892
+    },
+    {
+      "path": "/app/workspaces/ws-baseline-probe/conversations",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "size_bytes": 10882
+    },
+    {
+      "path": "/app/workspaces/ws-baseline-probe/conversations/c-baseline-probe",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "size_bytes": 21841
+    }
+  ],
+  "api_routes": [
+    {
+      "path": "/v1/me",
+      "status": 401,
+      "content_type": "application/json; charset=utf-8",
+      "envelope": "{\"error\":{\"code\":\"UNAUTHORIZED\",\"message\":\"Authentication required.\",\"request_id\":\"<redacted>\"}}"
+    },
+    {
+      "path": "/v1/workspaces",
+      "status": 401,
+      "content_type": "application/json; charset=utf-8",
+      "envelope": "{\"error\":{\"code\":\"UNAUTHORIZED\",\"message\":\"Authentication required.\",\"request_id\":\"<redacted>\"}}"
+    },
+    {
+      "path": "/v1/workspaces/ws-baseline-probe/documents",
+      "status": 401,
+      "content_type": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/v1/workspaces/ws-baseline-probe/conversations",
+      "status": 401,
+      "content_type": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/openapi.yaml",
+      "status": 404,
+      "content_type": "application/json; charset=utf-8",
+      "note": "OpenAPI contract exists at api/openapi.yaml on disk; not served from /openapi.yaml"
+    }
+  ],
+  "auth_routes": [
+    { "path": "/auth/login", "status": 302, "note": "redirects to OIDC provider" },
+    {
+      "path": "/auth/callback",
+      "status": 400,
+      "note": "expected 400 for direct callback without state"
+    },
+    { "path": "/auth/logout", "status": 404, "note": "not implemented" }
+  ],
+  "pwa_assets": [
+    { "path": "/manifest.webmanifest", "status": 404 },
+    { "path": "/manifest.json", "status": 404 },
+    { "path": "/service-worker.js", "status": 404 },
+    { "path": "/service-worker.ts", "status": 404 },
+    { "path": "/sw.js", "status": 404 },
+    { "path": "/sw.ts", "status": 404 },
+    { "path": "/apple-touch-icon.png", "status": 404 },
+    { "path": "/apple-touch-icon-precomposed.png", "status": 404 },
+    { "path": "/favicon.ico", "status": 404 }
+  ],
+  "html_evidence_all_screens": {
+    "viewport_meta": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+    "viewport_fit_cover": "absent",
+    "theme_color": "absent",
+    "apple_touch_icon": "absent",
+    "manifest_link": "absent",
+    "serviceworker_link": "absent",
+    "safe_area_inset_refs": 0,
+    "touch_action_refs": 0,
+    "media_hover_none_refs": 0,
+    "media_pointer_coarse_refs": 0
+  },
+  "security_headers": {
+    "x_content_type_options": "nosniff",
+    "x_frame_options": "DENY",
+    "referrer_policy": "strict-origin-when-cross-origin",
+    "permissions_policy": "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+    "content_security_policy": "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; form-action 'self'",
+    "strict_transport_security": "absent (HTTP host; will be required when served via HTTPS cloudflared tunnel)",
+    "csp_observation": "script-src 'self' 'unsafe-inline' is permissive; service-worker registration will require revisiting CSP. inline scripts are present in served HTML (the page shell injects sharedJs and bodyScript as <script type=\"module\">)."
+  },
+  "baseline_findings_summary": [
+    "API live on http://localhost:3000 (PID 216180).",
+    "PostgreSQL reachable; /health/ready returns database:ok.",
+    "All 7 web shells render with bare viewport meta — no viewport-fit=cover, no theme-color, no apple-touch-icon, no PWA manifest link, no service-worker link.",
+    "All 6 workspace shells render with placeholder workspace IDs (no server-side validation); client-side fetch returns 401 unauthenticated and surfaces the error via showError().",
+    "API authentication boundary works: 401 with structured error envelope for protected /v1/* routes.",
+    "PWA assets completely absent: 9 candidate paths all 404.",
+    "No mobile-specific CSS: 0 safe-area, 0 touch-action, 0 @media (hover: none), 0 @media (pointer: coarse) anywhere in served HTML.",
+    "CSP is permissive: script-src 'self' 'unsafe-inline'. Service worker registration will require CSP revisiting (service worker install needs script-src 'self' without 'unsafe-inline' OR nonce-based).",
+    "HSTS absent (expected on HTTP).",
+    "OpenAPI contract not served from /openapi.yaml (404); contract exists at api/openapi.yaml on disk.",
+    "/auth/logout not implemented (404).",
+    "Largest page (conversation detail) is 21,841 bytes uncompressed; for mobile networks this is the primary payload concern."
+  ]
+}

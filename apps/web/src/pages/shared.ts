@@ -6,8 +6,40 @@
  * Uses high-contrast colors, system font stack, and ARIA-friendly design.
  */
 export const sharedCss = `
+  /* PIA-MUR-D-004 design tokens (locked; sourced from
+   * .ui-redesign/contracts/DESIGN_CONTRACT.json). All subsequent
+   * commits (PIA-MUR-D-004-IMPL #2-#8) reference these tokens. */
+  :root {
+    --accent: #2563EB;
+    --accent-pressed: #1D4ED8;
+    --accent-fg: #FFFFFF;
+    --bg: #FFFFFF;
+    --fg: #0A0A0A;
+    --fg-muted: #5C5C5C;
+    --fg-subtle: #9C9C9C;
+    --divider: #ECECEC;
+    --selection: #DBE7FF;
+    --t-body: 19pt;
+    --t-caption: 14pt;
+    --t-section: 24pt;
+    --s-1: 4pt; --s-2: 8pt; --s-3: 12pt; --s-4: 16pt;
+    --s-5: 20pt; --s-6: 24pt; --s-8: 32pt; --s-10: 40pt; --s-12: 48pt;
+    --r-sm: 8pt; --r-md: 12pt; --r-lg: 16pt; --r-pill: 9999pt;
+    --motion-fast: 120ms;
+    --motion-base: 200ms;
+    --motion-slow: 280ms;
+    --motion-sheet: 280ms;
+    --motion-ease: cubic-bezier(0.32, 0.72, 0, 1);
+    --touch-min: 44pt;
+    --tab-bar-h: 49pt;
+  }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; line-height: 1.5; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; line-height: 1.5;
+          padding-top: max(env(safe-area-inset-top, 0px), 59pt);
+          padding-bottom: env(safe-area-inset-bottom, 0px);
+          padding-left: env(safe-area-inset-left, 0px);
+          padding-right: env(safe-area-inset-right, 0px);
+  }
   .container { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
   .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #e0e0e0; }
   .header h1 { font-size: 1.5rem; font-weight: 600; }
@@ -63,6 +95,136 @@ export const sharedCss = `
   .progress-container { margin: 1rem 0; }
   .progress-bar { height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden; }
   .progress-fill { height: 100%; background: #2563eb; border-radius: 4px; transition: width 0.3s ease; }
+
+  /* PIA-MUR-D-004-IMPL commit 3: 3-tab mobile-first bottom bar
+   * (Documents / Search / Conversations). position: fixed so it
+   * stays at the viewport bottom regardless of body content height.
+   * Matches the Stream concept prototype (PIA-MUR-D-011). */
+  .bottom-tab-bar {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: calc(var(--tab-bar-h) + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    display: flex;
+    background: var(--bg);
+    border-top: 0.5pt solid var(--divider);
+    z-index: 10;
+  }
+  .bottom-tab {
+    flex: 1 1 0;
+    min-height: var(--touch-min);
+    border: 0;
+    background: transparent;
+    color: var(--fg-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: inherit;
+    cursor: pointer;
+  }
+  .bottom-tab[aria-current="page"] { color: var(--accent); }
+  .bottom-tab:focus-visible { outline: 2pt solid var(--accent); outline-offset: -2pt; }
+
+  /* PIA-MUR-D-004-IMPL commit 4: top app bar (T4=A).
+   * 44pt x 44pt avatar (PIA-MUR-D-009 touch target minimum). */
+  .app-header {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    padding: var(--s-3) var(--s-4);
+  }
+  .app-header__avatar {
+    width: var(--touch-min);
+    height: var(--touch-min);
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-fg);
+    border: 0;
+    font-size: 16pt;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .app-header__avatar:focus-visible { outline: 2pt solid var(--accent); outline-offset: 2pt; }
+  .app-header__title {
+    font-size: var(--t-body);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  /* PIA-MUR-D-004-IMPL commit 5: network-loss banner (T6=A).
+   * Sits below the Dynamic Island, disables destructive actions
+   * (FAB, Send, btn-danger) when offline. */
+  .network-banner {
+    position: fixed;
+    top: max(env(safe-area-inset-top, 0px), 59pt);
+    left: 0; right: 0;
+    padding: 8pt 16pt;
+    background: #fee2e2;
+    color: #991b1b;
+    text-align: center;
+    font-size: var(--t-caption);
+    z-index: 50;
+    display: none;
+  }
+  .network-banner[data-offline="true"] { display: block; }
+
+  /* PIA-MUR-D-004-IMPL commit 6: footnote-style citation chip
+   * (PIA-MUR-D-009 44pt tap area) + slide-up citation sheet
+   * (wraps the existing <dialog> in a sheet container). */
+  .citation-chip {
+    background: transparent;
+    border: 0;
+    color: var(--accent);
+    font: inherit;
+    font-size: 0.85em;
+    text-decoration: none;
+    min-width: var(--touch-min);
+    min-height: var(--touch-min);
+    padding: 0 4pt;
+    cursor: pointer;
+  }
+  .citation-chip:hover, .citation-chip:focus-visible { text-decoration: underline; }
+  .citation-sheet { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; display: flex; align-items: flex-end; justify-content: center; }
+  .citation-sheet[hidden] { display: none; }
+  .citation-sheet__panel { width: 100%; max-width: 480px; max-height: 80vh; overflow-y: auto; background: var(--bg); border-top-left-radius: var(--r-lg); border-top-right-radius: var(--r-lg); padding: var(--s-4); transform: translateY(100%); transition: transform var(--motion-sheet) var(--motion-ease); }
+  .citation-sheet:not([hidden]) .citation-sheet__panel { transform: translateY(0); }
+
+  /* PIA-MUR-D-004-IMPL commit 7: FAB (T7=A) + mode-of-conversation
+   * sheet. FAB is 56pt x 56pt; sits above the bottom tab bar. */
+  .fab {
+    position: fixed;
+    bottom: calc(var(--tab-bar-h) + env(safe-area-inset-bottom, 0px) + var(--s-4));
+    right: var(--s-4);
+    width: 56pt;
+    height: 56pt;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-fg);
+    border: 0;
+    font-size: 24pt;
+    font-weight: 700;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4pt 12pt rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 20;
+    padding: 0;
+  }
+  .fab:focus-visible { outline: 2pt solid var(--accent); outline-offset: 2pt; }
+  .fab:disabled { opacity: 0.4; cursor: not-allowed; }
+  .sheet { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; display: flex; align-items: flex-end; justify-content: center; }
+  .sheet[hidden] { display: none; }
+  .sheet__panel { width: 100%; max-width: 480px; max-height: 80vh; overflow-y: auto; background: var(--bg); border-top-left-radius: var(--r-lg); border-top-right-radius: var(--r-lg); padding: var(--s-4); transform: translateY(100%); transition: transform var(--motion-sheet) var(--motion-ease); }
+  .sheet:not([hidden]) .sheet__panel { transform: translateY(0); }
+  .sheet__panel h2 { margin: 0 0 var(--s-3) 0; font-size: 1.1em; }
+  .mode-row { display: block; width: 100%; min-height: var(--touch-min); text-align: left; background: transparent; border: 0; border-bottom: 1px solid var(--border); padding: var(--s-3) var(--s-2); font: inherit; cursor: pointer; }
+  .mode-row:focus-visible { background: var(--bg-elev); }
+  .mode-row:last-child { border-bottom: 0; }
 `;
 
 /**
@@ -118,6 +280,65 @@ function announce(message) {
   liveRegion.textContent = '';
   setTimeout(function() { liveRegion.textContent = message; }, 50);
 }
+
+/* PIA-MUR-D-004-IMPL commit 5: network-loss banner.
+ * Shows the banner when offline; disables destructive actions
+ * (FAB, Send, btn-danger) so the user can't submit work that
+ * won't reach the server. The existing app's resubmit path uses
+ * idempotency keys (per AGENTS.md), so a delayed retry after
+ * reconnect will not double-submit. */
+var netBanner = document.getElementById('network-banner');
+function setOffline(offline) {
+  if (!netBanner) return;
+  netBanner.hidden = !offline;
+  if (offline) netBanner.setAttribute('data-offline', 'true');
+  else netBanner.removeAttribute('data-offline');
+  document.querySelectorAll('.fab, .send-btn, .btn-danger').forEach(function (el) {
+    el.disabled = offline;
+  });
+}
+window.addEventListener('online',  function () { setOffline(false); });
+window.addEventListener('offline', function () { setOffline(true); });
+setOffline(!navigator.onLine);
+
+/* PIA-MUR-D-004-IMPL commit 7: FAB + mode-of-conversation
+ * sheet (T7=A). The FAB on the Conversations tab opens the
+ * mode sheet; selecting a mode posts to /v1/workspaces/:wid/
+ * conversations and navigates to the new conversation. */
+var modeSheet = document.getElementById('mode-sheet');
+function openModeSheet() { if (modeSheet) modeSheet.hidden = false; }
+function closeModeSheet() { if (modeSheet) modeSheet.hidden = true; }
+if (modeSheet) {
+  modeSheet.addEventListener('click', closeModeSheet);
+  var fabConv = document.getElementById('fab-conversation');
+  if (fabConv) fabConv.addEventListener('click', openModeSheet);
+  modeSheet.querySelectorAll('.mode-row[data-mode]').forEach(function (btn) {
+    btn.addEventListener('click', async function () {
+      var mode = btn.getAttribute('data-mode');
+      try {
+        var c = await apiFetch('/v1/workspaces/' + (window.__piaWorkspaceId || '') + '/conversations', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ mode: mode, title: null }),
+        });
+        window.location.href = '/app/workspaces/' + (window.__piaWorkspaceId || '') + '/conversations/' + c.id;
+      } catch (err) {
+        showError('Failed to create conversation: ' + err.message);
+        closeModeSheet();
+      }
+    });
+  });
+}
+
+/* PIA-MUR-D-004-IMPL commit 8: service-worker registration.
+ * PIA is a network-required PWA (per PIA-MUR-D-001 / DECISION_LEDGER).
+ * The SW caches the shell so a second visit is fast; the /v1/* API
+ * and SSE streams are excluded from caching (see sw.js). */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function () {});
+  });
+}
 `;
 
 /**
@@ -146,28 +367,40 @@ export function pageShell({
 
   let tabs = '';
   if (workspaceId) {
-    const makeTab = (label: string, href: string, active: boolean) =>
-      `<a href="${href}" class="${active ? 'active' : ''}">${label}</a>`;
+    // PIA-MUR-D-004-IMPL commit 3: 3-tab mobile-first bottom bar
+    // (Documents / Search / Conversations). Upload is a sub-page of
+    // Documents and is reached via the FAB (commit 7). Map
+    // tabActive === 'upload' to 'documents' for the bar.
+    const ACTIVE_TAB = tabActive === 'upload' ? 'documents' : tabActive;
+    const makeTab = (id: string, label: string, active: boolean) =>
+      `<button class="bottom-tab" data-tab="${id}" type="button"${active ? ' aria-current="page"' : ''}>${label}</button>`;
     tabs = `
-      <div class="tab-bar" role="navigation" aria-label="Workspace pages">
-        ${makeTab('Documents', `/app/workspaces/${workspaceId}/documents`, tabActive === 'documents')}
-        ${makeTab('Upload', `/app/workspaces/${workspaceId}/upload`, tabActive === 'upload')}
-        ${makeTab('Search', `/app/workspaces/${workspaceId}/search`, tabActive === 'search')}
-        ${makeTab('Conversations', `/app/workspaces/${workspaceId}/conversations`, tabActive === 'conversations')}
-      </div>`;
+      <nav class="bottom-tab-bar" role="navigation" aria-label="Primary">
+        ${makeTab('documents', 'Documents', ACTIVE_TAB === 'documents')}
+        ${makeTab('search', 'Search', ACTIVE_TAB === 'search')}
+        ${makeTab('conversations', 'Conversations', ACTIVE_TAB === 'conversations')}
+      </nav>`;
   }
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>${title} — PIA</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#2563EB">
   <style>${sharedCss}</style>
 </head>
 <body>
   <div id="live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  <div id="network-banner" class="network-banner" role="status" aria-live="polite" hidden>You're offline. Some actions are disabled.</div>
   <div class="container">
+    <header class="app-header" role="banner">
+      <button id="avatar-btn" class="app-header__avatar" type="button" aria-label="Workspace: ${encodedName}. Tap to switch." aria-haspopup="dialog" aria-expanded="false">P</button>
+      <div class="app-header__title">${encodedName}</div>
+    </header>
     <div class="header">
       <div>
         <h1>${encodedName}</h1>
@@ -181,6 +414,18 @@ export function pageShell({
     <div id="error-container"></div>
     <div id="content">
 ${bodyHtml}
+    </div>
+    <div id="mode-sheet" class="sheet" role="dialog" aria-modal="true" aria-labelledby="mode-sheet-title" hidden>
+      <div class="sheet__panel" onclick="event.stopPropagation()">
+        <h2 id="mode-sheet-title">Mode</h2>
+        <button class="mode-row" type="button" data-mode="ASK">Ask</button>
+        <button class="mode-row" type="button" data-mode="RESEARCH">Research</button>
+        <button class="mode-row" type="button" data-mode="ANALYZE">Analyze</button>
+        <button class="mode-row" type="button" data-mode="PLAN">Plan</button>
+        <button class="mode-row" type="button" data-mode="EXECUTE">Execute</button>
+        <button class="mode-row" type="button" data-mode="LEARN">Learn</button>
+        <button class="mode-row" type="button" onclick="document.getElementById('mode-sheet').hidden=true" style="border-bottom:0;color:var(--accent);text-align:center">Cancel</button>
+      </div>
     </div>
   </div>
   <script type="module">

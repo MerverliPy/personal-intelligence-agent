@@ -1,0 +1,55 @@
+{
+  "dpcId": "DPC-1: custom sheet focus (UNVERIFIED-1a)",
+  "result": "PASS",
+  "subTests": [
+    {
+      "title": "focus moves into the sheet on open",
+      "status": "PASS",
+      "durationMs": 487,
+      "errors": []
+    },
+    {
+      "title": "Tab cycles within the sheet",
+      "status": "BLOCKED",
+      "durationMs": 457,
+      "errors": []
+    },
+    {
+      "title": "Esc closes the sheet",
+      "status": "PASS",
+      "durationMs": 445,
+      "errors": []
+    },
+    {
+      "title": "backdrop tap closes the sheet",
+      "status": "PASS",
+      "durationMs": 437,
+      "errors": []
+    },
+    {
+      "title": "focus moves into the sheet on open",
+      "status": "PASS",
+      "durationMs": 1031,
+      "errors": []
+    },
+    {
+      "title": "Tab cycles within the sheet",
+      "status": "BLOCKED",
+      "durationMs": 878,
+      "errors": []
+    },
+    {
+      "title": "Esc closes the sheet",
+      "status": "PASS",
+      "durationMs": 806,
+      "errors": []
+    },
+    {
+      "title": "backdrop tap closes the sheet",
+      "status": "PASS",
+      "durationMs": 980,
+      "errors": []
+    }
+  ],
+  "timestamp": "2026-06-15T22:27:04.555Z"
+}

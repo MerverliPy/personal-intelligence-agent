@@ -1,0 +1,1108 @@
+{
+  "contractId": "PIA-MUR-D-004",
+  "status": "approved",
+  "decisionIds": ["PIA-MUR-D-001", "PIA-MUR-D-002", "PIA-MUR-D-003", "PIA-MUR-D-003c"],
+  "parentDecisions": {
+    "PIA-MUR-D-001": "Repository adapter (APPROVED 2026-06-14) — authorizes design-contract phase",
+    "PIA-MUR-D-002": "Product model (APPROVED 2026-06-14) — T1=A bottom tab bar, T2=A single-pane with bottom-sheet citation modal, T3=A dedicated Search tab, T4=A top-left avatar in header, T5=A text-only composer, T6=A persistent top network-loss banner, T7=A FAB on Documents/Conversations tabs",
+    "PIA-MUR-D-003": "Concept pick (APPROVED 2026-06-14) — selects PIA-MUR-D-003c (Stream) as the visual direction",
+    "PIA-MUR-D-003c": "Stream concept — single PIA blue accent (#2563EB), 3-tab bottom bar, footnote-style citation chips, sheet-heavy navigation, conversation-first default landing"
+  },
+  "target": {
+    "primaryDevice": "iPhone 16 Pro",
+    "orientation": "portrait",
+    "environments": ["Safari", "installed PWA", "iOS Chrome"],
+    "logicalViewport": {
+      "width": "393pt",
+      "height": "852pt",
+      "devicePixelRatio": 3
+    },
+    "compatibilityDevices": ["iPhone 15", "iPhone 14", "iPhone 13", "iPhone SE (3rd generation)"],
+    "networkRequirement": "online-only",
+    "pwaIntent": "Add to Home Screen (Safari → Share → Add to Home Screen)"
+  },
+  "tokens": {
+    "color": {
+      "schema": "CSS custom properties (--token-name) defined on :root; dark-mode variants via @media (prefers-color-scheme: dark) and .theme-dark class",
+      "light": {
+        "bg": "#FFFFFF",
+        "fg": "#0A0A0A",
+        "fgMuted": "#5C5C5C",
+        "fgSubtle": "#9C9C9C",
+        "divider": "#ECECEC",
+        "accent": "#2563EB",
+        "accentPressed": "#1D4ED8",
+        "accentFg": "#FFFFFF",
+        "selection": "#DBE7FF",
+        "success": "#16A34A",
+        "warning": "#D97706",
+        "danger": "#DC2626",
+        "backdrop": "rgba(0, 0, 0, 0.4)"
+      },
+      "dark": {
+        "bg": "#0A0A0A",
+        "fg": "#F5F5F5",
+        "fgMuted": "#A0A0A0",
+        "fgSubtle": "#6C6C6C",
+        "divider": "#1F1F1F",
+        "accent": "#3B82F6",
+        "accentPressed": "#2563EB",
+        "accentFg": "#FFFFFF",
+        "selection": "#1E3A5C",
+        "success": "#16A34A",
+        "warning": "#D97706",
+        "danger": "#DC2626",
+        "backdrop": "rgba(0, 0, 0, 0.6)"
+      },
+      "status": {
+        "ready": {
+          "bg": "#DCFCE7",
+          "fg": "#166534"
+        },
+        "processing": {
+          "bg": "#DBEAFE",
+          "fg": "#1E40AF"
+        },
+        "failed": {
+          "bg": "#FEE2E2",
+          "fg": "#991B1B"
+        },
+        "quarantined": {
+          "bg": "#FEF3C7",
+          "fg": "#92400E"
+        },
+        "cancelled": {
+          "bg": "#FEF3C7",
+          "fg": "#92400E"
+        },
+        "interrupted": {
+          "bg": "#FEE2E2",
+          "fg": "#991B1B"
+        },
+        "uploaded": {
+          "bg": "#F3E8FF",
+          "fg": "#6B21A8"
+        },
+        "pending": {
+          "bg": "#F3F4F6",
+          "fg": "#374151"
+        },
+        "completed": {
+          "bg": "#DCFCE7",
+          "fg": "#166534"
+        },
+        "streaming": {
+          "bg": "#DBEAFE",
+          "fg": "#1E40AF"
+        }
+      },
+      "statusSource": "Existing baseline tokens from apps/web/src/pages/shared.ts:40-47 (badge classes) plus prototype styles.css:26-38; CANCELLED, INTERRUPTED, COMPLETED, STREAMING derived from conversation-detail.ts:330-338 run-state badge map",
+      "statusNote": "Status tokens are constant across light and dark mode (semantic colors preserved); only surface tokens (bg/fg/divider) invert in dark mode",
+      "modeDot": {
+        "ASK": "#2563EB",
+        "RESEARCH": "#7C3AED",
+        "ANALYZE": "#DB2777",
+        "PLAN": "#16A34A",
+        "EXECUTE": "#EA580C",
+        "LEARN": "#0891B2"
+      },
+      "modeDotSource": "Stream prototype styles.css:216-221; all 6 values match packages/contracts/src/index.ts:347 ConversationMode"
+    },
+    "typography": {
+      "fontFamily": "-apple-system, BlinkMacSystemFont, system-ui, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+      "fontFamilySource": "Stream prototype styles.css:48",
+      "weights": [400, 500, 600, 700],
+      "lineHeight": {
+        "body": 1.42,
+        "display": 1.2
+      },
+      "scale": {
+        "tBody": "19pt",
+        "tCaption": "14pt",
+        "tSection": "24pt",
+        "tLarge": "32pt",
+        "tTab": "10pt"
+      },
+      "scaleSource": "Stream prototype styles.css:49-54; values match the 6-mode + 6-state + 19pt body design language of PIA-MUR-D-003c",
+      "dynamicType": {
+        "support": "All body sizes scale via a theme class or CSS variable; AX5 (Larger Text) accessibility size supported",
+        "ax5": {
+          "tBody": "34pt",
+          "tCaption": "24pt",
+          "tSection": "42pt",
+          "tLarge": "56pt",
+          "tTab": "16pt"
+        },
+        "ax5Source": "Stream prototype styles.css:95-101 (.theme-ax5)",
+        "ax5Ratio": 1.78
+      }
+    },
+    "spacing": {
+      "grid": "4pt",
+      "tokens": {
+        "s1": "4pt",
+        "s2": "8pt",
+        "s3": "12pt",
+        "s4": "16pt",
+        "s5": "20pt",
+        "s6": "24pt",
+        "s8": "32pt",
+        "s10": "40pt",
+        "s12": "48pt"
+      },
+      "source": "Derived from Stream prototype spacing values (4pt, 8pt, 12pt, 16pt, 20pt, 24pt, 32pt, 40pt, 48pt) used throughout styles.css padding/margin/gap declarations"
+    },
+    "shape": {
+      "radius": {
+        "rSm": "8pt",
+        "rMd": "12pt",
+        "rLg": "16pt",
+        "rPill": "9999pt",
+        "rCircle": "50%"
+      },
+      "source": "Stream prototype: --r-pill on tabs/FAB (.tab::before, .fab); .sheet__panel uses 14pt top corners (close to rLg); .doc/.conv rows use square (0pt); .search-form__row uses 12pt (rMd); FAB uses 50% (rCircle); send-btn uses 50%",
+      "rowCorners": "0pt (sharp, list-row convention; consistent with iOS native list aesthetics)"
+    },
+    "elevation": {
+      "tokens": {
+        "shadow1": "0 1pt 2pt rgba(0, 0, 0, 0.08)",
+        "shadow2": "0 2pt 8pt rgba(0, 0, 0, 0.12)",
+        "fabShadow": "0 6pt 20pt rgba(37, 99, 235, 0.36)",
+        "fabShadowPressed": "0 2pt 6pt rgba(37, 99, 235, 0.24)"
+      },
+      "source": "Stream prototype styles.css:320-325 (FAB shadow / pressed state)",
+      "hairlineDivider": "0.5pt solid var(--divider) (iOS-native hairline; used on tab bar top border, list row bottom border, composer top border, header bottom border)",
+      "principle": "Lists and chrome use hairlines (0.5pt) for iOS-native look; FAB is the only elevated element (shadow-2 + brand-color tint)"
+    },
+    "motion": {
+      "tokens": {
+        "motionFast": "120ms",
+        "motionBase": "200ms",
+        "motionSlow": "280ms",
+        "motionSheet": "280ms",
+        "motionFade": "200ms",
+        "motionEase": "cubic-bezier(0.32, 0.72, 0, 1)"
+      },
+      "source": "Stream prototype styles.css:22-24 (--motion-sheet, --motion-fade, --motion-ease); --motion-fast and --motion-slow follow PIA-MUR-D-002 §5 guidance",
+      "easingRationale": "cubic-bezier(0.32, 0.72, 0, 1) is iOS-native 'sharp out' curve; matches Apple's Material sheet curve for natural feel",
+      "elementTimings": {
+        "tabSwitchColor": "100ms linear",
+        "rowPressIn": "80ms ease-out",
+        "rowPressOut": "200ms ease-in-out",
+        "fabPressIn": "100ms ease-out (scale 1.0 → 0.94)",
+        "fabPressOut": "200ms ease-in-out",
+        "sheetOpen": "280ms cubic-bezier(0.32, 0.72, 0, 1) (translateY 100% → 0)",
+        "sheetClose": "240ms cubic-bezier(0.32, 0.72, 0, 1)",
+        "backdropFade": "200ms ease (opacity 0 → 0.4)",
+        "networkBannerIn": "220ms cubic-bezier(0.32, 0.72, 0, 1) (translateY -100% → 0)",
+        "citationUnderlineReveal": "200ms ease (scaleX 0.5 → 1)"
+      },
+      "elementTimingsSource": "evidence/source-file-changes.md 'Stream — Motion spec' (the single source of truth)",
+      "reducedMotion": "prefers-reduced-motion: reduce sets --motion-sheet and --motion-fade to 0.01ms; 0.01ms (not 0ms) preserves animation registration so final state is reached via keyframe 'to'",
+      "streamedTextReveal": "0ms; entire delta appended in single frame (mirrors appendAssistantDelta at conversation-detail.ts:305-318)"
+    },
+    "size": {
+      "tabBarHeight": "49pt",
+      "tabBarSafe": "calc(49pt + env(safe-area-inset-bottom, 0px))",
+      "headerHeight": "44pt",
+      "headerSafeTop": "calc(env(safe-area-inset-top, 0px) + 44pt)",
+      "composerHeight": "56pt",
+      "fabSize": "56pt",
+      "touchMin": "44pt",
+      "dynamicIslandClearance": "59pt",
+      "dynamicIslandTop": "calc(11pt + env(safe-area-inset-top, 0px))"
+    },
+    "viewport": {
+      "fit": "cover",
+      "metaTag": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, viewport-fit=cover\">",
+      "metaTagSource": "Stream prototype index.html:5; replaces baseline apps/api/src/routes/web.ts:25 bare viewport meta",
+      "dynamicViewport": "100dvh (dynamic viewport units) for full-height containers; 100vh fallback for older browsers"
+    },
+    "safeArea": {
+      "insetTop": "env(safe-area-inset-top, 0px)",
+      "insetBottom": "env(safe-area-inset-bottom, 0px)",
+      "insetLeft": "env(safe-area-inset-left, 0px)",
+      "insetRight": "env(safe-area-inset-right, 0px)",
+      "topDynamicIsland": "Persistent content starts at max(env(safe-area-inset-top, 0px), 59pt) to clear the Dynamic Island",
+      "bottomTabBar": "tab-bar height = 49pt + env(safe-area-inset-bottom, 0px)",
+      "fab": "bottom = 16pt + env(safe-area-inset-bottom, 0px); right = max(16pt, env(safe-area-inset-right, 0px))",
+      "composer": "bottom = var(--tab-bar-safe); padding-bottom = 8pt + env(safe-area-inset-bottom, 0px)"
+    }
+  },
+  "navigation": {
+    "primaryPattern": "3-tab bottom navigation bar (T1=A)",
+    "tabBar": {
+      "id": "tab-bar",
+      "tabs": [
+        {
+          "id": "tab-conversations",
+          "label": "Conversations",
+          "screen": "conversations",
+          "defaultLanding": true
+        },
+        {
+          "id": "tab-documents",
+          "label": "Documents",
+          "screen": "documents",
+          "defaultLanding": false
+        },
+        {
+          "id": "tab-search",
+          "label": "Search",
+          "screen": "search",
+          "defaultLanding": false
+        }
+      ],
+      "layout": "flex 1 1 0; each tab is 1/3 width (131pt on 393pt viewport)",
+      "tabHeight": "49pt + env(safe-area-inset-bottom, 0px)",
+      "tabLabelSize": "10pt (prototype --t-tab)",
+      "tabIconSize": "28pt × 28pt",
+      "selectedIndicator": "2pt top accent bar (--accent), 40% width centered, square corners radius 0 0 2pt 2pt",
+      "selectedColor": "var(--accent)",
+      "unselectedColor": "var(--fg-muted)",
+      "tabAccessibility": {
+        "role": "button",
+        "ariaCurrent": "page (on the active tab; removed on others)",
+        "ariaLabel": "Implicit from text content; each tab's <span> is the accessible name",
+        "minTapTarget": "44pt (per iOS HIG; achieved by tab flex layout)"
+      },
+      "source": "Stream prototype interactive/index.html:293-315 + styles.css:264-302"
+    },
+    "defaultLanding": "Conversations (T1=A; matches PIA-MUR-D-002 §1 outcome #4 priority; honors PIA-MUR-D-003c 'conversation-first' thesis)",
+    "header": {
+      "id": "app-header",
+      "role": "banner",
+      "height": "44pt + env(safe-area-inset-top, 0px)",
+      "leftSlot": {
+        "id": "header-avatar",
+        "shape": "32pt circle",
+        "background": "var(--accent)",
+        "text": "First letter of workspace name (white, 16pt, 700 weight)",
+        "behavior": "Opens workspace switcher sheet (T4=A); aria-haspopup='dialog'; aria-expanded toggles",
+        "ariaLabel": "'Workspace: <name>. Tap to switch.'",
+        "source": "Stream prototype index.html:21 + styles.css:156-174"
+      },
+      "centerSlot": {
+        "id": "header-title",
+        "type": "text (24pt section title, 700 weight, -0.02em letter-spacing)",
+        "behavior": "Truncates on long titles; per-screen text (Conversations / Documents / Search / conversation title)",
+        "source": "Stream prototype index.html:24 + styles.css:175-179"
+      },
+      "rightSlot": {
+        "id": "header-right",
+        "type": "placeholder (intentionally empty; Stream has no settings cog)",
+        "rationale": "Stream sacrifices discoverability of less-frequent actions (PIA-MUR-D-003c README §'What Stream sacrifices') to keep the header minimal"
+      }
+    },
+    "backButton": {
+      "id": "back-btn",
+      "position": "left of header (replaces avatar in detail screens)",
+      "size": "44pt × 44pt",
+      "icon": "left chevron (22pt stroke, currentColor)",
+      "ariaLabel": "'Back to conversations' (or contextually correct target)",
+      "behavior": "In-app back chevron replaces the missing Safari back gesture in installed PWA mode; mandatory for standalone PWA (no URL bar, no back button)",
+      "source": "Stream prototype index.html:104-108 + styles.css:544-558"
+    },
+    "fab": {
+      "id": "header-fab",
+      "shape": "circle, 56pt × 56pt",
+      "position": "bottom-right; right = max(16pt, env(safe-area-inset-right, 0px)); bottom = var(--tab-bar-safe) + 16pt",
+      "background": "var(--accent)",
+      "foreground": "white plus icon (24pt stroke)",
+      "shadow": "0 6pt 20pt rgba(37, 99, 235, 0.36)",
+      "focusRing": "3pt white outline, 2pt offset",
+      "activeState": "scale(0.94); shadow reduces to 0 2pt 6pt rgba(37, 99, 235, 0.24)",
+      "disabled": "40% opacity when offline (T6=A)",
+      "trigger": {
+        "conversationsTab": "Opens mode-of-conversation sheet (6 radio rows; ASK / RESEARCH / ANALYZE / PLAN / EXECUTE / LEARN)",
+        "documentsTab": "Opens upload sheet (file picker + title + 'Upload' primary action; 50MB cap per upload.ts:23)",
+        "searchTab": "FAB hidden (no creation action)"
+      },
+      "ariaLabel": "contextual: 'New conversation' on Conversations tab; 'Upload document' on Documents tab",
+      "source": "Stream prototype index.html:94-98 + styles.css:305-325"
+    },
+    "sheetNavigation": {
+      "pattern": "Bottom sheets for citation, mode, feedback, workspace switcher, upload, file picker; full-screen sheet for destructive confirms and approvals (T2=A)",
+      "rationale": "Sheet-heavy: keeps the user 'in' the conversation thread; avoids full-page modals except for destructive confirms"
+    },
+    "pushNavigation": {
+      "pattern": "SPA-style: data-screen swap on .app-main children; conversation-list → conversation-detail is a push (hidden via data-screen, back chevron returns)",
+      "source": "Stream prototype app.js:28-37, 100-110"
+    },
+    "backForwardInStandalonePwa": {
+      "urlBar": "Absent in display: 'standalone'",
+      "browserBack": "Unavailable; the in-app back chevron replaces it",
+      "browserForward": "Unavailable; the in-app navigation model is push-only with explicit back chevron",
+      "shareSheet": "Out of scope for v1 (navigator.share is a future API; flagged in PIA-MUR-D-002 §5 #10)",
+      "survival": "The app must survive a full-screen relaunch; cold start goes to Conversations default landing"
+    }
+  },
+  "components": [
+    {
+      "id": "tab-bar",
+      "name": "Bottom Tab Bar",
+      "source": "Stream prototype index.html:293-315 + styles.css:264-302",
+      "anatomy": [
+        "nav[role='navigation'][aria-label='Primary']",
+        "button.tab[data-tab] × 3 (Conversations / Documents / Search)",
+        "Each tab: svg.tab__icon (28pt) + span.tab__label (10pt)",
+        "Selected indicator: ::before pseudo-element, 2pt height, --accent background"
+      ],
+      "variants": [
+        "light mode (default)",
+        "dark mode (prefers-color-scheme: dark or .theme-dark)",
+        "AX5 (Larger Text; .theme-ax5; tab labels scale to 16pt)"
+      ],
+      "states": [
+        "default",
+        "selected (aria-current='page')",
+        "pressed (background flash)",
+        "focus-visible (2pt outline)"
+      ],
+      "behavior": "Tapping a tab swaps data-screen on .app-main children; tapping the active tab is a no-op; selected indicator animates with 100ms color transition",
+      "accessibility": {
+        "role": "navigation",
+        "ariaLabel": "Primary",
+        "minTapTarget": "44pt (achieved by flex 1 1 0 layout on 393pt viewport)",
+        "voiceOver": "Rotor navigation reaches all 3 tabs; selected tab announces 'Current page'"
+      },
+      "motion": {
+        "colorTransition": "100ms linear (selected indicator paint)",
+        "reducedMotion": "instant"
+      },
+      "safeArea": "padding-bottom: env(safe-area-inset-bottom, 0px)",
+      "sourceFileChange": "apps/web/src/pages/shared.ts:60-62 (existing top tab-bar) DELETE; apps/api/src/routes/web.ts:126-192 pageShell — add <nav class='tab-bar'> with 3 <button> tabs"
+    },
+    {
+      "id": "app-header",
+      "name": "Top App Bar",
+      "source": "Stream prototype index.html:20-25 + styles.css:145-179",
+      "anatomy": [
+        "header[role='banner']",
+        "button.app-header__avatar (left, 32pt circle, --accent bg, white initial)",
+        "div.app-header__title (center, 24pt 700 weight, -0.02em)"
+      ],
+      "variants": [
+        "Avatar + title (default on tabs)",
+        "Back chevron + title (on detail screens; replaces avatar with back-btn)",
+        "Title only (when no avatar/back action is meaningful)"
+      ],
+      "states": ["default", "pressed (avatar: --accent-pressed scale 0.94)"],
+      "behavior": "Avatar tap opens workspace switcher sheet (T4=A); title is the screen name; back chevron pops the in-app navigation stack",
+      "accessibility": {
+        "role": "banner",
+        "avatarAriaLabel": "'Workspace: <name>. Tap to switch.'",
+        "avatarAriaHaspopup": "dialog",
+        "avatarAriaExpanded": "false (toggled on tap)"
+      },
+      "motion": "Instant; no slide-in",
+      "safeArea": "padding-top: env(safe-area-inset-top, 0px); 44pt content height",
+      "sourceFileChange": "apps/web/src/pages/shared.ts:126-192 (pageShell header) — add <header role='banner'> with avatar and title; remove existing .header"
+    },
+    {
+      "id": "sheet-slide-up",
+      "name": "Bottom Sheet (Slide-up)",
+      "source": "Stream prototype index.html:320-352 + styles.css:347-377",
+      "anatomy": [
+        "div.sheet (position: fixed; inset: 0; z-index: 200; flex; align-end)",
+        "div.sheet__backdrop (absolute, inset 0, rgba(0,0,0,0.4), fade-in 200ms)",
+        "div.sheet__panel (relative, 100% width, max-width 393pt, max-height 80%, 14pt top corners, slide-up 280ms)",
+        "div.sheet__handle (4pt × 36pt, --fg-subtle, 8pt from top)",
+        "Optional: span.sheet__eyebrow + h2.sheet__title"
+      ],
+      "variants": [
+        "Citation sheet (T2=A): source/locator/verification meta + claim blockquote + 'Open source' button",
+        "Mode-of-conversation sheet (M1): 6 radio rows (ASK/RESEARCH/ANALYZE/PLAN/EXECUTE/LEARN)",
+        "Feedback sheet: 8 categories + optional free-text correction textarea",
+        "Workspace switcher sheet: list of workspaces with current marked",
+        "Upload sheet: file picker + title + 'Upload' primary action"
+      ],
+      "states": [
+        "hidden (default)",
+        "open (slide-up animation)",
+        "swiping (live translateY)",
+        "dismissing (slide-down)"
+      ],
+      "behavior": {
+        "open": "Fade backdrop + slide panel 100% → 0 over 280ms; focus first focusable element in panel",
+        "dismiss": "Backdrop tap closes; Esc closes; swipe-down > 80pt closes",
+        "focusTrap": "Tab cycles within panel; Shift+Tab from first wraps to last; Esc closes"
+      },
+      "accessibility": {
+        "panelRole": "dialog",
+        "panelAriaModal": "true",
+        "panelAriaLabelledby": "title element id",
+        "backdropAriaHidden": "true (decorative)",
+        "livePoliteness": "polite on open; the sheet's title is announced"
+      },
+      "motion": {
+        "openDuration": "280ms cubic-bezier(0.32, 0.72, 0, 1)",
+        "closeDuration": "240ms cubic-bezier(0.32, 0.72, 0, 1)",
+        "backdropFade": "200ms ease (0 → 0.4 alpha)",
+        "reducedMotion": "snap open/closed instantly; --motion-sheet: 0.01ms"
+      },
+      "safeArea": "padding-bottom: 16pt + env(safe-area-inset-bottom, 0px); max-height 80vh respects Dynamic Island clearance",
+      "sourceFileChange": "apps/web/src/pages/conversation-detail.ts:45 (existing <dialog id='citation-modal'>) — keep as inner surface; wrap in <div class='sheet'> for slide-up animation per evidence/source-file-changes.md"
+    },
+    {
+      "id": "full-screen-sheet",
+      "name": "Full-Screen Sheet",
+      "source": "Defined by PIA-MUR-D-002 §3 ('Sheet vs. page vs. full-screen — when to use'); reserved for destructive confirms and approvals (F8)",
+      "anatomy": [
+        "div.full-screen-sheet (position: fixed; inset: 0; z-index: 300)",
+        "div.full-screen-sheet__panel (covers entire viewport including safe-area; bg: var(--bg))",
+        "Header bar (Cancel + Title + primary action)",
+        "Body content"
+      ],
+      "variants": [
+        "Destructive confirm (e.g., 'Delete document?'): replaces window.confirm() at document-detail.ts:159",
+        "Approval (FR-TOOL-004; rare in MVP per PIA-MUR-D-002 §2 F8): consequential tool action approval"
+      ],
+      "states": ["hidden (default)", "open", "submitting"],
+      "behavior": "Replaces entire viewport; no tab bar visible; close via Cancel or primary action; focus trap; primary action is destructive (e.g., 'Delete') and uses --danger",
+      "accessibility": {
+        "panelRole": "alertdialog (destructive variant)",
+        "panelAriaModal": "true",
+        "panelAriaLabelledby": "title element id",
+        "panelAriaDescribedby": "body description id"
+      },
+      "motion": {
+        "openDuration": "200ms ease",
+        "closeDuration": "200ms ease",
+        "reducedMotion": "instant"
+      },
+      "safeArea": "padding: env(safe-area-inset-top, 0px) 16pt env(safe-area-inset-bottom, 0px) 16pt",
+      "sourceFileChange": "apps/web/src/pages/document-detail.ts:158-170 (existing window.confirm for delete) — replace with <div class='full-screen-sheet'> trigger"
+    },
+    {
+      "id": "citation-chip",
+      "name": "Citation Chip (Footnote-style)",
+      "source": "Stream prototype index.html:122-124 + styles.css:471-500; preserves the existing renderCitationChipClient shape at conversation-detail.ts:100-104",
+      "anatomy": [
+        "button.cite[data-citation-id] (inline text marker, no background, no border)",
+        "Visible glyph: 16pt (0.85em); [1] [2] format",
+        "Transparent tap area: 18pt min-width × 24pt min-height",
+        "::after pseudo-element: 0.5pt underline, --accent, scaleX(0.5)"
+      ],
+      "variants": ["default", "hover/focus-visible (underline animates to scaleX(1))"],
+      "states": ["default", "hover", "focus-visible", "active"],
+      "behavior": "Tap opens citation sheet (T2=A); the chip's accessible name includes the claim text ('Citation 1 of N, claims: ...')",
+      "accessibility": {
+        "role": "button (native <button>)",
+        "ariaLabel": "'Citation <idx> of <total>, claims: <claim text>, button'",
+        "minTapTarget": "24pt visible; 44pt preferred (transparent padding around glyph)",
+        "focusRing": "2pt --accent outline, 2pt offset, 4pt border-radius"
+      },
+      "motion": {
+        "underlineReveal": "200ms ease (scaleX 0.5 → 1 on :hover or :focus-visible)",
+        "reducedMotion": "no animation"
+      },
+      "safeArea": "N/A (inline content)",
+      "sourceFileChange": "apps/web/src/pages/conversation-detail.ts:100-104 (renderCitationChipClient) — KEEP the [N] shape; update CSS class to .cite; remove background pill (per PIA-MUR-D-003c)"
+    },
+    {
+      "id": "fab",
+      "name": "Floating Action Button (FAB)",
+      "source": "Stream prototype index.html:94-98 + styles.css:305-325",
+      "anatomy": [
+        "button.fab (56pt × 56pt circle, --accent bg, white icon)",
+        "Focus ring: 3pt white outline, 2pt offset",
+        "Shadow: 0 6pt 20pt rgba(37, 99, 235, 0.36) (brand-tinted)"
+      ],
+      "variants": [
+        "Conversations tab: 'New conversation' (plus icon)",
+        "Documents tab: 'Upload document' (plus icon)",
+        "Search tab: hidden (no creation action)"
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus-visible",
+        "active (scale 0.94)",
+        "disabled (40% opacity when offline)"
+      ],
+      "behavior": "Tap opens context-specific sheet (mode / upload); disabled when offline (T6=A)",
+      "accessibility": {
+        "role": "button",
+        "ariaLabel": "contextual: 'New conversation' or 'Upload document'",
+        "ariaDisabled": "true when offline"
+      },
+      "motion": {
+        "pressIn": "100ms ease-out (scale 1.0 → 0.94; shadow 6pt → 2pt)",
+        "pressOut": "200ms ease-in-out",
+        "reducedMotion": "no transform"
+      },
+      "safeArea": "right: max(16pt, env(safe-area-inset-right, 0px)); bottom: var(--tab-bar-safe) + 16pt",
+      "sourceFileChange": "apps/web/src/pages/conversation-list.ts:22-35 (existing 'New conversation' form) DELETE; apps/web/src/pages/document-list.ts:18-21 (existing '+ Upload' header button) DELETE; both replaced by FAB"
+    },
+    {
+      "id": "status-badge",
+      "name": "Status Badge",
+      "source": "Stream prototype styles.css:243-261; existing baseline tokens from apps/web/src/pages/shared.ts:40-47 + conversation-detail.ts:330-338",
+      "anatomy": [
+        "span.status-badge[data-state] (inline-block, 2pt × 8pt padding, 4pt radius, 14pt caption, 600 weight, uppercase, 0.02em letter-spacing)"
+      ],
+      "states": [
+        "READY → bg: #DCFCE7, fg: #166534 (--status-ready)",
+        "INGESTING / PROCESSING / STREAMING → bg: #DBEAFE, fg: #1E40AF (--status-processing)",
+        "FAILED / INTERRUPTED → bg: #FEE2E2, fg: #991B1B (--status-failed)",
+        "QUARANTINED / CANCELLED → bg: #FEF3C7, fg: #92400E (--status-quarantined)",
+        "UPLOADED → bg: #F3E8FF, fg: #6B21A8 (--status-uploaded)",
+        "PENDING / CREATED → bg: #F3F4F6, fg: #374151 (--status-pending)",
+        "COMPLETED → bg: #DCFCE7, fg: #166534 (--status-ready)"
+      ],
+      "behavior": "Static visual; ARIA-labeled with the human-readable status name (e.g., aria-label='Ready')",
+      "accessibility": {
+        "role": "status",
+        "ariaLabel": "human-readable status name"
+      },
+      "motion": "None (static)",
+      "safeArea": "N/A (inline)",
+      "sourceFileChange": "apps/web/src/pages/shared.ts:39-47 (existing .badge classes) — keep tokens; add .status-badge alias + 7th/8th/9th states (STREAMING, COMPLETED, INTERRUPTED) per conversation-detail.ts:330-338"
+    },
+    {
+      "id": "message-bubble",
+      "name": "Message Bubble (User + Assistant)",
+      "source": "Stream prototype index.html:111-150 + styles.css:429-468",
+      "anatomy": [
+        "article.message[data-message-id]",
+        "For user: div.message__content (--accent bg, white fg, 18pt radius, 4pt bottom-right corner; 8pt × 14pt padding); align-self: flex-end; max-width 92%",
+        "For assistant: no bubble (0pt radius, no bg, --fg color); align-self: flex-start; max-width 100%",
+        "div.message__author (14pt caption, --fg-muted, uppercase, 0.06em letter-spacing, 700 weight) — assistant only",
+        "div.message__content (word-wrap: break-word, --fg color, 19pt body)",
+        "div.message__meta (6pt gap, 14pt caption, --fg-muted): time + run-state badge + duration + feedback link"
+      ],
+      "variants": ["user (right-aligned bubble)", "assistant (left-aligned, no bubble)"],
+      "states": [
+        "default",
+        "streaming (SSE delta appends in single frame; aria-live='polite' announces)"
+      ],
+      "behavior": {
+        "streamPacing": "Entire delta appended in single frame per SSE event (mirrors appendAssistantDelta at conversation-detail.ts:305-318); no character-by-character reveal",
+        "liveRegion": "Thread has role='log' aria-live='polite' aria-relevant='additions' (existing baseline at conversation-detail.ts:40)",
+        "feedback": "Each assistant message has a 'Feedback' link that opens the feedback sheet"
+      },
+      "accessibility": {
+        "threadRole": "log",
+        "threadAriaLive": "polite",
+        "threadAriaRelevant": "additions"
+      },
+      "motion": "None for delta; 0ms reveal (single frame append)",
+      "safeArea": "N/A (inline content within thread)",
+      "sourceFileChange": "apps/web/src/pages/conversation-detail.ts:25-46 (existing thread) — KEEP; align visual with Stream bubble + chip model"
+    },
+    {
+      "id": "mode-sheet",
+      "name": "Mode-of-Conversation Sheet",
+      "source": "Stream prototype index.html:337-352 + styles.css:406-426",
+      "anatomy": [
+        "div.sheet (reuses slide-up sheet)",
+        "div.sheet__panel",
+        "h2.sheet__title ('New conversation')",
+        "ul.mode-list[role='radiogroup'][aria-label='Conversation mode']",
+        "6 × button.mode-row[role='radio'][data-mode] (44pt min-height, 12pt vertical padding, 0.5pt bottom border)",
+        "Each row: span.mode-row__name (19pt) + span.mode-row__desc (14pt caption, --fg-muted)"
+      ],
+      "variants": [
+        "Default selection: ASK (aria-checked='true')",
+        "Selected: text color --accent, 700 weight, '✓ ' prefix on name"
+      ],
+      "states": ["unselected (default)", "selected (aria-checked='true')"],
+      "behavior": "Tap a row → updates aria-checked on all rows; tap outside or Esc dismisses; on selection, opens new conversation with chosen mode",
+      "accessibility": {
+        "listRole": "radiogroup",
+        "rowRole": "radio",
+        "rowAriaChecked": "true/false per row",
+        "rowMinTapTarget": "44pt (achieved by min-height)"
+      },
+      "motion": "Inherits sheet slide-up 280ms",
+      "safeArea": "Inherits sheet safe-area",
+      "sourceFileChange": "apps/web/src/pages/conversation-list.ts:25-30 (existing 6-mode <select>) — REMOVE; FAB on Conversations tab opens this sheet"
+    },
+    {
+      "id": "file-picker-sheet",
+      "name": "File Picker Sheet (Upload)",
+      "source": "Defined by PIA-MUR-D-002 §3 ('Sheet vs. page vs. full-screen'); F6 (Upload a document on the go); 50MB cap from upload.ts:23",
+      "anatomy": [
+        "div.sheet (slide-up)",
+        "div.sheet__panel",
+        "h2.sheet__title ('Upload document')",
+        "input[type='file'] (file picker; camera / Files / iCloud Drive)",
+        "label + input[type='text'] for title (required)",
+        "button[type='submit'] 'Upload' (primary, --accent)"
+      ],
+      "states": ["idle", "picking", "uploading (progress)", "success", "error"],
+      "behavior": "User gestures required for iOS file picker; respects 'Wi-Fi only' cellular choice; 50MB cap (per upload.ts:23); progress bar inline; 'Continue in background' on success",
+      "accessibility": {
+        "panelRole": "dialog",
+        "panelAriaModal": "true",
+        "formAriaLabel": "Upload document"
+      },
+      "motion": "Inherits sheet slide-up; progress bar uses width transition 300ms ease",
+      "safeArea": "Inherits sheet safe-area",
+      "sourceFileChange": "apps/web/src/pages/document-list.ts:18-21 (existing '+ Upload' button) — REPLACE with FAB opening this sheet; apps/web/src/pages/upload.ts:23 (50MB cap text) KEEP"
+    },
+    {
+      "id": "search-input",
+      "name": "Search Input",
+      "source": "Stream prototype index.html:247-252 + styles.css:561-579",
+      "anatomy": [
+        "form.search-form[role='search'][aria-label='Document search'] (sticky top, padding 8pt 16pt 4pt)",
+        "div.search-form__row (flex, 44pt height, padding 0 14pt, --bg bg, 0.5pt --divider border, 12pt radius)",
+        "input[type='search']#query-input (flex 1 1 auto, border 0, --bg bg, --fg color, 19pt body, no outline)"
+      ],
+      "states": [
+        "empty (placeholder 'Search…')",
+        "focused (focus ring on form row)",
+        "filled (with text)"
+      ],
+      "behavior": "Submit triggers live search; results render below in .result-list; pressing '/' on any screen focuses the search input (per app.js:186-193)",
+      "accessibility": {
+        "formRole": "search",
+        "formAriaLabel": "Document search",
+        "inputAriaLabel": "Search",
+        "inputType": "search"
+      },
+      "motion": "None (sticky; no slide)",
+      "safeArea": "top: 0 (sticky); respects Dynamic Island clearance via parent safe-area top padding",
+      "sourceFileChange": "apps/web/src/pages/search.ts:13-156 — re-flow form to sticky single-row search input"
+    },
+    {
+      "id": "result-card",
+      "name": "Search Result Card",
+      "source": "Stream prototype index.html:253-287 + styles.css:581-594",
+      "anatomy": [
+        "li.result[tabindex='0'] (flex, gap 12pt, padding 14pt 16pt, 0.5pt bottom border, 44pt min-height)",
+        "div.result__rank (14pt caption, --fg-muted, 600 weight, 16pt width)",
+        "div.result__body (flex 1 1 auto)",
+        "p.result__excerpt (19pt body, 1.42 line-height)",
+        "div.result__meta (6pt gap, 14pt caption, --fg-muted): locator (e.g., 'page 1') + single Fuse score chip"
+      ],
+      "states": [
+        "default",
+        "pressed (background flash)",
+        "focus-visible (2pt --accent outline, -2pt offset)"
+      ],
+      "behavior": "Tap opens the source document detail; the score-bar trio (Lex:/Vec:/Fuse:) is collapsed to a single Fuse score on mobile (per PIA-MUR-D-002 §7 item 14 and source-file-changes.md)",
+      "accessibility": {
+        "role": "listitem (within result-list)",
+        "tabIndex": "0",
+        "focusRing": "2pt --accent outline, -2pt offset"
+      },
+      "motion": "Press 80ms ease-out; release 200ms ease-in-out",
+      "safeArea": "N/A (inline list)",
+      "sourceFileChange": "apps/web/src/pages/search.ts:131-137 — DELETE JSON.stringify(locator); collapse score-bar trio to single Fuse chip"
+    },
+    {
+      "id": "empty-state",
+      "name": "Empty State",
+      "source": "Defined by PIA-MUR-D-002 §6 ('Top 3 cognitive-load risks'); mirrors iOS Mail / Files empty state pattern",
+      "anatomy": [
+        "div.empty-state (centered, padding 32pt 16pt)",
+        "svg.empty-state__icon (48pt × 48pt, --fg-subtle)",
+        "h2.empty-state__title (24pt section, 700 weight, --fg)",
+        "p.empty-state__subtext (19pt body, --fg-muted, max 1 line preferred)",
+        "button.empty-state__cta (primary, --accent bg, white fg, 19pt, 600 weight, 44pt min-height)"
+      ],
+      "variants": [
+        "No conversations yet: 'Start a new conversation' CTA (opens mode sheet)",
+        "No documents: 'Upload a document' CTA (opens upload sheet)",
+        "No search results: 'No matches' + subtext suggesting rephrasing"
+      ],
+      "states": ["default"],
+      "behavior": "Static; CTA opens the appropriate sheet",
+      "accessibility": {
+        "titleRole": "heading",
+        "titleLevel": 2,
+        "ariaLive": "polite on first paint"
+      },
+      "motion": "Fade-in 200ms on first paint; reduced-motion: instant",
+      "safeArea": "padding 32pt 16pt (no top safe-area override; centered)",
+      "sourceFileChange": "apps/web/src/pages/conversation-list.ts + document-list.ts + search.ts — add empty-state markup per variant"
+    },
+    {
+      "id": "error-state",
+      "name": "Error State (Inline Banner)",
+      "source": "Defined by PIA-MUR-D-002 §6 ('Top 3 a11y risks') and §10 acceptance; error envelope from API per shared.ts:92-94 showError",
+      "anatomy": [
+        "div.error-state[role='alert'] (background --status-failed-bg, border 0.5pt --danger, 8pt radius, padding 8pt 16pt, --status-failed-fg color, 14pt caption)",
+        "span.error-state__code (uppercase, 600 weight)",
+        "span.error-state__message (--status-failed-fg, sanitized)",
+        "button.error-state__retry (underline, --status-failed-fg, 14pt caption)"
+      ],
+      "variants": [
+        "Non-blocking: rendered above the content; user can dismiss or retry",
+        "Blocking: rendered in a full-screen sheet"
+      ],
+      "states": ["default", "dismissed"],
+      "behavior": "On error envelope `{error: {code, message, request_id}}`, show only the `code` and a sanitized `message`; NEVER show `request_id` to the user (audit-only); retry button re-issues the request with the same idempotency key",
+      "accessibility": {
+        "role": "alert",
+        "ariaLive": "assertive"
+      },
+      "motion": "Fade-in 200ms ease; reduced-motion: instant",
+      "safeArea": "N/A (inline banner)",
+      "sourceFileChange": "apps/web/src/pages/shared.ts:92-94 (existing showError) — KEEP shape; sanitize request_id out of user-facing message"
+    },
+    {
+      "id": "offline-banner",
+      "name": "Network-Loss (Offline) Banner",
+      "source": "Stream prototype index.html:13-16 + styles.css:327-345; PIA-MUR-D-002 T6=A",
+      "anatomy": [
+        "div#network-banner.network-banner[role='status'][aria-live='polite'] (position: fixed; top: calc(env(safe-area-inset-top, 0px) + 60pt); left: 0; right: 0; z-index 100)",
+        "span.network-banner__dot (8pt × 8pt, --status-failed-fg)",
+        "span.network-banner__text (\"You're offline. Some actions are disabled.\")"
+      ],
+      "states": ["hidden (default)", "visible (when navigator.onLine === false or 4xx/5xx)"],
+      "behavior": "Persistent top banner below Dynamic Island; disables destructive actions (FAB, Send, Retry Ingestion, Delete) at 40% opacity; resubmits use idempotency keys for safety (NFR-REL-002)",
+      "accessibility": {
+        "role": "status",
+        "ariaLive": "polite"
+      },
+      "motion": "Slide-in 220ms cubic-bezier(0.32, 0.72, 0, 1) (translateY -100% → 0); reduced-motion: instant",
+      "safeArea": "top: calc(env(safe-area-inset-top, 0px) + 60pt) (Dynamic Island clearance + 13pt buffer)",
+      "sourceFileChange": "apps/web/src/pages/shared.ts:186-189 (sharedJs) — add online/offline event listeners; show/hide banner; disable destructive actions"
+    },
+    {
+      "id": "loading-skeleton",
+      "name": "Loading Skeleton",
+      "source": "Defined by PIA-MUR-D-002 §6 (SSE pacing); mirrors existing baseline loading pattern at shared.ts:25",
+      "anatomy": [
+        "div.skeleton-row (matches final row height; --divider bg)",
+        "div.skeleton-block (rounded, --divider bg, height: 14pt or 19pt depending on role)",
+        "Subtle 1.5s pulse animation (opacity 0.6 → 1.0 → 0.6)"
+      ],
+      "variants": [
+        "Conversation list skeleton: 5-6 placeholder rows",
+        "Document list skeleton: 4-5 placeholder rows",
+        "Message thread skeleton: 2-3 placeholder messages",
+        "Search results skeleton: 5-6 placeholder rows"
+      ],
+      "states": [
+        "default (≤ 1s) → persistent skeleton (no spinner)",
+        "cancellable (with Cancel button)"
+      ],
+      "behavior": "Skeleton renders for any operation > 200ms; persistent for > 1s (no spinner per PIA-MUR-D-002 §6); cancellable operations show a Cancel button",
+      "accessibility": {
+        "role": "status",
+        "ariaLabel": "'Loading…'",
+        "ariaLive": "polite"
+      },
+      "motion": "1.5s pulse opacity 0.6 → 1.0 → 0.6; reduced-motion: no pulse (static)",
+      "safeArea": "N/A (inline content)",
+      "sourceFileChange": "apps/web/src/pages/conversation-list.ts + document-list.ts + search.ts + conversation-detail.ts — add skeleton placeholders matching final row height"
+    },
+    {
+      "id": "network-required-splash",
+      "name": "Network-Required Splash",
+      "source": "Defined by PIA-MUR-D-002 §5 #5 ('Install-to-Home-Screen UX'); not in Stream prototype (out of concept scope; design contract specifies behavior)",
+      "anatomy": [
+        "div.splash (full viewport, --bg, centered)",
+        "div.splash__wordmark ('PIA', 32pt large, 700 weight, --fg)",
+        "No marketing copy; no spinner; no progress bar"
+      ],
+      "states": ["visible (≤ 200ms on cold launch)", "hidden (after first paint)"],
+      "behavior": "Shown briefly (≤ 200ms) on cold launch; system-font 'PIA'; no marketing copy; safe-area-cleared; immediately replaced by the app shell (default landing: Conversations)",
+      "accessibility": {
+        "role": "status",
+        "ariaLabel": "'PIA' (app name)",
+        "ariaLive": "off (intentionally not announced; not a status change)"
+      },
+      "motion": "Fade-out 100ms ease; reduced-motion: instant",
+      "safeArea": "padding: env(safe-area-inset-top, 0px) 16pt env(safe-area-inset-bottom, 0px) 16pt",
+      "sourceFileChange": "apps/api/src/routes/web.ts:126-192 (pageShell) — add <div class='splash'> in body; service worker pre-caches the splash image (see pwa.serviceWorker)"
+    }
+  ],
+  "states": [
+    {
+      "id": "loading",
+      "name": "Loading",
+      "contract": "Skeleton for ≤ 1s; persistent skeleton (no spinner) for > 1s; cancellable operations show a Cancel button",
+      "a11y": "role='status', aria-label='Loading…', aria-live='polite'",
+      "motion": "1.5s pulse opacity 0.6 → 1.0 → 0.6; reduced-motion: no pulse (static)"
+    },
+    {
+      "id": "empty",
+      "name": "Empty",
+      "contract": "Centered icon (48pt) + headline (24pt section, 700 weight) + 1-line subtext (19pt body, --fg-muted) + primary CTA (--accent bg, 44pt min-height)",
+      "a11y": "headline as h2; CTA button with accessible name; aria-live='polite' on first paint",
+      "motion": "Fade-in 200ms ease on first paint; reduced-motion: instant"
+    },
+    {
+      "id": "error",
+      "name": "Error",
+      "contract": "Inline red banner with code (uppercase) + sanitized 1-line message; retry button; error envelope `{error: {code, message, request_id}}` — show only `code` and sanitized `message`; NEVER show `request_id` to the user (audit-only)",
+      "a11y": "role='alert', aria-live='assertive'",
+      "motion": "Fade-in 200ms ease; reduced-motion: instant"
+    },
+    {
+      "id": "offline",
+      "name": "Offline",
+      "contract": "Persistent top banner below Dynamic Island (--status-failed-bg, --status-failed-fg, 8pt dot); disables destructive actions (FAB, Send, Retry Ingestion, Delete) at 40% opacity; resubmits use idempotency keys (NFR-REL-002)",
+      "a11y": "role='status', aria-live='polite'; disabled controls have aria-disabled='true'",
+      "motion": "Slide-in 220ms cubic-bezier(0.32, 0.72, 0, 1) (translateY -100% → 0); reduced-motion: instant"
+    },
+    {
+      "id": "pressed",
+      "name": "Pressed",
+      "contract": "8% darker background (var(--divider) on rows; scale 0.94 on FAB); release on touchend / mouseup",
+      "a11y": "Visual only; no ARIA state change",
+      "motion": "Row press 80ms ease-out; FAB press 100ms ease-out"
+    },
+    {
+      "id": "focus",
+      "name": "Focus",
+      "contract": "2pt --accent outline + 2pt offset (FAB uses 3pt white outline); visible on :focus-visible only (keyboard); hidden on :focus (mouse)",
+      "a11y": ":focus-visible selector; never rely on :focus alone",
+      "motion": "Instant (no transition)"
+    },
+    {
+      "id": "disabled",
+      "name": "Disabled",
+      "contract": "40% opacity; pointer-events: none; aria-disabled='true' on the control; semantic disabled state for inputs/buttons",
+      "a11y": "aria-disabled='true' on buttons; disabled attribute on form controls; VoiceOver announces 'dimmed'",
+      "motion": "N/A"
+    },
+    {
+      "id": "success",
+      "name": "Success",
+      "contract": "Inline checkmark + 1-line text; aria-live='polite' announces; auto-dismiss after 3s (or on next user action)",
+      "a11y": "role='status', aria-live='polite'",
+      "motion": "Fade-in 200ms ease; auto-dismiss fade-out 200ms ease after 3s"
+    }
+  ],
+  "motion": {
+    "adaptive": true,
+    "userSelectable": true,
+    "reducedMotion": true,
+    "implementation": "All durations and easings expressed as CSS custom properties; single token change disables all sheets (e.g., --motion-sheet); prefers-reduced-motion media query sets motion tokens to 0.01ms (preserves layout via keyframe 'to' state)",
+    "tokens": {
+      "--motion-fast": "120ms",
+      "--motion-base": "200ms",
+      "--motion-slow": "280ms",
+      "--motion-sheet": "280ms",
+      "--motion-fade": "200ms",
+      "--motion-ease": "cubic-bezier(0.32, 0.72, 0, 1)"
+    },
+    "userSelection": "prefers-reduced-motion media query honored by default; .theme-reduce-motion class adds a manual toggle (matches Stream prototype app.js:167-168); the toggle is also accessible via a settings sheet (PIA-MUR-D-002 §6 acknowledgment)",
+    "reducedMotionFallback": "0.01ms (not 0ms); preserves keyframe 'to' state on the rendered element so final state is reached via animation rather than skipped",
+    "bannedAnimations": [
+      "parallax",
+      "zoom on tap",
+      "infinite animations",
+      "auto-playing carousels"
+    ],
+    "tabBar": {
+      "colorTransition": "100ms linear (selected indicator)",
+      "tapResponse": "instant (no transition; visual press via background flash)"
+    },
+    "sheet": {
+      "open": "280ms cubic-bezier(0.32, 0.72, 0, 1) (translateY 100% → 0)",
+      "close": "240ms cubic-bezier(0.32, 0.72, 0, 1) (translateY 0 → 100%)",
+      "backdropFade": "200ms ease (opacity 0 → 0.4)",
+      "reducedMotion": "snap open/closed instantly; --motion-sheet: 0.01ms"
+    }
+  },
+  "density": {
+    "progressiveDisclosure": true,
+    "userSelectable": true,
+    "screenSpecific": true,
+    "implementation": "All list rows match final height (no spinners; persistent skeleton); long content scrolls in the sheet panel; row height adapts to Dynamic Type (AX5) by scaling padding, not min-height, to keep touch targets at 44pt",
+    "userDensityControls": "Per PIA-MUR-D-002 §5: text size follows Dynamic Type (system-level); no in-app density toggle in v1; the user can override accent color via .theme-dark and motion via .theme-reduce-motion",
+    "screenSpecificDensity": "Conversations: 19pt body, 14pt caption (default landing, conversation-first); Documents: 19pt body, 14pt caption (matches); Search: 19pt body, 14pt caption (matches); Detail: 19pt body, 14pt caption (matches conversation)",
+    "rowHeightPolicy": "Minimum 44pt (iOS HIG) for any interactive row; AX5 scales body 19pt → 34pt; rows grow vertically as padding scales, min-height is preserved for touch targets"
+  },
+  "accessibility": {
+    "minimum": "WCAG 2.2 AA",
+    "accessibilityFirst": true,
+    "aaaWherePractical": true,
+    "dynamicType": {
+      "support": "All body sizes scale via .theme-ax5 class or system-level Dynamic Type; AX5 (Larger Text accessibility size) supported; ratio 1.78× (19pt → 34pt body)",
+      "implementation": "Type tokens are CSS custom properties; AX5 multiplier applied at the :root level (.theme-ax5 class); system Dynamic Type on iOS is honored via -apple-system-body/-apple-system-headline (PIA-MUR-D-002 §6)"
+    },
+    "touchTargets": {
+      "minimum": "44pt × 44pt (iOS HIG; WCAG 2.2 SC 2.5.8 Target Size Minimum Level AA)",
+      "primaryActions": "56pt × 56pt (FAB, Send button)",
+      "tapAreaAudit": "Citation chip: 24pt visible glyph + transparent padding to 44pt; tabs: 1/3 width × 49pt height + safe-area; rows: min-height 44pt"
+    },
+    "colorContrast": {
+      "minimum": "4.5:1 for body text (WCAG 2.2 SC 1.4.3)",
+      "target": "7:1 for body text where practical (WCAG 2.2 AAA)",
+      "lightModeVerification": {
+        "bodyText": "#0A0A0A on #FFFFFF = 19.3:1 (AAA)",
+        "accentText": "#2563EB on #FFFFFF = 4.6:1 (AA pass for ≥ 18pt body text)",
+        "accentBodyText": "#1D4ED8 on #FFFFFF = 6.1:1 (AAA for < 18pt body text; used for primary buttons with body text)"
+      },
+      "darkModeVerification": "UNVERIFIED per PIA-MUR-D-003c UNVERIFIED items list; requires automated axe-core check at G7 gate (B-6 dependency-approval policy)"
+    },
+    "accessibleNames": {
+      "allInteractiveElements": "Every button, input, link has an accessible name (text content, aria-label, or aria-labelledby)",
+      "iconOnlyButtons": "aria-label required (e.g., 'New conversation', 'Upload document', 'Back to conversations', 'Send', 'Workspace: PIA Workspace. Tap to switch.')"
+    },
+    "liveRegions": {
+      "thread": "role='log' aria-live='polite' aria-relevant='additions' (existing baseline at conversation-detail.ts:40)",
+      "networkBanner": "role='status' aria-live='polite'",
+      "errorBanner": "role='alert' aria-live='assertive'",
+      "feedbackStatus": "aria-live='polite' on <output> (existing baseline at conversation-detail.ts:96)"
+    },
+    "landmarks": {
+      "header": "role='banner' (or <header> element)",
+      "main": "role='main' (or <main> element)",
+      "nav": "role='navigation' aria-label='Primary' on .tab-bar",
+      "footer": "role='contentinfo' (when applicable)",
+      "aside": "role='complementary' (e.g., offline banner if persistent; otherwise role='status')"
+    },
+    "headingHierarchy": "h1 (page title; visually-hidden) → h2 (section) → h3 (subsection); no skipped levels; citation chip is not a heading",
+    "voiceOver": {
+      "rotor": "Landmarks + Headings + Links + Form Controls",
+      "citationChipLabel": "'Citation <idx> of <total>, claims: <claim text>, button'",
+      "modeDot": "aria-hidden='true' (decorative); the mode name is in the row text"
+    },
+    "keyboard": {
+      "tabOrder": "Top-to-bottom, left-to-right; no tabindex > 0; no positive tabindex anywhere",
+      "externalKeyboard": "Tab / Shift+Tab traverse; Enter / Space activate; Esc closes sheets and modals; focus-visible always shows the outline",
+      "focusTrap": "Sheets and modals trap focus within their panel; Tab cycles, Shift+Tab from first → last, Esc closes"
+    },
+    "skipLink": "'Skip to main content' hidden until focused; first focusable element on every page",
+    "motionSafety": "prefers-reduced-motion: reduce honored in both Safari browser mode and installed PWA mode (UNVERIFIED per PIA-MUR-D-002 §6 for installed PWA; flagged for device-validation)"
+  },
+  "pwa": {
+    "networkRequired": true,
+    "offlineSupported": false,
+    "manifest": {
+      "path": "/manifest.webmanifest",
+      "name": "Personal Intelligence and Action Engine",
+      "shortName": "PIA",
+      "startUrl": "/app",
+      "display": "standalone",
+      "backgroundColor": "#FFFFFF",
+      "themeColor": "#2563EB",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        },
+        {
+          "src": "/icon-512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        },
+        {
+          "src": "/apple-touch-icon.png",
+          "sizes": "180x180",
+          "type": "image/png"
+        }
+      ]
+    },
+    "meta": [
+      "<meta name=\"theme-color\" content=\"#2563EB\">",
+      "<meta name=\"apple-mobile-web-app-capable\" content=\"yes\">",
+      "<meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\">",
+      "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, viewport-fit=cover\">",
+      "<link rel=\"manifest\" href=\"/manifest.webmanifest\">",
+      "<link rel=\"apple-touch-icon\" href=\"/apple-touch-icon.png\">"
+    ],
+    "serviceWorker": {
+      "scope": "/",
+      "scriptPath": "/service-worker.js",
+      "preCache": [
+        "app shell HTML",
+        "app shell CSS",
+        "app shell JS",
+        "manifest.webmanifest",
+        "icons (192×192, 512×512, 180×180)",
+        "splash image"
+      ],
+      "doNotCache": [
+        "conversation content (network-required; stale conversation data is unsafe)",
+        "document content (network-required; stale document content is unsafe)",
+        "any /v1/* response (network-required; API responses are always live)"
+      ],
+      "fetchFailureBehavior": {
+        "navigation": "serve a static offline HTML (minimal shell with network-required splash + retry button)",
+        "v1Api": "let the request fail; the page must handle 401/500 with the error envelope (see dataPolicy.errorEnvelope)"
+      },
+      "implementationNote": "Service worker implementation is at the implementation-contract phase; this contract specifies behavior, not code"
+    },
+    "securityHeaders": {
+      "hsts": "Required when served via HTTPS; cloudflared quick-tunnel provides HTTPS automatically (per REPOSITORY_ADAPTER §'Runtime access'/'HTTPS requirement')",
+      "csp": "Tighten script-src to allow service-worker registration (per REPOSITORY_BASELINE §3 'CSP observation'); current 'self' 'unsafe-inline' permits SW registration; a stricter policy with nonces is recommended but is an implementation-contract concern",
+      "permissionsPolicy": "Keep camera=(), microphone=(), geolocation=(), interest-cohort() (per REPOSITORY_BASELINE §3)"
+    }
+  },
+  "dataPolicy": {
+    "realDataRequired": true,
+    "inventedContentAllowed": false,
+    "mockAcceptanceAllowed": false,
+    "realDataSources": [
+      "Captured baseline: .ui-redesign/baseline/REPOSITORY_BASELINE.md",
+      "HTTP probes: .ui-redesign/evidence/automated/http-baseline-probes.json",
+      "Source files: apps/web/src/pages/*.ts, apps/api/src/routes/web*.ts",
+      "Contracts: packages/contracts/src/index.ts (ConversationMode, FeedbackCategory, Citation, ModelRunStatusApi)",
+      "OpenAPI: api/openapi.yaml (37 operations)",
+      "Eval fixtures: evals/answers/datasets/sample.yaml (retention period, AI/weather summary)"
+    ],
+    "errorEnvelope": {
+      "shape": "{ error: { code: string, message: string, request_id: string } }",
+      "userFacing": "Show only `code` and a sanitized `message`; NEVER show `request_id` to the user (audit-only)",
+      "source": "Confirmed by HTTP probes (e.g., /v1/me returns this envelope on 401)",
+      "rationale": "request_id is for server-side audit; exposing it leaks correlation IDs to the user"
+    },
+    "noMocks": "Mock data is not allowed for acceptance evidence; if real data is unavailable (DB down, dev user not provisioned), the workflow blocks and the user is informed (per REPOSITORY_ADAPTER §'Data unavailable behavior')"
+  },
+  "openDecisions": [],
+  "followUpTopics": [
+    {
+      "id": "PIA-MUR-D-005-candidate",
+      "title": "Dark-mode color-contrast verification for status badges",
+      "rationale": "Status tokens are constant across light and dark mode in the Stream prototype (preserves semantic colors). The PIA-MUR-D-003c UNVERIFIED items list flags this for automated axe-core check at G7 gate.",
+      "owner": "device-validation (depends on B-6 Playwright + axe-core dependency approval)",
+      "blocks": "G7 gate automated a11y evidence; not blocking this design-contract gate",
+      "status": "acknowledged; not blocking"
+    },
+    {
+      "id": "PIA-MUR-D-006-candidate",
+      "title": "iOS 16 Pro Safari <dialog> showModal() focus-management verification",
+      "rationale": "PIA-MUR-D-002 §6 UNVERIFIED; Stream prototype uses <div class='sheet'> with role='dialog' (per evidence/source-file-changes.md 'UNVERIFIED: iOS 16 Pro Safari showModal() focus-management')",
+      "owner": "device-validation",
+      "blocks": "G7 gate physical-device evidence; not blocking this design-contract gate",
+      "status": "acknowledged; not blocking"
+    },
+    {
+      "id": "PIA-MUR-D-007-candidate",
+      "title": "prefers-reduced-motion in installed PWA mode",
+      "rationale": "PIA-MUR-D-002 §5 #13 UNVERIFIED; Stream prototype defines prefers-reduced-motion media query + .theme-reduce-motion class; installed PWA mode support needs device validation",
+      "owner": "device-validation",
+      "blocks": "G7 gate physical-device evidence; not blocking this design-contract gate",
+      "status": "acknowledged; not blocking"
+    },
+    {
+      "id": "PIA-MUR-D-008-candidate",
+      "title": "POST /v1/me/active-workspace endpoint for workspace switcher",
+      "rationale": "PIA-MUR-D-003c decision-packet §'Backend, API, data, and route effects' notes that the workspace switcher flow (T4=A via header avatar) requires an endpoint that does not exist in the current OpenAPI contract (37 operations). Out of redesign scope per PIA-MUR-D-002 §7.",
+      "owner": "PIA team / API owner",
+      "blocks": "Production deployment of workspace switching; design contract specifies the UX; implementation contract does not implement the endpoint",
+      "status": "acknowledged; not blocking"
+    }
+  ],
+  "blockersAcknowledged": {
+    "B-1": "Physical iPhone 16 Pro availability — RESOLVED 2026-06-14 per .ui-redesign/state/workflow-state.json#b1_resolution; downstream device-validation is unblocked",
+    "B-2": "mobile-ui-design-contract command missing — acknowledged; orchestrator dispatches directly to design-system-architect",
+    "B-3": ".opencode/run-logs/cookies.txt — mitigated by defensive .gitignore; never read, never committed",
+    "B-4": "opencode.json vs opencode.jsonc — separate ADR (not blocking this gate)",
+    "B-5": "AGENT_HANDOFF.md mislabels @pia/web as Next.js — low-risk docs (not blocking this gate)",
+    "B-6": "Playwright + axe-core dependency-approval policy — affects G7 gate; not blocking this design-contract gate"
+  },
+  "featureParityAcknowledged": {
+    "matrix": ".ui-redesign/contracts/FEATURE_PARITY_MATRIX.md",
+    "streamCoverage": "Rows 1-8 (8 screens): all IMPROVED; rows 9-14 (PWA-intent): all REPLACED or IMPROVED; rows 15-16 (BLOCKED gaps): /auth/logout and /openapi.yaml remain out of scope per PIA-MUR-D-002 §7",
+    "designContractFixes": "Items 14 (search.ts:131 JSON.stringify(locator)) and 15 (document-detail.ts:159 window.confirm) per PIA-MUR-D-002 §7 are addressed in the design contract (see result-card and full-screen-sheet components)"
+  },
+  "approval": {
+    "approvedBy": "user",
+    "approvedAt": "2026-06-14T00:00:00Z",
+    "decisionId": "PIA-MUR-D-004",
+    "rationale": "Translation of PIA-MUR-D-003c (Stream) concept and PIA-MUR-D-002 (product model) into a complete, validated design system. AC1-AC8 all met. Open decisions: 0. Authorizes the design system as the source of truth for the implementation contract (PIA-MUR-D-004-IMPL). Does NOT authorize any product code, dependency, schema, route, API, auth, infra, or deployment change."
+  }
+}

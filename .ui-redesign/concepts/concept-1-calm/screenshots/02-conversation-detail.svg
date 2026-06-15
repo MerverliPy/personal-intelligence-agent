@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 393 852" width="393" height="852" font-family="-apple-system, system-ui, sans-serif">
+  <rect width="393" height="852" fill="#FAFAF7"/>
+
+  <!-- Dynamic Island -->
+  <rect x="134.5" y="11" width="124" height="37" rx="18.5" fill="#000000"/>
+
+  <!-- Header with back button + title -->
+  <line x1="0" y1="91" x2="393" y2="91" stroke="#E5E5E2" stroke-width="0.5"/>
+  <!-- Back chevron (44pt target) -->
+  <g transform="translate(8, 47)" stroke="#000000" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14,5 L7,11 L14,17"/>
+  </g>
+  <text x="196.5" y="68" font-size="17" font-weight="600" fill="#000000" text-anchor="middle">What is the retention period?</text>
+
+  <!-- Message thread -->
+  <!-- User message (right-aligned) -->
+  <g transform="translate(0, 110)">
+    <rect x="180" y="0" width="197" height="50" rx="14" fill="#D0E8FF"/>
+    <text x="190" y="20" font-size="17" fill="#000000">What is the</text>
+    <text x="190" y="40" font-size="17" fill="#000000">retention period?</text>
+  </g>
+
+  <!-- Assistant message with inline citations -->
+  <g transform="translate(16, 175)">
+    <text x="0" y="20" font-size="17" fill="#000000">The retention period is 7 years</text>
+    <text x="0" y="48" font-size="17" fill="#000000">
+      <tspan>This applies to all records</tspan>
+    </text>
+    <text x="0" y="76" font-size="17" fill="#000000">
+      <tspan>ingested under the standard policy</tspan>
+      <tspan fill="#2563EB" text-decoration="underline" dx="2" font-weight="500">[2]</tspan>
+      <tspan>.</tspan>
+    </text>
+
+    <!-- Citation 1 chip inline (next to "7 years") -->
+    <g transform="translate(195, 7)">
+      <text font-size="17" font-weight="500" fill="#2563EB" text-decoration="underline" text-underline-offset="2">[1]</text>
+    </g>
+
+    <!-- Status + Feedback row -->
+    <g transform="translate(0, 100)">
+      <rect x="0" y="0" width="84" height="22" rx="4" fill="#DCFCE7"/>
+      <text x="42" y="15" font-size="13" font-weight="600" fill="#166534" text-anchor="middle">COMPLETED</text>
+      <text x="98" y="15" font-size="13" fill="#6B6B68" text-decoration="underline">Feedback</text>
+    </g>
+  </g>
+
+  <!-- Second pair -->
+  <g transform="translate(0, 320)">
+    <rect x="180" y="0" width="197" height="50" rx="14" fill="#D0E8FF"/>
+    <text x="190" y="20" font-size="17" fill="#000000">Compare AI and</text>
+    <text x="190" y="40" font-size="17" fill="#000000">weather sources</text>
+  </g>
+
+  <g transform="translate(16, 385)">
+    <text x="0" y="20" font-size="17" fill="#000000">
+      <tspan>AI is transforming industries</tspan>
+      <tspan fill="#2563EB" text-decoration="underline" dx="2" font-weight="500">[1]</tspan>
+    </text>
+    <text x="0" y="48" font-size="17" fill="#000000">
+      <tspan>and today's weather is sunny with a</tspan>
+    </text>
+    <text x="0" y="76" font-size="17" fill="#000000">
+      <tspan>high of 75 degrees</tspan>
+      <tspan fill="#2563EB" text-decoration="underline" dx="2" font-weight="500">[2]</tspan>
+      <tspan>.</tspan>
+    </text>
+
+    <g transform="translate(0, 100)">
+      <rect x="0" y="0" width="84" height="22" rx="4" fill="#DCFCE7"/>
+      <text x="42" y="15" font-size="13" font-weight="600" fill="#166534" text-anchor="middle">COMPLETED</text>
+      <text x="98" y="15" font-size="13" fill="#6B6B68" text-decoration="underline">Feedback</text>
+    </g>
+  </g>
+
+  <!-- Composer (56pt tall) -->
+  <line x1="0" y1="687" x2="393" y2="687" stroke="#E5E5E2" stroke-width="0.5"/>
+  <g transform="translate(12, 695)">
+    <rect x="0" y="0" width="293" height="56" rx="18" fill="#FAFAF7" stroke="#D0D0CC" stroke-width="0.5"/>
+    <text x="14" y="34" font-size="17" fill="#9B9B98">Message</text>
+    <circle cx="333" cy="28" r="28" fill="#000000"/>
+    <path d="M328,18 L343,28 L333,40 Z" fill="#FAFAF7" stroke="#FAFAF7" stroke-width="0.5"/>
+    <line x1="333" y1="22" x2="333" y2="34" stroke="#000000" stroke-width="1"/>
+  </g>
+
+  <!-- Tab bar -->
+  <line x1="0" y1="769" x2="393" y2="769" stroke="#E5E5E2" stroke-width="0.5"/>
+  <g transform="translate(0, 769)">
+    <rect x="0" y="0" width="131" height="49" fill="none"/>
+    <g transform="translate(65.5, 14)" stroke="#6B6B68" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-19,-6 c0,-1.1 .9,-2 2,-2 h14 a2,2 0 0 1 2,2 v8 a2,2 0 0 1 -2,2 h-9 l-5,4 v-4 h0 a2,2 0 0 1 -2,-2 z"/>
+    </g>
+    <text x="65.5" y="42" font-size="10" font-weight="500" fill="#6B6B68" text-anchor="middle">Conversations</text>
+    <rect x="131" y="0" width="131" height="49" fill="none"/>
+    <g transform="translate(196.5, 14)" stroke="#6B6B68" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-7,-10 h6 l4,4 v10 a2,2 0 0 1 -2,2 h-8 a2,2 0 0 1 -2,-2 v-12 a2,2 0 0 1 2,-2 z"/>
+      <path d="M-1,-10 v4 h4"/>
+      <path d="M-5,0 h8 M-5,4 h6"/>
+    </g>
+    <text x="196.5" y="42" font-size="10" font-weight="500" fill="#6B6B68" text-anchor="middle">Documents</text>
+    <rect x="262" y="0" width="131" height="49" fill="none"/>
+    <g transform="translate(327.5, 14)" stroke="#6B6B68" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="-2" cy="-2" r="6"/>
+      <line x1="2.5" y1="2.5" x2="8" y2="8"/>
+    </g>
+    <text x="327.5" y="42" font-size="10" font-weight="500" fill="#6B6B68" text-anchor="middle">Search</text>
+  </g>
+  <rect x="129.5" y="841" width="134" height="5" rx="2.5" fill="#000000"/>
+
+  <text x="16" y="838" font-size="9" fill="#9B9B98">Calm — Conversation detail with inline [N] citation chips</text>
+</svg>

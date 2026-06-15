@@ -1,0 +1,31 @@
+{
+  "dpcId": "DPC-6: safe-area insets",
+  "result": "PASS",
+  "subTests": [
+    {
+      "title": "Dynamic Island clearance is at least 59pt from the viewport top",
+      "status": "PASS",
+      "durationMs": 277,
+      "errors": []
+    },
+    {
+      "title": "tab bar is at the bottom of the viewport with no overflow",
+      "status": "PASS",
+      "durationMs": 260,
+      "errors": []
+    },
+    {
+      "title": "Dynamic Island clearance is at least 59pt from the viewport top",
+      "status": "PASS",
+      "durationMs": 631,
+      "errors": []
+    },
+    {
+      "title": "tab bar is at the bottom of the viewport with no overflow",
+      "status": "PASS",
+      "durationMs": 525,
+      "errors": []
+    }
+  ],
+  "timestamp": "2026-06-15T22:27:04.555Z"
+}

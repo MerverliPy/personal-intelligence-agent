@@ -42,7 +42,11 @@ export function conversationDetailPage(
   </div>
 </section>
 
-<dialog id="citation-modal" class="citation-modal" aria-labelledby="citation-modal-title"></dialog>
+<div id="citation-sheet" class="citation-sheet" role="dialog" aria-modal="true" aria-labelledby="citation-modal-title" hidden>
+  <div class="citation-sheet__panel">
+    <dialog id="citation-modal" class="citation-modal" aria-labelledby="citation-modal-title"></dialog>
+  </div>
+</div>
 `;
 
   const bodyScript = `
@@ -150,18 +154,27 @@ async function submitFeedback(form) {
 }
 
 async function openCitationModal(citationId) {
-  // The modal renders from the in-memory citation list, NOT from a
-  // fetch. See the citation-modal test for the no-fetch guarantee.
+  // PIA-MUR-D-004-IMPL commit 6: the citation dialog is now wrapped
+  // in a slide-up sheet container (#citation-sheet). We toggle the
+  // sheet wrapper's hidden attribute instead of calling
+  // dialog.showModal() (the inner <dialog> is left in the DOM but
+  // hidden inside the sheet panel; the sheet is the visible
+  // affordance).
+  var sheet = document.getElementById('citation-sheet');
   var modal = document.getElementById('citation-modal');
-  if (!modal) return;
+  if (!sheet || !modal) return;
   var citations = (window.__piaCitations && window.__piaCitations[citationId]) || null;
   if (!citations) {
     modal.innerHTML = '<p>Citation details are no longer available.</p>';
   } else {
     modal.innerHTML = renderCitationModalBodyClient(citations);
   }
-  if (typeof modal.showModal === 'function') modal.showModal();
-  else modal.setAttribute('open', '');
+  sheet.hidden = false;
+}
+
+function closeCitationModal() {
+  var sheet = document.getElementById('citation-sheet');
+  if (sheet) sheet.hidden = true;
 }
 
 function renderCitationModalBodyClient(citation) {

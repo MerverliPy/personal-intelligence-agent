@@ -1,0 +1,79 @@
+{
+  "dpcId": "DPC-4: touch targets (UNVERIFIED-4)",
+  "result": "PASS",
+  "subTests": [
+    {
+      "title": "tab bar buttons meet 44pt",
+      "status": "PASS",
+      "durationMs": 376,
+      "errors": []
+    },
+    {
+      "title": "FAB meets 56pt (primary)",
+      "status": "PASS",
+      "durationMs": 313,
+      "errors": []
+    },
+    {
+      "title": "Send button meets 56pt (primary)",
+      "status": "PASS",
+      "durationMs": 458,
+      "errors": []
+    },
+    {
+      "title": "avatar meets 44pt (expected FAIL — CSS says 32pt)",
+      "status": "PASS",
+      "durationMs": 281,
+      "errors": []
+    },
+    {
+      "title": "back chevron meets 44pt",
+      "status": "PASS",
+      "durationMs": 465,
+      "errors": []
+    },
+    {
+      "title": "citation chip tap area meets 44pt (PIA-MUR-D-009 fix applied)",
+      "status": "PASS",
+      "durationMs": 477,
+      "errors": []
+    },
+    {
+      "title": "tab bar buttons meet 44pt",
+      "status": "PASS",
+      "durationMs": 761,
+      "errors": []
+    },
+    {
+      "title": "FAB meets 56pt (primary)",
+      "status": "PASS",
+      "durationMs": 580,
+      "errors": []
+    },
+    {
+      "title": "Send button meets 56pt (primary)",
+      "status": "PASS",
+      "durationMs": 727,
+      "errors": []
+    },
+    {
+      "title": "avatar meets 44pt (expected FAIL — CSS says 32pt)",
+      "status": "PASS",
+      "durationMs": 573,
+      "errors": []
+    },
+    {
+      "title": "back chevron meets 44pt",
+      "status": "PASS",
+      "durationMs": 720,
+      "errors": []
+    },
+    {
+      "title": "citation chip tap area meets 44pt (PIA-MUR-D-009 fix applied)",
+      "status": "PASS",
+      "durationMs": 712,
+      "errors": []
+    }
+  ],
+  "timestamp": "2026-06-15T22:27:04.555Z"
+}

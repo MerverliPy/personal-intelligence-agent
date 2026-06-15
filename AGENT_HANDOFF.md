@@ -2,70 +2,80 @@
 
 ## Audit Summary
 
-- **Date:** 2026-06-12
+- **Date:** 2026-06-13
 - **Repository:** Personal Intelligence and Action Engine (PIA)
-- **Branch:** `main` @ `e209dcc` — clean worktree
+- **Branch:** `main` @ `efab8b7` — clean worktree
 - **Stack:** TypeScript 5.7 strict, Node.js 22.22.3, pnpm 9.15.9, Fastify, PostgreSQL 17 + pgvector, Redis 7, MinIO, Turborepo, Vitest
-- **Architecture:** 3 apps (api, worker, web) composing 14 domain packages with strict dependency inversion; workspace-isolated RBAC, OIDC auth, append-only audit, durable outbox jobs
-- **Phase status:** P0 ✓ P1 ✓ P2 ✓ (all gates DONE); P3 IN_PROGRESS (2/10), P4–P7 NOT_STARTED
-- **Health:** All CI quality gates pass. 23 of 64 tasks complete. No secrets, no build failures, no auth bypasses, no test.skip/only patterns, no `as any` in production code.
-- **Previous handoff:** `AGENT_HANDOFF.md` dated 2026-06-11 — all P1 and P2 findings (AUD-P1-001, AUD-P2-001, AUD-P2-002) resolved. Remaining P3 items partially addressed (gitignore entries added, MANIFEST count partially updated). Three new P2/P3 staleness findings discovered in this audit.
-- **Scope inspected:** Root manifests, all CI/security scripts, compose.yaml, planning/backlog.yaml, planning/status.yaml, all run records (35 files), all review records (24 files), all package.json boundaries, key source paths in auth/knowledge/storage/audit/jobs/observability/config, API routes, db/schema.sql, db/migrations (7 files), .gitignore, .env.example, README.md, MANIFEST.md, opencode.jsonc.
-- **Not inspected:** Individual migration SQL semantics, provider SDK internals, Next.js app router details, infra/ Pulumi modules, full integration test suite (requires PostgreSQL), individual file-level review of all 300+ tracked source files.
-- **Commands executed:** `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test:unit`, `pnpm build`, `pnpm security:secrets`, `pnpm security:dependencies`, `pnpm exec tsx scripts/ci/validate-status.ts`, `pnpm eval:retrieval`.
-- **Limitations:** No PostgreSQL/Redis/MinIO running locally — integration tests skipped in test:unit (by design). `.env` file exists (931 bytes) but is gitignored and not inspected (safety boundary). Full schema reconciliation between `db/schema.sql` and 7 migration files not performed.
+- **Architecture:** 3 apps (api, worker, web) composing 14 domain packages with strict dependency inversion; workspace-isolated RBAC, OIDC auth, append-only audit, durable outbox jobs, provider-neutral LLM gateway, deterministic context compiler, citation verifier, answer-scoring evaluation harness
+- **Phase status:** P0 ✓ P1 ✓ P2 ✓ P3 ✓ (all four gates DONE); P4–P7 NOT_STARTED
+- **Health:** All CI quality gates pass. 33 of 64 tasks complete. No secrets, no build failures, no auth bypasses, no test.skip/only patterns, no `as any` in production code.
+- **Previous handoff:** `AGENT_HANDOFF.md` dated 2026-06-12 — at the time of that audit the repository was at `e209dcc` (P2-GATE closure) with P3 2/10 IN_PROGRESS and 23 of 64 tasks complete. All findings from that handoff (AUD-P2-001, AUD-P3-001) have since been resolved; AUD-P3-002 and AUD-P3-003 remain carried forward.
+- **Scope inspected:** Root manifests, all CI/security scripts, compose.yaml, planning/backlog.yaml, planning/status.yaml, all 41 run records, all 39 review records, all package.json boundaries, key source paths in auth/knowledge/storage/audit/jobs/observability/config/ai/evals, API routes, db/schema.sql, db/migrations (10 files), .gitignore, .env.example, README.md, MANIFEST.md, opencode.jsonc, docs/adr/0007-path-boundary-precedent.md, evals/answers/, test/e2e/, test/security/.
+- **Not inspected:** Individual migration SQL semantics, provider SDK internals, Next.js app router internals, infra/ Pulumi modules, individual file-level review of all 400+ tracked source files.
+- **Commands executed (prior runs cited as evidence):** `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test:unit`, `pnpm build`, `pnpm security:secrets`, `pnpm security:dependencies`, `pnpm eval:retrieval`, `pnpm eval:answers`, `pnpm test:e2e`, `pnpm test:security`, `pnpm exec tsx scripts/ci/validate-status.ts` — full evidence in `planning/runs/P3-GATE.md:42-56`.
+- **Limitations:** No PostgreSQL/Redis/MinIO running locally during this audit — integration, e2e, and security suites were not executed in this audit but have verified evidence in `planning/runs/P3-GATE.md:51-54` from the P3 closure run. `.env` file exists (931 bytes) but is gitignored and not inspected (safety boundary). Full schema reconciliation between `db/schema.sql` and 10 migration files not performed.
 
 ## Repository Map
 
 ### Applications (3)
 
-| Path           | Package       | Purpose                                                                             | Status          |
-| -------------- | ------------- | ----------------------------------------------------------------------------------- | --------------- |
-| `apps/api/`    | `@pia/api`    | Fastify HTTP API server — auth, workspaces, uploads, documents, retrieval, health   | Active          |
-| `apps/worker/` | `@pia/worker` | Background job consumer — outbox polling, ingestion workflow, retry/dead-letter     | Active          |
-| `apps/web/`    | `@pia/web`    | Next.js App Router frontend — workspace/project listing, document upload, search UI | Active (P2-T09) |
+| Path           | Package       | Purpose                                                                                              | Status |
+| -------------- | ------------- | ---------------------------------------------------------------------------------------------------- | ------ |
+| `apps/api/`    | `@pia/api`    | Fastify HTTP API server — auth, workspaces, uploads, documents, retrieval, conversations, feedback   | Active |
+| `apps/worker/` | `@pia/worker` | Background job consumer — outbox polling, ingestion workflow, retry/dead-letter                      | Active |
+| `apps/web/`    | `@pia/web`    | Next.js App Router frontend — workspaces, documents, conversations, citation UI, feedback form, a11y | Active |
 
 ### Domain Packages (14)
 
-| Path                      | Package              | Purpose                                                            | Status          |
-| ------------------------- | -------------------- | ------------------------------------------------------------------ | --------------- |
-| `packages/auth/`          | `@pia/auth`          | OIDC client, JWT sessions, RBAC, policy decisions, fake provider   | Active          |
-| `packages/config/`        | `@pia/config`        | Typed env-var config with Redacted secret handling                 | Active          |
-| `packages/contracts/`     | `@pia/contracts`     | Shared API types, error envelopes, pagination                      | Active          |
-| `packages/db/`            | `@pia/db`            | PostgreSQL pool, migrations, membership queries                    | Active          |
-| `packages/domain/`        | `@pia/domain`        | Authorization types and role hierarchy                             | Active          |
-| `packages/audit/`         | `@pia/audit`         | Append-only audit event writer, reader, redaction                  | Active          |
-| `packages/observability/` | `@pia/observability` | Structured logger, correlation context, redaction                  | Active          |
-| `packages/storage/`       | `@pia/storage`       | S3/MinIO adapter, signed uploads, local adapter                    | Active          |
-| `packages/jobs/`          | `@pia/jobs`          | Outbox events, consumer, retry policies                            | Active          |
-| `packages/knowledge/`     | `@pia/knowledge`     | Parsing, chunking, embeddings, retrieval, citations, state machine | Active          |
-| `packages/evals/`         | `@pia/evals`         | Evaluation scorers, retrieval harness runner, dataset framework    | Active (P2-T10) |
-| `packages/ai/`            | `@pia/ai`            | Model gateway, prompt registry, context compiler                   | Active (P3)     |
-| `packages/memory/`        | `@pia/memory`        | Candidate/approved memory lifecycle                                | Shell (P4)      |
-| `packages/tools/`         | `@pia/tools`         | Tool registry, policy engine, approvals                            | Shell (P5)      |
+| Path                      | Package              | Purpose                                                                                                | Status     |
+| ------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------ | ---------- |
+| `packages/auth/`          | `@pia/auth`          | OIDC client, JWT sessions, RBAC, policy decisions, fake provider                                       | Active     |
+| `packages/config/`        | `@pia/config`        | Typed env-var config with Redacted secret handling                                                     | Active     |
+| `packages/contracts/`     | `@pia/contracts`     | Shared API types, error envelopes, pagination                                                          | Active     |
+| `packages/db/`            | `@pia/db`            | PostgreSQL pool, migrations, membership + conversation + feedback repositories                         | Active     |
+| `packages/domain/`        | `@pia/domain`        | Authorization types, role hierarchy, failure taxonomy                                                  | Active     |
+| `packages/audit/`         | `@pia/audit`         | Append-only audit event writer, reader, redaction                                                      | Active     |
+| `packages/observability/` | `@pia/observability` | Structured logger, correlation context, redaction                                                      | Active     |
+| `packages/storage/`       | `@pia/storage`       | S3/MinIO adapter, signed uploads, local adapter                                                        | Active     |
+| `packages/jobs/`          | `@pia/jobs`          | Outbox events, consumer, retry policies                                                                | Active     |
+| `packages/knowledge/`     | `@pia/knowledge`     | Parsing, chunking, embeddings, retrieval, citations, state machine, verification                       | Active     |
+| `packages/evals/`         | `@pia/evals`         | Evaluation scorers, retrieval harness runner, answer harness runner, dataset framework                 | Active     |
+| `packages/ai/`            | `@pia/ai`            | Model gateway, prompt registry, context compiler, assistant orchestrator, feedback service, SSE events | Active     |
+| `packages/memory/`        | `@pia/memory`        | Candidate/approved memory lifecycle                                                                    | Shell (P4) |
+| `packages/tools/`         | `@pia/tools`         | Tool registry, policy engine, approvals                                                                | Shell (P5) |
+
+### Evaluation, Test, and Architecture Decision Records
+
+| Path                                       | Purpose                                                                                  |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `evals/retrieval/`                         | Retrieval evaluation CLI + datasets (P2-T10)                                             |
+| `evals/answers/`                           | Grounded-answer evaluation CLI + datasets — 4 fixture datasets (P3-T10)                  |
+| `test/e2e/`                                | End-to-end journey tests — upload-to-feedback (P3-T10)                                   |
+| `test/security/`                           | Security suite — citation cross-tenant, prompt injection, provider failure, P3-T08 gap   |
+| `docs/adr/0007-path-boundary-precedent.md` | Formalizes `apps/api/src/routes/web*.ts` and `db/migrations/**` path-boundary precedents |
 
 ### Infrastructure & Configuration
 
 | Path                                     | Purpose                                                                            |
 | ---------------------------------------- | ---------------------------------------------------------------------------------- |
 | `compose.yaml`                           | Local dev dependencies (pgvector, Redis, MinIO)                                    |
-| `db/schema.sql`                          | Reference PostgreSQL/pgvector schema (619 lines)                                   |
-| `db/migrations/`                         | 7 versioned forward migrations (001–006, 663 lines total)                          |
+| `db/schema.sql`                          | Reference PostgreSQL/pgvector schema                                               |
+| `db/migrations/`                         | 10 versioned forward migrations (001–010)                                          |
 | `.github/workflows/ci.yaml`              | CI quality gates + security checks                                                 |
 | `scripts/ci/check-all.sh`                | Local CI simulation (format → lint → status → typecheck → test → build → security) |
 | `scripts/ci/validate-status.ts`          | Governance validation (dependency/reviewer/gate integrity)                         |
 | `scripts/security/check-secrets.sh`      | Secret pattern scan with false-positive filters                                    |
 | `scripts/security/check-dependencies.sh` | `pnpm audit --prod` vulnerability scan                                             |
-| `api/openapi.yaml`                       | OpenAPI 3.1 contract (37 operations)                                               |
+| `api/openapi.yaml`                       | OpenAPI 3.1 contract                                                               |
 
 ### Planning Artifacts
 
-| Path                    | Purpose                                            |
-| ----------------------- | -------------------------------------------------- |
-| `planning/backlog.yaml` | 64 tasks across 8 phases (P0–P7)                   |
-| `planning/status.yaml`  | Execution state tracker — 23 DONE, 41 NOT_STARTED  |
-| `planning/runs/`        | 35 per-task run records with verification evidence |
-| `planning/reviews/`     | 24 review records (all P0–P2 tasks + gates)        |
+| Path                    | Purpose                                                                  |
+| ----------------------- | ------------------------------------------------------------------------ |
+| `planning/backlog.yaml` | 64 tasks across 8 phases (P0–P7)                                         |
+| `planning/status.yaml`  | Execution state tracker — 33 DONE, 31 NOT_STARTED, 0 FAILED_VERIFICATION |
+| `planning/runs/`        | 41 per-task run records with verification evidence                       |
+| `planning/reviews/`     | 39 review records (all P0–P3 tasks, gates, and audit findings)           |
 
 ### Excluded/Generated Areas
 
@@ -75,328 +85,289 @@
 
 ## Validation Results
 
-| Check                 | Command                                       | Result     | Evidence                                                                                                     |
-| --------------------- | --------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------ |
-| Format check          | `pnpm format:check`                           | **Passed** | All matched files use Prettier code style                                                                    |
-| Lint                  | `pnpm lint`                                   | **Passed** | 17/17 packages, 0 errors (all cached)                                                                        |
-| Type check            | `pnpm typecheck`                              | **Passed** | 28/28 tasks successful (11 build-cached, 17 typecheck)                                                       |
-| Unit tests            | `pnpm test:unit`                              | **Passed** | 34/34 tasks successful — 160 knowledge tests, 162 auth tests, 85 API tests, 38 evals tests, all others green |
-| Build                 | `pnpm build`                                  | **Passed** | 17/17 packages compile (14 tsc, 2 no-build shells)                                                           |
-| Secrets scan          | `pnpm security:secrets`                       | **Passed** | No secrets detected                                                                                          |
-| Dependency audit      | `pnpm security:dependencies`                  | **Passed** | No known vulnerabilities found                                                                               |
-| Governance validation | `pnpm exec tsx scripts/ci/validate-status.ts` | **Passed** | 64 tasks, 8 phases — all dependency/reviewer/gate checks pass                                                |
-| Retrieval evaluation  | `pnpm eval:retrieval`                         | **Passed** | 5/5 cases passed, 100% recall@K, 100% MRR, 100% version/auth correctness                                     |
+P3-GATE-anchored evidence (full reproduction in `planning/runs/P3-GATE.md:42-56`).
+
+| Check                 | Command                                       | Result     | Evidence                                                                                                      |
+| --------------------- | --------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------- |
+| Format check          | `pnpm format:check`                           | **Passed** | All matched files use Prettier code style (auto-fix applied to `planning/reviews/P3-T10.md`)                  |
+| Lint                  | `pnpm lint`                                   | **Passed** | 17/17 packages, 0 errors; 1 pre-existing unrelated warning in `packages/ai/src/assistant/orchestrator.ts:521` |
+| Type check            | `pnpm typecheck`                              | **Passed** | 29/29 tasks successful                                                                                        |
+| Unit tests            | `pnpm test:unit`                              | **Passed** | 34/34 tasks successful — **921 tests** cumulative across 13 packages                                          |
+| Build                 | `pnpm build`                                  | **Passed** | 17/17 packages compile                                                                                        |
+| Secrets scan          | `pnpm security:secrets`                       | **Passed** | No secrets detected                                                                                           |
+| Dependency audit      | `pnpm security:dependencies`                  | **Passed** | No known production-runtime vulnerabilities; 2 dev-only advisories (see AUD-P3-104)                           |
+| Governance validation | `pnpm exec tsx scripts/ci/validate-status.ts` | **Passed** | 64 tasks, 8 phases, 8 gates — all dependency/reviewer/gate checks pass                                        |
+| Retrieval evaluation  | `pnpm eval:retrieval`                         | **Passed** | 11/11 cases, 0 failures, 0 security failures                                                                  |
+| Answer evaluation     | `pnpm eval:answers`                           | **Passed** | 11/11 evaluated; 4 `security_critical: true` correctly flagged; release-blocking exit-2 fires by design       |
+| End-to-end suite      | `pnpm test:e2e`                               | **Passed** | 1/1 upload-to-feedback journey                                                                                |
+| Security suite        | `pnpm test:security`                          | **Passed** | 13/13 tests across 5 files (cross-tenant, injection, provider failure, P3-T08 sentinel)                       |
+
+### Test breakdown by package (cumulative, P3-GATE.md:62-77)
+
+| Package       | Tests   | Result   |
+| ------------- | ------- | -------- |
+| domain        | 11      | PASS     |
+| web           | 51      | PASS     |
+| config        | 17      | PASS     |
+| observability | 34      | PASS     |
+| contracts     | 21      | PASS     |
+| storage       | 34      | PASS     |
+| auth          | 162     | PASS     |
+| jobs          | 18      | PASS     |
+| audit         | 36      | PASS     |
+| knowledge     | 201     | PASS     |
+| evals         | 81      | PASS     |
+| ai            | 143     | PASS     |
+| api           | 112     | PASS     |
+| **Total**     | **921** | **PASS** |
 
 ## Findings Summary
 
-| ID         | Severity | Confidence | Finding                                                                                                                                                                                                                | Location                                                                                                                         | Status          |
-| ---------- | -------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| AUD-P2-001 | P2       | High       | README.md progress badges, phase table, and summary text are stale — P2 shown as 7/10 in-progress but is 10/10 DONE; "20 of 50" should be "23 of 64"; "Currently In Progress" section lists completed tasks P2-T08–T10 | `README.md` lines 16–19, 43–62, 762                                                                                              | New             |
-| AUD-P3-001 | P3       | High       | MANIFEST.md stale — "P2 in progress" should be "P2 complete"; "17 completed" should be "23 completed"; "301 tracked files" should be "329"                                                                             | `MANIFEST.md` lines 7–11                                                                                                         | New             |
-| AUD-P3-002 | P3       | Medium     | 12 `as unknown as` type casts — 5 in production code paths, 7 in test code. Present since original audit; no regression but no hardening either                                                                        | `publishing-stage.ts:40`, `s3-adapter.ts:133`, `session.ts:105`, `upload-workflow.ts:46`, `idempotency.ts:189,202`, 7 test files | Carried forward |
-| AUD-P3-003 | P3       | Low        | `db/schema.sql` (619 lines reference) vs 7 migration files (663 lines) — potential drift; never systematically reconciled                                                                                              | `db/schema.sql`, `db/migrations/*.sql`                                                                                           | Carried forward |
+| ID         | Severity | Confidence | Finding                                                                                                                                 | Location                                                                                                           | Status                                                                                |
+| ---------- | -------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| AUD-P2-001 | P2       | High       | README progress indicators (badges, phase table, summary, in-progress section, footer) were stale — P2 shown as 7/10 in-progress        | `README.md` lines 18, 44, 50, 57–65, 761                                                                           | **Resolved** (commits `dd84116`, `ab7247e`; run record `planning/runs/AUD-P2-001.md`) |
+| AUD-P3-001 | P3       | High       | MANIFEST metadata (tracked-file count, phase, task counts) was stale                                                                    | `MANIFEST.md` lines 9–11                                                                                           | **Resolved** (commits `dd84116`, `ab7247e`)                                           |
+| AUD-P3-002 | P3       | Medium     | 5 `as unknown as` type casts in production code at adapter boundaries                                                                   | `publishing-stage.ts:40`, `s3-adapter.ts:133`, `session.ts:105`, `upload-workflow.ts:46`, `idempotency.ts:189,202` | Carried forward                                                                       |
+| AUD-P3-003 | P3       | Low        | `db/schema.sql` reference vs 10 cumulative migrations — drift risk                                                                      | `db/schema.sql`, `db/migrations/*.sql`                                                                             | Carried forward                                                                       |
+| AUD-P3-101 | P3       | High       | `submitFeedback` does not verify that `messageId` belongs to the supplied `workspaceId` at the service layer                            | `packages/ai/src/feedback/service.ts`                                                                              | New — P4 follow-up                                                                    |
+| AUD-P3-102 | P3       | Medium     | Orchestrator passes raw provider error text to the client (truncated to 200 chars) — not mapped to sanitized safe messages              | `packages/ai/src/assistant/orchestrator.ts:524-532`                                                                | New — P4 follow-up                                                                    |
+| AUD-P3-103 | P3       | Low        | `test/e2e/**` and `test/security/**` not in `.eslintrc.json` `parserOptions.project` — `pnpm exec eslint test/...` reports parse errors | `.eslintrc.json`                                                                                                   | New — optional hardening                                                              |
+| AUD-P3-104 | P3       | High       | Dev-only dependency advisories: `vitest@2.1.9` (critical GHSA-5xrq-8626-4rwp), `esbuild`/`vite` (moderate) — no production impact       | `pnpm-lock.yaml`                                                                                                   | New — known dev-only                                                                  |
+| AUD-P3-105 | P3       | Low        | `apps/api`, `apps/web`, `apps/worker` use `echo`-based build stubs; real build tooling deferred                                         | `apps/api/package.json`, `apps/web/package.json`, `apps/worker/package.json`                                       | New — known shell                                                                     |
+| AUD-P3-106 | P3       | Medium     | File scanning uses a stub; real malware scanning deferred to P7                                                                         | `packages/knowledge/src/ingestion/scan-stub`                                                                       | New — P7 follow-up                                                                    |
 
-### Previously Resolved Findings (from 2026-06-11 handoff)
+### Resolved Findings (from 2026-06-12 handoff)
 
-| ID                                                          | Status                                                        |
-| ----------------------------------------------------------- | ------------------------------------------------------------- |
-| AUD-P1-001 (P2-T07 missing from status.yaml)                | **Resolved** — P2-T07 added to status.yaml as DONE            |
-| AUD-P2-001 (P2-T07 review record missing)                   | **Resolved** — `planning/reviews/P2-T07.md` created           |
-| AUD-P2-002 (P2-T08–T10 missing from status)                 | **Resolved** — all three added to status.yaml as DONE         |
-| AUD-P3-001 (MANIFEST tracked files 228→301)                 | **Partially resolved** — count was 301, now 329 (stale again) |
-| AUD-P3-002 (.gitignore missing `__pycache__/` and `.venv/`) | **Resolved** — entries added to `.gitignore`                  |
-| AUD-P3-003 (untracked dev artifacts)                        | **Resolved** — entries added to `.gitignore`                  |
+| ID                                              | Status                       | Evidence                                                               |
+| ----------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------- |
+| AUD-P2-001 (README stale progress)              | **Resolved**                 | Commits `dd84116`, `ab7247e`; run record `planning/runs/AUD-P2-001.md` |
+| AUD-P3-001 (MANIFEST stale metadata)            | **Resolved**                 | Commits `dd84116`, `ab7247e`                                           |
+| AUD-P1-001 (P2-T07 missing from status)         | **Resolved** (prior handoff) | `planning/status.yaml:42`                                              |
+| AUD-P2-002 (P2-T08–T10 missing from status)     | **Resolved** (prior handoff) | `planning/status.yaml:43-45`                                           |
+| AUD-P3-002 (gitignore `__pycache__/`, `.venv/`) | **Resolved** (prior handoff) | `.gitignore`                                                           |
 
 ## Detailed Findings
 
-### AUD-P2-001 — README.md Stale Progress Indicators (P2)
+### AUD-P2-001 — README.md Stale Progress Indicators (P2) — **RESOLVED**
 
-**Severity:** P2 | **Confidence:** High | **Status:** New
+- **Resolution commits:** `dd84116` ("docs: reconcile README and MANIFEST with current delivery state") and `ab7247e` ("docs: reconcile README and MANIFEST with P3-GATE completion").
+- **Current state:** P2 badge shows `P2_Knowledge-COMPLETE-22C55E` (green); phase table row shows 10/10 DONE; summary reads "33 of 64 tasks complete"; "Currently In Progress" section now describes P4 as the next active phase; footer reads "33 of 64 tasks complete · P0 ✓ · P1 ✓ · P2 ✓ · P3 ✓".
+- **Evidence:** `planning/runs/AUD-P2-001.md`.
 
-**Affected locations:**
+### AUD-P3-001 — MANIFEST.md Stale Metadata (P3) — **RESOLVED**
 
-- `README.md:18` — Badge: `P2_Knowledge-7%2F10-F59E0B` (amber) should be `P2_Knowledge-COMPLETE-22C55E` (green)
-- `README.md:50` — Phase table: P2 row says `7/10` with `In Progress` gate; should be `10/10` with `DONE`
-- `README.md:43` — Summary: "20 of 50 tasks complete" should be "23 of 64 tasks complete"
-- `README.md:57–65` — "Currently In Progress" section lists P2-T08, P2-T09, P2-T10 as "last blockers"; all three are DONE
-- `README.md:59` — "These 3 tasks are the last blockers before the P2 knowledge phase can be closed" — P2 gate closed on 2026-06-12
-- `README.md:762` — Footer: "20 of 50 tasks complete · P0 ✓ · P1 ✓ · P2 in progress" should be "23 of 64 tasks complete · P0 ✓ · P1 ✓ · P2 ✓"
+- **Resolution commits:** `dd84116`, `ab7247e`.
+- **Current state (2026-06-13):** Tracked files 442, phase "P0, P1, P2, P3 complete; P4-P7 not started", 64 defined, 33 completed, 0 failed verification, baseline `dd84116`.
+- **Note:** The `git ls-files | wc -l` count is now 467 (25 higher than MANIFEST reports) — see AUD-P3-107 below.
 
-**Observed vs expected:** The README reflects repository state from before P2-T08/T09/T10 and P2-GATE completion. All P2 tasks are DONE and the P2-GATE closure run record exists at `planning/runs/P2-GATE.md`. The user-facing README misrepresents project maturity to readers.
+### AUD-P3-002 — `as unknown as` Type Casts in Production Code (P3) — **CARRIED FORWARD**
 
-**Impact:** External-facing documentation (GitHub README, npm/registry badges) shows incorrect project status — understates completion by 3 tasks and mislabels the P2 phase as active rather than complete.
+5 production casts (no change since prior handoff). No runtime evidence of bugs. Replacement requires narrowing at adapter boundaries (`pg.Pool` ↔ internal pool type, Fastify request augmentation, S3 head metadata, verified session payload). See `AGENT_HANDOFF.md@2026-06-12:175-200` for full location list and rationale.
 
-**Root cause:** README was not updated when P2-T08, P2-T09, P2-T10, and P2-GATE were completed (commits `ce7ae55`, `37b66e8`, `53af795`, `aabb577`, `e209dcc`).
+### AUD-P3-003 — Schema Drift Risk Between `db/schema.sql` and Migrations (P3) — **CARRIED FORWARD**
 
-**Remediation:**
+10 migrations (001–010, cumulative post-P3-T08); `db/schema.sql` is a reference design artifact and has not been systematically reconciled. Mitigated by `db/schema.sql:2` comment declaring migrations authoritative. See `AGENT_HANDOFF.md@2026-06-12:202-217` for remediation options.
 
-1. Change P2 badge from `7/10` amber to `COMPLETE` green (update URL-encoded badge text)
-2. Change P2 phase table row from `7/10, In Progress` to `10/10, DONE`
-3. Change summary from "20 of 50 tasks complete" to "23 of 64 tasks complete"
-4. Replace "Currently In Progress" section — either remove it or update to reflect P3 as next phase
-5. Change footer line from "20 of 50 tasks complete · P0 ✓ · P1 ✓ · P2 in progress" to "23 of 64 tasks complete · P0 ✓ · P1 ✓ · P2 ✓"
-6. If any "P3–P7 Planned" section text references the P2 gap, update accordingly
-7. Regenerate badge on shield.io or update the static badge text
+### AUD-P3-101 — P3-T08 Cross-Tenant Insert Gap (P3) — **NEW, P4 FOLLOW-UP**
 
-**Acceptance criteria:**
+- **Affected:** `packages/ai/src/feedback/service.ts` `submitFeedback()` does not verify that the supplied `messageId` belongs to the supplied `workspaceId`.
+- **Defense-in-depth present:** (1) `apps/api/src/routes/feedback.ts` calls `requireWorkspaceContext`; (2) DB-level RLS policy on `feedback` enforces workspace isolation.
+- **Gap:** A direct caller of `submitFeedback` (bypassing the route) could insert feedback for another workspace's message. The route is the only production caller.
+- **Evidence:** `test/security/p3-t08-cross-tenant-insert.test.ts` documents the gap as a regression sentinel. Cited in `planning/runs/P3-GATE.md:131-134`.
+- **Remediation:** Add workspace alignment check in `submitFeedback`; add a unit test that does not rely on the route layer.
+- **Acceptance criteria:** `submitFeedback` rejects (or aligns) when `messageId.workspaceId !== workspaceId`; the regression sentinel in `test/security/p3-t08-cross-tenant-insert.test.ts` passes.
 
-- README.md badge shows P2=COMPLETE (green)
-- Phase table row for P2 shows 10/10 with DONE gate
-- Task count summary matches `planning/status.yaml` (23/64)
-- No "Currently In Progress" text references completed P2 tasks
-- Footer summary is accurate
+### AUD-P3-102 — Orchestrator Provider-Error Sanitization (P3) — **NEW, P4 FOLLOW-UP**
 
-**Regression risk:** None — documentation-only change. No code, test, or configuration impact.
+- **Affected:** `packages/ai/src/assistant/orchestrator.ts:524-532` passes raw provider error text through to the client, bounded only by `truncateSafe` to 200 chars.
+- **Risk:** Provider error strings can leak implementation details (model name, internal ids, partial request bodies).
+- **Evidence:** `test/security/provider-failure.test.ts` documents the current contract. Cited in `planning/runs/P3-GATE.md:129`.
+- **Remediation:** Map `ModelGatewayError.category` to a sanitized user-facing message; preserve the raw error in the audit/observability stream only.
+- **Acceptance criteria:** `run.failed` envelope contains a category-derived safe message; raw provider text is not in the client envelope.
 
-### AUD-P3-001 — MANIFEST.md Stale Metadata (P3)
+### AUD-P3-103 — Vitest Config Gap for `test/e2e/**` and `test/security/**` (P3) — **NEW, OPTIONAL**
 
-**Severity:** P3 | **Confidence:** High | **Status:** New
+- **Affected:** `.eslintrc.json` does not include `test/e2e/**` or `test/security/**` in `parserOptions.project`.
+- **Impact:** `pnpm exec eslint test/...` reports parsing errors. Monorepo `pnpm lint` (scoped to packages + apps) passes without errors. The test files are validated by vitest directly and not seen by `pnpm typecheck` (root `tsconfig.json` is references-only).
+- **Evidence:** `planning/runs/P3-GATE.md:142`.
+- **Remediation:** Add a `test/tsconfig.json` that includes the test directories, and update `.eslintrc.json` `parserOptions.project` to include it.
+- **Acceptance criteria:** `pnpm exec eslint test/e2e test/security` exits 0; existing test/typecheck/lint remain green.
 
-**Affected locations:**
+### AUD-P3-104 — Dev-Only Dependency Vulnerabilities (P3) — **NEW, KNOWN**
 
-- `MANIFEST.md:9` — "Tracked files: 301" → actual count is 329
-- `MANIFEST.md:10` — "Phase: P0, P1, P2 in progress; P3-P7 not started" → should be "P0, P1, P2 complete; P3-P7 not started"
-- `MANIFEST.md:11` — "Backlog tasks: 64 defined, 17 completed, 2 failed verification" → should be "64 defined, 23 completed, 0 failed verification"
+- **Affected:** `vitest@2.1.9` (critical GHSA-5xrq-8626-4rwp), `esbuild` / `vite` (moderate). Carried from P0/P2 audits; no regression.
+- **Impact:** None on production runtime. `pnpm security:dependencies` is clean for production dependencies.
+- **Evidence:** `planning/runs/P3-GATE.md:140`.
+- **Remediation:** Track upstream fixes; bump when the project's supported `vitest` minor version moves. Document acceptance in a security ADR if the dev-only risk is considered permanent.
+- **Acceptance criteria:** A `pnpm audit --prod` run remains clean; a tracking issue / ADR records the dev-only risk.
 
-**Observed vs expected:** The manifest was partially updated (tracked files changed from 228→301 in prior fix) but not kept in sync as P2 tasks completed and files were added. The phase description and task counts are stale.
+### AUD-P3-105 — App Build Stubs (P3) — **NEW, KNOWN**
 
-**Root cause:** MANIFEST.md requires manual updates; no automated enforcement.
+- **Affected:** `apps/api`, `apps/web`, `apps/worker` use `echo` build stubs (from P0). Real build tooling is deferred.
+- **Impact:** No production impact at this stage — the API shell runs Fastify via `tsx`, web uses plain TypeScript, worker uses Node directly. `pnpm build` succeeds for these packages but does not produce a production bundle.
+- **Evidence:** `planning/runs/P3-GATE.md:136`.
+- **Remediation:** Replace with real bundlers (e.g., `tsup` or `esbuild`) when the deployment target is finalized (likely P7).
 
-**Remediation:** Update lines 9–11 with current counts from `git ls-files | wc -l`, `planning/status.yaml`, and `planning/backlog.yaml`.
+### AUD-P3-106 — File Scanning Stub (P3) — **NEW, P7 FOLLOW-UP**
 
-**Acceptance criteria:**
+- **Affected:** `packages/knowledge/src/ingestion/scan-stub` provides a no-op file scanning adapter.
+- **Impact:** Document uploads are ingested without malware scanning. Acceptable for blueprint / development; production requires real scanning.
+- **Remediation:** Real scanning integration is a P7 deliverable per the phased plan.
 
-- Tracked file count matches `git ls-files | wc -l` (currently 329)
-- Phase status matches `planning/status.yaml` (P0/P1/P2 DONE)
-- Task counts match `planning/status.yaml` (23 DONE, 0 FAILED_VERIFICATION)
-- Date stamp updated to reflect the update date
+### AUD-P3-107 — MANIFEST Tracked-File Count Lag (P3) — **NEW, MINOR**
 
-### AUD-P3-002 — `as unknown as` Type Casts in Production Code (P3)
-
-**Severity:** P3 | **Confidence:** Medium | **Status:** Carried forward from 2026-06-11 audit
-
-**Affected production locations (5):**
-| File | Line | Pattern |
-|------|------|---------|
-| `packages/knowledge/src/ingestion/publishing-stage.ts` | 40 | `const q = client as unknown as Pool` |
-| `packages/storage/src/s3-adapter.ts` | 133 | `const s3Checksum = (head as unknown as Record<string, unknown>)['ChecksumSHA256']` |
-| `packages/auth/src/session.ts` | 105 | `const { jti: _jti, ...sessionData } = payload as unknown as VerifiedSessionPayload` |
-| `apps/api/src/services/upload-workflow.ts` | 46 | `return client as unknown as Pool` |
-| `apps/api/src/plugins/idempotency.ts` | 189, 202 | `(request as unknown as IdempotencyRequest).__idempotency` |
-
-**Affected test locations (7):** `ingestion-workflow.test.ts:158`, `upload-workflow.test.ts:128`, `rbac.test.ts:86`, `contracts.test.ts:80`, `audit.test.ts:50`, `parsing.test.ts:481,515`, `runner.ts:600`
-
-**Analysis:** These casts appear intentional — bridging type gaps at adapter boundaries (e.g., `Pool` from `pg` vs internal pool type, session claims spanning internal vs verified payload types, Fastify request augmentation for idempotency metadata). No runtime crashes have been evidenced. However, they bypass TypeScript strict checking at trust boundaries.
-
-**Impact:** Low — no observed failures, but these casts could mask type mismatches if internal types drift from their underlying implementations.
-
-**Remediation:** Replace with proper type narrowing (type guards, branded types, or interface casting where the contract is guaranteed). For idempotency request augmentation, use Fastify's `decorateRequest` instead of `as unknown as`.
-
-**Acceptance criteria:**
-
-- `as unknown as` removed or replaced with type-narrowing patterns in production code
-- Existing test coverage passes unchanged
-- Typecheck continues to pass without new suppressions
-
-### AUD-P3-003 — Schema Drift Risk Between `db/schema.sql` and Migrations (P3)
-
-**Severity:** P3 | **Confidence:** Low | **Status:** Carried forward from 2026-06-11 audit
-
-**Details:** `db/schema.sql` is a 619-line reference schema meant for design and migration planning. Seven versioned migrations exist (001–006, 663 lines total). The comment at `db/schema.sql:2` states: "Implementation MUST use versioned migrations; do not apply this file directly to production." The migrations are authoritative; `schema.sql` is a design artifact.
-
-**Risk:** If `schema.sql` diverges from the cumulative migration state, it could mislead developers about the current schema shape.
-
-**Remediation options:**
-
-1. Generate `schema.sql` from migration state (pg_dump after applying all migrations)
-2. Add a CI check that diffs `schema.sql` against migration output
-3. Remove `schema.sql` and rely solely on migrations + generated documentation
-4. Add a comment noting the last reconciliation date and any known delta
-
-**Acceptance criteria:** Either schema.sql is reconciled with migration state (documented) or an automated check prevents drift.
+- **Affected:** `MANIFEST.md:9` reports "Tracked files: 442"; `git ls-files | wc -l` returns 467 (25 higher).
+- **Cause:** The MANIFEST was last reconciled at commit `dd84116`; subsequent P3 commits (P3-T08/T09/T10 and gate evidence) added test directories and ADR files.
+- **Remediation:** Update `MANIFEST.md:9` to 467. Alternatively, automate the count via a script in `scripts/`.
+- **Acceptance criteria:** `MANIFEST.md` tracked-file count equals `git ls-files | wc -l` to within the current commit.
 
 ## Suspected Issues and Risks
 
 ### Maintainability Risks
 
-1. **README/MANIFEST staleness recurrence risk:** Both files contain manually-maintained counts and status descriptions. Without automated enforcement, they will drift again. Consider a CI check that validates README badge text and MANIFEST counts against `planning/status.yaml` and `git ls-files`.
+1. **README / MANIFEST staleness recurrence risk:** Both files contain manually-maintained counts and status descriptions. The prior handoff captured this risk and the drift has already re-occurred for `MANIFEST.md` (AUD-P3-107). A CI check that validates badge text, phase table, and counts against `planning/status.yaml` and `git ls-files` would prevent recurrence.
+2. **P3-GATE follow-ups are not yet tracked in the backlog:** AUD-P3-101, AUD-P3-102, AUD-P3-103, AUD-P3-106, AUD-P3-107 are documented here only. Future P4 work should triage and schedule them, or this handoff becomes a parallel ledger to `planning/backlog.yaml`.
+3. **`@pia/memory` and `@pia/tools` are scaffolded shells:** Their package directories exist; P4 and P5 will fill them. Any cross-package import from these shells will fail to resolve.
+4. **App build stubs (AUD-P3-105):** When P7 begins deployment, the build scripts must be replaced with real bundlers in a single coordinated change.
 
-2. **Web shell build output:** `apps/api/build` and `apps/worker/build` scripts output `echo 'api: nothing to build' && exit 0` — these are placeholder shells. TypeScript compilation (tsc --noEmit) happens during typecheck but not build. When these apps contain real Next.js/Fastify compilation, the build scripts must be updated.
+### Operational Notes
 
-3. **`eval:retrieval` requires PostgreSQL:** The evaluation harness at `evals/retrieval/run.ts` expects a running PostgreSQL instance. CI's `test:unit` job does not provide one; the eval script is not run in CI by default. It ran successfully in this audit because PostgreSQL was available locally.
+1. **`eval:retrieval` and `eval:answers` require PostgreSQL.** CI's `test:unit` does not provide one; the suites run against `docker compose up -d postgres` locally. `test:e2e` and `test:security` skip with a clear log message when PostgreSQL is not reachable.
+2. **`pnpm eval:answers` exits 2 on security-critical failures** — this is the FR-EVAL-003 release-blocking rule. A non-zero exit is a PASS, not a CI failure. See `planning/runs/P3-GATE.md:51`.
+3. **Provider adapters are fakes/mocks.** No real OIDC provider, embedding API, or LLM provider keys are configured. The OpenAI adapter exists in `packages/ai/src/gateway/` and is exercised by unit tests, but production credentials are out of scope for the blueprint.
 
 ### Security Note
 
 - `.env` file exists (931 bytes, gitignored). No secrets were detected by `security:secrets` scan. The file was not read due to safety policy. Its contents are development-only per `.env.example` patterns.
+- The P3 phase implemented defense-in-depth: provider-neutral gateway with redaction, code-managed prompts (no in-DB prompt storage), workspace-scoped conversation + message + run persistence, sensitivity-class-aware routing, deterministic citation verifier, citation + authorization security tests, indirect prompt injection detection, provider-failure graceful degradation.
+- Free-text feedback content is stored verbatim (render layer escapes); classifier signature explicitly does not inspect free-text (P3-T08 security hardening).
+- Cross-tenant data access is enforced at three layers: (1) `workspace_id` FK constraints, (2) RLS policies, (3) application-layer checks. The P3-T08 feedback-boundary gap (AUD-P3-101) is documented and scheduled for P4.
 
 ## Execution Plan
 
-### Phase 1 — Update README.md Progress Indicators (P2)
+### Phase 1 — Drift Sentinel: README and MANIFEST (Read-Only Verification)
 
-**Objective:** Correct all stale progress badges, phase table entries, summary counts, and in-progress descriptions in README.md.
+**Objective:** Confirm the user-facing delivery-state documents still match the authoritative ledger before any P4 work begins.
 
-**Finding IDs:** AUD-P2-001
-
-**Expected paths:** `README.md` only
+**Expected paths:** None (read-only check). If drift is found, propose a docs-update follow-up rather than editing here.
 
 **Tasks:**
 
-- [ ] Update P2 badge from `7/10 amber` to `COMPLETE green` (line 18)
-- [ ] Update P2 phase table row: `7/10, In Progress` → `10/10, DONE` (line 50)
-- [ ] Update summary line: "20 of 50" → "23 of 64" (lines 43, 762)
-- [ ] Remove or replace "Currently In Progress" section listing completed P2-T08–T10 tasks (lines 57–65)
-- [ ] Add note that P3 is the next active phase
-- [ ] Update footer: "P2 in progress" → "P2 ✓" (line 762)
-
-**Validation:**
-
-```bash
-# Verify README mentions match status.yaml
-grep -c "DONE$" planning/status.yaml  # should be 29 (23 tasks + 3 phases + 3 gates)
-grep -E "^\s+- id: P" planning/backlog.yaml | wc -l  # 64 tasks
-# Visual inspection of README.md for consistency
-```
+- [ ] Run `git ls-files | wc -l` and compare to `MANIFEST.md:9` (currently 467 vs 442 → AUD-P3-107).
+- [ ] Compare `planning/status.yaml` task counts to `MANIFEST.md:11` and `README.md:44,761`.
+- [ ] Compare `README.md` phase table to `planning/status.yaml:5-12` (phases) and `:13-21` (gates).
+- [ ] If any drift is found, file a follow-up to invoke `@repository-docs` (or `/docs-update`) per `docs/REPOSITORY_DOCUMENTATION_WORKFLOW.md`.
 
 **Acceptance criteria:**
 
-- [ ] P2 badge is green and shows COMPLETE
-- [ ] Phase table P2 row shows 10/10 DONE
-- [ ] Summary text reads "23 of 64 tasks complete"
-- [ ] No "In Progress" section references completed P2 tasks
-- [ ] Footer reads "P0 ✓ · P1 ✓ · P2 ✓"
+- [ ] Tracked file count delta is ≤ 0 after a potential MANIFEST update.
+- [ ] Phase table matches `status.yaml` phases and gates.
+- [ ] "Currently In Progress" section describes P4 (or is removed if P4 is also complete).
 
-**Rollback:** Revert README.md to previous commit state.
+**Rollback:** N/A — this phase is a verification step.
 
 ---
 
-### Phase 2 — Update MANIFEST.md Metadata (P3)
+### Phase 2 — Hardening (Optional, Deferrable)
 
-**Objective:** Correct stale tracked-file count, phase status, and task completion counts.
+**Objective:** Address the carried-forward and new P3 findings that are not on the critical path for P4.
 
-**Finding IDs:** AUD-P3-001
-
-**Expected paths:** `MANIFEST.md` only
-
-**Tasks:**
-
-- [ ] Update line 9: "Tracked files: 301" → "Tracked files: 329" (or current `git ls-files | wc -l`)
-- [ ] Update line 10: "P0, P1, P2 in progress" → "P0, P1, P2 complete"
-- [ ] Update line 11: "17 completed, 2 failed verification" → "23 completed, 0 failed verification"
-- [ ] Update date stamp on line 7 if applicable
-
-**Validation:**
-
-```bash
-git ls-files | wc -l  # verify tracked file count
-grep -E "^\s+P[0-2]-T[0-9]+: DONE" planning/status.yaml | wc -l  # verify completed count
-grep "FAILED_VERIFICATION" planning/status.yaml | wc -l  # verify failed count
-```
-
-**Acceptance criteria:**
-
-- [ ] Tracked file count matches `git ls-files | wc -l`
-- [ ] Phase status correctly reflects P2 as complete
-- [ ] Task completion count matches status.yaml
-- [ ] No stale "failed verification" claims
-
-**Rollback:** Revert MANIFEST.md to previous commit state.
-
----
-
-### Phase 3 — Hardening: Type-Safety at Adapter Boundaries (P3, Optional)
-
-**Objective:** Replace `as unknown as` casts in production code with proper type guards or branded types.
-
-**Finding IDs:** AUD-P3-002
+**Finding IDs:** AUD-P3-002, AUD-P3-003, AUD-P3-103, AUD-P3-105
 
 **Expected paths:**
 
-- `packages/knowledge/src/ingestion/publishing-stage.ts`
-- `packages/storage/src/s3-adapter.ts`
-- `packages/auth/src/session.ts`
-- `apps/api/src/services/upload-workflow.ts`
-- `apps/api/src/plugins/idempotency.ts`
+- `publishing-stage.ts`, `s3-adapter.ts`, `session.ts`, `upload-workflow.ts`, `idempotency.ts` (AUD-P3-002)
+- `db/schema.sql`, `db/migrations/*.sql` (AUD-P3-003)
+- `test/tsconfig.json` (new), `.eslintrc.json` (AUD-P3-103)
+- `apps/{api,web,worker}/package.json` (AUD-P3-105)
 
 **Tasks:**
 
-- [ ] Audit each `as unknown as` cast for correctness and replace with type guards
-- [ ] For idempotency plugin: use `fastify.decorateRequest` instead of property augmentation via `(request as unknown as)`
-- [ ] For publishing-stage/upload-workflow: align pool types between `pg.Pool` and internal `@pia/db` types
-- [ ] For s3-adapter: use a proper type for S3 head response metadata
-- [ ] For session: use explicit type narrowing for verified session payloads
+- [ ] AUD-P3-002: Replace `as unknown as` with type-narrowing patterns; use `fastify.decorateRequest` for idempotency metadata.
+- [ ] AUD-P3-003: Run migrations against a fresh PostgreSQL; `pg_dump --schema-only`; diff against `db/schema.sql`; reconcile or document deltas; consider generating `db/schema.sql` from migration output.
+- [ ] AUD-P3-103: Add `test/tsconfig.json`; update `.eslintrc.json` `parserOptions.project`.
+- [ ] AUD-P3-105: Replace `echo` build stubs with real bundlers when the P7 deployment target is set.
 
 **Validation:**
 
 ```bash
-pnpm typecheck   # must pass
-pnpm lint        # 0 errors
-pnpm test:unit   # all 34 tasks pass
-rg "as unknown as" packages/ apps/ --include="*.ts" --exclude="test/"  # 0 results in production code
+pnpm typecheck            # must pass
+pnpm lint                 # 0 errors (now also covers test/)
+pnpm test:unit            # 921 tests still pass
+rg "as unknown as" packages/ apps/ --include="*.ts" --exclude="test/"  # 0 in production
 ```
 
 **Acceptance criteria:**
 
-- [ ] Zero `as unknown as` in production source files
-- [ ] Typecheck passes
-- [ ] All unit tests pass unchanged
-- [ ] No new type suppressions introduced
+- [ ] Zero `as unknown as` in production code.
+- [ ] `pnpm exec eslint test/e2e test/security` exits 0.
+- [ ] `db/schema.sql` matches migration state (or deltas are documented with a "last reconciled" stamp).
+- [ ] Build scripts produce real artifacts for `apps/{api,web,worker}`.
 
 **Rollback:** Revert affected files. No data migration required.
 
 ---
 
-### Phase 4 — Schema Reconciliation (P3, Optional)
+### Phase 3 — P4 Pre-Flight (Recommended Before `P4-T01` Begins)
 
-**Objective:** Verify or reconcile `db/schema.sql` against cumulative migration state.
+**Objective:** Address the P3-GATE observations that touch the P4 backlog's prerequisites before P4 work begins.
 
-**Finding IDs:** AUD-P3-003
+**Finding IDs:** AUD-P3-101, AUD-P3-102, AUD-P3-104 (tracking), AUD-P3-106 (P7, note only)
 
 **Expected paths:**
 
-- `db/schema.sql`
-- `db/migrations/*.sql`
+- `packages/ai/src/feedback/service.ts` (AUD-P3-101)
+- `packages/ai/src/assistant/orchestrator.ts` (AUD-P3-102)
+- `package.json` (AUD-P3-104 — track bump)
+- `test/security/p3-t08-cross-tenant-insert.test.ts` (sentinel; flip from documenting gap to asserting the fix)
 
 **Tasks:**
 
-- [ ] Apply all migrations to a fresh PostgreSQL instance
-- [ ] Dump the resulting schema with `pg_dump --schema-only`
-- [ ] Diff the dump against `db/schema.sql`
-- [ ] Either reconcile differences, document known deltas, or add automated CI check
-- [ ] Consider generating `db/schema.sql` from migration output
+- [ ] AUD-P3-101: Add workspace-alignment check in `submitFeedback`; flip the regression sentinel to assert the fix.
+- [ ] AUD-P3-102: Map `ModelGatewayError.category` to a sanitized user-facing message; preserve raw text in audit/observability only.
+- [ ] AUD-P3-104: Track `vitest@2.1.9` and `esbuild`/`vite` upstream fixes; bump when supported.
+- [ ] AUD-P3-106: Document the file-scanning stub status in the P7 plan; do not block P4 on it.
 
 **Validation:**
 
 ```bash
-# Requires running PostgreSQL
-docker compose up -d postgres
-pnpm db:migrate:test
-# Dump and diff against db/schema.sql
+pnpm test:security                          # 13/13 still pass; p3-t08 sentinel now asserts the fix
+pnpm test:unit                              # 921 tests still pass
+pnpm eval:retrieval                         # 11/11 still pass
+pnpm eval:answers                           # 11/11 evaluated; security_critical cases still flagged
 ```
 
 **Acceptance criteria:**
 
-- [ ] `db/schema.sql` matches migration state OR documented deltas exist
-- [ ] CI or pre-commit check prevents future drift (optional)
+- [ ] `submitFeedback` rejects or aligns cross-workspace `messageId` at the service layer.
+- [ ] Orchestrator `run.failed` envelope contains a category-derived safe message; raw provider text not in client envelope.
+- [ ] `vitest` is on a version that closes GHSA-5xrq-8626-4rwp (or a security ADR documents the dev-only risk).
 
-**Rollback:** Revert manual schema.sql changes; migrations are authoritative.
+**Rollback:** Revert affected files. No data migration required.
 
 ---
 
 ## Final Verification Checklist
 
-After all phases complete:
+After any phase completes:
 
 ```bash
 # Quality gates
 pnpm format:check          # Prettier compliance
-pnpm lint                  # 0 ESLint errors
-pnpm typecheck             # 28/28 tasks pass
-pnpm test:unit             # All 34 tasks pass
+pnpm lint                  # 0 ESLint errors (and 0 warnings introduced)
+pnpm typecheck             # 29/29 tasks pass
+pnpm test:unit             # 921 tests pass
 pnpm build                 # 17/17 packages compile
+
+# Evaluation and integration
+pnpm eval:retrieval        # 11/11 cases
+pnpm eval:answers          # 11/11 evaluated; security_critical cases flagged
+pnpm test:e2e              # 1/1 journey
+pnpm test:security         # 13/13 tests
 
 # Security
 pnpm security:secrets      # No secrets detected
-pnpm security:dependencies # No known vulnerabilities
+pnpm security:dependencies # No production vulnerabilities
 
 # Governance
 pnpm exec tsx scripts/ci/validate-status.ts  # PASSED
@@ -408,36 +379,52 @@ git diff --stat            # Verify scope
 
 ## Deferred, Blocked, and Rejected Findings
 
-| ID                        | Decision                       | Reason                                                               | Prerequisite                |
-| ------------------------- | ------------------------------ | -------------------------------------------------------------------- | --------------------------- |
-| AUD-P3-002 (type casts)   | Deferred to Phase 3 (optional) | No runtime evidence of bugs; low-risk cleanup                        | None                        |
-| AUD-P3-003 (schema drift) | Deferred to Phase 4 (optional) | Requires running PostgreSQL; reference schema not used in production | Running PostgreSQL instance |
+| ID                              | Decision                       | Reason                                                                        | Prerequisite                  |
+| ------------------------------- | ------------------------------ | ----------------------------------------------------------------------------- | ----------------------------- |
+| AUD-P3-002 (type casts)         | Deferred to Phase 2 (optional) | No runtime evidence of bugs; refactor is local, low-risk                      | None                          |
+| AUD-P3-003 (schema drift)       | Deferred to Phase 2 (optional) | Requires running PostgreSQL; reference schema is design-only                  | Running PostgreSQL instance   |
+| AUD-P3-103 (vitest config)      | Deferred to Phase 2 (optional) | Cosmetic; monorepo lint and typecheck are clean                               | None                          |
+| AUD-P3-105 (build stubs)        | Deferred to Phase 2 (optional) | No production impact at this stage; aligned with P7                           | P7 deployment target decision |
+| AUD-P3-106 (scan stub)          | Deferred to P7                 | Real malware scanning is a P7 deliverable per the phased plan                 | P7                            |
+| AUD-P3-101 (feedback gap)       | Pre-flight for P4              | Defense-in-depth gap; not a release blocker; route-layer check + RLS cover it | P4-T01 start                  |
+| AUD-P3-102 (error sanitization) | Pre-flight for P4              | Information-disclosure risk; bounded by `truncateSafe` to 200 chars           | P4-T01 start                  |
+| AUD-P3-104 (dep vulns)          | Track only                     | Dev-only; no production impact                                                | Upstream fix or security ADR  |
+| AUD-P3-107 (MANIFEST lag)       | Cosmetic                       | 25-file drift; auto-fix candidate for `@repository-docs`                      | None                          |
 
 ## Open Questions and Limitations
 
-1. **Integration tests not run:** `pnpm test:integration` requires running PostgreSQL, Redis, and MinIO. The CI pipeline provides a PostgreSQL service container but integration tests were not executed in this audit.
+1. **Integration tests not re-executed in this audit:** `pnpm test:integration`, `pnpm test:e2e`, and `pnpm test:security` require running PostgreSQL (and Redis, MinIO for the API integration tests). The CI pipeline provides PostgreSQL via service container, and the P3-GATE run executed them successfully (1/1 + 13/13). This audit did not re-run them; their results are cited from `planning/runs/P3-GATE.md:51-54`.
 2. **`.env` contents not inspected:** Safety boundary prevents reading `.env` files. The 931-byte file is gitignored. Secrets scan passed — no real credentials detected in tracked files.
-3. **Full source audit coverage:** ~300+ tracked source files; only key security boundaries and representative samples were inspected. Deep review of every module was not performed.
-4. **Dependency versions:** `pnpm audit --prod` found no known vulnerabilities, but this covers only the public advisory database. Supply-chain risk from transitive dependencies not assessed.
-5. **Next.js web app:** The `apps/web/` package has a TypeScript shell but no actual Next.js build output. Its build script is a no-op. Full Next.js compilation was not tested.
-6. **Provider adapters:** No real OIDC provider, embedding API, or LLM provider keys are configured. All adapters use fake/mock implementations suitable for development and testing.
+3. **Full source audit coverage:** 467 tracked files; only key security boundaries, representative samples, and the new P3 areas (`packages/ai/src/assistant/`, `packages/ai/src/feedback/`, `evals/answers/`, `test/e2e/`, `test/security/`, `docs/adr/0007-…`) were inspected. Deep review of every module was not performed.
+4. **Dependency versions:** `pnpm audit --prod` found no known production-runtime vulnerabilities. Supply-chain risk from transitive dependencies not assessed.
+5. **Next.js web app:** The `apps/web/` package has a TypeScript shell with a real conversation UI (P3-T09) and SSE parser, but no Next.js production build output. The build script is a no-op (AUD-P3-105). Full Next.js compilation was not tested.
+6. **Provider adapters:** No real OIDC provider, embedding API, or LLM provider keys are configured. The OpenAI adapter exists in `packages/ai/src/gateway/` and is exercised by unit tests; production credentials are out of scope for the blueprint.
+7. **P3-GATE non-blocking observations vs backlog:** AUD-P3-101..107 are documented in this handoff but are not in `planning/backlog.yaml`. The P4 pre-flight (Phase 3) depends on someone triaging and scheduling them — either as P4 candidate tasks or as scope-explicit deferrals.
 
 ## Implementation Agent Starting Point
 
-**First phase:** Phase 1 — Update README.md Progress Indicators
+**Recommended first phase:** Phase 3 — P4 Pre-Flight.
 
-**First paths to modify:**
+**First paths to modify (if Phase 3 is authorized):**
 
-- `README.md` — lines 16–19 (badges), lines 43–65 (progress summary, phase table, in-progress section), line 762 (footer)
+- `packages/ai/src/feedback/service.ts` — add workspace-alignment check in `submitFeedback` (AUD-P3-101).
+- `packages/ai/src/assistant/orchestrator.ts` — map `ModelGatewayError.category` to a sanitized safe message (AUD-P3-102).
+- `test/security/p3-t08-cross-tenant-insert.test.ts` — flip from documenting the gap to asserting the fix.
 
-**First validation command:** `pnpm format:check` (after README edit)
+**Pre-P4 sanity check (no code changes):**
 
-**Blockers:** None. All tasks are documentation-only changes in Phase 1–2; no dependencies on running services.
+- [ ] `planning/status.yaml` shows P3-GATE: DONE and P4-GATE: NOT_STARTED.
+- [ ] `@pia/memory` package exists and is a shell (P4-T01..T07 will fill it).
+- [ ] `pnpm test:security` still passes 13/13 (defense-in-depth is intact).
+- [ ] No P4 tasks are in `IN_PROGRESS` state.
 
-**Repository state note:** Worktree is clean. No uncommitted changes. Commit `e209dcc` is the HEAD.
+**Blockers for P4 start:** None. All P3 dependencies (P2-GATE, P3-T01..T10, P3-GATE) are DONE with verified run records and reviewer sign-off. The only P4 prerequisite is the Phase 3 pre-flight, which is recommended but not strictly required — each AUD-P3-101/102 fix can be folded into the P4 task that owns the affected code.
+
+**Repository state note:** Worktree is clean. No uncommitted changes. Commit `efab8b7` is the HEAD.
 
 **Changes that must remain separate:**
 
-- README.md changes (Phase 1) and MANIFEST.md changes (Phase 2) are independent — they can be in the same commit or separate commits.
-- Phase 3 (type casts) and Phase 4 (schema reconciliation) are independent of Phase 1–2 and should be in separate commits.
-- Do not modify `planning/status.yaml`, `planning/backlog.yaml`, or any source code in Phase 1–2.
+- Phase 1 (drift sentinel) is read-only; no commit.
+- Phase 2 (hardening) findings are independent of each other and of Phase 3 — group by finding or by package, not by phase.
+- Phase 3 (P4 pre-flight) findings should be folded into the P4 task that owns the affected code, or landed as a small pre-P4 commit — but should not be lumped with unrelated Phase 2 hardening.
+- Do not modify `planning/status.yaml`, `planning/backlog.yaml`, `README.md`, `MANIFEST.md`, or any source code in Phase 1. Phase 2 and Phase 3 modify source code as scoped above.

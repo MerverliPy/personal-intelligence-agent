@@ -13,6 +13,7 @@ export function documentListPage(workspaceId: string, workspaceName: string): st
     workspaceName,
     tabActive: 'documents',
     bodyHtml: `
+      <button class="fab" id="fab-document" type="button" aria-label="Upload document" data-fab="document" onclick="window.location.href='/app/workspaces/${workspaceId}/upload'">&#x2191;</button>
       <div class="loading" id="loading">Loading documents...</div>
       <div id="results" style="display:none">
         <div class="row" style="margin-bottom:1rem">

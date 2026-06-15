@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 393 852" width="393" height="852" font-family="-apple-system, system-ui, sans-serif">
+  <rect width="393" height="852" fill="#FAFAF7"/>
+
+  <!-- Backdrop (faded detail page) -->
+  <rect width="393" height="852" fill="#000000" opacity="0.4"/>
+
+  <!-- Bottom sheet -->
+  <g>
+    <path d="M0,310 L393,310 L393,852 L0,852 Z" fill="#FAFAF7"/>
+    <!-- Top corners rounded -->
+    <path d="M0,310 L393,310 L393,322 Q393,310 381,310 L12,310 Q0,310 0,322 Z" fill="#FAFAF7"/>
+
+    <!-- Handle -->
+    <rect x="178.5" y="326" width="36" height="5" rx="2.5" fill="#D0D0CC"/>
+
+    <!-- Eyebrow -->
+    <text x="16" y="358" font-size="13" font-weight="600" fill="#6B6B68" letter-spacing="0.05em">CITATION 1 OF 2</text>
+
+    <!-- Title -->
+    <text x="16" y="390" font-size="22" font-weight="700" fill="#000000">Source</text>
+
+    <!-- Meta dl -->
+    <g transform="translate(16, 410)">
+      <text x="0" y="0" font-size="13" font-weight="600" fill="#6B6B68" letter-spacing="0.04em">SOURCE</text>
+      <text x="80" y="0" font-size="17" fill="#000000">policy-v3</text>
+      <text x="0" y="28" font-size="13" font-weight="600" fill="#6B6B68" letter-spacing="0.04em">LOCATOR</text>
+      <text x="80" y="28" font-size="17" fill="#000000">page 1</text>
+      <text x="0" y="56" font-size="13" font-weight="600" fill="#6B6B68" letter-spacing="0.04em">VERIFICATION</text>
+      <text x="80" y="56" font-size="17" fill="#000000">VERIFIED</text>
+    </g>
+
+    <!-- Claim heading -->
+    <text x="16" y="500" font-size="13" font-weight="600" fill="#6B6B68" letter-spacing="0.05em">CLAIM</text>
+    <!-- Claim blockquote -->
+    <line x1="16" y1="510" x2="18" y2="568" stroke="#000000" stroke-width="2"/>
+    <text x="28" y="528" font-size="17" fill="#000000">The retention period</text>
+    <text x="28" y="552" font-size="17" fill="#000000">is 7 years.</text>
+
+    <!-- Open source button -->
+    <g transform="translate(16, 700)">
+      <rect x="0" y="0" width="361" height="50" rx="10" fill="#000000"/>
+      <text x="180.5" y="32" font-size="17" font-weight="600" fill="#FAFAF7" text-anchor="middle">Open source</text>
+    </g>
+  </g>
+
+  <!-- Home indicator -->
+  <rect x="129.5" y="841" width="134" height="5" rx="2.5" fill="#000000"/>
+
+  <text x="16" y="838" font-size="9" fill="#FAFAF7" opacity="0.6">Calm — Citation bottom sheet (T2 = A)</text>
+</svg>
