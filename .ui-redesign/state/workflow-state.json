@@ -4,13 +4,13 @@
   "agent": "mobile-ui-orchestrator",
   "adapter_id": "PIA-MUR-ADAPTER-001",
   "updated_at": "2026-06-14T00:00:00Z",
-  "current_state": "DESIGN_CONTRACT_APPROVED",
+  "current_state": "PREFLIGHT_REPORT_READY",
   "phase": "implementation-contract",
   "blocker_count": 4,
   "open_decision_count": 0,
   "approved_decision_count": 6,
-  "completed_phases": ["adapter-discovery", "baseline", "product-model", "concept-production", "design-contract"],
-  "active_phase": "tooling-preflight",
+  "completed_phases": ["adapter-discovery", "baseline", "product-model", "concept-production", "design-contract", "tooling-preflight"],
+  "active_phase": "preflight-report-review",
   "pause_reason": "User directed the orchestrator to run a device-validation pre-flight before the implementation contract begins (2026-06-14). This will start the cloudflared quick-tunnel, produce a structured iPhone test checklist, and capture device evidence for the Stream concept prototype. UNVERIFIED items (UNVERIFIED-1 <dialog> showModal() focus, UNVERIFIED-2 prefers-reduced-motion in installed PWA, UNVERIFIED-4 touch-target bounding-box sizes, UNVERIFIED-6 prototype pixel-perfect match) will be confirmed on the real iPhone 16 Pro before any source file is touched.",
   "selected_concept": {
     "id": "PIA-MUR-D-003c",
@@ -84,10 +84,12 @@
       "decision_id": "PIA-MUR-D-001"
     },
     "tooling-preflight": {
-      "status": "IN_PROGRESS",
+      "status": "DONE",
       "started_at": "2026-06-14T00:00:00Z",
+      "completed_at": "2026-06-15T15:06:48Z",
       "owner": "mobile-ui-orchestrator (delegated to real-ui-product-tester, accessibility-performance-validator, iphone-interaction-specialist)",
-      "decision_id": "PIA-MUR-D-016 (APPROVED with overrides)"
+      "decision_id": "PIA-MUR-D-016 (APPROVED with overrides) + PIA-MUR-D-017 (APPROVED)",
+      "evidence": ".ui-redesign/evidence/preflight/dpc-{01..14}.json (13 files) + dpc-summary.json"
     },
     "baseline": {
       "status": "DONE",
@@ -123,8 +125,8 @@
     },
     "implementation-contract": {
       "status": "PAUSED",
-      "pause_reason": "PIA-MUR-D-016 (automated pre-flight tooling) approved; PIA-MUR-D-017 (install step) open. Implementation contract is paused until the automated pre-flight report is delivered.",
-      "next_action": "After PIA-MUR-D-017 is approved and the harness runs, surface the automated pre-flight report + manual DPC-11 handoff. After pre-flight closes, draft PIA-MUR-D-004-IMPL (implementation contract)."
+      "pause_reason": "Pre-flight report delivered (PIA-MUR-D-016 + PIA-MUR-D-017); 1 real finding (DPC-4 touch targets) + several harness issues to address before drafting PIA-MUR-D-004-IMPL.",
+      "next_action": "User reviews pre-flight report; opens PIA-MUR-D-009 (NEW) for DPC-4 touch-target fix; decides on harness refinements (DPC-3 regex, DPC-5 buffer, DPC-7 viewport, DPC-6/8 investigation). After that, draft PIA-MUR-D-004-IMPL (implementation contract)."
     },
     "tooling-preflight": {
       "status": "IN_PROGRESS",
@@ -418,7 +420,7 @@
     "design_contract_machine": ".ui-redesign/contracts/DESIGN_CONTRACT.json (PIA-MUR-D-004, APPROVED)",
     "design_contract_human": ".ui-redesign/contracts/DESIGN_CONTRACT.md (PIA-MUR-D-004, APPROVED)",
     "preflight_harness": "apps/web/test/preflight/ (PIA-MUR-D-016 APPROVED with overrides; PIA-MUR-D-017 OPEN)",
-    "preflight_evidence_dir": ".ui-redesign/evidence/preflight/ (PIA-MUR-D-016; will be populated after PIA-MUR-D-017 install)",
+    "preflight_evidence_dir": ".ui-redesign/evidence/preflight/ (PIA-MUR-D-016 + PIA-MUR-D-017; 13 per-DPC JSON files + dpc-summary.json committed at 58b2d6c)",
     "preflight_docs": "docs/PREFLIGHT.md (PIA-MUR-D-016)",
     "p3_gate_baseline": {
       "unit_tests": "921/921",
