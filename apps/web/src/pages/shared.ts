@@ -34,7 +34,12 @@ export const sharedCss = `
     --tab-bar-h: 49pt;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; line-height: 1.5; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; line-height: 1.5;
+          padding-top: max(env(safe-area-inset-top, 0px), 59pt);
+          padding-bottom: env(safe-area-inset-bottom, 0px);
+          padding-left: env(safe-area-inset-left, 0px);
+          padding-right: env(safe-area-inset-right, 0px);
+  }
   .container { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
   .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #e0e0e0; }
   .header h1 { font-size: 1.5rem; font-weight: 600; }
