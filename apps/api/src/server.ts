@@ -26,6 +26,7 @@ import authRoutes from './routes/auth.js';
 import webShell from './routes/web.js';
 import webDocumentRoutes from './routes/web-documents.js';
 import webConversationRoutes from './routes/web-conversations.js';
+import pwaAssetsRoutes from './routes/pwa-assets.js';
 
 /**
  * Server creation options.
@@ -109,6 +110,7 @@ export async function createServer(opts: CreateServerOptions) {
   await app.register(webShell);
   await app.register(webDocumentRoutes);
   await app.register(webConversationRoutes);
+  await app.register(pwaAssetsRoutes);
 
   // Add Content-Type for all responses
   app.addHook('onSend', async (_request, reply, payload) => {

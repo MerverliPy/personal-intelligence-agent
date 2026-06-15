@@ -329,6 +329,16 @@ if (modeSheet) {
     });
   });
 }
+
+/* PIA-MUR-D-004-IMPL commit 8: service-worker registration.
+ * PIA is a network-required PWA (per PIA-MUR-D-001 / DECISION_LEDGER).
+ * The SW caches the shell so a second visit is fast; the /v1/* API
+ * and SSE streams are excluded from caching (see sw.js). */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function () {});
+  });
+}
 `;
 
 /**
@@ -376,8 +386,11 @@ export function pageShell({
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>${title} — PIA</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#2563EB">
   <style>${sharedCss}</style>
 </head>
 <body>
