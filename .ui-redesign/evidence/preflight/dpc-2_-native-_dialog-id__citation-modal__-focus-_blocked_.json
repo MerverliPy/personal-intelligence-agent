@@ -1,0 +1,19 @@
+{
+  "dpcId": "DPC-2: native <dialog id=\"citation-modal\"> focus (BLOCKED)",
+  "result": "PASS",
+  "subTests": [
+    {
+      "title": "deferred — requires authenticated session",
+      "status": "BLOCKED",
+      "durationMs": 14,
+      "errors": []
+    },
+    {
+      "title": "deferred — requires authenticated session",
+      "status": "BLOCKED",
+      "durationMs": 13,
+      "errors": []
+    }
+  ],
+  "timestamp": "2026-06-15T15:06:48.766Z"
+}

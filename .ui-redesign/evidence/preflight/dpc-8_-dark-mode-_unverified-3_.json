@@ -1,0 +1,59 @@
+{
+  "dpcId": "DPC-8: dark mode (UNVERIFIED-3)",
+  "result": "FAIL",
+  "subTests": [
+    {
+      "title": "auto-switches to dark when prefers-color-scheme: dark",
+      "status": "FAIL",
+      "durationMs": 291,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"rgb(\u001b[7m10, 10, 10\u001b[27m)\"\u001b[39m\nReceived: \u001b[31m\"rgb(\u001b[7m255, 255, 255\u001b[27m)\"\u001b[39m"
+      ]
+    },
+    {
+      "title": "light mode default",
+      "status": "PASS",
+      "durationMs": 223,
+      "errors": []
+    },
+    {
+      "title": "manual dev toggle: clicking #toggle-dark flips theme",
+      "status": "PASS",
+      "durationMs": 321,
+      "errors": []
+    },
+    {
+      "title": "axe color-contrast: no critical violations in dark mode",
+      "status": "PASS",
+      "durationMs": 1080,
+      "errors": []
+    },
+    {
+      "title": "auto-switches to dark when prefers-color-scheme: dark",
+      "status": "FAIL",
+      "durationMs": 331,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"rgb(\u001b[7m10, 10, 10\u001b[27m)\"\u001b[39m\nReceived: \u001b[31m\"rgb(\u001b[7m255, 255, 255\u001b[27m)\"\u001b[39m"
+      ]
+    },
+    {
+      "title": "light mode default",
+      "status": "PASS",
+      "durationMs": 272,
+      "errors": []
+    },
+    {
+      "title": "manual dev toggle: clicking #toggle-dark flips theme",
+      "status": "PASS",
+      "durationMs": 326,
+      "errors": []
+    },
+    {
+      "title": "axe color-contrast: no critical violations in dark mode",
+      "status": "PASS",
+      "durationMs": 1112,
+      "errors": []
+    }
+  ],
+  "timestamp": "2026-06-15T15:06:48.766Z"
+}

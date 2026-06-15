@@ -1,0 +1,31 @@
+{
+  "dpcId": "DPC-13: PWA standalone (PARTIALLY_VERIFIED)",
+  "result": "PASS",
+  "subTests": [
+    {
+      "title": "matchMedia display-mode: standalone is detectable",
+      "status": "PASS",
+      "durationMs": 205,
+      "errors": []
+    },
+    {
+      "title": "back chevron works in conversation detail",
+      "status": "PASS",
+      "durationMs": 308,
+      "errors": []
+    },
+    {
+      "title": "matchMedia display-mode: standalone is detectable",
+      "status": "PASS",
+      "durationMs": 180,
+      "errors": []
+    },
+    {
+      "title": "back chevron works in conversation detail",
+      "status": "PASS",
+      "durationMs": 295,
+      "errors": []
+    }
+  ],
+  "timestamp": "2026-06-15T15:06:48.766Z"
+}

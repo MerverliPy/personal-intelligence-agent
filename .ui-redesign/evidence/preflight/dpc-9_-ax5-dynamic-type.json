@@ -1,0 +1,31 @@
+{
+  "dpcId": "DPC-9: AX5 Dynamic Type",
+  "result": "PASS",
+  "subTests": [
+    {
+      "title": "body text scales to ~34pt when AX5 toggle is on",
+      "status": "PASS",
+      "durationMs": 277,
+      "errors": []
+    },
+    {
+      "title": "tab bar still functional at AX5 (no clipped labels)",
+      "status": "PASS",
+      "durationMs": 344,
+      "errors": []
+    },
+    {
+      "title": "body text scales to ~34pt when AX5 toggle is on",
+      "status": "PASS",
+      "durationMs": 320,
+      "errors": []
+    },
+    {
+      "title": "tab bar still functional at AX5 (no clipped labels)",
+      "status": "PASS",
+      "durationMs": 340,
+      "errors": []
+    }
+  ],
+  "timestamp": "2026-06-15T15:06:48.766Z"
+}

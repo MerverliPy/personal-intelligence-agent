@@ -1,0 +1,55 @@
+{
+  "dpcId": "DPC-14: offline banner (T6)",
+  "result": "PASS",
+  "subTests": [
+    {
+      "title": "banner appears below Dynamic Island when offline toggle is on",
+      "status": "PASS",
+      "durationMs": 231,
+      "errors": []
+    },
+    {
+      "title": "FAB is visually disabled (40% opacity) when offline",
+      "status": "PASS",
+      "durationMs": 259,
+      "errors": []
+    },
+    {
+      "title": "Send button is disabled when offline",
+      "status": "PASS",
+      "durationMs": 336,
+      "errors": []
+    },
+    {
+      "title": "toggling off restores FAB and Send",
+      "status": "PASS",
+      "durationMs": 296,
+      "errors": []
+    },
+    {
+      "title": "banner appears below Dynamic Island when offline toggle is on",
+      "status": "PASS",
+      "durationMs": 248,
+      "errors": []
+    },
+    {
+      "title": "FAB is visually disabled (40% opacity) when offline",
+      "status": "PASS",
+      "durationMs": 276,
+      "errors": []
+    },
+    {
+      "title": "Send button is disabled when offline",
+      "status": "PASS",
+      "durationMs": 348,
+      "errors": []
+    },
+    {
+      "title": "toggling off restores FAB and Send",
+      "status": "PASS",
+      "durationMs": 311,
+      "errors": []
+    }
+  ],
+  "timestamp": "2026-06-15T15:06:48.766Z"
+}

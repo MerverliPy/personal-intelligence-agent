@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const EVIDENCE_DIR = '../../../.ui-redesign/evidence/preflight';
+const EVIDENCE_DIR = '../../../../.ui-redesign/evidence/preflight';
 
 export default defineConfig({
   testDir: './specs',
@@ -12,6 +12,7 @@ export default defineConfig({
     ['list'],
     ['json', { outputFile: './test-results/dpc-summary.json' }],
     ['html', { outputFolder: './playwright-report', open: 'never' }],
+    ['./run-preflight-reporter.ts'],
   ],
   outputDir: './test-results',
 

@@ -1,0 +1,55 @@
+{
+  "dpcId": "DPC-10: VoiceOver / ARIA (UNVERIFIED via axe)",
+  "result": "PASS",
+  "subTests": [
+    {
+      "title": "axe landmark rules: banner, main, navigation present",
+      "status": "PASS",
+      "durationMs": 867,
+      "errors": []
+    },
+    {
+      "title": "axe label rule: no buttons or inputs without accessible name",
+      "status": "PASS",
+      "durationMs": 905,
+      "errors": []
+    },
+    {
+      "title": "axe heading-order rule: headings descend",
+      "status": "PASS",
+      "durationMs": 903,
+      "errors": []
+    },
+    {
+      "title": "citation chip has an accessible name (aria-label includes claim text)",
+      "status": "PASS",
+      "durationMs": 309,
+      "errors": []
+    },
+    {
+      "title": "axe landmark rules: banner, main, navigation present",
+      "status": "PASS",
+      "durationMs": 900,
+      "errors": []
+    },
+    {
+      "title": "axe label rule: no buttons or inputs without accessible name",
+      "status": "PASS",
+      "durationMs": 953,
+      "errors": []
+    },
+    {
+      "title": "axe heading-order rule: headings descend",
+      "status": "PASS",
+      "durationMs": 893,
+      "errors": []
+    },
+    {
+      "title": "citation chip has an accessible name (aria-label includes claim text)",
+      "status": "PASS",
+      "durationMs": 315,
+      "errors": []
+    }
+  ],
+  "timestamp": "2026-06-15T15:06:48.766Z"
+}

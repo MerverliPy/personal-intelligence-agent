@@ -1,0 +1,103 @@
+{
+  "dpcId": "DPC-5: pixel-perfect match (UNVERIFIED-6)",
+  "result": "FAIL",
+  "subTests": [
+    {
+      "title": "01-conversation-list: prototype renders (visual diff vs SVG is manual)",
+      "status": "FAIL",
+      "durationMs": 501,
+      "errors": [
+        "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/01-conversation-list.svg'"
+      ]
+    },
+    {
+      "title": "02-conversation-detail: prototype renders (visual diff vs SVG is manual)",
+      "status": "FAIL",
+      "durationMs": 612,
+      "errors": [
+        "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/02-conversation-detail.svg'"
+      ]
+    },
+    {
+      "title": "03-citation-bottom-sheet: prototype renders (visual diff vs SVG is manual)",
+      "status": "FAIL",
+      "durationMs": 667,
+      "errors": [
+        "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/03-citation-bottom-sheet.svg'"
+      ]
+    },
+    {
+      "title": "04-document-list: prototype renders (visual diff vs SVG is manual)",
+      "status": "FAIL",
+      "durationMs": 579,
+      "errors": [
+        "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/04-document-list.svg'"
+      ]
+    },
+    {
+      "title": "05-search-results: prototype renders (visual diff vs SVG is manual)",
+      "status": "FAIL",
+      "durationMs": 588,
+      "errors": [
+        "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/05-search-results.svg'"
+      ]
+    },
+    {
+      "title": "06-offline-state: prototype renders (visual diff vs SVG is manual)",
+      "status": "FAIL",
+      "durationMs": 599,
+      "errors": [
+        "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/06-offline-state.svg'"
+      ]
+    },
+    {
+      "title": "01-conversation-list: prototype renders (visual diff vs SVG is manual)",
+      "status": "FAIL",
+      "durationMs": 500,
+      "errors": [
+        "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/01-conversation-list.svg'"
+      ]
+    },
+    {
+      "title": "02-conversation-detail: prototype renders (visual diff vs SVG is manual)",
+      "status": "FAIL",
+      "durationMs": 611,
+      "errors": [
+        "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/02-conversation-detail.svg'"
+      ]
+    },
+    {
+      "title": "03-citation-bottom-sheet: prototype renders (visual diff vs SVG is manual)",
+      "status": "FAIL",
+      "durationMs": 665,
+      "errors": [
+        "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/03-citation-bottom-sheet.svg'"
+      ]
+    },
+    {
+      "title": "04-document-list: prototype renders (visual diff vs SVG is manual)",
+      "status": "FAIL",
+      "durationMs": 582,
+      "errors": [
+        "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/04-document-list.svg'"
+      ]
+    },
+    {
+      "title": "05-search-results: prototype renders (visual diff vs SVG is manual)",
+      "status": "FAIL",
+      "durationMs": 579,
+      "errors": [
+        "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/05-search-results.svg'"
+      ]
+    },
+    {
+      "title": "06-offline-state: prototype renders (visual diff vs SVG is manual)",
+      "status": "FAIL",
+      "durationMs": 620,
+      "errors": [
+        "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/06-offline-state.svg'"
+      ]
+    }
+  ],
+  "timestamp": "2026-06-15T15:06:48.766Z"
+}

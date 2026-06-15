@@ -1,0 +1,39 @@
+{
+  "dpcId": "DPC-6: safe-area insets",
+  "result": "FAIL",
+  "subTests": [
+    {
+      "title": "header clears Dynamic Island (>= 59pt top padding)",
+      "status": "FAIL",
+      "durationMs": 300,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m59\u001b[39m\nReceived:    \u001b[31m0\u001b[39m"
+      ]
+    },
+    {
+      "title": "tab bar includes home-indicator clearance",
+      "status": "FAIL",
+      "durationMs": 308,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m"
+      ]
+    },
+    {
+      "title": "header clears Dynamic Island (>= 59pt top padding)",
+      "status": "FAIL",
+      "durationMs": 312,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m59\u001b[39m\nReceived:    \u001b[31m0\u001b[39m"
+      ]
+    },
+    {
+      "title": "tab bar includes home-indicator clearance",
+      "status": "FAIL",
+      "durationMs": 303,
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m"
+      ]
+    }
+  ],
+  "timestamp": "2026-06-15T15:06:48.766Z"
+}

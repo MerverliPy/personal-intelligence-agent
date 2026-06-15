@@ -21,7 +21,7 @@
     "test:e2e": "vitest run --config test/e2e/vitest.config.ts",
     "test:security": "vitest run --config test/security/vitest.config.ts",
     "preflight:install": "npx playwright install chromium webkit",
-    "preflight:device": "pnpm --filter @pia/web exec playwright test --config apps/web/test/preflight/playwright.config.ts"
+    "preflight:device": "cd apps/web && npx playwright test --config test/preflight/playwright.config.ts"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
