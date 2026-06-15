@@ -5,13 +5,13 @@
     {
       "title": "Safari browser: sheet snaps instantly with reduce-motion ON",
       "status": "PASS",
-      "durationMs": 410,
+      "durationMs": 421,
       "errors": []
     },
     {
       "title": "Safari browser: sheet animates with reduce-motion OFF (default)",
       "status": "FAIL",
-      "durationMs": 495,
+      "durationMs": 472,
       "errors": [
         "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/0?\\.28s|280m?s/\u001b[39m\nReceived string:  \u001b[31m\"0s\"\u001b[39m"
       ]
@@ -19,7 +19,7 @@
     {
       "title": "Safari browser: sheet snaps instantly with reduce-motion ON",
       "status": "FAIL",
-      "durationMs": 1026,
+      "durationMs": 982,
       "errors": [
         "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/1e-05s|0\\.01m?s|0s/\u001b[39m\nReceived string:  \u001b[31m\"0.00001s\"\u001b[39m"
       ]
@@ -27,11 +27,11 @@
     {
       "title": "Safari browser: sheet animates with reduce-motion OFF (default)",
       "status": "FAIL",
-      "durationMs": 1032,
+      "durationMs": 991,
       "errors": [
         "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/0?\\.28s|280m?s/\u001b[39m\nReceived string:  \u001b[31m\"0s\"\u001b[39m"
       ]
     }
   ],
-  "timestamp": "2026-06-15T21:23:20.047Z"
+  "timestamp": "2026-06-15T22:27:04.555Z"
 }

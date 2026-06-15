@@ -5,15 +5,15 @@
     {
       "title": "deferred — requires authenticated session",
       "status": "BLOCKED",
-      "durationMs": 13,
+      "durationMs": 15,
       "errors": []
     },
     {
       "title": "deferred — requires authenticated session",
       "status": "BLOCKED",
-      "durationMs": 15,
+      "durationMs": 14,
       "errors": []
     }
   ],
-  "timestamp": "2026-06-15T21:23:20.047Z"
+  "timestamp": "2026-06-15T22:27:04.555Z"
 }

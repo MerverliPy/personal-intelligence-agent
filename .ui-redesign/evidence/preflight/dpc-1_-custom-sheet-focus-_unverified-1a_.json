@@ -5,51 +5,51 @@
     {
       "title": "focus moves into the sheet on open",
       "status": "PASS",
-      "durationMs": 497,
+      "durationMs": 487,
       "errors": []
     },
     {
       "title": "Tab cycles within the sheet",
       "status": "BLOCKED",
-      "durationMs": 456,
+      "durationMs": 457,
       "errors": []
     },
     {
       "title": "Esc closes the sheet",
       "status": "PASS",
-      "durationMs": 425,
+      "durationMs": 445,
       "errors": []
     },
     {
       "title": "backdrop tap closes the sheet",
       "status": "PASS",
-      "durationMs": 469,
+      "durationMs": 437,
       "errors": []
     },
     {
       "title": "focus moves into the sheet on open",
       "status": "PASS",
-      "durationMs": 1097,
+      "durationMs": 1031,
       "errors": []
     },
     {
       "title": "Tab cycles within the sheet",
       "status": "BLOCKED",
-      "durationMs": 947,
+      "durationMs": 878,
       "errors": []
     },
     {
       "title": "Esc closes the sheet",
       "status": "PASS",
-      "durationMs": 892,
+      "durationMs": 806,
       "errors": []
     },
     {
       "title": "backdrop tap closes the sheet",
       "status": "PASS",
-      "durationMs": 935,
+      "durationMs": 980,
       "errors": []
     }
   ],
-  "timestamp": "2026-06-15T21:23:20.047Z"
+  "timestamp": "2026-06-15T22:27:04.555Z"
 }

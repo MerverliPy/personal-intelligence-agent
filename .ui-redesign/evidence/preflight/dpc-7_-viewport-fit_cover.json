@@ -5,27 +5,27 @@
     {
       "title": "viewport meta has viewport-fit=cover",
       "status": "PASS",
-      "durationMs": 299,
+      "durationMs": 258,
       "errors": []
     },
     {
       "title": "iPhone 16 Pro viewport is 393x852pt (CSS pixels)",
       "status": "PASS",
-      "durationMs": 204,
+      "durationMs": 159,
       "errors": []
     },
     {
       "title": "viewport meta has viewport-fit=cover",
       "status": "PASS",
-      "durationMs": 615,
+      "durationMs": 636,
       "errors": []
     },
     {
       "title": "iPhone 16 Pro viewport is 393x852pt (CSS pixels)",
       "status": "PASS",
-      "durationMs": 408,
+      "durationMs": 415,
       "errors": []
     }
   ],
-  "timestamp": "2026-06-15T21:23:20.048Z"
+  "timestamp": "2026-06-15T22:27:04.555Z"
 }
