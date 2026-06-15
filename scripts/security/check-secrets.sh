@@ -41,6 +41,7 @@ EXCLUDE_FILES=(
   "docs/05_SECURITY_GOVERNANCE.md"
   ".env.example"
   "pnpm-lock.yaml"
+  "DECISION_LEDGER.md"
 )
 
 # Additional patterns to filter from grep output (known false-positive sources).
@@ -53,6 +54,8 @@ FILTER_OUT=(
   "docs/development/"
   "scripts/dev/"
   "infra/"
+  ".ui-redesign/backup/"
+  "apps/web/test/preflight/playwright-report/"
 )
 
 build_grep_excludes() {
