@@ -5,27 +5,27 @@
     {
       "title": "Dynamic Island clearance is at least 59pt from the viewport top",
       "status": "PASS",
-      "durationMs": 327,
+      "durationMs": 278,
       "errors": []
     },
     {
       "title": "tab bar is at the bottom of the viewport with no overflow",
       "status": "PASS",
-      "durationMs": 266,
+      "durationMs": 263,
       "errors": []
     },
     {
       "title": "Dynamic Island clearance is at least 59pt from the viewport top",
       "status": "PASS",
-      "durationMs": 650,
+      "durationMs": 627,
       "errors": []
     },
     {
       "title": "tab bar is at the bottom of the viewport with no overflow",
       "status": "PASS",
-      "durationMs": 527,
+      "durationMs": 511,
       "errors": []
     }
   ],
-  "timestamp": "2026-06-15T19:49:29.984Z"
+  "timestamp": "2026-06-15T21:23:20.048Z"
 }

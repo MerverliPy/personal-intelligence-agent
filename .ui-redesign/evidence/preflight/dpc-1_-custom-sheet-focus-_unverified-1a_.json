@@ -1,59 +1,55 @@
 {
   "dpcId": "DPC-1: custom sheet focus (UNVERIFIED-1a)",
-  "result": "FAIL",
+  "result": "PASS",
   "subTests": [
     {
       "title": "focus moves into the sheet on open",
-      "status": "FAIL",
-      "durationMs": 506,
-      "errors": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
-      ]
+      "status": "PASS",
+      "durationMs": 497,
+      "errors": []
     },
     {
       "title": "Tab cycles within the sheet",
       "status": "BLOCKED",
-      "durationMs": 463,
+      "durationMs": 456,
       "errors": []
     },
     {
       "title": "Esc closes the sheet",
       "status": "PASS",
-      "durationMs": 439,
+      "durationMs": 425,
       "errors": []
     },
     {
       "title": "backdrop tap closes the sheet",
       "status": "PASS",
-      "durationMs": 451,
+      "durationMs": 469,
       "errors": []
     },
     {
       "title": "focus moves into the sheet on open",
-      "status": "FAIL",
-      "durationMs": 1140,
-      "errors": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
-      ]
+      "status": "PASS",
+      "durationMs": 1097,
+      "errors": []
     },
     {
       "title": "Tab cycles within the sheet",
       "status": "BLOCKED",
-      "durationMs": 976,
+      "durationMs": 947,
       "errors": []
     },
     {
       "title": "Esc closes the sheet",
       "status": "PASS",
-      "durationMs": 931,
+      "durationMs": 892,
       "errors": []
     },
     {
       "title": "backdrop tap closes the sheet",
       "status": "PASS",
-      "durationMs": 967,
+      "durationMs": 935,
       "errors": []
     }
   ],
-  "timestamp": "2026-06-15T19:49:29.984Z"
+  "timestamp": "2026-06-15T21:23:20.047Z"
 }

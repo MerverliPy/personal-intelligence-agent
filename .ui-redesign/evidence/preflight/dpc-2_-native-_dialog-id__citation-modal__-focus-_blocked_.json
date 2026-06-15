@@ -11,9 +11,9 @@
     {
       "title": "deferred — requires authenticated session",
       "status": "BLOCKED",
-      "durationMs": 13,
+      "durationMs": 15,
       "errors": []
     }
   ],
-  "timestamp": "2026-06-15T19:49:29.984Z"
+  "timestamp": "2026-06-15T21:23:20.047Z"
 }

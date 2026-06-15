@@ -44,7 +44,12 @@
     var sheet = document.getElementById(id);
     if (!sheet) return;
     sheet.hidden = false;
-    var first = sheet.querySelector('.sheet__panel .mode-row');
+    // PIA-MUR-D-004-IMPL pre-flight fix: focus the first interactive
+    // element in the sheet (button or [tabindex="0"]), not just
+    // `.mode-row` which only exists in the mode sheet. For the
+    // citation sheet, this is the "Open source" button; for the mode
+    // sheet, this is the first mode row.
+    var first = sheet.querySelector('.sheet__panel button, .sheet__panel [tabindex="0"]');
     if (first) first.focus();
   }
   function closeSheet(id) {
