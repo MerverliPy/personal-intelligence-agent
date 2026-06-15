@@ -170,6 +170,27 @@ export const sharedCss = `
     display: none;
   }
   .network-banner[data-offline="true"] { display: block; }
+
+  /* PIA-MUR-D-004-IMPL commit 6: footnote-style citation chip
+   * (PIA-MUR-D-009 44pt tap area) + slide-up citation sheet
+   * (wraps the existing <dialog> in a sheet container). */
+  .citation-chip {
+    background: transparent;
+    border: 0;
+    color: var(--accent);
+    font: inherit;
+    font-size: 0.85em;
+    text-decoration: none;
+    min-width: var(--touch-min);
+    min-height: var(--touch-min);
+    padding: 0 4pt;
+    cursor: pointer;
+  }
+  .citation-chip:hover, .citation-chip:focus-visible { text-decoration: underline; }
+  .citation-sheet { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; display: flex; align-items: flex-end; justify-content: center; }
+  .citation-sheet[hidden] { display: none; }
+  .citation-sheet__panel { width: 100%; max-width: 480px; max-height: 80vh; overflow-y: auto; background: var(--bg); border-top-left-radius: var(--r-lg); border-top-right-radius: var(--r-lg); padding: var(--s-4); transform: translateY(100%); transition: transform var(--motion-sheet) var(--motion-ease); }
+  .citation-sheet:not([hidden]) .citation-sheet__panel { transform: translateY(0); }
 `;
 
 /**
