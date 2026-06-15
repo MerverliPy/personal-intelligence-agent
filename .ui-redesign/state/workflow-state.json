@@ -4,13 +4,13 @@
   "agent": "mobile-ui-orchestrator",
   "adapter_id": "PIA-MUR-ADAPTER-001",
   "updated_at": "2026-06-14T00:00:00Z",
-  "current_state": "PREFLIGHT_REPORT_READY",
-  "phase": "implementation-contract",
+  "current_state": "IMPLEMENTATION_CONTRACT_APPROVED",
+  "phase": "implementation",
   "blocker_count": 4,
-  "open_decision_count": 1,
-  "approved_decision_count": 9,
-  "completed_phases": ["adapter-discovery", "baseline", "product-model", "concept-production", "design-contract", "tooling-preflight"],
-  "active_phase": "preflight-report-review",
+  "open_decision_count": 0,
+  "approved_decision_count": 10,
+  "completed_phases": ["adapter-discovery", "baseline", "product-model", "concept-production", "design-contract", "tooling-preflight", "implementation-contract"],
+  "active_phase": "implementation-commit-1",
   "pause_reason": "User directed the orchestrator to run a device-validation pre-flight before the implementation contract begins (2026-06-14). This will start the cloudflared quick-tunnel, produce a structured iPhone test checklist, and capture device evidence for the Stream concept prototype. UNVERIFIED items (UNVERIFIED-1 <dialog> showModal() focus, UNVERIFIED-2 prefers-reduced-motion in installed PWA, UNVERIFIED-4 touch-target bounding-box sizes, UNVERIFIED-6 prototype pixel-perfect match) will be confirmed on the real iPhone 16 Pro before any source file is touched.",
   "selected_concept": {
     "id": "PIA-MUR-D-003c",
@@ -124,9 +124,18 @@
       "evidence": ".ui-redesign/contracts/DESIGN_CONTRACT.json (1,031 lines; validates against contracts/design-contract.schema.json); .ui-redesign/contracts/DESIGN_CONTRACT.md (690 lines; 13 sections)"
     },
     "implementation-contract": {
-      "status": "PAUSED",
-      "pause_reason": "Pre-flight report delivered (PIA-MUR-D-016 + PIA-MUR-D-017); 1 real finding (DPC-4 touch targets) + several harness issues to address before drafting PIA-MUR-D-004-IMPL.",
-      "next_action": "User reviews pre-flight report; opens PIA-MUR-D-009 (NEW) for DPC-4 touch-target fix; decides on harness refinements (DPC-3 regex, DPC-5 buffer, DPC-7 viewport, DPC-6/8 investigation). After that, draft PIA-MUR-D-004-IMPL (implementation contract)."
+      "status": "DONE",
+      "started_at": "2026-06-15T00:00:00Z",
+      "completed_at": "2026-06-15T00:00:00Z",
+      "owner": "mobile-ui-orchestrator",
+      "decision_id": "PIA-MUR-D-004-IMPL (APPROVED with 8 atomic commits)",
+      "evidence": ".ui-redesign/decisions/PIA-MUR-D-004-IMPL.md"
+    },
+    "implementation": {
+      "status": "IN_PROGRESS",
+      "started_at": "2026-06-15T00:00:00Z",
+      "owner": "mobile-ui-orchestrator (delegated to frontend-implementer for per-commit protocol)",
+      "next_action": "Begin per-commit approval protocol. Commit 1: design tokens to shared.ts. Each commit requires explicit user approval before landing. Per-commit summary, verification command output, and surface to user before each commit."
     },
     "tooling-preflight": {
       "status": "DONE",
@@ -152,7 +161,7 @@
     "agents_root": ".opencode/agents/",
     "skills_root": ".opencode/skills/",
     "commands_root": ".opencode/commands/",
-    "open_decisions": ["PIA-MUR-D-004-IMPL"]
+    "open_decisions": []
   },
   "git": {
     "branch": "chore/install-mobile-ui-redesign-system",
