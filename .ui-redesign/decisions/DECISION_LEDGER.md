@@ -4,7 +4,7 @@
 
 | ID | Category | Problem | Status | Dependencies |
 |---|---|---|---|---|
-| *(none — see approved decisions below)* | | | | |
+| PIA-MUR-D-004-IMPL | implementation-contract | Authorize the implementation contract that maps the approved design contract (PIA-MUR-D-004) + Stream concept (PIA-MUR-D-003c) + 3 follow-up decisions (PIA-MUR-D-005, -009, -011) to specific source files in apps/web/, apps/api/, and apps/web/test/. The contract includes 8 atomic commits, each with per-commit verification commands. After approval, the frontend-implementer begins the per-commit approval protocol for each of the 8 commits. Does NOT authorize production runtime changes (those are per-commit). | `OPEN` | User approval |
 
 ## Approved decisions
 

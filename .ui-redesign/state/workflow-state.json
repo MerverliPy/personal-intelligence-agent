@@ -7,7 +7,7 @@
   "current_state": "PREFLIGHT_REPORT_READY",
   "phase": "implementation-contract",
   "blocker_count": 4,
-  "open_decision_count": 0,
+  "open_decision_count": 1,
   "approved_decision_count": 9,
   "completed_phases": ["adapter-discovery", "baseline", "product-model", "concept-production", "design-contract", "tooling-preflight"],
   "active_phase": "preflight-report-review",
@@ -152,7 +152,7 @@
     "agents_root": ".opencode/agents/",
     "skills_root": ".opencode/skills/",
     "commands_root": ".opencode/commands/",
-    "open_decisions": []
+    "open_decisions": ["PIA-MUR-D-004-IMPL"]
   },
   "git": {
     "branch": "chore/install-mobile-ui-redesign-system",
