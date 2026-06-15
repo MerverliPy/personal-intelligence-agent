@@ -124,6 +124,35 @@ export const sharedCss = `
   }
   .bottom-tab[aria-current="page"] { color: var(--accent); }
   .bottom-tab:focus-visible { outline: 2pt solid var(--accent); outline-offset: -2pt; }
+
+  /* PIA-MUR-D-004-IMPL commit 4: top app bar (T4=A).
+   * 44pt x 44pt avatar (PIA-MUR-D-009 touch target minimum). */
+  .app-header {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    padding: var(--s-3) var(--s-4);
+  }
+  .app-header__avatar {
+    width: var(--touch-min);
+    height: var(--touch-min);
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-fg);
+    border: 0;
+    font-size: 16pt;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .app-header__avatar:focus-visible { outline: 2pt solid var(--accent); outline-offset: 2pt; }
+  .app-header__title {
+    font-size: var(--t-body);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
 `;
 
 /**
@@ -233,6 +262,10 @@ export function pageShell({
 <body>
   <div id="live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
   <div class="container">
+    <header class="app-header" role="banner">
+      <button id="avatar-btn" class="app-header__avatar" type="button" aria-label="Workspace: ${encodedName}. Tap to switch." aria-haspopup="dialog" aria-expanded="false">P</button>
+      <div class="app-header__title">${encodedName}</div>
+    </header>
     <div class="header">
       <div>
         <h1>${encodedName}</h1>
