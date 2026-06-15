@@ -153,6 +153,23 @@ export const sharedCss = `
     font-weight: 700;
     letter-spacing: -0.02em;
   }
+
+  /* PIA-MUR-D-004-IMPL commit 5: network-loss banner (T6=A).
+   * Sits below the Dynamic Island, disables destructive actions
+   * (FAB, Send, btn-danger) when offline. */
+  .network-banner {
+    position: fixed;
+    top: max(env(safe-area-inset-top, 0px), 59pt);
+    left: 0; right: 0;
+    padding: 8pt 16pt;
+    background: #fee2e2;
+    color: #991b1b;
+    text-align: center;
+    font-size: var(--t-caption);
+    z-index: 50;
+    display: none;
+  }
+  .network-banner[data-offline="true"] { display: block; }
 `;
 
 /**
@@ -208,6 +225,26 @@ function announce(message) {
   liveRegion.textContent = '';
   setTimeout(function() { liveRegion.textContent = message; }, 50);
 }
+
+/* PIA-MUR-D-004-IMPL commit 5: network-loss banner.
+ * Shows the banner when offline; disables destructive actions
+ * (FAB, Send, btn-danger) so the user can't submit work that
+ * won't reach the server. The existing app's resubmit path uses
+ * idempotency keys (per AGENTS.md), so a delayed retry after
+ * reconnect will not double-submit. */
+var netBanner = document.getElementById('network-banner');
+function setOffline(offline) {
+  if (!netBanner) return;
+  netBanner.hidden = !offline;
+  if (offline) netBanner.setAttribute('data-offline', 'true');
+  else netBanner.removeAttribute('data-offline');
+  document.querySelectorAll('.fab, .send-btn, .btn-danger').forEach(function (el) {
+    el.disabled = offline;
+  });
+}
+window.addEventListener('online',  function () { setOffline(false); });
+window.addEventListener('offline', function () { setOffline(true); });
+setOffline(!navigator.onLine);
 `;
 
 /**
@@ -261,6 +298,7 @@ export function pageShell({
 </head>
 <body>
   <div id="live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  <div id="network-banner" class="network-banner" role="status" aria-live="polite" hidden>You're offline. Some actions are disabled.</div>
   <div class="container">
     <header class="app-header" role="banner">
       <button id="avatar-btn" class="app-header__avatar" type="button" aria-label="Workspace: ${encodedName}. Tap to switch." aria-haspopup="dialog" aria-expanded="false">P</button>
