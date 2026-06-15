@@ -135,7 +135,7 @@
       "status": "IN_PROGRESS",
       "started_at": "2026-06-15T00:00:00Z",
       "owner": "mobile-ui-orchestrator (delegated to frontend-implementer for per-commit protocol)",
-      "next_action": "Begin per-commit approval protocol. Commit 1: design tokens to shared.ts. Each commit requires explicit user approval before landing. Per-commit summary, verification command output, and surface to user before each commit."
+      "next_action": "Per-commit approval protocol underway. Commit 1 (design tokens) landed at 440c693. Commit 2: safe-area + viewport-fit=cover."
     },
     "tooling-preflight": {
       "status": "DONE",
