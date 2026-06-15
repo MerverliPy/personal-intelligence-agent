@@ -95,6 +95,35 @@ export const sharedCss = `
   .progress-container { margin: 1rem 0; }
   .progress-bar { height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden; }
   .progress-fill { height: 100%; background: #2563eb; border-radius: 4px; transition: width 0.3s ease; }
+
+  /* PIA-MUR-D-004-IMPL commit 3: 3-tab mobile-first bottom bar
+   * (Documents / Search / Conversations). position: fixed so it
+   * stays at the viewport bottom regardless of body content height.
+   * Matches the Stream concept prototype (PIA-MUR-D-011). */
+  .bottom-tab-bar {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: calc(var(--tab-bar-h) + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    display: flex;
+    background: var(--bg);
+    border-top: 0.5pt solid var(--divider);
+    z-index: 10;
+  }
+  .bottom-tab {
+    flex: 1 1 0;
+    min-height: var(--touch-min);
+    border: 0;
+    background: transparent;
+    color: var(--fg-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: inherit;
+    cursor: pointer;
+  }
+  .bottom-tab[aria-current="page"] { color: var(--accent); }
+  .bottom-tab:focus-visible { outline: 2pt solid var(--accent); outline-offset: -2pt; }
 `;
 
 /**
@@ -178,15 +207,19 @@ export function pageShell({
 
   let tabs = '';
   if (workspaceId) {
-    const makeTab = (label: string, href: string, active: boolean) =>
-      `<a href="${href}" class="${active ? 'active' : ''}">${label}</a>`;
+    // PIA-MUR-D-004-IMPL commit 3: 3-tab mobile-first bottom bar
+    // (Documents / Search / Conversations). Upload is a sub-page of
+    // Documents and is reached via the FAB (commit 7). Map
+    // tabActive === 'upload' to 'documents' for the bar.
+    const ACTIVE_TAB = tabActive === 'upload' ? 'documents' : tabActive;
+    const makeTab = (id: string, label: string, active: boolean) =>
+      `<button class="bottom-tab" data-tab="${id}" type="button"${active ? ' aria-current="page"' : ''}>${label}</button>`;
     tabs = `
-      <div class="tab-bar" role="navigation" aria-label="Workspace pages">
-        ${makeTab('Documents', `/app/workspaces/${workspaceId}/documents`, tabActive === 'documents')}
-        ${makeTab('Upload', `/app/workspaces/${workspaceId}/upload`, tabActive === 'upload')}
-        ${makeTab('Search', `/app/workspaces/${workspaceId}/search`, tabActive === 'search')}
-        ${makeTab('Conversations', `/app/workspaces/${workspaceId}/conversations`, tabActive === 'conversations')}
-      </div>`;
+      <nav class="bottom-tab-bar" role="navigation" aria-label="Primary">
+        ${makeTab('documents', 'Documents', ACTIVE_TAB === 'documents')}
+        ${makeTab('search', 'Search', ACTIVE_TAB === 'search')}
+        ${makeTab('conversations', 'Conversations', ACTIVE_TAB === 'conversations')}
+      </nav>`;
   }
 
   return `<!DOCTYPE html>
