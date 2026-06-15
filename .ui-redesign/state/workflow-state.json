@@ -7,8 +7,8 @@
   "current_state": "PREFLIGHT_REPORT_READY",
   "phase": "implementation-contract",
   "blocker_count": 4,
-  "open_decision_count": 3,
-  "approved_decision_count": 6,
+  "open_decision_count": 0,
+  "approved_decision_count": 9,
   "completed_phases": ["adapter-discovery", "baseline", "product-model", "concept-production", "design-contract", "tooling-preflight"],
   "active_phase": "preflight-report-review",
   "pause_reason": "User directed the orchestrator to run a device-validation pre-flight before the implementation contract begins (2026-06-14). This will start the cloudflared quick-tunnel, produce a structured iPhone test checklist, and capture device evidence for the Stream concept prototype. UNVERIFIED items (UNVERIFIED-1 <dialog> showModal() focus, UNVERIFIED-2 prefers-reduced-motion in installed PWA, UNVERIFIED-4 touch-target bounding-box sizes, UNVERIFIED-6 prototype pixel-perfect match) will be confirmed on the real iPhone 16 Pro before any source file is touched.",
@@ -152,7 +152,7 @@
     "agents_root": ".opencode/agents/",
     "skills_root": ".opencode/skills/",
     "commands_root": ".opencode/commands/",
-    "open_decisions": ["PIA-MUR-D-009", "PIA-MUR-D-011", "PIA-MUR-D-005"]
+    "open_decisions": []
   },
   "git": {
     "branch": "chore/install-mobile-ui-redesign-system",

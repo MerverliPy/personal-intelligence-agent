@@ -1,59 +1,55 @@
 {
   "dpcId": "DPC-8: dark mode (UNVERIFIED-3)",
-  "result": "FAIL",
+  "result": "PASS",
   "subTests": [
     {
       "title": "auto-switches to dark when prefers-color-scheme: dark",
-      "status": "FAIL",
-      "durationMs": 507,
-      "errors": [
-        "Error: body backgroundColor should be rgb(10, 10, 10) in dark mode; got rgb(255, 255, 255)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"rgb(\u001b[7m10, 10, 10\u001b[27m)\"\u001b[39m\nReceived: \u001b[31m\"rgb(\u001b[7m255, 255, 255\u001b[27m)\"\u001b[39m"
-      ]
+      "status": "PASS",
+      "durationMs": 444,
+      "errors": []
     },
     {
       "title": "light mode default",
       "status": "PASS",
-      "durationMs": 477,
+      "durationMs": 453,
       "errors": []
     },
     {
       "title": "manual dev toggle: clicking #toggle-dark flips theme",
       "status": "PASS",
-      "durationMs": 374,
+      "durationMs": 349,
       "errors": []
     },
     {
       "title": "axe color-contrast: no critical violations in dark mode",
       "status": "PASS",
-      "durationMs": 1176,
+      "durationMs": 1108,
       "errors": []
     },
     {
       "title": "auto-switches to dark when prefers-color-scheme: dark",
-      "status": "FAIL",
-      "durationMs": 859,
-      "errors": [
-        "Error: body backgroundColor should be rgb(10, 10, 10) in dark mode; got rgb(255, 255, 255)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"rgb(\u001b[7m10, 10, 10\u001b[27m)\"\u001b[39m\nReceived: \u001b[31m\"rgb(\u001b[7m255, 255, 255\u001b[27m)\"\u001b[39m"
-      ]
+      "status": "PASS",
+      "durationMs": 794,
+      "errors": []
     },
     {
       "title": "light mode default",
       "status": "PASS",
-      "durationMs": 727,
+      "durationMs": 813,
       "errors": []
     },
     {
       "title": "manual dev toggle: clicking #toggle-dark flips theme",
       "status": "PASS",
-      "durationMs": 756,
+      "durationMs": 721,
       "errors": []
     },
     {
       "title": "axe color-contrast: no critical violations in dark mode",
       "status": "PASS",
-      "durationMs": 1624,
+      "durationMs": 1675,
       "errors": []
     }
   ],
-  "timestamp": "2026-06-15T17:24:07.641Z"
+  "timestamp": "2026-06-15T19:49:29.984Z"
 }

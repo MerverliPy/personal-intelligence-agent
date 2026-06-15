@@ -5,39 +5,39 @@
     {
       "title": "Tab cycles through header -> list -> fab -> tab bar",
       "status": "PASS",
-      "durationMs": 492,
+      "durationMs": 437,
       "errors": []
     },
     {
       "title": "no positive tabindex in the prototype",
       "status": "PASS",
-      "durationMs": 242,
+      "durationMs": 251,
       "errors": []
     },
     {
       "title": "/ shortcut focuses search input",
       "status": "PASS",
-      "durationMs": 248,
+      "durationMs": 284,
       "errors": []
     },
     {
       "title": "Tab cycles through header -> list -> fab -> tab bar",
       "status": "PASS",
-      "durationMs": 968,
+      "durationMs": 1001,
       "errors": []
     },
     {
       "title": "no positive tabindex in the prototype",
       "status": "PASS",
-      "durationMs": 515,
+      "durationMs": 526,
       "errors": []
     },
     {
       "title": "/ shortcut focuses search input",
       "status": "PASS",
-      "durationMs": 528,
+      "durationMs": 545,
       "errors": []
     }
   ],
-  "timestamp": "2026-06-15T17:24:07.641Z"
+  "timestamp": "2026-06-15T19:49:29.984Z"
 }

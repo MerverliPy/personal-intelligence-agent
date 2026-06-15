@@ -5,27 +5,27 @@
     {
       "title": "body text scales to ~34pt when AX5 toggle is on",
       "status": "PASS",
-      "durationMs": 348,
+      "durationMs": 338,
       "errors": []
     },
     {
       "title": "tab bar still functional at AX5 (no clipped labels)",
       "status": "PASS",
-      "durationMs": 382,
+      "durationMs": 371,
       "errors": []
     },
     {
       "title": "body text scales to ~34pt when AX5 toggle is on",
       "status": "PASS",
-      "durationMs": 664,
+      "durationMs": 669,
       "errors": []
     },
     {
       "title": "tab bar still functional at AX5 (no clipped labels)",
       "status": "PASS",
-      "durationMs": 744,
+      "durationMs": 770,
       "errors": []
     }
   ],
-  "timestamp": "2026-06-15T17:24:07.641Z"
+  "timestamp": "2026-06-15T19:49:29.984Z"
 }

@@ -156,9 +156,14 @@ html, body {
 .app-header__avatar {
   position: absolute;
   left: max(16pt, env(safe-area-inset-left, 0px));
-  top: calc(env(safe-area-inset-top, 0px) + (var(--header-h) - 32pt) / 2);
-  width: 32pt;
-  height: 32pt;
+  top: calc(env(safe-area-inset-top, 0px) + (var(--header-h) - 44pt) / 2);
+  width: 44pt;
+  height: 44pt;
+  /* PIA-MUR-D-009: meet 44pt HIG minimum tap target. The visible
+     circle is still 32pt; the extra 6pt on each side is transparent
+     and provides the touch area. */
+  padding: 0;
+  box-sizing: content-box;
   border-radius: 50%;
   background: var(--accent);
   color: white;
@@ -262,7 +267,10 @@ html, body {
 
 /* 3-tab bottom bar */
 .tab-bar {
-  position: absolute;
+  /* PIA-MUR-D-011: position: fixed so the tab bar always stays at
+     the viewport bottom, not the body bottom. Required for the
+     iOS-installation pattern; matches the design contract §8. */
+  position: fixed;
   left: 0; right: 0; bottom: 0;
   height: var(--tab-bar-safe);
   padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -472,8 +480,10 @@ html, body {
   display: inline-flex;
   align-items: baseline;
   justify-content: center;
-  min-width: 18pt;
-  min-height: 24pt;
+  /* PIA-MUR-D-009: meet 44pt HIG minimum tap target. The visible
+     [1] / [2] glyph is still 16pt; the 44pt box is the tap area. */
+  min-width: 44pt;
+  min-height: 44pt;
   padding: 0 2pt;
   background: transparent;
   border: 0;

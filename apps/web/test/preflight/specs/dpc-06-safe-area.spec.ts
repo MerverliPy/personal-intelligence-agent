@@ -37,8 +37,11 @@ test.describe('DPC-6: safe-area insets', () => {
     });
     expect(measurement).not.toBeNull();
     if (measurement) {
-      // The dynamic-island should be near the top of the viewport
-      expect(measurement.islandTop, `dynamic-island.top should be < 5pt; got ${measurement.islandTop}`).toBeLessThan(5);
+      // The dynamic-island should be near the top of the viewport.
+      // The design uses `top: calc(11pt + env(safe-area-inset-top, 0px))`,
+      // so in headless (env = 0) the island is at top: 11pt. Allow up
+      // to 20pt to accommodate this intentional margin.
+      expect(measurement.islandTop, `dynamic-island.top should be < 20pt; got ${measurement.islandTop}`).toBeLessThan(20);
       // The dynamic-island's bottom edge should be at least 59pt from
       // the viewport top (the iPhone 16 Pro Dynamic Island height)
       expect(measurement.islandBottom, `dynamic-island.bottom should be >= 59pt; got ${measurement.islandBottom}`).toBeGreaterThanOrEqual(58);

@@ -10,7 +10,7 @@
  *
  * Decision: PIA-MUR-D-016 AC1.
  */
-import { test, expect, PROTOTYPE_URL } from './helpers';
+import { test, expect, PROTOTYPE_URL, hideDevControls } from './helpers';
 
 const MIN_TOUCH = 44;
 const PRIMARY = 56;
@@ -18,6 +18,10 @@ const PRIMARY = 56;
 test.describe('DPC-4: touch targets (UNVERIFIED-4)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(PROTOTYPE_URL);
+    // Hide the dev-controls panel so it doesn't intercept clicks on
+    // conversation rows (needed to navigate to conversation detail
+    // to find citation chips).
+    await hideDevControls(page);
   });
 
   test('tab bar buttons meet 44pt', async ({ page }) => {
@@ -44,7 +48,8 @@ test.describe('DPC-4: touch targets (UNVERIFIED-4)', () => {
 
   test('Send button meets 56pt (primary)', async ({ page }) => {
     // Navigate to a conversation to expose the composer
-    await page.locator('#conversation-list .conv').first().click();
+    await page.locator('#conversation-list .conv').first().click({ force: true });
+    await page.waitForTimeout(100);
     const sendBtn = page.locator('.send-btn');
     const box = await sendBtn.boundingBox();
     expect(box).not.toBeNull();
@@ -72,7 +77,8 @@ test.describe('DPC-4: touch targets (UNVERIFIED-4)', () => {
   });
 
   test('back chevron meets 44pt', async ({ page }) => {
-    await page.locator('#conversation-list .conv').first().click();
+    await page.locator('#conversation-list .conv').first().click({ force: true });
+    await page.waitForTimeout(100);
     const back = page.locator('.back-btn');
     const box = await back.boundingBox();
     expect(box).not.toBeNull();
@@ -82,19 +88,14 @@ test.describe('DPC-4: touch targets (UNVERIFIED-4)', () => {
     }
   });
 
-  test('citation chip tap area meets 44pt (expected FAIL — CSS says 18x24)', async ({ page }) => {
-    await page.locator('#conversation-list .conv').first().click();
+  test('citation chip tap area meets 44pt (PIA-MUR-D-009 fix applied)', async ({ page }) => {
+    await page.locator('#conversation-list .conv').first().click({ force: true });
+    await page.waitForTimeout(100);
     const chip = page.locator('.cite').first();
     const box = await chip.boundingBox();
     expect(box).not.toBeNull();
     if (box) {
       const meets = box.width >= MIN_TOUCH && box.height >= MIN_TOUCH;
-      if (!meets) {
-        test.info().annotations.push({
-          type: 'predicted-fail',
-          description: `Citation chip is ${box.width}x${box.height}pt; < 44pt minimum. Triggers PIA-MUR-D-009.`,
-        });
-      }
       expect(meets, `citation chip ${box.width}x${box.height}pt must be >= ${MIN_TOUCH}pt`).toBe(true);
     }
   });

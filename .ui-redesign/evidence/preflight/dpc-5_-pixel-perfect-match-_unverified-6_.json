@@ -5,7 +5,7 @@
     {
       "title": "01-conversation-list: prototype renders (visual diff vs SVG is manual)",
       "status": "FAIL",
-      "durationMs": 1429,
+      "durationMs": 1405,
       "errors": [
         "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/01-conversation-list.svg'"
       ]
@@ -13,7 +13,7 @@
     {
       "title": "02-conversation-detail: prototype renders (visual diff vs SVG is manual)",
       "status": "FAIL",
-      "durationMs": 5821,
+      "durationMs": 5829,
       "errors": [
         "TimeoutError: locator.click: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#conversation-list .conv').first()\u001b[22m\n\u001b[2m    - locator resolved to <li class=\"conv\" tabindex=\"0\" data-mode=\"RESEARCH\" data-conversation-id=\"c-001\">…</li>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m  2 × retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <label class=\"dev-controls__row\">…</label> from <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m  2 × retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <label class=\"dev-controls__row\">…</label> from <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <label class=\"dev-controls__row\">…</label> from <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n"
       ]
@@ -21,7 +21,7 @@
     {
       "title": "03-citation-bottom-sheet: prototype renders (visual diff vs SVG is manual)",
       "status": "FAIL",
-      "durationMs": 5815,
+      "durationMs": 5834,
       "errors": [
         "TimeoutError: locator.click: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#conversation-list .conv').first()\u001b[22m\n\u001b[2m    - locator resolved to <li class=\"conv\" tabindex=\"0\" data-mode=\"RESEARCH\" data-conversation-id=\"c-001\">…</li>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m  2 × retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <label class=\"dev-controls__row\">…</label> from <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m  2 × retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <label class=\"dev-controls__row\">…</label> from <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <label class=\"dev-controls__row\">…</label> from <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n"
       ]
@@ -29,7 +29,7 @@
     {
       "title": "04-document-list: prototype renders (visual diff vs SVG is manual)",
       "status": "FAIL",
-      "durationMs": 1465,
+      "durationMs": 1520,
       "errors": [
         "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/04-document-list.svg'"
       ]
@@ -37,7 +37,7 @@
     {
       "title": "05-search-results: prototype renders (visual diff vs SVG is manual)",
       "status": "FAIL",
-      "durationMs": 1518,
+      "durationMs": 1467,
       "errors": [
         "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/05-search-results.svg'"
       ]
@@ -45,7 +45,7 @@
     {
       "title": "06-offline-state: prototype renders (visual diff vs SVG is manual)",
       "status": "FAIL",
-      "durationMs": 1550,
+      "durationMs": 1520,
       "errors": [
         "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/06-offline-state.svg'"
       ]
@@ -53,7 +53,7 @@
     {
       "title": "01-conversation-list: prototype renders (visual diff vs SVG is manual)",
       "status": "FAIL",
-      "durationMs": 1789,
+      "durationMs": 1750,
       "errors": [
         "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/01-conversation-list.svg'"
       ]
@@ -61,7 +61,7 @@
     {
       "title": "02-conversation-detail: prototype renders (visual diff vs SVG is manual)",
       "status": "FAIL",
-      "durationMs": 6136,
+      "durationMs": 6032,
       "errors": [
         "TimeoutError: locator.click: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#conversation-list .conv').first()\u001b[22m\n\u001b[2m    - locator resolved to <li class=\"conv\" tabindex=\"0\" data-mode=\"RESEARCH\" data-conversation-id=\"c-001\">…</li>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m  2 × retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <label class=\"dev-controls__row\">…</label> from <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m  2 × retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <label class=\"dev-controls__row\">…</label> from <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <label class=\"dev-controls__row\">…</label> from <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n"
       ]
@@ -69,7 +69,7 @@
     {
       "title": "03-citation-bottom-sheet: prototype renders (visual diff vs SVG is manual)",
       "status": "FAIL",
-      "durationMs": 6131,
+      "durationMs": 6212,
       "errors": [
         "TimeoutError: locator.click: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#conversation-list .conv').first()\u001b[22m\n\u001b[2m    - locator resolved to <li class=\"conv\" tabindex=\"0\" data-mode=\"RESEARCH\" data-conversation-id=\"c-001\">…</li>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m  2 × retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <label class=\"dev-controls__row\">…</label> from <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m  2 × retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <label class=\"dev-controls__row\">…</label> from <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <label class=\"dev-controls__row\">…</label> from <aside id=\"dev-controls\" class=\"dev-controls\" aria-label=\"Prototype controls (non-product)\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n"
       ]
@@ -77,7 +77,7 @@
     {
       "title": "04-document-list: prototype renders (visual diff vs SVG is manual)",
       "status": "FAIL",
-      "durationMs": 1828,
+      "durationMs": 1928,
       "errors": [
         "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/04-document-list.svg'"
       ]
@@ -85,7 +85,7 @@
     {
       "title": "05-search-results: prototype renders (visual diff vs SVG is manual)",
       "status": "FAIL",
-      "durationMs": 1864,
+      "durationMs": 1885,
       "errors": [
         "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/05-search-results.svg'"
       ]
@@ -93,11 +93,11 @@
     {
       "title": "06-offline-state: prototype renders (visual diff vs SVG is manual)",
       "status": "FAIL",
-      "durationMs": 1865,
+      "durationMs": 1928,
       "errors": [
         "Error: ENOENT: no such file or directory, open '.ui-redesign/concepts/concept-3-stream/screenshots/06-offline-state.svg'"
       ]
     }
   ],
-  "timestamp": "2026-06-15T17:24:07.641Z"
+  "timestamp": "2026-06-15T19:49:29.984Z"
 }

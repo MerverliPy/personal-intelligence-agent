@@ -164,6 +164,22 @@
   /* Toggles */
   var darkToggle = document.getElementById('toggle-dark');
   if (darkToggle) darkToggle.addEventListener('change', function () { root.classList.toggle('theme-dark', darkToggle.checked); });
+
+  /* PIA-MUR-D-005: Auto-apply dark theme when prefers-color-scheme: dark.
+   * The CSS @media rule updates --bg/--fg/--accent when :root has
+   * the .theme-auto class. We add .theme-auto on load and on
+   * system-preference changes. The manual #toggle-dark adds .theme-dark
+   * (which is always-on and overrides the .theme-auto values). */
+  function applyAutoTheme() {
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    root.classList.toggle('theme-auto', !!prefersDark);
+  }
+  applyAutoTheme();
+  if (window.matchMedia) {
+    var mql = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mql.addEventListener) mql.addEventListener('change', applyAutoTheme);
+    else if (mql.addListener) mql.addListener(applyAutoTheme);
+  }
   var rmToggle = document.getElementById('toggle-reduce-motion');
   if (rmToggle) rmToggle.addEventListener('change', function () { root.classList.toggle('theme-reduce-motion', rmToggle.checked); });
   var ax5Toggle = document.getElementById('toggle-ax5');
