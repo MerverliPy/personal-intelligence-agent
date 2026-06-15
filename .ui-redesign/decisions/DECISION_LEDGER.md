@@ -4,7 +4,9 @@
 
 | ID | Category | Problem | Status | Dependencies |
 |---|---|---|---|---|
-| *(none — see approved decisions below)* | | | | |
+| PIA-MUR-D-009 | touch-targets | Avatar (32x32pt) and citation chip (18x24pt) in the Stream concept prototype are below the 44pt HIG minimum. Surfaces in DPC-4. | `OPEN` | User approval |
+| PIA-MUR-D-011 | layout-position | The Stream concept prototype's `.tab-bar` is `position: absolute; bottom: 0` of body (which is 1136pt tall), placing the tab bar 283pt below the viewport. Should be `position: fixed`. Surfaces in DPC-6. | `OPEN` | User approval |
+| PIA-MUR-D-005 | dark-mode-css | The Stream concept prototype's `prefers-color-scheme: dark` media query does not trigger body backgroundColor change in Chromium (manual toggle works). Real CSS issue. | `OPEN` | User approval |
 
 ## Approved decisions
 
