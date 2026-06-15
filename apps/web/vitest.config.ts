@@ -15,5 +15,16 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    // PIA-MUR-D-004-IMPL: Exclude the preflight harness directory
+    // (managed by Playwright, not vitest). The preflight specs use
+    // `@playwright/test`'s `test` export; running them under vitest
+    // triggers "test.describe() not expected here" errors.
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/test-results/**',
+      '**/playwright-report/**',
+      'test/preflight/**',
+    ],
   },
 });

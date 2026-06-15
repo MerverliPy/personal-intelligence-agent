@@ -6,6 +6,33 @@
  * Uses high-contrast colors, system font stack, and ARIA-friendly design.
  */
 export const sharedCss = `
+  /* PIA-MUR-D-004 design tokens (locked; sourced from
+   * .ui-redesign/contracts/DESIGN_CONTRACT.json). All subsequent
+   * commits (PIA-MUR-D-004-IMPL #2-#8) reference these tokens. */
+  :root {
+    --accent: #2563EB;
+    --accent-pressed: #1D4ED8;
+    --accent-fg: #FFFFFF;
+    --bg: #FFFFFF;
+    --fg: #0A0A0A;
+    --fg-muted: #5C5C5C;
+    --fg-subtle: #9C9C9C;
+    --divider: #ECECEC;
+    --selection: #DBE7FF;
+    --t-body: 19pt;
+    --t-caption: 14pt;
+    --t-section: 24pt;
+    --s-1: 4pt; --s-2: 8pt; --s-3: 12pt; --s-4: 16pt;
+    --s-5: 20pt; --s-6: 24pt; --s-8: 32pt; --s-10: 40pt; --s-12: 48pt;
+    --r-sm: 8pt; --r-md: 12pt; --r-lg: 16pt; --r-pill: 9999pt;
+    --motion-fast: 120ms;
+    --motion-base: 200ms;
+    --motion-slow: 280ms;
+    --motion-sheet: 280ms;
+    --motion-ease: cubic-bezier(0.32, 0.72, 0, 1);
+    --touch-min: 44pt;
+    --tab-bar-h: 49pt;
+  }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; line-height: 1.5; }
   .container { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
