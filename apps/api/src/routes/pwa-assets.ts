@@ -24,7 +24,10 @@ import { fileURLToPath } from 'node:url';
 import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 
 const ASSETS: Record<string, { file: string; contentType: string }> = {
-  '/manifest.webmanifest': { file: 'manifest.webmanifest', contentType: 'application/manifest+json' },
+  '/manifest.webmanifest': {
+    file: 'manifest.webmanifest',
+    contentType: 'application/manifest+json',
+  },
   '/sw.js': { file: 'sw.js', contentType: 'application/javascript; charset=utf-8' },
   '/icon-192.png': { file: 'icon-192.png', contentType: 'image/png' },
   '/icon-512.png': { file: 'icon-512.png', contentType: 'image/png' },
