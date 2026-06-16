@@ -3,12 +3,12 @@
   "workflow": "mobile-ui-redesign",
   "agent": "mobile-ui-orchestrator",
   "adapter_id": "PIA-MUR-ADAPTER-001",
-  "updated_at": "2026-06-14T00:00:00Z",
-  "current_state": "IMPLEMENTATION_CONTRACT_APPROVED",
-  "phase": "implementation",
-  "blocker_count": 4,
+  "updated_at": "2026-06-16T00:00:00Z",
+  "current_state": "IMPLEMENTATION_COMPLETE",
+  "phase": "validation-critique",
+  "blocker_count": 0,
   "open_decision_count": 0,
-  "approved_decision_count": 10,
+  "approved_decision_count": 11,
   "completed_phases": [
     "adapter-discovery",
     "baseline",
@@ -16,10 +16,11 @@
     "concept-production",
     "design-contract",
     "tooling-preflight",
-    "implementation-contract"
+    "implementation-contract",
+    "implementation"
   ],
-  "active_phase": "implementation-commit-1",
-  "pause_reason": "User directed the orchestrator to run a device-validation pre-flight before the implementation contract begins (2026-06-14). This will start the cloudflared quick-tunnel, produce a structured iPhone test checklist, and capture device evidence for the Stream concept prototype. UNVERIFIED items (UNVERIFIED-1 <dialog> showModal() focus, UNVERIFIED-2 prefers-reduced-motion in installed PWA, UNVERIFIED-4 touch-target bounding-box sizes, UNVERIFIED-6 prototype pixel-perfect match) will be confirmed on the real iPhone 16 Pro before any source file is touched.",
+  "active_phase": "validation-critique",
+  "pause_reason": "All 8 implementation commits from PIA-MUR-D-004-IMPL have landed (440c693 through 9484a95). A PWA follow-up commit (e1d219a) added iOS meta tags and workspace card click handlers for standalone mode. The implementation is complete. Current action: run /mobile-ui-validate (automated regression + contract validation), then /mobile-ui-critique (Feature Critique Panel on 8 features). Device-validation, evidence-bundle, and delivery phases remain.",
   "selected_concept": {
     "id": "PIA-MUR-D-003c",
     "name": "Stream",
@@ -33,12 +34,12 @@
   },
   "device_validation_preflight": {
     "started_at": "2026-06-14T21:50:00Z",
-    "status": "in_progress",
+    "status": "ready",
     "bridges_live": {
       "cloudflared_tunnel": {
         "url": "https://sig-mardi-experiences-coastal.trycloudflare.com",
         "target": "http://localhost:3000 (live API)",
-        "pid": 2006185,
+        "pid": null,
         "log": ".ui-redesign/evidence/devices/cloudflared.log",
         "use": "HTTPS, installed-PWA, service-worker-required checks"
       },
@@ -50,7 +51,7 @@
       "tailscale_prototype": {
         "url": "http://100.81.83.98:8000",
         "target": ".ui-redesign/concepts/concept-3-stream/interactive/ (Stream concept prototype)",
-        "pid": 2016765,
+        "pid": null,
         "log": ".ui-redesign/evidence/devices/prototype-server.log",
         "use": "HTTP, prototype testing, no SW needed"
       }
@@ -66,7 +67,7 @@
       "PIA-MUR-D-005 (dark-mode contrast, already named)",
       "PIA-MUR-D-006 (iOS focus fix, already named)",
       "PIA-MUR-D-007 (reduce-motion PWA, already named)",
-      "PIA-MUR-D-009 (touch-target fix, NEW if DPC-4 fails)",
+      "PIA-MUR-D-009 (touch-target fix, already named)",
       "PIA-MUR-D-010 (visual-fidelity fix, NEW if DPC-5 fails)"
     ]
   },
@@ -140,23 +141,32 @@
       "evidence": ".ui-redesign/decisions/PIA-MUR-D-004-IMPL.md"
     },
     "implementation": {
-      "status": "IN_PROGRESS",
-      "started_at": "2026-06-15T00:00:00Z",
-      "owner": "mobile-ui-orchestrator (delegated to frontend-implementer for per-commit protocol)",
-      "next_action": "Per-commit approval protocol underway. Commit 1 (design tokens) landed at 440c693. Commit 2: safe-area + viewport-fit=cover."
-    },
-    "tooling-preflight": {
       "status": "DONE",
-      "started_at": "2026-06-14T00:00:00Z",
-      "completed_at": "2026-06-15T15:06:48Z",
-      "owner": "mobile-ui-orchestrator (delegated to real-ui-product-tester, accessibility-performance-validator, iphone-interaction-specialist)",
-      "decision_id": "PIA-MUR-D-016 (APPROVED with overrides) + PIA-MUR-D-017 (APPROVED)",
-      "evidence": ".ui-redesign/evidence/preflight/dpc-{01..14}.json (13 files) + dpc-summary.json"
+      "started_at": "2026-06-15T00:00:00Z",
+      "completed_at": "2026-06-16T00:00:00Z",
+      "owner": "mobile-ui-orchestrator (delegated to frontend-implementer for per-commit protocol)",
+      "commit_ids": [
+        "440c693 (design tokens)",
+        "040de91 (safe-area + viewport-fit)",
+        "3c54d25 (bottom tab bar)",
+        "89f2088 (top app bar + 44pt avatar)",
+        "3181682 (network-loss banner)",
+        "6479230 (citation chip + sheet)",
+        "10c3561 (FAB + mode sheet)",
+        "9484a95 (PWA manifest + SW + icons)"
+      ],
+      "evidence": ".ui-redesign/evidence/preflight/dpc-{01..14}.json"
     },
-    "implementation": { "status": "NOT_STARTED" },
+    "implementation": { "status": "DONE" },
+    "validation-critique": {
+      "status": "IN_PROGRESS",
+      "started_at": "2026-06-16T00:00:00Z",
+      "owner": "mobile-ui-orchestrator",
+      "next_action": "Run /mobile-ui-critique (Feature Critique Panel) against 8 implemented features in 3 groups"
+    },
     "device-validation": {
       "status": "NOT_STARTED",
-      "note": "Requires physical iPhone 16 Pro (B-1) and bridge confirmation (B-2)."
+      "note": "Requires physical iPhone 16 Pro. Run after validation and critique complete. Start cloudflared tunnel for installed-PWA testing."
     },
     "evidence-bundle": { "status": "NOT_STARTED" },
     "delivery": { "status": "NOT_STARTED" }
@@ -175,45 +185,23 @@
     "open_decisions": []
   },
   "git": {
-    "branch": "chore/install-mobile-ui-redesign-system",
-    "head_commit": "db76db2",
-    "head_message": "chore(redesign): adopt mobile UI redesign adapter (PIA-MUR-D-001)",
-    "worktree_clean": false,
-    "remote_check": "NOT RUN — orchestrator to verify independently",
-    "uncommitted_paths": [
-      "AGENT_HANDOFF.md (modified, +263/-276)",
-      "tatus --short (untracked stray file, 3859 B, safe to delete)",
-      ".opencode/run-logs/ (untracked; contains api.log 13,673 B, api.pid, cookies.txt 604 B — DO NOT READ cookies.txt)",
-      ".ui-redesign/backup/ (untracked; pre-redesign backup, intentional)",
-      ".ui-redesign/state/workflow-state.json (untracked, orchestrator-written)"
-    ],
-    "tracked_modifications": [
-      {
-        "path": "AGENT_HANDOFF.md",
-        "kind": "modified",
-        "summary": "Reconciled handoff for P3-GATE closure; references P3 ✓ DONE; P4–P7 NOT_STARTED; 33/64 tasks complete; 921 unit tests; 1/1 e2e; 13/13 security; 11/11 retrieval+answers evals."
-      }
-    ],
+    "branch": "main",
+    "head_commit": "e1d219a",
+    "head_message": "fix(redesign): add iOS PWA meta tags + workspace card click handlers for standalone mode",
+    "worktree_clean": true,
+    "remote_check": "PENDING — orchestrator will verify at evidence-bundle phase",
+    "uncommitted_paths": [],
+    "tracked_modifications": [],
     "untracked_paths": [
-      {
-        "path": "tatus --short",
-        "kind": "untracked_stray",
-        "summary": "Captured `git status --short`/`git diff --stat` output (typo of `git status --short`). No secrets. Safe to delete."
-      },
-      {
-        "path": ".opencode/run-logs/",
-        "kind": "untracked_directory",
-        "summary": "Local run logs: api.log (13,673 B), api.pid (\"216180\"), cookies.txt (604 B — REAL SESSION COOKIE, DO NOT READ OR COMMIT)."
-      },
       {
         "path": ".ui-redesign/backup/",
         "kind": "untracked_directory",
         "summary": "Pre-mobile-ui-redesign backup of AGENTS.md and .opencode/. Intentional. Add to .gitignore."
       },
       {
-        "path": ".ui-redesign/state/workflow-state.json",
-        "kind": "orchestrator_artifact",
-        "summary": "Initial state file written by mobile-ui-orchestrator. Will be committed on next state transition."
+        "path": ".opencode/run-logs/",
+        "kind": "untracked_directory",
+        "summary": "Local run logs with cookies.txt. Already .gitignored."
       }
     ]
   },
@@ -222,8 +210,8 @@
     "display_name": "Personal Intelligence and Action Engine (PIA)",
     "purpose": "Private, evidence-grounded LLM/agent platform with workspace isolation, OIDC authentication, document ingestion, hybrid retrieval, and governed persistent memory.",
     "phase_status": "P0 ✓ P1 ✓ P2 ✓ P3 ✓ DONE; P4–P7 NOT_STARTED",
-    "tracked_files": 522,
-    "tracked_files_note": "Updated from 467 (per AGENT_HANDOFF.md) to 521 (per `git ls-files | wc -l` on 2026-06-14) to 522 (after baseline capture added the new workflow-state.json file).",
+    "tracked_files": 533,
+    "tracked_files_note": "Updated from 522 to 533 after 8 IMPL commits added PWA assets, preflight harness, and new app files.",
     "tasks_total": 64,
     "tasks_done": 33,
     "tasks_in_progress": 0,
@@ -238,9 +226,9 @@
     "test_runner": "vitest 2.1.9 + jsdom 25",
     "http_server": "Fastify 5.8.5",
     "datastore": "PostgreSQL 17 + pgvector (local dev), Redis 7, MinIO (object storage)",
-    "frontend_runtime": "Server-rendered HTML string modules (NOT Next.js); no client bundler configured; no PWA (no manifest, no service worker, no viewport-fit=cover)",
+    "frontend_runtime": "Server-rendered HTML string modules (NOT Next.js); no client bundler configured; PWA DEPLOYED (manifest, service worker, viewport-fit=cover, iOS meta tags)",
     "authentication": "OIDC (Keycloak) with fake provider for dev; JWT cookies; RBAC; workspace authorization",
-    "pwa_status": "NONE — clean-slate baseline for redesign"
+    "pwa_status": "DEPLOYED — manifest.webmanifest at /manifest.webmanifest (standalone display, theme_color #2563EB, 192/512 icons), service-worker.js, apple-touch-icon, iOS meta tags"
   },
   "runtime_status": {
     "api": {
@@ -296,10 +284,10 @@
       "apps/api/src/routes/web-documents.ts",
       "apps/api/src/routes/web-conversations.ts"
     ],
-    "viewport_meta": "width=device-width, initial-scale=1.0 (no viewport-fit=cover, no safe-area insets, no touch-icon, no theme-color)",
+    "viewport_meta": "width=device-width, initial-scale=1.0, viewport-fit=cover (safe-area insets in CSS; iOS PWA meta tags present)",
     "build_script": "echo 'web: nothing to build' && exit 0 (stub)",
     "dev_script": "echo 'web: dev mode not configured' && exit 0 (stub)",
-    "mobile_specific_styling": "NONE — no @media (hover: none), no @media (pointer: coarse), no safe-area-inset, no touch-action tuning"
+    "mobile_specific_styling": "DEPLOYED — viewport-fit=cover, safe-area-inset padding, .tab-bar fixed bottom, 44pt touch targets, 56pt FAB"
   },
   "backend_inventory": {
     "package": "@pia/api",
@@ -404,6 +392,16 @@
       "approval": "required"
     },
     "ci:check": { "command": "pnpm ci:check", "mutates": "maybe", "approval": "required" },
+    "preflight:install": {
+      "command": "pnpm preflight:install",
+      "mutates": true,
+      "approval": "allowed"
+    },
+    "preflight:device": {
+      "command": "pnpm preflight:device",
+      "mutates": false,
+      "approval": "allowed"
+    },
     "start_deps": {
       "command": "./scripts/dev/start-deps.sh",
       "mutates": true,
@@ -436,7 +434,7 @@
   "real_data": {
     "environment": "local development (docker compose) — LIVE: API PID 216180, Postgres PID 978, Redis PID 198199, MinIO PID 199086",
     "data_source": "PostgreSQL 17 + pgvector, Redis 7, MinIO",
-    "auth_method": "OIDC (Keycloak) with fake provider in dev (`createFakeOidcClient`, `InMemoryLoginTransactionStore`); dev bypass returns `sub=dev-user-1, email=dev@localhost`",
+    "auth_method": "OIDC (Keycloak) with fake provider in dev; dev bypass returns `sub=dev-user-1, email=dev@localhost`",
     "read_write_authority": "User identity and workspace membership derived from JWT session; workspace_id propagated via `requireWorkspaceContext`",
     "sensitive_fields": [
       "session cookies",
@@ -444,7 +442,7 @@
       "embedding vectors (sensitivity_class-gated)",
       "user-submitted documents and free-text feedback"
     ],
-    "redaction_policy": "Provider errors truncated to 200 chars (orchestrator:524-532); logger redaction in @pia/observability; classifier signature explicitly does not inspect free-text feedback (P3-T08 security hardening)",
+    "redaction_policy": "Provider errors truncated to 200 chars; logger redaction in @pia/observability; classifier signature does not inspect free-text feedback",
     "data_unavailable_behavior": "BLOCK — never invent",
     "environment_file": ".env exists (931 bytes, gitignored, not inspected per safety policy)"
   },
@@ -460,7 +458,7 @@
     "cloudflared_path": "/usr/local/bin/cloudflared",
     "tailscale_active": true,
     "tailscale_ip": "100.81.83.98/32 (tailscale0)",
-    "physical_iphone_present": "UNCONFIRMED — requires user confirmation",
+    "physical_iphone_present": "CONFIRMED (per B-1 resolution, requires re-confirmation for device-validation)",
     "candidate_bridges": {
       "primary_installed_pwa": {
         "method": "cloudflared quick-tunnel",
@@ -468,30 +466,25 @@
         "host_target": "http://localhost:3000 (API live, PID 216180)",
         "iphone_url_pattern": "https://<random>.trycloudflare.com",
         "iphone_steps": [
-          "Connect iPhone to any internet (Wi-Fi or cellular).",
-          "Safari → enter the https://<random>.trycloudflare.com URL.",
-          "Verify HTTPS loads and certificate is valid.",
-          "Tap Share → Add to Home Screen → confirm name → Add.",
-          "Launch the PIA icon from Home Screen — opens in standalone installed PWA mode.",
+          "Connect iPhone to internet.",
+          "Safari → https://<random>.trycloudflare.com.",
+          "Verify HTTPS loads.",
+          "Tap Share → Add to Home Screen.",
+          "Launch the PWA icon.",
           "Repeat validations in both Safari browser and installed PWA."
         ],
-        "risks": [
-          "Random hostname changes per session unless a named tunnel is configured.",
-          "Free tier has no custom headers; if API requires Host validation, use --http-host-header localhost.",
-          "Quick-tunnel is best-effort, not for production."
-        ]
+        "risks": ["Random hostname per session.", "Free tier best-effort."]
       },
       "secondary_safari_browser": {
         "method": "Tailscale direct",
-        "host_target": "http://100.81.83.98:3000 (host tailscale0)",
+        "host_target": "http://100.81.83.98:3000",
         "iphone_steps": [
-          "Ensure iPhone is signed into the same Tailscale network.",
+          "Ensure iPhone is on same Tailscale network.",
           "Safari → http://100.81.83.98:3000"
         ],
         "limitations": [
-          "HTTP only — Safari will warn for non-HTTPS.",
-          "Service worker registration requires secure context — installed-PWA mode will NOT register the SW on http://.",
-          "Use only for Safari browser validation, not installed-PWA validation."
+          "HTTP only — SW registration requires HTTPS.",
+          "Use only for Safari browser validation."
         ]
       }
     }
@@ -537,36 +530,37 @@
       "env": "iPhone 16 Pro Safari portrait",
       "priority": "primary",
       "required": true,
-      "blocker": "B-1"
+      "status": "UNVERIFIED"
     },
     {
       "env": "iPhone 16 Pro installed PWA portrait",
       "priority": "primary",
       "required": true,
-      "blocker": "B-1"
+      "status": "UNVERIFIED"
     },
     {
       "env": "iPhone 16 Pro iOS Chrome portrait",
       "priority": "secondary",
       "required": true,
-      "blocker": "B-1"
+      "status": "UNVERIFIED"
     },
     {
       "env": "iPhone 15 / 14 / 13 / SE compatibility",
       "priority": "compatibility",
       "required": true,
-      "blocker": "B-1"
+      "status": "UNVERIFIED"
     },
     {
-      "env": "Desktop responsive browser (Chromium, Firefox, Safari) — automated",
+      "env": "Desktop responsive browser (automated)",
       "priority": "compatibility",
       "required": true,
-      "note": "No browser-automation tool installed; Playwright + axe-core would be new dependencies requiring separate approval."
+      "status": "PASS (preflight harness)"
     }
   ],
+  "critique_panel_history": [],
   "evidence": {
     "pre_p3_closure_run": "planning/runs/P3-GATE.md:42-56",
-    "audit_handoff": "AGENT_HANDOFF.md (modified at 2023-06-13, 539 lines diff: +263/-276)",
+    "audit_handoff": "AGENT_HANDOFF.md",
     "phase_status_ledger": "planning/status.yaml",
     "baseline_evidence": ".ui-redesign/baseline/REPOSITORY_BASELINE.md (PIA-MUR-D-001)",
     "baseline_http_probes": ".ui-redesign/evidence/automated/http-baseline-probes.json",
@@ -575,9 +569,10 @@
     "selected_concept_evidence": ".ui-redesign/concepts/concept-3-stream/",
     "design_contract_machine": ".ui-redesign/contracts/DESIGN_CONTRACT.json (PIA-MUR-D-004, APPROVED)",
     "design_contract_human": ".ui-redesign/contracts/DESIGN_CONTRACT.md (PIA-MUR-D-004, APPROVED)",
-    "preflight_harness": "apps/web/test/preflight/ (PIA-MUR-D-016 APPROVED with overrides; PIA-MUR-D-017 OPEN)",
-    "preflight_evidence_dir": ".ui-redesign/evidence/preflight/ (PIA-MUR-D-016 + PIA-MUR-D-017; 13 per-DPC JSON files + dpc-summary.json committed at 58b2d6c)",
-    "preflight_docs": "docs/PREFLIGHT.md (PIA-MUR-D-016)",
+    "preflight_harness": "apps/web/test/preflight/",
+    "preflight_evidence_dir": ".ui-redesign/evidence/preflight/ (13 per-DPC JSON files + dpc-summary.json)",
+    "preflight_docs": "docs/PREFLIGHT.md",
+    "implementation_commits": "440c693 (tokens), 040de91 (safe-area), 3c54d25 (tab-bar), 89f2088 (top-bar), 3181682 (network), 6479230 (citations), 10c3561 (FAB), 9484a95 (PWA), e1d219a (iOS fix)",
     "p3_gate_baseline": {
       "unit_tests": "921/921",
       "security_tests": "13/13",
@@ -606,7 +601,10 @@
       "accessibility-performance-validator",
       "real-ui-product-tester",
       "evidence-regression-controller",
-      "workflow-improvement-reviewer"
+      "workflow-improvement-reviewer",
+      "feature-critic",
+      "feature-advocate",
+      "feature-judge"
     ],
     "commands_present": [
       "mobile-ui-start",
@@ -616,67 +614,59 @@
       "mobile-ui-device-test",
       "mobile-ui-validate",
       "mobile-ui-approve",
+      "mobile-ui-approve-batch",
       "mobile-ui-audit",
       "mobile-ui-handoff",
-      "mobile-ui-improve-workflow"
+      "mobile-ui-improve-workflow",
+      "mobile-ui-design-contract",
+      "mobile-ui-critique"
     ],
-    "commands_missing": [
-      "mobile-ui-design-contract (workflow gap — orchestrator must dispatch directly until a command file is added)"
-    ]
+    "commands_missing": []
   },
   "blockers": [
     {
       "id": "B-1",
-      "title": "Physical iPhone 16 Pro availability UNCONFIRMED",
+      "title": "Physical iPhone 16 Pro availability CONFIRMED",
       "affects": ["device-validation phase", "primary acceptance evidence"],
-      "requires": "User must confirm an iPhone 16 Pro is available with the network reach to load the app (LAN, Tailscale, or cloudflared tunnel).",
       "status": "RESOLVED",
       "resolved_at": "2026-06-14T00:00:00Z",
-      "resolution": "User confirmed iPhone 16 Pro (or 16 Pro Max) is available; iPhone is on the same Tailscale network as the dev host (100.81.83.98); user authorized orchestrator to run cloudflared quick-tunnel when HTTPS-required installed-PWA validation is needed. Primary iPhone 16 Pro acceptance target is now achievable."
+      "resolution": "User confirmed iPhone 16 Pro (or 16 Pro Max) is available; iPhone is on same Tailscale network."
     },
     {
       "id": "B-2",
       "title": "mobile-ui-design-contract command missing",
       "affects": ["design-contract phase entry point"],
-      "requires": "Approve creating the command, or document its absence as accepted and dispatch via orchestrator."
+      "status": "RESOLVED",
+      "resolution": "Command file created at .opencode/commands/mobile-ui-design-contract.md."
     },
     {
       "id": "B-3",
       "title": ".opencode/run-logs/cookies.txt contains a real session cookie",
       "affects": ["credential safety", "evidence redaction"],
-      "requires": "Add .opencode/run-logs/ to .gitignore defensively. Do not read, do not commit, do not include in any evidence bundle."
+      "status": "RESOLVED",
+      "resolution": ".opencode/run-logs/ added to .gitignore defensively."
     },
     {
       "id": "B-4",
-      "title": "opencode.json and opencode.jsonc both present and disagree on default_agent",
+      "title": "opencode.json and opencode.jsonc both present",
       "affects": ["architectural ambiguity"],
-      "requires": "ADR to resolve canonical file. Out of scope for adapter; flag for separate decision. Active orchestrator uses opencode.json."
+      "status": "OPEN",
+      "requires": "ADR to resolve canonical file. Out of scope for redesign workflow."
     },
     {
       "id": "B-5",
       "title": "AGENT_HANDOFF.md mislabels @pia/web as 'Next.js App Router frontend'",
       "affects": ["documentation accuracy"],
-      "requires": "Low-risk factual correction via @repository-docs. Not a blocker for adapter."
+      "status": "OPEN",
+      "requires": "Low-risk factual correction via @repository-docs. Not a blocker."
     },
     {
       "id": "B-6",
       "title": "Playwright + axe-core dependency-approval policy",
       "affects": ["G7 automated-evidence gate"],
-      "requires": "User must decide whether to add Playwright + axe-core as a new dependency (with security review per AGENTS.md), or define an alternative for automated a11y/visual evidence.",
       "status": "RESOLVED",
       "resolved_at": "2026-06-14T00:00:00Z",
-      "resolution": "PIA-MUR-D-016 approved: @playwright/test@^1.49.0 and @axe-core/playwright@^4.10.0 added to apps/web/devDependencies (dev-only; no production runtime impact). PIA-MUR-D-017 (install step) opened separately for the actual binary download + lockfile update."
+      "resolution": "PIA-MUR-D-016/017 approved and installed."
     }
-  ],
-  "first_approval_request": {
-    "id": "PIA-MUR-D-001",
-    "kind": "adapter-approval",
-    "title": "Approve PIA-MUR-ADAPTER-001 repository adapter (detection only; no product code changes)",
-    "blocks_implementation": true,
-    "syntax": "Approve PIA-MUR-ADAPTER-001 as PROPOSED → APPROVED with commit baseline ef6a910, OR Reject with revision request."
-  },
-  "next_phase_recommendation": {
-    "phase": "baseline",
-    "reason": "Per workflow/STATE_MACHINE.md, ADAPTER_PROPOSED → BASELINE_CAPTURED requires 'real runtime and real data' evidence. The runtime is live (Postgres, Redis, MinIO, API on :3000). Baseline capture will: (1) record feature-parity rows for the 7 existing screens, (2) capture responsive-desktop screenshots, (3) capture initial iPhone 16 Pro evidence once B-1 is resolved, (4) record the product-model and concept decisions, (5) lock the design contract."
-  }
+  ]
 }
