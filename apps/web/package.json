@@ -17,7 +17,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
     "test:unit": "vitest run",
-    "dev": "echo 'web: dev mode not configured' && exit 0"
+    "dev": "echo 'web: library consumed by @pia/api — run api dev instead' && exit 0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",

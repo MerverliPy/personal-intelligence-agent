@@ -83,6 +83,52 @@
 - `.venv/`, `__pycache__/` (Python tooling artifacts, gitignored)
 - `.opencode/`, `.git/`
 
+## Development Setup
+
+For detailed development instructions, see **[DEVELOPMENT.md](./DEVELOPMENT.md)**.
+
+### Quick Start
+
+```bash
+# 1. Install dependencies
+pnpm install
+
+# 2. Start Docker dependencies (PostgreSQL, Redis, MinIO)
+./scripts/dev/start-deps.sh
+
+# 3. Start API server (persists across shell sessions)
+setsid node --env-file=.env --import tsx apps/api/src/index.ts &
+disown
+
+# 4. Verify API is running
+curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/health/live
+# Should return: 200
+
+# 5. (Optional) Start worker
+setsid node --env-file=.env --import tsx apps/worker/src/index.ts &
+disown
+
+# 6. (Optional) Generate cloudflared tunnel for remote access
+setsid cloudflared tunnel --no-autoupdate --url http://localhost:3000 &
+disown
+```
+
+### Dev Scripts
+
+All three apps have working `dev` scripts:
+
+| App    | Command                         | Description                                    |
+| ------ | ------------------------------- | ---------------------------------------------- |
+| API    | `pnpm --filter @pia/api dev`    | Starts the Fastify API server                  |
+| Worker | `pnpm --filter @pia/worker dev` | Starts the background job consumer             |
+| Web    | `pnpm --filter @pia/web dev`    | Library consumed by API (no standalone server) |
+
+### Important Notes
+
+- **Use `setsid`** to detach processes from the shell session. Without it, processes get killed when the terminal closes.
+- **Commands appear to hang** — This is expected. The shell displays background process output but waits for completion. Press `Enter` for a new prompt.
+- **Port 3000** is used by the API. Check for conflicts with `lsof -i :3000`.
+
 ## Validation Results
 
 P3-GATE-anchored evidence (full reproduction in `planning/runs/P3-GATE.md:42-56`).

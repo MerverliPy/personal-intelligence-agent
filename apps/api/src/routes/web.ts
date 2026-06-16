@@ -101,7 +101,7 @@ const WEB_SHELL_HTML = `<!DOCTYPE html>
 
         let html = '';
         for (const ws of workspaces) {
-          html += '<div class="card"><h2>' + escapeHtml(ws.name) + '</h2>';
+          html += '<a href="/app/workspaces/' + ws.id + '/conversations" class="card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;"><h2>' + escapeHtml(ws.name) + '</h2>';
           html += '<div class="meta">Workspace &middot; Created ' + new Date(ws.created_at).toLocaleDateString() + '</div>';
 
           // Load projects for this workspace
@@ -118,7 +118,7 @@ const WEB_SHELL_HTML = `<!DOCTYPE html>
             // Silently skip project loading errors
           }
 
-          html += '</div>';
+          html += '</a>';
         }
         content.innerHTML = html;
       } catch (err) {
