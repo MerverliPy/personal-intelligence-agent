@@ -334,7 +334,7 @@ setOffline(!navigator.onLine);
  * Extracts workspace ID from the current URL path to avoid relying
  * on window.__piaWorkspaceId (which isn't set on all pages). */
 function getWorkspaceIdFromUrl() {
-  var m = window.location.pathname.match(/^\/app\/workspaces\/([^\/]+)/);
+  var m = window.location.pathname.match(/^\\/app\\/workspaces\\/([^\\/]+)/);
   return m ? m[1] : '';
 }
 function initTabNav() {
