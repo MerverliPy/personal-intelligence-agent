@@ -105,7 +105,7 @@ loadConversations();
   // (added in shared.ts). Tap opens the mode picker (default ASK).
   const fabHtml =
     '<button class="fab" id="fab-conversation" type="button" aria-label="New conversation" data-fab="conversation">+</button>';
-  const bodyHtmlWithFab = bodyHtml.replace('</section>', '</section>' + fabHtml);
+  const bodyHtmlWithFab = bodyHtml + '\n' + fabHtml;
 
   return pageShell({
     title: 'Conversations',
