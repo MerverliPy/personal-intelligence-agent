@@ -198,9 +198,12 @@ function closeCitationModal() {
 document.addEventListener('keydown', function(ce) {
   if (ce.key === 'Escape') closeCitationModal();
 });
-document.getElementById('citation-sheet').addEventListener('click', function(ce) {
-  if (ce.target === this) closeCitationModal();
-});
+var citationSheet = document.getElementById('citation-sheet');
+if (citationSheet) {
+  citationSheet.addEventListener('click', function(ce) {
+    if (ce.target === this) closeCitationModal();
+  });
+}
 
 function renderCitationModalBodyClient(citation) {
   var locator = citation.source_locator || {};
