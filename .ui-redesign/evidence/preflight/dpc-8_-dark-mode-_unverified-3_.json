@@ -5,51 +5,51 @@
     {
       "title": "auto-switches to dark when prefers-color-scheme: dark",
       "status": "PASS",
-      "durationMs": 480,
+      "durationMs": 439,
       "errors": []
     },
     {
       "title": "light mode default",
       "status": "PASS",
-      "durationMs": 494,
+      "durationMs": 441,
       "errors": []
     },
     {
       "title": "manual dev toggle: clicking #toggle-dark flips theme",
       "status": "PASS",
-      "durationMs": 354,
+      "durationMs": 331,
       "errors": []
     },
     {
       "title": "axe color-contrast: no critical violations in dark mode",
       "status": "PASS",
-      "durationMs": 1177,
+      "durationMs": 1111,
       "errors": []
     },
     {
       "title": "auto-switches to dark when prefers-color-scheme: dark",
       "status": "PASS",
-      "durationMs": 778,
+      "durationMs": 772,
       "errors": []
     },
     {
       "title": "light mode default",
       "status": "PASS",
-      "durationMs": 781,
+      "durationMs": 802,
       "errors": []
     },
     {
       "title": "manual dev toggle: clicking #toggle-dark flips theme",
       "status": "PASS",
-      "durationMs": 716,
+      "durationMs": 706,
       "errors": []
     },
     {
       "title": "axe color-contrast: no critical violations in dark mode",
       "status": "PASS",
-      "durationMs": 1719,
+      "durationMs": 1544,
       "errors": []
     }
   ],
-  "timestamp": "2026-06-15T22:27:04.555Z"
+  "timestamp": "2026-06-16T06:06:49.478Z"
 }

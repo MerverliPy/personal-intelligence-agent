@@ -5,75 +5,75 @@
     {
       "title": "tab bar buttons meet 44pt",
       "status": "PASS",
-      "durationMs": 376,
+      "durationMs": 353,
       "errors": []
     },
     {
       "title": "FAB meets 56pt (primary)",
       "status": "PASS",
-      "durationMs": 313,
+      "durationMs": 285,
       "errors": []
     },
     {
       "title": "Send button meets 56pt (primary)",
       "status": "PASS",
-      "durationMs": 458,
+      "durationMs": 439,
       "errors": []
     },
     {
       "title": "avatar meets 44pt (expected FAIL — CSS says 32pt)",
       "status": "PASS",
-      "durationMs": 281,
+      "durationMs": 254,
       "errors": []
     },
     {
       "title": "back chevron meets 44pt",
       "status": "PASS",
-      "durationMs": 465,
+      "durationMs": 440,
       "errors": []
     },
     {
       "title": "citation chip tap area meets 44pt (PIA-MUR-D-009 fix applied)",
       "status": "PASS",
-      "durationMs": 477,
+      "durationMs": 438,
       "errors": []
     },
     {
       "title": "tab bar buttons meet 44pt",
       "status": "PASS",
-      "durationMs": 761,
+      "durationMs": 693,
       "errors": []
     },
     {
       "title": "FAB meets 56pt (primary)",
       "status": "PASS",
-      "durationMs": 580,
+      "durationMs": 529,
       "errors": []
     },
     {
       "title": "Send button meets 56pt (primary)",
       "status": "PASS",
-      "durationMs": 727,
+      "durationMs": 671,
       "errors": []
     },
     {
       "title": "avatar meets 44pt (expected FAIL — CSS says 32pt)",
       "status": "PASS",
-      "durationMs": 573,
+      "durationMs": 564,
       "errors": []
     },
     {
       "title": "back chevron meets 44pt",
       "status": "PASS",
-      "durationMs": 720,
+      "durationMs": 735,
       "errors": []
     },
     {
       "title": "citation chip tap area meets 44pt (PIA-MUR-D-009 fix applied)",
       "status": "PASS",
-      "durationMs": 712,
+      "durationMs": 699,
       "errors": []
     }
   ],
-  "timestamp": "2026-06-15T22:27:04.555Z"
+  "timestamp": "2026-06-16T06:06:49.478Z"
 }
