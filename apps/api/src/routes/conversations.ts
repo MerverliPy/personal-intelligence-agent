@@ -12,7 +12,7 @@
 import type { FastifyInstance, FastifyPluginAsync, FastifyRequest, FastifyReply } from 'fastify';
 import { createPool } from '@pia/db';
 import { createConversation, listConversations, getConversation } from '@pia/db';
-import { getModelRun, getMessage } from '@pia/db';
+import { getConversationMessages, getModelRun, getMessage } from '@pia/db';
 import type { ConversationMode } from '@pia/db';
 import {
   fakeModelGateway,
@@ -31,6 +31,8 @@ import {
   type ConversationPage,
   type CreateConversationRequest,
   type CreateMessageRequest,
+  type Message,
+  type MessagePage,
   type ModelRun,
   type ModelRunStatusApi,
 } from '@pia/contracts';
@@ -57,6 +59,24 @@ function toApiConversation(row: {
     mode: row.mode,
     created_at: row.createdAt,
     updated_at: row.updatedAt,
+  };
+}
+
+/**
+ * Maps database PersistedMessage rows to API contract Message objects.
+ */
+function toApiMessage(row: {
+  id: string;
+  conversationId: string;
+  role: string;
+  content: string;
+  createdAt: string;
+}): Message {
+  return {
+    id: row.id,
+    role: row.role,
+    content: row.content,
+    created_at: row.createdAt,
   };
 }
 
@@ -173,6 +193,26 @@ const conversationRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
       }
 
       return reply.send(toApiConversation(row));
+    },
+  );
+
+  // -----------------------------------------------------------------------
+  // GET /v1/workspaces/{workspace_id}/conversations/{conversation_id}/messages
+  //
+  // Returns all messages for a conversation in chronological order.
+  // -----------------------------------------------------------------------
+  app.get(
+    '/v1/workspaces/:workspace_id/conversations/:conversation_id/messages',
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      requireAuth(request);
+      const ctx = await requireWorkspaceContext(request);
+      const params = request.params as { conversation_id: string };
+
+      const rows = await getConversationMessages(pool, ctx.workspaceId, params.conversation_id);
+
+      const items = rows.map(toApiMessage);
+      const page: MessagePage = { items };
+      return reply.send(page);
     },
   );
 

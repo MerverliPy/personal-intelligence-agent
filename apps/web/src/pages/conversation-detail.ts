@@ -62,11 +62,22 @@ let activeEventSource = null;
 let citationModal = null;
 
 async function loadMessages() {
-  // No dedicated list-messages endpoint exists yet (the API only exposes
-  // SSE for live streams), so the initial thread is rendered empty and
-  // new messages are appended as the user sends them.
   var thread = document.getElementById('message-thread');
-  thread.innerHTML = '<p class="empty">No messages yet. Send one above.</p>';
+  try {
+    var data = await apiFetch('/v1/workspaces/' + WORKSPACE_ID + '/conversations/' + CONVERSATION_ID + '/messages');
+    var items = (data && data.items) || [];
+    if (items.length === 0) {
+      thread.innerHTML = '<p class="empty">No messages yet. Send one above.</p>';
+      return;
+    }
+    thread.innerHTML = items.map(function(msg) {
+      return renderMessageClient(msg, true);
+    }).join('');
+    wireCitationChips();
+    wireFeedbackForms();
+  } catch (err) {
+    thread.innerHTML = '<p class="empty">Could not load messages.</p>';
+  }
 }
 
 // Client-side mirror of renderMessage (kept inline so the page works

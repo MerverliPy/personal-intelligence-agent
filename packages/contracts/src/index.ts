@@ -374,6 +374,20 @@ export interface ConversationPage {
 // Message types (per api/openapi.yaml §components/schemas/CreateMessageRequest)
 // ---------------------------------------------------------------------------
 
+/** A message resource returned by the API. */
+export interface Message {
+  id: string;
+  role: string;
+  content: string;
+  created_at: string;
+}
+
+/** Paginated message response. */
+export interface MessagePage {
+  items: Message[];
+  next_cursor?: string | null;
+}
+
 /** Request to create a message and initiate a model run. */
 export interface CreateMessageRequest {
   content: string;
