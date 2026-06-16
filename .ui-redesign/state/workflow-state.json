@@ -38,8 +38,8 @@
     "status": "ready",
     "bridges_live": {
       "cloudflared_tunnel": {
-        "url": "https://sig-mardi-experiences-coastal.trycloudflare.com",
-        "target": "http://localhost:3000 (live API)",
+        "url": "https://prospects-clinical-cables-separate.trycloudflare.com",
+        "target": "http://localhost:3000 (live API, restarted with PUBLIC_APP_URL=tunnel URL)",
         "pid": null,
         "log": ".ui-redesign/evidence/devices/cloudflared.log",
         "use": "HTTPS, installed-PWA, service-worker-required checks"
