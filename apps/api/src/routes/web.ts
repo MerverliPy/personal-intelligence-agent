@@ -27,6 +27,8 @@ const WEB_SHELL_HTML = `<!DOCTYPE html>
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <meta name="theme-color" content="#2563EB">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; line-height: 1.5; }
@@ -101,7 +103,7 @@ const WEB_SHELL_HTML = `<!DOCTYPE html>
 
         let html = '';
         for (const ws of workspaces) {
-          html += '<a href="/app/workspaces/' + ws.id + '/conversations" class="card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;"><h2>' + escapeHtml(ws.name) + '</h2>';
+          html += '<div class="card ws-card" data-href="/app/workspaces/' + ws.id + '/conversations" role="link" tabindex="0" style="cursor:pointer;"><h2>' + escapeHtml(ws.name) + '</h2>';
           html += '<div class="meta">Workspace &middot; Created ' + new Date(ws.created_at).toLocaleDateString() + '</div>';
 
           // Load projects for this workspace
@@ -118,9 +120,14 @@ const WEB_SHELL_HTML = `<!DOCTYPE html>
             // Silently skip project loading errors
           }
 
-          html += '</a>';
+          html += '</div>';
         }
         content.innerHTML = html;
+        // iOS PWA: use click handlers instead of <a> tags to stay in standalone mode
+        content.querySelectorAll('.ws-card').forEach(function(card) {
+          card.addEventListener('click', function() { window.location.href = card.getAttribute('data-href'); });
+          card.addEventListener('keydown', function(e) { if (e.key === 'Enter') window.location.href = card.getAttribute('data-href'); });
+        });
       } catch (err) {
         showError(err.message);
         content.innerHTML = '<div class="empty">Unable to load.<br><br><a href="/auth/login" class="btn btn-primary">Sign In</a></div>';
