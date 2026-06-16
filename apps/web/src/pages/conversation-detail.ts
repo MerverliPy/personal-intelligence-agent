@@ -23,34 +23,39 @@ export function conversationDetailPage(
   conversationId: string,
 ): string {
   const bodyHtml = `
+<div class="conversation-layout">
 <section aria-labelledby="conversation-title-heading">
   <h2 id="conversation-title-heading">Conversation</h2>
   <div id="run-state-container" aria-live="polite"></div>
 </section>
 
-<form id="message-form" aria-label="Send a message">
-  <label for="message-content">Your message</label>
-  <textarea id="message-content" name="content" rows="4" required
-    placeholder="Ask a question, or request research / analysis / planning."></textarea>
-  <button type="submit" class="btn btn-primary send-btn">Send</button>
-</form>
-
-<section aria-labelledby="thread-heading">
-  <h3 id="thread-heading" class="sr-only">Message thread</h3>
+<div class="message-thread-section">
   <div id="message-thread" role="log" aria-live="polite" aria-relevant="additions">
     <p class="loading">Loading messages…</p>
   </div>
-</section>
+</div>
+
+<form id="message-form" class="message-form" aria-label="Send a message">
+  <div class="message-form__row">
+    <label for="message-content" class="sr-only">Your message</label>
+    <textarea id="message-content" name="content" rows="1" required
+      placeholder="Ask a question, or request research / analysis / planning."
+      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight, 200)+'px'"></textarea>
+    <button type="submit" class="btn btn-primary send-btn">Send</button>
+  </div>
+</form>
 
 <div id="citation-sheet" class="citation-sheet" role="dialog" aria-modal="true" aria-labelledby="citation-modal-title" hidden>
   <div class="citation-sheet__panel">
     <dialog id="citation-modal" class="citation-modal" aria-labelledby="citation-modal-title"></dialog>
   </div>
 </div>
+</div>
 `;
 
   const bodyScript = `
 const WORKSPACE_ID = ${JSON.stringify(workspaceId)};
+window.__piaWorkspaceId = WORKSPACE_ID;
 const CONVERSATION_ID = ${JSON.stringify(conversationId)};
 
 let activeEventSource = null;

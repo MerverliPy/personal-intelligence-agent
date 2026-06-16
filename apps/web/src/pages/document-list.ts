@@ -41,6 +41,7 @@ export function documentListPage(workspaceId: string, workspaceName: string): st
       </div>`,
     bodyScript: `
 const wsId = ${JSON.stringify(workspaceId)};
+window.__piaWorkspaceId = wsId;
 let currentCursor = null;
 let hasMore = false;
 

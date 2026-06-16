@@ -48,7 +48,7 @@ export const sharedCss = `
           padding-left: env(safe-area-inset-left, 0px);
           padding-right: env(safe-area-inset-right, 0px);
   }
-  .container { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
+  .container { max-width: 960px; margin: 0 auto; padding: var(--s-4); }
   .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #e0e0e0; }
   .header h1 { font-size: 1.5rem; font-weight: 600; }
   .header nav a { margin-left: 1rem; color: #444; text-decoration: none; font-size: 0.9rem; }
@@ -157,6 +157,15 @@ export const sharedCss = `
     cursor: pointer;
   }
   .app-header__avatar:focus-visible { outline: 2pt solid var(--accent); outline-offset: 2pt; }
+
+  /* Conversation layout: thread fills space, form sticks at the bottom */
+  .conversation-layout { display: flex; flex-direction: column; min-height: calc(100dvh - 59pt - var(--tab-bar-h) - env(safe-area-inset-bottom, 0px) - 2*var(--s-4)); }
+  .message-thread-section { flex: 1; overflow-y: auto; min-height: 0; }
+  .message-form { position: sticky; bottom: 0; background: var(--bg); border-top: 0.5pt solid var(--divider); padding: var(--s-3) 0; margin-top: auto; }
+  .message-form__row { display: flex; gap: var(--s-3); align-items: flex-end; }
+  .message-form textarea { flex: 1; resize: none; border: 1pt solid var(--divider); border-radius: var(--r-md); padding: var(--s-3); font: inherit; font-size: var(--t-body); min-height: 44pt; max-height: 200px; }
+  .message-form .send-btn { min-width: 56pt; min-height: 44pt; border-radius: var(--r-md); }
+
   .app-header__title {
     font-size: var(--t-body);
     font-weight: 700;
@@ -314,14 +323,20 @@ window.addEventListener('offline', function () { setOffline(true); });
 setOffline(!navigator.onLine);
 
 /* PIA-MUR-D-004-IMPL commit 3 + critique fix: tab click handler.
- * Navigates to the corresponding screen when a bottom-tab is clicked.
- * Uses full-page navigation (no SPA router) for simplicity. */
+ * Extracts workspace ID from the current URL path to avoid relying
+ * on window.__piaWorkspaceId (which isn't set on all pages). */
+function getWorkspaceIdFromUrl() {
+  var m = window.location.pathname.match(/^\/app\/workspaces\/([^\/]+)/);
+  return m ? m[1] : '';
+}
 function initTabNav() {
+  var wid = getWorkspaceIdFromUrl();
+  // Expose for other code that may need it
+  window.__piaWorkspaceId = wid;
   document.querySelectorAll('.bottom-tab').forEach(function(tab) {
     tab.addEventListener('click', function() {
       var tabId = tab.getAttribute('data-tab');
       if (!tabId) return;
-      var wid = window.__piaWorkspaceId || '';
       var routes = { conversations: 'conversations', documents: 'documents', search: 'search' };
       if (routes[tabId]) window.location.href = '/app/workspaces/' + wid + '/' + routes[tabId];
     });
