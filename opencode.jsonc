@@ -1,9 +1,14 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "default_agent": "plan",
+  "default_agent": "mobile-ui-orchestrator",
   "share": "disabled",
   "snapshot": true,
   "autoupdate": "notify",
+  "instructions": [
+    "AGENTS.md",
+    ".ui-redesign/adapter/REPOSITORY_ADAPTER.md",
+    ".ui-redesign/decisions/DECISION_LEDGER.md"
+  ],
   "watcher": {
     "ignore": [
       ".git/**",
@@ -11,7 +16,8 @@
       "dist/**",
       ".turbo/**",
       "coverage/**",
-      ".next/**"
+      ".next/**",
+      ".ui-redesign/evidence/raw/**"
     ]
   },
   "tool_output": {
