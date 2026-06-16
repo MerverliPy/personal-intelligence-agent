@@ -706,8 +706,9 @@
       "id": "B-4",
       "title": "opencode.json and opencode.jsonc both present",
       "affects": ["architectural ambiguity"],
-      "status": "OPEN",
-      "requires": "ADR to resolve canonical file. Out of scope for redesign workflow."
+      "status": "RESOLVED",
+      "resolved_at": "2026-06-16T12:30:00Z",
+      "resolution": "Canonicalized to opencode.jsonc; opencode.json deleted. opencode.jsonc updated with default_agent: mobile-ui-orchestrator, instructions array, and expanded watcher ignores."
     },
     {
       "id": "B-5",
