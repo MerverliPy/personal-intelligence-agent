@@ -3,12 +3,12 @@
   "workflow": "mobile-ui-redesign",
   "agent": "mobile-ui-orchestrator",
   "adapter_id": "PIA-MUR-ADAPTER-001",
-  "updated_at": "2026-06-16T00:00:00Z",
-  "current_state": "IMPLEMENTATION_COMPLETE",
-  "phase": "validation-critique",
+  "updated_at": "2026-06-16T12:30:00Z",
+  "current_state": "CRITIQUE_COMPLETE",
+  "phase": "device-validation",
   "blocker_count": 0,
   "open_decision_count": 0,
-  "approved_decision_count": 11,
+  "approved_decision_count": 14,
   "completed_phases": [
     "adapter-discovery",
     "baseline",
@@ -17,10 +17,11 @@
     "design-contract",
     "tooling-preflight",
     "implementation-contract",
-    "implementation"
+    "implementation",
+    "validation-critique"
   ],
-  "active_phase": "validation-critique",
-  "pause_reason": "All 8 implementation commits from PIA-MUR-D-004-IMPL have landed (440c693 through 9484a95). A PWA follow-up commit (e1d219a) added iOS meta tags and workspace card click handlers for standalone mode. The implementation is complete. Current action: run /mobile-ui-validate (automated regression + contract validation), then /mobile-ui-critique (Feature Critique Panel on 8 features). Device-validation, evidence-bundle, and delivery phases remain.",
+  "active_phase": "device-validation",
+  "pause_reason": "All 8 implementation commits from PIA-MUR-D-004-IMPL have landed (440c693 through 9484a95). PWA follow-up (e1d219a) added iOS meta tags and workspace card click handlers. Feature Critique Panel evaluated all 8 features in 3 groups (PIA-MUR-D-013 Core Shell REVISE, PIA-MUR-D-014 Interactions HYBRID, PIA-MUR-D-015 PWA HYBRID). All P0/P1 remediations applied across 5 follow-up commits (d3e28a6, 4678602, 0cf39ce, 038910f, dfd88b3). Device-validation (physical iPhone 16 Pro) is the next phase. Evidence-bundle and delivery remain.",
   "selected_concept": {
     "id": "PIA-MUR-D-003c",
     "name": "Stream",
@@ -153,16 +154,27 @@
         "3181682 (network-loss banner)",
         "6479230 (citation chip + sheet)",
         "10c3561 (FAB + mode sheet)",
-        "9484a95 (PWA manifest + SW + icons)"
+        "9484a95 (PWA manifest + SW + icons)",
+        "e1d219a (iOS PWA meta tags + click handlers)",
+        "d3e28a6 (critique panel fixes D-013/D-014/D-015)",
+        "4678602 (tab nav, layout, chat fixes)",
+        "0cf39ce (quick-ask composer)",
+        "038910f (citation sheet null guard)",
+        "dfd88b3 (preflight evidence update)"
       ],
       "evidence": ".ui-redesign/evidence/preflight/dpc-{01..14}.json"
     },
-    "implementation": { "status": "DONE" },
     "validation-critique": {
-      "status": "IN_PROGRESS",
+      "status": "DONE",
       "started_at": "2026-06-16T00:00:00Z",
+      "completed_at": "2026-06-16T12:00:00Z",
       "owner": "mobile-ui-orchestrator",
-      "next_action": "Run /mobile-ui-critique (Feature Critique Panel) against 8 implemented features in 3 groups"
+      "next_action": "Completed. 3 critique panels executed (PIA-MUR-D-013 Core Shell REVISE, D-014 Interactions HYBRID, D-015 PWA HYBRID). All P0/P1 remediations applied.",
+      "run_records": [
+        "planning/runs/PIA-MUR-D-013-core-shell-critique.md",
+        "planning/runs/PIA-MUR-D-014-interactions-critique.md",
+        "planning/runs/PIA-MUR-D-015-pwa-critique.md"
+      ]
     },
     "device-validation": {
       "status": "NOT_STARTED",
@@ -186,8 +198,8 @@
   },
   "git": {
     "branch": "main",
-    "head_commit": "e1d219a",
-    "head_message": "fix(redesign): add iOS PWA meta tags + workspace card click handlers for standalone mode",
+    "head_commit": "dfd88b3",
+    "head_message": "chore(redesign): update preflight evidence after critique panel fixes",
     "worktree_clean": true,
     "remote_check": "PENDING — orchestrator will verify at evidence-bundle phase",
     "uncommitted_paths": [],
@@ -557,7 +569,48 @@
       "status": "PASS (preflight harness)"
     }
   ],
-  "critique_panel_history": [],
+  "critique_panel_history": [
+    {
+      "id": "PIA-MUR-D-013",
+      "group": "Group 1 — Core Shell",
+      "features": ["design tokens", "safe-area insets", "bottom tab bar", "top app bar"],
+      "verdict": "REVISE",
+      "p0_items": 2,
+      "p1_items": 5,
+      "p2_items": 6,
+      "p3_items": 4,
+      "judge": "feature-judge",
+      "evaluated_at": "2026-06-16T00:00:00Z",
+      "remediated_by": "d3e28a6, 4678602",
+      "run_record": "planning/runs/PIA-MUR-D-013-core-shell-critique.md"
+    },
+    {
+      "id": "PIA-MUR-D-014",
+      "group": "Group 2 — Interactions",
+      "features": ["network-loss banner", "citation chips/sheet", "FAB/mode sheet"],
+      "verdict": "HYBRID (ACCEPT with conditions)",
+      "p0_items": 3,
+      "p1_items": 6,
+      "p2_items": 5,
+      "p3_items": 4,
+      "remediations": 8,
+      "judge": "feature-judge",
+      "evaluated_at": "2026-06-16T00:00:00Z",
+      "remediated_by": "d3e28a6, 0cf39ce, 038910f",
+      "run_record": "planning/runs/PIA-MUR-D-014-interactions-critique.md"
+    },
+    {
+      "id": "PIA-MUR-D-015",
+      "group": "Group 3 — PWA Infrastructure",
+      "features": ["manifest", "service worker", "icons", "iOS meta tags", "click handlers"],
+      "verdict": "HYBRID (ACCEPT with conditions)",
+      "modifications": 6,
+      "judge": "feature-judge",
+      "evaluated_at": "2026-06-16T00:00:00Z",
+      "remediated_by": "d3e28a6",
+      "run_record": "planning/runs/PIA-MUR-D-015-pwa-critique.md"
+    }
+  ],
   "evidence": {
     "pre_p3_closure_run": "planning/runs/P3-GATE.md:42-56",
     "audit_handoff": "AGENT_HANDOFF.md",
@@ -572,7 +625,10 @@
     "preflight_harness": "apps/web/test/preflight/",
     "preflight_evidence_dir": ".ui-redesign/evidence/preflight/ (13 per-DPC JSON files + dpc-summary.json)",
     "preflight_docs": "docs/PREFLIGHT.md",
-    "implementation_commits": "440c693 (tokens), 040de91 (safe-area), 3c54d25 (tab-bar), 89f2088 (top-bar), 3181682 (network), 6479230 (citations), 10c3561 (FAB), 9484a95 (PWA), e1d219a (iOS fix)",
+    "implementation_commits": "440c693 (tokens), 040de91 (safe-area), 3c54d25 (tab-bar), 89f2088 (top-bar), 3181682 (network), 6479230 (citations), 10c3561 (FAB), 9484a95 (PWA), e1d219a (iOS fix), d3e28a6 (critique fixes), 4678602 (tab-nav/layout/chat), 0cf39ce (quick-ask), 038910f (null-guard), dfd88b3 (preflight-evidence)",
+    "critique_core_shell": "planning/runs/PIA-MUR-D-013-core-shell-critique.md (REVISE, 2 P0 + 5 P1 items resolved)",
+    "critique_interactions": "planning/runs/PIA-MUR-D-014-interactions-critique.md (HYBRID, 3 P0 + 6 P1 items resolved)",
+    "critique_pwa": "planning/runs/PIA-MUR-D-015-pwa-critique.md (HYBRID, 6 modifications applied)",
     "p3_gate_baseline": {
       "unit_tests": "921/921",
       "security_tests": "13/13",
