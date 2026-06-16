@@ -158,6 +158,14 @@ export const sharedCss = `
   }
   .app-header__avatar:focus-visible { outline: 2pt solid var(--accent); outline-offset: 2pt; }
 
+  /* Fresh-chat quick-ask composer on conversation list page */
+  .quick-ask-form { margin: var(--s-4) 0; }
+  .quick-ask__row { display: flex; gap: var(--s-3); align-items: flex-end; }
+  .quick-ask-form textarea { flex: 1; resize: none; border: 1pt solid var(--divider); border-radius: var(--r-md); padding: var(--s-3); font: inherit; font-size: var(--t-body); min-height: 44pt; max-height: 120px; }
+  .quick-ask-form .send-btn { min-width: 56pt; min-height: 44pt; border-radius: var(--r-md); font-size: var(--t-body); font-weight: 600; }
+  .quick-ask__hint { display: block; color: var(--fg-subtle); font-size: var(--t-caption); margin-top: var(--s-2); }
+  .conversation-list-heading { font-size: var(--t-section); font-weight: 700; margin: var(--s-6) 0 var(--s-3) 0; }
+
   /* Conversation layout: thread fills space, form sticks at the bottom */
   .conversation-layout { display: flex; flex-direction: column; min-height: calc(100dvh - 59pt - var(--tab-bar-h) - env(safe-area-inset-bottom, 0px) - 2*var(--s-4)); }
   .message-thread-section { flex: 1; overflow-y: auto; min-height: 0; }
