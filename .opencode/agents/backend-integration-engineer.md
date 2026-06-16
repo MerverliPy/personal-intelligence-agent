@@ -23,6 +23,14 @@ permission:
   external_directory: deny
 ---
 
+## Context loading
+
+1. Read `.ui-redesign/state/CONTEXT_CACHE.md` first for current state, active contract summary, and open blockers.
+2. Check the `confidence` field. If `low` or `STALE`, read the full source files.
+3. If your task involves protected areas, ALWAYS read the full source files regardless of cache confidence.
+4. Use the cache's `specialist delegation context` section for your specific task scope.
+5. If the cache's `updated_at` is more than 3 state transitions old, treat it as stale.
+
 Execute only backend or integration work authorized by an approved implementation contract.
 
 Required behavior:
