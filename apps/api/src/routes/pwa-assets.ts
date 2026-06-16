@@ -45,21 +45,20 @@ const pwaAssetsRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
       const filePath = path.join(PUBLIC_DIR, meta.file);
       try {
         const data = await fs.readFile(filePath);
-        // Use raw response so Fastify does not try to JSON-encode the
-        // buffer. Setting content-type and content-length via
-        // reply.header avoids the onSend hook's default-JSON path.
-        reply.raw.setHeader('content-type', meta.contentType);
-        reply.raw.setHeader('content-length', String(data.length));
-        reply.raw.setHeader('cache-control', 'public, max-age=3600');
-        reply.raw.statusCode = 200;
-        reply.raw.end(data);
-        // Returning reply.send() with no payload signals Fastify the
-        // response is already sent (avoids double-send).
+        // Use standard Fastify reply pipeline so onSend hooks
+        // (security headers, CSP, CSRF cookie) fire for all assets.
+        // Fastify 5.x correctly handles Buffer payloads without JSON wrapping.
+        const cacheControl =
+          route === '/manifest.webmanifest' ? 'no-cache, max-age=0' : 'public, max-age=3600';
+        reply
+          .code(200)
+          .header('content-type', meta.contentType)
+          .header('content-length', String(data.length))
+          .header('cache-control', cacheControl)
+          .send(data);
         return reply;
       } catch {
-        reply.raw.setHeader('content-type', 'text/plain; charset=utf-8');
-        reply.raw.statusCode = 404;
-        reply.raw.end('Not found');
+        reply.code(404).header('content-type', 'text/plain; charset=utf-8').send('Not found');
         return reply;
       }
     });

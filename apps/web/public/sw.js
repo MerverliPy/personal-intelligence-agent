@@ -6,6 +6,7 @@
 const CACHE_NAME = 'pia-shell-v1';
 const SHELL_URLS = [
   '/',
+  '/app',
   '/manifest.webmanifest',
   '/icon-192.png',
   '/icon-512.png',
@@ -43,7 +44,7 @@ self.addEventListener('fetch', function (event) {
 
   // SSE streams are always network. Never cache.
   var accept = req.headers.get('accept') || '';
-  if (accept.indexOf('text/event-stream') !== -1) return;
+  if (accept.toLowerCase().indexOf('text/event-stream') !== -1) return;
 
   // Network-first with cache fallback.
   event.respondWith(

@@ -32,7 +32,7 @@ export function conversationDetailPage(
   <label for="message-content">Your message</label>
   <textarea id="message-content" name="content" rows="4" required
     placeholder="Ask a question, or request research / analysis / planning."></textarea>
-  <button type="submit" class="btn btn-primary">Send</button>
+  <button type="submit" class="btn btn-primary send-btn">Send</button>
 </form>
 
 <section aria-labelledby="thread-heading">
@@ -154,12 +154,9 @@ async function submitFeedback(form) {
 }
 
 async function openCitationModal(citationId) {
-  // PIA-MUR-D-004-IMPL commit 6: the citation dialog is now wrapped
-  // in a slide-up sheet container (#citation-sheet). We toggle the
-  // sheet wrapper's hidden attribute instead of calling
-  // dialog.showModal() (the inner <dialog> is left in the DOM but
-  // hidden inside the sheet panel; the sheet is the visible
-  // affordance).
+  // PIA-MUR-D-004-IMPL commit 6 + critique fix: slide-up sheet
+  // animation uses a three-phase approach (remove hidden, wait for
+  // paint, add .sheet-open class) to allow CSS transitions to fire.
   var sheet = document.getElementById('citation-sheet');
   var modal = document.getElementById('citation-modal');
   if (!sheet || !modal) return;
@@ -169,13 +166,36 @@ async function openCitationModal(citationId) {
   } else {
     modal.innerHTML = renderCitationModalBodyClient(citations);
   }
+  // Three-phase slide-up animation
   sheet.hidden = false;
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      sheet.classList.add('sheet-open');
+    });
+  });
+  // Focus the first focusable element inside the sheet
+  var firstFocusable = sheet.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (firstFocusable) firstFocusable.focus();
 }
 
 function closeCitationModal() {
   var sheet = document.getElementById('citation-sheet');
-  if (sheet) sheet.hidden = true;
+  if (!sheet) return;
+  sheet.classList.remove('sheet-open');
+  var done = function() {
+    sheet.removeEventListener('transitionend', done);
+    sheet.hidden = true;
+  };
+  sheet.addEventListener('transitionend', done);
 }
+
+// Esc key and backdrop click dismiss the citation sheet
+document.addEventListener('keydown', function(ce) {
+  if (ce.key === 'Escape') closeCitationModal();
+});
+document.getElementById('citation-sheet').addEventListener('click', function(ce) {
+  if (ce.target === this) closeCitationModal();
+});
 
 function renderCitationModalBodyClient(citation) {
   var locator = citation.source_locator || {};
