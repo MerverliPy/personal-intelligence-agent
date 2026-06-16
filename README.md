@@ -691,7 +691,7 @@ graph LR
 
 This repository is designed for AI-assisted development with OpenCode. The task graph in `planning/backlog.yaml` defines every implementation step with dependencies, acceptance criteria, security checks, and verification commands.
 
-### Workflow Cycle
+### Core Workflow Cycle
 
 1. **`/project-analyze`** — Inspect the repo, task graph, and current phase status
 2. **`/phase-plan <PHASE>`** — Understand dependencies before starting a phase
@@ -703,6 +703,42 @@ This repository is designed for AI-assisted development with OpenCode. The task 
 > [!IMPORTANT]
 > `NO_CHANGE_REQUIRED` is a valid successful outcome when acceptance criteria already pass.
 > Never weaken tests, permissions, or acceptance criteria to mark work complete.
+
+### Mobile UI Redesign Workflow
+
+An approval-gated orchestrator (`mobile-ui-orchestrator`) coordinates 25 agents and 27 commands for the iPhone 16 Pro-first web UI redesign. Every design decision requires explicit approval; no product code changes before the repository adapter, baseline, product model, concept, design contract, and implementation contract are approved.
+
+| Command                       | Purpose                                      |
+| ----------------------------- | -------------------------------------------- |
+| `/mobile-ui-start`            | Initialize the redesign workflow             |
+| `/mobile-ui-status`           | Current phase, approvals, evidence, blockers |
+| `/mobile-ui-concepts`         | Produce visual concept directions            |
+| `/mobile-ui-design-contract`  | Produce schema-validated design contract     |
+| `/mobile-ui-implement`        | Execute implementation contract commits      |
+| `/mobile-ui-approve`          | Present a single approval packet             |
+| `/mobile-ui-approve-batch`    | Present up to 5 items as one approval        |
+| `/mobile-ui-critique`         | Run Feature Critique Panel on a feature      |
+| `/mobile-ui-validate`         | Run device-validation evidence               |
+| `/mobile-ui-device-test`      | Capture physical iPhone 16 Pro evidence      |
+| `/mobile-ui-audit`            | Run independent audit                        |
+| `/mobile-ui-improve-workflow` | Run workflow improvement review              |
+| `/mobile-ui-handoff`          | Produce delivery handoff                     |
+
+### Feature Critique Panel
+
+Three agents evaluate features from different perspectives before implementation:
+
+- **`feature-critic`** — Adversarial evaluator: finds flaws, risks, edge cases
+- **`feature-advocate`** — Constructive evaluator: finds strengths, opportunities, user value
+- **`feature-judge`** — Neutral synthesizer: weighs both reports, produces ACCEPT / REJECT / HYBRID / REVISE
+
+Invoke via `/mobile-ui-critique <feature description>` or automatically by the orchestrator when a new design decision arises.
+
+### Workflow Improvements
+
+- **Context cache** — `.ui-redesign/state/CONTEXT_CACHE.md` provides a condensed state summary for specialist agents, reducing repeated re-reading of large contract files
+- **Batch approval** — Group up to 5 items per approval packet; HIGH-risk items require explicit acknowledgment
+- **Adaptive phase ordering** — Independent phases can run in parallel; phases with passing criteria can be conditionally skipped
 
 ### Key Scripts
 
