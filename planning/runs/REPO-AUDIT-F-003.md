@@ -1,6 +1,7 @@
-# F-003: Enforce default-branch merge governance
+# Repository Audit F-003: Enforce default-branch merge governance
 
-**Task ID:** F-003
+**Task ID:** REPO-AUDIT-F-003
+**Source Finding:** External repository audit `F-003`
 **Final State:** DONE
 **Date:** 2026-06-17
 **Base Commit:** `39f0d5097c71ddb41961bec95bf5e5d9bcd5b415`
@@ -18,6 +19,10 @@
 - Hosted repository rulesets, branch protection, collaborators, permissions,
   commit check runs, and Actions policy
 - Existing repository governance files and issue templates
+- Namespace check: the repository-local `audit-findings.log.md` already uses
+  bare `F-003` for the logout revocation defect, so this run uses the
+  namespaced ID `REPO-AUDIT-F-003` while preserving the external audit finding
+  identifier.
 
 ---
 
@@ -42,10 +47,10 @@ validated pull request.
 
 ### New Files
 
-| File                     | Description                                          |
-| ------------------------ | ---------------------------------------------------- |
-| `.github/CODEOWNERS`     | Defines default and sensitive-path review ownership  |
-| `planning/runs/F-003.md` | Records repository and hosted-governance remediation |
+| File                                | Description                                          |
+| ----------------------------------- | ---------------------------------------------------- |
+| `.github/CODEOWNERS`                | Defines default and sensitive-path review ownership  |
+| `planning/runs/REPO-AUDIT-F-003.md` | Records repository and hosted-governance remediation |
 
 No application, workflow, dependency, database, or API files were changed.
 
