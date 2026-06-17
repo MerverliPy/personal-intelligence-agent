@@ -112,14 +112,14 @@ export const CONFIG_SCHEMA: Record<string, ConfigField> = {
     env: 'OIDC_ISSUER',
     description: 'OpenID Connect issuer URL',
     secret: false,
-    required: false,
+    required: true,
     default: 'http://localhost:8080/realms/pia',
   },
   OIDC_CLIENT_ID: {
     env: 'OIDC_CLIENT_ID',
     description: 'OpenID Connect client identifier',
     secret: false,
-    required: false,
+    required: true,
     default: 'pia-local',
   },
   OIDC_CLIENT_SECRET: {

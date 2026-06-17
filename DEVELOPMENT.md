@@ -23,6 +23,11 @@ pnpm install
 
 This starts PostgreSQL 17 (with pgvector), Redis 7, and MinIO.
 
+The local development stack does not include an external OIDC provider. To use
+the built-in local sign-in flow, set `PIA_ALLOW_DEV_AUTH_BYPASS=1` in `.env`.
+This flag is supported only in `development` and `test`; production rejects it.
+Unset the flag when testing against a real OIDC provider.
+
 ### 3. Start the API Server
 
 **Recommended method (persists across shell sessions):**
@@ -145,7 +150,9 @@ disown
 
 **Cause:** Not logged in or session expired.
 
-**Solution:** Click "Sign In" to authenticate via the dev bypass OIDC flow.
+**Solution:** When using the local stack without an external OIDC provider,
+set `PIA_ALLOW_DEV_AUTH_BYPASS=1` in `.env`, restart the API, and click
+"Sign In." Unset the flag when testing against a real OIDC provider.
 
 ### Database Connection Errors
 
