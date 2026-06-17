@@ -26,8 +26,7 @@ function createDevBypassOidcClient(config: OidcConfig): OidcClient {
       const codeVerifier = randomBytes(32).toString('base64url');
       const nonce = randomBytes(16).toString('hex');
 
-      const authorizationUrl =
-        `${config.redirectUri}?code=DEV-BYPASS&state=${encodeURIComponent(state)}`;
+      const authorizationUrl = `${config.redirectUri}?code=DEV-BYPASS&state=${encodeURIComponent(state)}`;
 
       return {
         authorizationUrl,

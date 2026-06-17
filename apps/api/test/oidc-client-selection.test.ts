@@ -1,19 +1,14 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { AppMode } from '@pia/config';
 import type { OidcClient, OidcConfig } from '@pia/auth';
-import {
-  selectOidcClient,
-  type OidcClientFactories,
-} from '../src/oidc-client-selection.js';
+import { selectOidcClient, type OidcClientFactories } from '../src/oidc-client-selection.js';
 
 const oidcConfig: OidcConfig = {
   issuerUrl: 'https://issuer.example.test',
   clientId: 'test-client',
   clientSecret: 'test-client-secret',
   redirectUri: 'http://localhost:3000/auth/callback',
-  sessionSecret: new TextEncoder().encode(
-    'test-session-secret-at-least-32-characters',
-  ),
+  sessionSecret: new TextEncoder().encode('test-session-secret-at-least-32-characters'),
   sessionMaxAgeSeconds: 3600,
   secureCookies: false,
 };
