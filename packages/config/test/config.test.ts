@@ -112,6 +112,8 @@ describe('loadConfig', () => {
           // Error message names missing keys
           expect(err.message).toContain('DATABASE_URL');
           expect(err.message).toContain('REDIS_URL');
+          expect(err.message).toContain('OIDC_ISSUER');
+          expect(err.message).toContain('OIDC_CLIENT_ID');
           expect(err.message).toContain('OIDC_CLIENT_SECRET');
           expect(err.message).toContain('SESSION_SECRET');
           expect(err.message).toContain('STORAGE_ACCESS_KEY_ID');
@@ -119,8 +121,36 @@ describe('loadConfig', () => {
           // missingKeys contains the env var names
           expect(err.missingKeys).toContain('DATABASE_URL');
           expect(err.missingKeys).toContain('REDIS_URL');
+          expect(err.missingKeys).toContain('OIDC_ISSUER');
+          expect(err.missingKeys).toContain('OIDC_CLIENT_ID');
         }
       });
+    });
+
+    it('requires explicit OIDC issuer and client ID in production', () => {
+      withEnv(
+        {
+          NODE_ENV: 'production',
+          DATABASE_URL: 'postgresql://prod-host/db',
+          REDIS_URL: 'redis://prod-host:6379',
+          OIDC_ISSUER: undefined,
+          OIDC_CLIENT_ID: undefined,
+          OIDC_CLIENT_SECRET: 'prod-oidc-secret',
+          SESSION_SECRET: 'prod-session-secret',
+          STORAGE_ACCESS_KEY_ID: 'prod-key',
+          STORAGE_SECRET_ACCESS_KEY: 'prod-secret',
+        },
+        () => {
+          expect(() => loadConfig()).toThrow(ConfigValidationError);
+
+          try {
+            loadConfig();
+          } catch (error) {
+            const err = error as ConfigValidationError;
+            expect(err.missingKeys).toEqual(['OIDC_ISSUER', 'OIDC_CLIENT_ID']);
+          }
+        },
+      );
     });
 
     it('loads successfully when all required config is set', () => {
@@ -129,6 +159,8 @@ describe('loadConfig', () => {
           NODE_ENV: 'production',
           DATABASE_URL: 'postgresql://prod-host/db',
           REDIS_URL: 'redis://prod-host:6379',
+          OIDC_ISSUER: 'https://login.example.com',
+          OIDC_CLIENT_ID: 'pia-production',
           OIDC_CLIENT_SECRET: 'prod-oidc-secret',
           SESSION_SECRET: 'prod-session-secret',
           STORAGE_ACCESS_KEY_ID: 'prod-key',
@@ -151,6 +183,8 @@ describe('loadConfig', () => {
           HOST: '127.0.0.1',
           DATABASE_URL: 'postgresql://prod/db',
           REDIS_URL: 'redis://prod:6379',
+          OIDC_ISSUER: 'https://login.example.com',
+          OIDC_CLIENT_ID: 'pia-production',
           OIDC_CLIENT_SECRET: 'secret',
           SESSION_SECRET: 'secret',
           STORAGE_ACCESS_KEY_ID: 'key',
