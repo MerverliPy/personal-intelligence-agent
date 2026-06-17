@@ -1,9 +1,9 @@
-import { randomBytes } from 'node:crypto';
 import { loadConfig, safeConfigForLogging } from '@pia/config';
 import { createObservability, runWithCorrelation } from '@pia/observability';
-import type { OidcConfig, OidcClient, AuthorizationParams, OidcUserInfo } from '@pia/auth';
+import type { OidcConfig } from '@pia/auth';
 import { createPool } from '@pia/db';
 import { createServer } from './server.js';
+import { selectOidcClient } from './oidc-client-selection.js';
 
 /**
  * Build OIDC configuration from the validated application config.
@@ -29,52 +29,16 @@ function buildOidcConfig(): OidcConfig {
   };
 }
 
-/**
- * Bypass OIDC client for development — no external provider needed.
- *
- * Instead of redirecting to an external OIDC issuer, returns a URL that
- * points directly to our own `/auth/callback` with a pre-authorized code.
- * On callback, validates the bypass code and returns a hardcoded dev user.
- */
-function createDevBypassOidcClient(config: OidcConfig): OidcClient {
-  const devSub = 'dev-user-1';
-  const devEmail = 'dev@localhost';
-
-  return {
-    getIssuerUrl: () => config.issuerUrl,
-
-    getAuthorizationUrl: async (): Promise<AuthorizationParams> => {
-      const state = randomBytes(16).toString('hex');
-      const codeVerifier = randomBytes(32).toString('base64url');
-      const nonce = randomBytes(16).toString('hex');
-
-      const authorizationUrl = `${config.redirectUri}?code=DEV-BYPASS&state=${encodeURIComponent(state)}`;
-
-      return { authorizationUrl, codeVerifier, state, nonce };
-    },
-
-    handleCallback: async (code: string): Promise<OidcUserInfo> => {
-      if (code !== 'DEV-BYPASS') {
-        throw new Error('Invalid dev bypass code');
-      }
-      return {
-        sub: devSub,
-        email: devEmail,
-        email_verified: true,
-        name: 'Dev User',
-        preferred_username: 'dev',
-        picture: undefined,
-      };
-    },
-  };
-}
-
 async function main(): Promise<void> {
   try {
     const config = loadConfig();
     const oidcConfig = buildOidcConfig();
     const dbPool = createPool();
-    const oidcClient = createDevBypassOidcClient(oidcConfig);
+    const oidcClient = selectOidcClient({
+      mode: config.mode,
+      bypassRequested: process.env['PIA_ALLOW_DEV_AUTH_BYPASS'] === '1',
+      config: oidcConfig,
+    });
     const observability = createObservability({
       enabled: true,
       logLevel: config.logging.level,
