@@ -1,0 +1,14 @@
+# Default review ownership.
+* @MerverliPy
+
+# Security-, automation-, authentication-, data-, and release-sensitive paths.
+/.github/ @MerverliPy
+/apps/api/ @MerverliPy
+/packages/auth/ @MerverliPy
+/packages/config/ @MerverliPy
+/packages/knowledge/ @MerverliPy
+/infra/ @MerverliPy
+/compose.yaml @MerverliPy
+/opencode.json @MerverliPy
+/opencode.jsonc @MerverliPy
+/.opencode/ @MerverliPy
