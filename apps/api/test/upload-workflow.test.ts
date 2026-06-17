@@ -4,6 +4,7 @@ const { Pool } = pg;
 import { createLocalStorageProvider, simulateUpload, type StoredObject } from '@pia/storage';
 import {
   createNoopScanProvider,
+  createUnavailableScanProvider,
   type ScanProvider,
   type ScanInput,
   type ScanResult,
@@ -324,6 +325,32 @@ describe('Quarantine — malware scan results', () => {
     expect(result.version.status).toBe('QUARANTINED');
     expect(result.quarantineReason).toContain('error');
     expect(result.ingestionJob).toBeUndefined();
+  });
+
+  it('quarantines when no scanner is configured', async (vtCtx) => {
+    requirePool(vtCtx);
+    const storage = createLocalStorageProvider();
+    const scan = createUnavailableScanProvider();
+
+    const { result } = await completeTestUpload(
+      pool,
+      storage,
+      scan,
+      TEST_WORKSPACE_ID,
+      'unverified content',
+      'unverified.pdf',
+      'application/pdf',
+    );
+
+    expect(result.version.status).toBe('QUARANTINED');
+    expect(result.quarantineReason).toContain('error');
+    expect(result.ingestionJob).toBeUndefined();
+    expect(result.storedFile.scanStatus).toBe('ERROR');
+    expect(result.storedFile.scanMetadata).toMatchObject({
+      scanned: false,
+      provider: 'unavailable',
+      errorCode: 'SCAN_PROVIDER_NOT_CONFIGURED',
+    });
   });
 });
 
