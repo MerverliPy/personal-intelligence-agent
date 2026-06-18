@@ -66,7 +66,37 @@ export interface ScanProvider {
 }
 
 // ---------------------------------------------------------------------------
-// Noop adapter (development/testing only)
+// Fail-closed adapter (runtime default when no scanner is configured)
+// ---------------------------------------------------------------------------
+
+/**
+ * Creates a scan provider that marks every upload as an error.
+ *
+ * This is the safe runtime fallback when no content-inspection service has
+ * been configured. Returning `ERROR` ensures the upload workflow quarantines
+ * the file and never schedules ingestion.
+ */
+export function createUnavailableScanProvider(): ScanProvider {
+  return {
+    async scan(input: ScanInput): Promise<ScanResult> {
+      const detectedMimeType = input.storageMimeType || input.declaredMimeType || null;
+
+      return {
+        status: 'ERROR',
+        detectedMimeType,
+        metadata: {
+          scanned: false,
+          provider: 'unavailable',
+          errorCode: 'SCAN_PROVIDER_NOT_CONFIGURED',
+          scannedAt: new Date().toISOString(),
+        },
+      };
+    },
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Noop adapter (explicit development/testing use only)
 // ---------------------------------------------------------------------------
 
 /**
@@ -89,6 +119,10 @@ const DEFAULT_ALLOWED_MIME_TYPES = new Set([
  *
  * Returns `CLEAN` for all files and sets the detected MIME type based on
  * the storage-layer MIME type (falling back to the declared type).
+ *
+ * This adapter bypasses malware analysis and must be injected explicitly
+ * by tests or controlled development tooling. It must never be selected as an
+ * implicit runtime fallback.
  *
  * **Not for production use.** Real deployments must plug in a content
  * inspection service.

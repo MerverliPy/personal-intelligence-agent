@@ -1,28 +1,28 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  // Canonical project configuration. Keep exactly one root OpenCode config.
+  // Change this policy only with an effective-config regression test.
   "default_agent": "plan",
   "share": "disabled",
   "snapshot": true,
   "autoupdate": "notify",
+  "instructions": [
+    "AGENTS.md",
+    ".ui-redesign/adapter/REPOSITORY_ADAPTER.md",
+    ".ui-redesign/decisions/DECISION_LEDGER.md",
+  ],
   "watcher": {
-    "ignore": [
-      ".git/**",
-      "node_modules/**",
-      "dist/**",
-      ".turbo/**",
-      "coverage/**",
-      ".next/**"
-    ]
+    "ignore": [".git/**", "node_modules/**", "dist/**", ".turbo/**", "coverage/**", ".next/**"],
   },
   "tool_output": {
     "max_lines": 500,
-    "max_bytes": 40000
+    "max_bytes": 40000,
   },
   "compaction": {
     "auto": true,
     "prune": true,
     "tail_turns": 3,
-    "reserved": 12000
+    "reserved": 12000,
   },
   "permission": {
     "read": {
@@ -40,8 +40,14 @@
       "*credentials*": "deny",
       "**/*credentials*": "deny",
       ".git/**": "deny",
-      "**/.git/**": "deny"
+      "**/.git/**": "deny",
     },
+    "glob": "allow",
+    "grep": "allow",
+    "list": "allow",
+    "lsp": "allow",
+    "todowrite": "allow",
+    "question": "allow",
     "edit": {
       "*": "ask",
       "*.env": "deny",
@@ -55,7 +61,7 @@
       "*credentials*": "deny",
       "**/*credentials*": "deny",
       ".git/**": "deny",
-      "**/.git/**": "deny"
+      "**/.git/**": "deny",
     },
     "external_directory": "deny",
     "webfetch": "ask",
@@ -92,7 +98,7 @@
       "kubectl apply*": "deny",
       "helm upgrade*": "deny",
       "npm publish*": "deny",
-      "pnpm publish*": "deny"
-    }
-  }
+      "pnpm publish*": "deny",
+    },
+  },
 }
