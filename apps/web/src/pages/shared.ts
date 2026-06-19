@@ -32,15 +32,23 @@ export const sharedCss = `
     --motion-ease: cubic-bezier(0.32, 0.72, 0, 1);
     --touch-min: 44pt;
     --tab-bar-h: 49pt;
+    --danger: #DC2626;
+    --status-failed-bg: #FEF2F2;
+    --status-failed-fg: #991B1B;
+    --z-tab-bar: 10;
+    --z-fab: 20;
+    --z-banner: 50;
+    --z-sheet: 100;
+    --z-status: 1000;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; line-height: 1.5;
+  body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--fg); line-height: 1.42; min-height: 100vh; min-height: 100dvh;
           padding-top: max(env(safe-area-inset-top, 0px), 59pt);
           padding-bottom: env(safe-area-inset-bottom, 0px);
           padding-left: env(safe-area-inset-left, 0px);
           padding-right: env(safe-area-inset-right, 0px);
   }
-  .container { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
+  .container { max-width: 960px; margin: 0 auto; padding: var(--s-4); }
   .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #e0e0e0; }
   .header h1 { font-size: 1.5rem; font-weight: 600; }
   .header nav a { margin-left: 1rem; color: #444; text-decoration: none; font-size: 0.9rem; }
@@ -108,7 +116,7 @@ export const sharedCss = `
     display: flex;
     background: var(--bg);
     border-top: 0.5pt solid var(--divider);
-    z-index: 10;
+    z-index: var(--z-tab-bar);
   }
   .bottom-tab {
     flex: 1 1 0;
@@ -122,7 +130,8 @@ export const sharedCss = `
     font: inherit;
     cursor: pointer;
   }
-  .bottom-tab[aria-current="page"] { color: var(--accent); }
+  .bottom-tab[aria-current="page"] { color: var(--accent); position: relative; }
+  .bottom-tab[aria-current="page"]::after { content: ''; position: absolute; top: 0; left: 30%; width: 40%; height: 2pt; background: var(--accent); border-radius: 0 0 2pt 2pt; }
   .bottom-tab:focus-visible { outline: 2pt solid var(--accent); outline-offset: -2pt; }
 
   /* PIA-MUR-D-004-IMPL commit 4: top app bar (T4=A).
@@ -148,10 +157,30 @@ export const sharedCss = `
     cursor: pointer;
   }
   .app-header__avatar:focus-visible { outline: 2pt solid var(--accent); outline-offset: 2pt; }
+
+  /* Fresh-chat quick-ask composer on conversation list page */
+  .quick-ask-form { margin: var(--s-4) 0; }
+  .quick-ask__row { display: flex; gap: var(--s-3); align-items: flex-end; }
+  .quick-ask-form textarea { flex: 1; resize: none; border: 1pt solid var(--divider); border-radius: var(--r-md); padding: var(--s-3); font: inherit; font-size: var(--t-body); min-height: 44pt; max-height: 120px; }
+  .quick-ask-form .send-btn { min-width: 56pt; min-height: 44pt; border-radius: var(--r-md); font-size: var(--t-body); font-weight: 600; }
+  .quick-ask__hint { display: block; color: var(--fg-subtle); font-size: var(--t-caption); margin-top: var(--s-2); }
+  .conversation-list-heading { font-size: var(--t-section); font-weight: 700; margin: var(--s-6) 0 var(--s-3) 0; }
+
+  /* Conversation layout: thread fills space, form sticks at the bottom */
+  .conversation-layout { display: flex; flex-direction: column; min-height: calc(100dvh - 59pt - var(--tab-bar-h) - env(safe-area-inset-bottom, 0px) - 2*var(--s-4)); }
+  .message-thread-section { flex: 1; overflow-y: auto; min-height: 0; }
+  .message-form { position: sticky; bottom: 0; background: var(--bg); border-top: 0.5pt solid var(--divider); padding: var(--s-3) 0; margin-top: auto; }
+  .message-form__row { display: flex; gap: var(--s-3); align-items: flex-end; }
+  .message-form textarea { flex: 1; resize: none; border: 1pt solid var(--divider); border-radius: var(--r-md); padding: var(--s-3); font: inherit; font-size: var(--t-body); min-height: 44pt; max-height: 200px; }
+  .message-form .send-btn { min-width: 56pt; min-height: 44pt; border-radius: var(--r-md); }
+
   .app-header__title {
     font-size: var(--t-body);
     font-weight: 700;
     letter-spacing: -0.02em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   /* PIA-MUR-D-004-IMPL commit 5: network-loss banner (T6=A).
@@ -162,11 +191,11 @@ export const sharedCss = `
     top: max(env(safe-area-inset-top, 0px), 59pt);
     left: 0; right: 0;
     padding: 8pt 16pt;
-    background: #fee2e2;
-    color: #991b1b;
+    background: var(--status-failed-bg);
+    color: var(--status-failed-fg);
     text-align: center;
     font-size: var(--t-caption);
-    z-index: 50;
+    z-index: var(--z-banner);
     display: none;
   }
   .network-banner[data-offline="true"] { display: block; }
@@ -187,10 +216,10 @@ export const sharedCss = `
     cursor: pointer;
   }
   .citation-chip:hover, .citation-chip:focus-visible { text-decoration: underline; }
-  .citation-sheet { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; display: flex; align-items: flex-end; justify-content: center; }
+  .citation-sheet { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: var(--z-sheet); display: flex; align-items: flex-end; justify-content: center; }
   .citation-sheet[hidden] { display: none; }
   .citation-sheet__panel { width: 100%; max-width: 480px; max-height: 80vh; overflow-y: auto; background: var(--bg); border-top-left-radius: var(--r-lg); border-top-right-radius: var(--r-lg); padding: var(--s-4); transform: translateY(100%); transition: transform var(--motion-sheet) var(--motion-ease); }
-  .citation-sheet:not([hidden]) .citation-sheet__panel { transform: translateY(0); }
+  .citation-sheet.sheet-open .citation-sheet__panel { transform: translateY(0); }
 
   /* PIA-MUR-D-004-IMPL commit 7: FAB (T7=A) + mode-of-conversation
    * sheet. FAB is 56pt x 56pt; sits above the bottom tab bar. */
@@ -217,13 +246,13 @@ export const sharedCss = `
   }
   .fab:focus-visible { outline: 2pt solid var(--accent); outline-offset: 2pt; }
   .fab:disabled { opacity: 0.4; cursor: not-allowed; }
-  .sheet { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; display: flex; align-items: flex-end; justify-content: center; }
+  .sheet { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: var(--z-sheet); display: flex; align-items: flex-end; justify-content: center; }
   .sheet[hidden] { display: none; }
   .sheet__panel { width: 100%; max-width: 480px; max-height: 80vh; overflow-y: auto; background: var(--bg); border-top-left-radius: var(--r-lg); border-top-right-radius: var(--r-lg); padding: var(--s-4); transform: translateY(100%); transition: transform var(--motion-sheet) var(--motion-ease); }
-  .sheet:not([hidden]) .sheet__panel { transform: translateY(0); }
+  .sheet.sheet-open .sheet__panel { transform: translateY(0); }
   .sheet__panel h2 { margin: 0 0 var(--s-3) 0; font-size: 1.1em; }
-  .mode-row { display: block; width: 100%; min-height: var(--touch-min); text-align: left; background: transparent; border: 0; border-bottom: 1px solid var(--border); padding: var(--s-3) var(--s-2); font: inherit; cursor: pointer; }
-  .mode-row:focus-visible { background: var(--bg-elev); }
+  .mode-row { display: block; width: 100%; min-height: var(--touch-min); text-align: left; background: transparent; border: 0; border-bottom: 1px solid var(--divider); padding: var(--s-3) var(--s-2); font: inherit; cursor: pointer; }
+  .mode-row:focus-visible { background: var(--selection); }
   .mode-row:last-child { border-bottom: 0; }
 `;
 
@@ -281,6 +310,53 @@ function announce(message) {
   setTimeout(function() { liveRegion.textContent = message; }, 50);
 }
 
+/* AUDIT-04/05: Focus trap for sheets (citation sheet, mode sheet).
+ * Tab cycles forward within the active sheet; Shift+Tab wraps backward.
+ * Focus returns to the triggering element on close.
+ * Used by both the shared mode-sheet and the page-specific citation-sheet. */
+var __piaSheetTrigger = null;
+
+function trapTabIn(el, e) {
+  var focusable = el.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (focusable.length === 0) return;
+  var first = focusable[0];
+  var last = focusable[focusable.length - 1];
+  if (e.key === 'Tab') {
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  }
+}
+
+function openSheetWithFocus(el, trigger) {
+  if (!el) return;
+  if (trigger) __piaSheetTrigger = trigger;
+  el.hidden = false;
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      el.classList.add('sheet-open');
+      var first = el.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (first) first.focus();
+    });
+  });
+}
+
+function closeSheetWithFocus(el) {
+  if (!el) return;
+  el.classList.remove('sheet-open');
+  var done = function() {
+    el.removeEventListener('transitionend', done);
+    el.hidden = true;
+    if (__piaSheetTrigger) {
+      __piaSheetTrigger.focus();
+      __piaSheetTrigger = null;
+    }
+  };
+  el.addEventListener('transitionend', done);
+}
+
 /* PIA-MUR-D-004-IMPL commit 5: network-loss banner.
  * Shows the banner when offline; disables destructive actions
  * (FAB, Send, btn-danger) so the user can't submit work that
@@ -301,20 +377,65 @@ window.addEventListener('online',  function () { setOffline(false); });
 window.addEventListener('offline', function () { setOffline(true); });
 setOffline(!navigator.onLine);
 
+/* PIA-MUR-D-004-IMPL commit 3 + critique fix: tab click handler.
+ * Extracts workspace ID from the current URL path to avoid relying
+ * on window.__piaWorkspaceId (which isn't set on all pages). */
+function getWorkspaceIdFromUrl() {
+  var m = window.location.pathname.match(/^\\/app\\/workspaces\\/([^\\/]+)/);
+  return m ? m[1] : '';
+}
+function initTabNav() {
+  var wid = getWorkspaceIdFromUrl();
+  // Expose for other code that may need it
+  window.__piaWorkspaceId = wid;
+  document.querySelectorAll('.bottom-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var tabId = tab.getAttribute('data-tab');
+      if (!tabId) return;
+      var routes = { conversations: 'conversations', documents: 'documents', search: 'search' };
+      if (routes[tabId]) window.location.href = '/app/workspaces/' + wid + '/' + routes[tabId];
+    });
+  });
+}
+initTabNav();
+
 /* PIA-MUR-D-004-IMPL commit 7: FAB + mode-of-conversation
  * sheet (T7=A). The FAB on the Conversations tab opens the
  * mode sheet; selecting a mode posts to /v1/workspaces/:wid/
  * conversations and navigates to the new conversation. */
 var modeSheet = document.getElementById('mode-sheet');
-function openModeSheet() { if (modeSheet) modeSheet.hidden = false; }
-function closeModeSheet() { if (modeSheet) modeSheet.hidden = true; }
+function openSheet(el) {
+  if (!el) return;
+  el.hidden = false;
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      el.classList.add('sheet-open');
+    });
+  });
+}
+function closeSheet(el) {
+  if (!el) return;
+  el.classList.remove('sheet-open');
+  var done = function() {
+    el.removeEventListener('transitionend', done);
+    el.hidden = true;
+  };
+  el.addEventListener('transitionend', done);
+}
+function openModeSheet() { openSheetWithFocus(modeSheet, document.getElementById('fab-conversation')); }
+function closeModeSheet() { closeSheetWithFocus(modeSheet); }
 if (modeSheet) {
-  modeSheet.addEventListener('click', closeModeSheet);
   var fabConv = document.getElementById('fab-conversation');
   if (fabConv) fabConv.addEventListener('click', openModeSheet);
+  // Backdrop click closes the mode sheet
+  modeSheet.addEventListener('click', function(ce) {
+    if (ce.target === modeSheet) closeModeSheet();
+  });
   modeSheet.querySelectorAll('.mode-row[data-mode]').forEach(function (btn) {
     btn.addEventListener('click', async function () {
       var mode = btn.getAttribute('data-mode');
+      // Disable button to prevent double-tap
+      btn.disabled = true;
       try {
         var c = await apiFetch('/v1/workspaces/' + (window.__piaWorkspaceId || '') + '/conversations', {
           method: 'POST',
@@ -324,9 +445,15 @@ if (modeSheet) {
         window.location.href = '/app/workspaces/' + (window.__piaWorkspaceId || '') + '/conversations/' + c.id;
       } catch (err) {
         showError('Failed to create conversation: ' + err.message);
+        btn.disabled = false;
         closeModeSheet();
       }
     });
+  });
+  // Esc + focus-trap Tab cycling
+  modeSheet.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeModeSheet(); return; }
+    trapTabIn(modeSheet, e);
   });
 }
 
@@ -336,7 +463,9 @@ if (modeSheet) {
  * and SSE streams are excluded from caching (see sw.js). */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
-    navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function () {});
+    navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function (err) {
+      console.warn('PIA SW registration failed:', err);
+    });
   });
 }
 `;
@@ -367,18 +496,17 @@ export function pageShell({
 
   let tabs = '';
   if (workspaceId) {
-    // PIA-MUR-D-004-IMPL commit 3: 3-tab mobile-first bottom bar
-    // (Documents / Search / Conversations). Upload is a sub-page of
-    // Documents and is reached via the FAB (commit 7). Map
-    // tabActive === 'upload' to 'documents' for the bar.
+    // PIA-MUR-D-004-IMPL commit 3 + critique fix: 3-tab mobile-first bottom bar
+    // (Conversations / Documents / Search). Conversations is the default landing.
+    // Upload is a sub-page of Documents and is reached via the FAB (commit 7).
     const ACTIVE_TAB = tabActive === 'upload' ? 'documents' : tabActive;
     const makeTab = (id: string, label: string, active: boolean) =>
       `<button class="bottom-tab" data-tab="${id}" type="button"${active ? ' aria-current="page"' : ''}>${label}</button>`;
     tabs = `
       <nav class="bottom-tab-bar" role="navigation" aria-label="Primary">
+        ${makeTab('conversations', 'Conversations', ACTIVE_TAB === 'conversations')}
         ${makeTab('documents', 'Documents', ACTIVE_TAB === 'documents')}
         ${makeTab('search', 'Search', ACTIVE_TAB === 'search')}
-        ${makeTab('conversations', 'Conversations', ACTIVE_TAB === 'conversations')}
       </nav>`;
   }
 
@@ -391,28 +519,22 @@ export function pageShell({
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <meta name="theme-color" content="#2563EB">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <style>${sharedCss}</style>
 </head>
 <body>
+  <a href="#content" class="sr-only skip-link" style="position:absolute;left:-9999px;top:0;z-index:9999;padding:8px;background:var(--bg);color:var(--accent);" onfocus="this.style.left='0'" onblur="this.style.left='-9999px'">Skip to main content</a>
   <div id="live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
   <div id="network-banner" class="network-banner" role="status" aria-live="polite" hidden>You're offline. Some actions are disabled.</div>
   <div class="container">
     <header class="app-header" role="banner">
-      <button id="avatar-btn" class="app-header__avatar" type="button" aria-label="Workspace: ${encodedName}. Tap to switch." aria-haspopup="dialog" aria-expanded="false">P</button>
+      <button id="avatar-btn" class="app-header__avatar" type="button" aria-label="Workspace: ${encodedName}. Tap to switch." aria-haspopup="dialog" aria-expanded="false">${encodedName.charAt(0).toUpperCase() || '?'}</button>
       <div class="app-header__title">${encodedName}</div>
     </header>
-    <div class="header">
-      <div>
-        <h1>${encodedName}</h1>
-        <div class="meta">PIA — Personal Intelligence Agent</div>
-      </div>
-      <nav>
-        <a href="/app">← Workspaces</a>
-      </nav>
-    </div>
     ${tabs}
     <div id="error-container"></div>
-    <div id="content">
+    <div id="content" tabindex="-1">
 ${bodyHtml}
     </div>
     <div id="mode-sheet" class="sheet" role="dialog" aria-modal="true" aria-labelledby="mode-sheet-title" hidden>

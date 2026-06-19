@@ -58,6 +58,7 @@ export function searchPage(workspaceId: string, workspaceName: string): string {
       <div class="loading" id="search-loading" style="display:none">Searching...</div>`,
     bodyScript: `
 const wsId = ${JSON.stringify(workspaceId)};
+window.__piaWorkspaceId = wsId;
 
 document.getElementById('search-form').addEventListener('submit', async function(e) {
   e.preventDefault();

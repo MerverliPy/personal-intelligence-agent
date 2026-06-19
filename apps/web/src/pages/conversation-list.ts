@@ -19,20 +19,21 @@ import { pageShell } from './shared.js';
 export function conversationListPage(workspaceId: string, workspaceName: string): string {
   const bodyHtml = `
 <h2 class="sr-only">Conversations</h2>
-<form id="new-conversation-form" aria-label="Start a new conversation">
-  <label for="new-conversation-mode">Mode</label>
-  <select id="new-conversation-mode" name="mode" required>
-    <option value="ASK" selected>Ask — direct question</option>
-    <option value="RESEARCH">Research — multi-source investigation</option>
-    <option value="ANALYZE">Analyze — evaluate evidence</option>
-    <option value="PLAN">Plan — define work</option>
-    <option value="EXECUTE">Execute — perform authorized work</option>
-    <option value="LEARN">Learn — improve future performance</option>
-  </select>
-  <label for="new-conversation-title">Title (optional)</label>
-  <input type="text" id="new-conversation-title" name="title" maxlength="200" />
-  <button type="submit" class="btn btn-primary">New conversation</button>
+
+<!-- Fresh-chat quick-ask composer — type and Send to start a new conversation -->
+<form id="quick-ask-form" class="quick-ask-form" aria-label="Ask a question">
+  <div class="quick-ask__row">
+    <label for="quick-ask-input" class="sr-only">Ask a question</label>
+    <textarea id="quick-ask-input" rows="1" required
+      placeholder="Ask a question, or request research / analysis / planning."
+      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight, 120)+'px'"></textarea>
+    <button type="submit" class="btn btn-primary send-btn">Ask</button>
+  </div>
+  <small class="quick-ask__hint">Ask a question to start a new conversation. Use the conversation list below to resume one.</small>
 </form>
+
+<!-- Existing conversations list -->
+<h3 class="conversation-list-heading">Recent conversations</h3>
 <table class="conversation-list" aria-label="Conversations">
   <thead>
     <tr>
@@ -58,7 +59,7 @@ async function loadConversations() {
     const data = await apiFetch('/v1/workspaces/' + WORKSPACE_ID + '/conversations');
     const items = (data && data.items) || [];
     if (items.length === 0) {
-      tbody.innerHTML = '<tr class="empty"><td colspan="4">No conversations yet. Start one above.</td></tr>';
+      tbody.innerHTML = '<tr class="empty"><td colspan="4">No conversations yet. Use the quick-ask box above to start one.</td></tr>';
       return;
     }
     tbody.innerHTML = items.map(function(c) {
@@ -78,19 +79,28 @@ async function loadConversations() {
   }
 }
 
-document.getElementById('new-conversation-form').addEventListener('submit', async function(ev) {
+// Quick-ask: type a question and Send to start a new ASK conversation
+// Creates the conversation, posts the typed question as the first user
+// message, then navigates to the conversation detail page.
+document.getElementById('quick-ask-form').addEventListener('submit', async function(ev) {
   ev.preventDefault();
-  const mode = document.getElementById('new-conversation-mode').value;
-  const title = document.getElementById('new-conversation-title').value.trim();
+  var input = document.getElementById('quick-ask-input');
+  var question = input.value.trim();
+  if (!question) return;
   try {
-    const c = await apiFetch('/v1/workspaces/' + WORKSPACE_ID + '/conversations', {
+    var c = await apiFetch('/v1/workspaces/' + WORKSPACE_ID + '/conversations', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ mode: mode, title: title || null }),
+      body: JSON.stringify({ mode: 'ASK', title: null }),
+    });
+    await apiFetch('/v1/workspaces/' + WORKSPACE_ID + '/conversations/' + c.id + '/messages', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ content: question }),
     });
     window.location.href = '/app/workspaces/' + WORKSPACE_ID + '/conversations/' + c.id;
   } catch (err) {
-    showError('Failed to create conversation: ' + err.message);
+    showError('Failed to start conversation: ' + err.message);
   }
 });
 
@@ -102,7 +112,7 @@ loadConversations();
   // (added in shared.ts). Tap opens the mode picker (default ASK).
   const fabHtml =
     '<button class="fab" id="fab-conversation" type="button" aria-label="New conversation" data-fab="conversation">+</button>';
-  const bodyHtmlWithFab = bodyHtml.replace('</section>', '</section>' + fabHtml);
+  const bodyHtmlWithFab = bodyHtml + '\n' + fabHtml;
 
   return pageShell({
     title: 'Conversations',

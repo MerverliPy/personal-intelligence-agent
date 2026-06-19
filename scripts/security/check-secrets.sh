@@ -32,6 +32,8 @@ EXCLUDE_DIRS=(
   "ci-output"
   "test-results"
   "planning"
+  ".chatgpt-context-pack"
+  ".chatgpt-context-pack.manual-*"
 )
 
 # Files to exclude from scanning (legitimate secret references)

@@ -2,7 +2,7 @@
   "name": "PIA — Personal Intelligence Agent",
   "short_name": "PIA",
   "description": "Private, evidence-grounded LLM agent platform.",
-  "start_url": "/",
+  "start_url": "/app",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
