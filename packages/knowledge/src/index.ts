@@ -58,6 +58,7 @@ export {
 
 export type { ScanInput, ScanResult, ScanProvider } from './scan.js';
 export {
+  createUnavailableScanProvider,
   createNoopScanProvider,
   isDefaultAllowedMimeType,
   defaultAllowedMimeTypes,

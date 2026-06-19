@@ -6,7 +6,7 @@ import {
   type StorageProvider,
 } from '@pia/storage';
 import { loadConfig } from '@pia/config';
-import { createNoopScanProvider, type ScanProvider } from '@pia/knowledge';
+import { createUnavailableScanProvider, type ScanProvider } from '@pia/knowledge';
 import { completeUploadWorkflow } from '../services/upload-workflow.js';
 import {
   type CreateUploadRequest,
@@ -25,7 +25,7 @@ import { requireWorkspaceContext } from '../plugins/workspace-context.js';
 export interface UploadRouteOptions {
   /** Storage provider (uses local in-memory adapter when omitted in dev). */
   storageProvider?: StorageProvider;
-  /** Scan provider (uses noop adapter when omitted). */
+  /** Scan provider (fails closed and quarantines when omitted). */
   scanProvider?: ScanProvider;
 }
 
@@ -68,7 +68,7 @@ const uploadRoutes: FastifyPluginAsync<UploadRouteOptions> = async (
 ) => {
   const pool = createPool();
   const storage = opts.storageProvider ?? defaultStorageProvider();
-  const scan = opts.scanProvider ?? createNoopScanProvider();
+  const scan = opts.scanProvider ?? createUnavailableScanProvider();
 
   // -------------------------------------------------------------------------
   // POST /v1/workspaces/:workspace_id/uploads
