@@ -80,6 +80,8 @@ async function loadConversations() {
 }
 
 // Quick-ask: type a question and Send to start a new ASK conversation
+// Creates the conversation, posts the typed question as the first user
+// message, then navigates to the conversation detail page.
 document.getElementById('quick-ask-form').addEventListener('submit', async function(ev) {
   ev.preventDefault();
   var input = document.getElementById('quick-ask-input');
@@ -90,6 +92,11 @@ document.getElementById('quick-ask-form').addEventListener('submit', async funct
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ mode: 'ASK', title: null }),
+    });
+    await apiFetch('/v1/workspaces/' + WORKSPACE_ID + '/conversations/' + c.id + '/messages', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ content: question }),
     });
     window.location.href = '/app/workspaces/' + WORKSPACE_ID + '/conversations/' + c.id;
   } catch (err) {

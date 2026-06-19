@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "default_agent": "mobile-ui-orchestrator",
+  "default_agent": "delivery",
   "share": "disabled",
   "snapshot": true,
   "autoupdate": "notify",

@@ -34,12 +34,12 @@ The judge re-rated the critic's P1 findings to P2/P3, noting that the critic's c
 
 ## Items Discharged or Deferred
 
-| Original Finding | Disposition | Reason |
-|---|---|---|
-| iOS PWA standalone test | Deferred | Requires physical device; tracked in device-validation |
-| SW update flow | Discharged | Current design (skip-waiting on install) is appropriate for v1 |
-| Tailscale HTTP limitation | Noted | Documented in REPOSITORY_ADAPTER.md as expected limitation |
-| No push notifications | Discharged | Not in redesign scope (P7) |
+| Original Finding          | Disposition | Reason                                                         |
+| ------------------------- | ----------- | -------------------------------------------------------------- |
+| iOS PWA standalone test   | Deferred    | Requires physical device; tracked in device-validation         |
+| SW update flow            | Discharged  | Current design (skip-waiting on install) is appropriate for v1 |
+| Tailscale HTTP limitation | Noted       | Documented in REPOSITORY_ADAPTER.md as expected limitation     |
+| No push notifications     | Discharged  | Not in redesign scope (P7)                                     |
 
 ## Remediations Applied
 

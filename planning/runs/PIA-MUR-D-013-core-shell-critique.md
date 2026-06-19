@@ -17,10 +17,12 @@ Evaluate the Core Shell features (design tokens, safe-area insets, bottom tab ba
 ## Findings by Severity
 
 ### P0 (blocking — must fix)
+
 1. Tab navigation click handler absent — tabs are visual but non-functional
 2. Dual headers rendered (app bar + page header) — violates Stream concept
 
 ### P1 (high — should fix)
+
 1. Tab order does not match design contract (Conversations must be first)
 2. Hardcoded body colors instead of CSS custom property tokens
 3. Missing 2pt active tab indicator
@@ -28,6 +30,7 @@ Evaluate the Core Shell features (design tokens, safe-area insets, bottom tab ba
 5. Undefined CSS custom properties referenced (unresolved var() calls)
 
 ### P2 (medium — good practice)
+
 1. Dark mode uses hardcoded colors, not token-driven
 2. Unconditional 59pt safe-area-top padding on all pages (only `#app-shell` needs it)
 3. Missing workspace-scoped safe-area adjustment
@@ -36,6 +39,7 @@ Evaluate the Core Shell features (design tokens, safe-area insets, bottom tab ba
 6. Header content overflows on long workspace names
 
 ### P3 (low — polish)
+
 1. Mode-of-conversation sheet scope: does not reset on tab switch
 2. z-index values hardcoded (risk of stacking context conflicts)
 3. No skip-to-content link for keyboard users

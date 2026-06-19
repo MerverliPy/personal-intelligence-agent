@@ -182,16 +182,19 @@ async function openCitationModal(citationId) {
   } else {
     modal.innerHTML = renderCitationModalBodyClient(citations);
   }
+  // Store trigger (the citation chip that was clicked) for focus restoration
+  if (__piaSheetTrigger === undefined) __piaSheetTrigger = null;
+  __piaSheetTrigger = document.querySelector('.citation-chip[data-citation-id="' + citationId + '"]');
   // Three-phase slide-up animation
   sheet.hidden = false;
   requestAnimationFrame(function() {
     requestAnimationFrame(function() {
       sheet.classList.add('sheet-open');
+      // Focus the first focusable element inside the sheet
+      var firstFocusable = sheet.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (firstFocusable) firstFocusable.focus();
     });
   });
-  // Focus the first focusable element inside the sheet
-  var firstFocusable = sheet.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-  if (firstFocusable) firstFocusable.focus();
 }
 
 function closeCitationModal() {
@@ -201,13 +204,21 @@ function closeCitationModal() {
   var done = function() {
     sheet.removeEventListener('transitionend', done);
     sheet.hidden = true;
+    if (__piaSheetTrigger) {
+      __piaSheetTrigger.focus();
+      __piaSheetTrigger = null;
+    }
   };
   sheet.addEventListener('transitionend', done);
 }
 
-// Esc key and backdrop click dismiss the citation sheet
+// Esc key closes the citation sheet. Tab cycles within it.
+// Backdrop click dismisses the citation sheet.
 document.addEventListener('keydown', function(ce) {
-  if (ce.key === 'Escape') closeCitationModal();
+  var sheet = document.getElementById('citation-sheet');
+  if (!sheet || !!sheet.hidden) return;
+  if (ce.key === 'Escape') { closeCitationModal(); return; }
+  trapTabIn(sheet, ce);
 });
 var citationSheet = document.getElementById('citation-sheet');
 if (citationSheet) {

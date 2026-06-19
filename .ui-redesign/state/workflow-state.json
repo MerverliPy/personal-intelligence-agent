@@ -240,7 +240,7 @@
     "datastore": "PostgreSQL 17 + pgvector (local dev), Redis 7, MinIO (object storage)",
     "frontend_runtime": "Server-rendered HTML string modules (NOT Next.js); no client bundler configured; PWA DEPLOYED (manifest, service worker, viewport-fit=cover, iOS meta tags)",
     "authentication": "OIDC (Keycloak) with fake provider for dev; JWT cookies; RBAC; workspace authorization",
-    "pwa_status": "DEPLOYED — manifest.webmanifest at /manifest.webmanifest (standalone display, theme_color #2563EB, 192/512 icons), service-worker.js, apple-touch-icon, iOS meta tags"
+    "pwa_status": "DEPLOYED — manifest.webmanifest at /manifest.webmanifest (standalone display, theme_color #2563EB, 192/512 icons), sw.js, apple-touch-icon, iOS meta tags"
   },
   "runtime_status": {
     "api": {

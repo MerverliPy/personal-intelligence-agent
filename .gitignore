@@ -50,6 +50,10 @@ __pycache__/
 # Mobile UI redesign backup of pre-redesign files (intentionally untracked)
 /.ui-redesign/backup/
 
+# ChatGPT context-pack audit artifacts (generated, not product source)
+/.chatgpt-context-pack/
+/.chatgpt-context-pack.manual-*/
+
 # Mobile UI redesign device-validation pre-flight per-session runtime
 # (PIDs, log files, trycloudflare URLs — all change every session;
 # the canonical URL is also recorded in planning/runs/<run-id>.md;

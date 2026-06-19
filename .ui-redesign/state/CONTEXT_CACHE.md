@@ -10,10 +10,10 @@
 - **Phase**: `IMPLEMENTATION_COMPLETE`
 - **Phase index**: 7 of 10
 - **Last approval**: PWA follow-up commit (apple-mobile-web-app meta + ws-card click handlers, 2026-06-16)
-- **Next action**: Run `/mobile-ui-validate` (automated regression + contract validation), then `/mobile-ui-critique` (Feature Critique Panel on 8 features)
-- **Updated at**: 2026-06-16
+- **Next action**: Critique panels DONE (PIA-MUR-D-013/014/015). Device validation deferred (no real iPhone verified). Focus-trap code implemented (AUDIT-05), not device-verified. Proceed to evidence-bundle and delivery when device validation complete.
+- **Updated at**: 2026-06-18
 - **Confidence**: `high`
-- **Staleness**: 0 / 3 transitions
+- **Staleness**: 2 / 3 transitions
 
 ## Active Contract Summary
 
@@ -117,7 +117,7 @@
 ### For feature-critic — Group 3 (PWA)
 
 **Evaluate**: PWA manifest, service worker, icons, theme-color, apple-touch-icon, iOS PWA meta tags (apple-mobile-web-app-capable, status-bar-style), workspace card click handlers for standalone mode
-**Evidence**: CONTEXT_CACHE.md, `apps/web/public/manifest.webmanifest`, `apps/web/public/service-worker.js`, `apps/web/src/pages/shared.ts` (PWA meta tags), `apps/api/src/routes/web.ts` (workspace card handlers + head section), `.ui-redesign/evidence/preflight/dpc-13-pwa-standalone.json`
+**Evidence**: CONTEXT_CACHE.md, `apps/web/public/manifest.webmanifest`, `apps/web/public/sw.js`, `apps/web/src/pages/shared.ts` (PWA meta tags), `apps/api/src/routes/web.ts` (workspace card handlers + head section), `.ui-redesign/evidence/preflight/dpc-13-pwa-standalone.json`
 **Key contracts**: PIA-MUR-D-004 §9 (PWA), PIA-MUR-D-012 (iOS meta tags + click handlers)
 **Protected areas**: Same as Group 1
 **Output**: Feature Critic Report with P0-P3 severity
@@ -157,7 +157,7 @@
 - Requires physical iPhone 16 Pro
 - cloudflared tunnel: `cloudflared tunnel --no-autoupdate --url http://localhost:3000`
 - DPC checklist: 14 DPCs (dpc-01 through dpc-14)
-- Unverified items: DPC-1 (sheet focus), DPC-3 (reduce-motion in PWA), DPC-4 (touch targets), DPC-5 (pixel-perfect), DPC-11 (PWA install)
+- Unverified items: DPC-1 (sheet focus — code implemented, device verification deferred), DPC-3 (reduce-motion in PWA), DPC-5 (pixel-perfect), DPC-11 (PWA install)
 
 ## Batch Approval State
 

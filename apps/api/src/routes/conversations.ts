@@ -208,6 +208,13 @@ const conversationRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
       const ctx = await requireWorkspaceContext(request);
       const params = request.params as { conversation_id: string };
 
+      const conv = await getConversation(pool, ctx.workspaceId, params.conversation_id);
+      if (!conv) {
+        return reply
+          .status(404)
+          .send(createErrorEnvelope('NOT_FOUND', 'Conversation not found.', request.id));
+      }
+
       const rows = await getConversationMessages(pool, ctx.workspaceId, params.conversation_id);
 
       const items = rows.map(toApiMessage);

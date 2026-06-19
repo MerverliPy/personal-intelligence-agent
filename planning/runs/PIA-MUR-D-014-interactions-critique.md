@@ -17,11 +17,13 @@ Evaluate the Interaction features (network-loss banner, citation chips/sheet, FA
 ## Findings by Severity
 
 ### P0 (blocking — must fix)
+
 1. Send button selector mismatch (`#send-btn` vs `.send-btn`) — form submit fails
 2. Citation sheet CSS animation bug — sheet slides in but backdrop appears after animation completes (race condition between transitionend + opacity)
 3. Missing focus traps in citation sheet and mode sheet — Tab can escape the modal
 
 ### P1 (high — should fix)
+
 1. Network-loss banner colors use hardcoded values, not design tokens
 2. Citation chip `[1] [2]` overflow in narrow viewports
 3. FAB overlaps citation sheet on open (z-index conflict)
@@ -30,6 +32,7 @@ Evaluate the Interaction features (network-loss banner, citation chips/sheet, FA
 6. Network banner dismiss animation not respected with `prefers-reduced-motion`
 
 ### P2 (medium — good practice)
+
 1. Citation sheet backdrop tap does not close the sheet (only close button works)
 2. Mode sheet item icons use browser-default spacing
 3. FAB press state uses opacity-only feedback (should use scale or background transition)
@@ -37,6 +40,7 @@ Evaluate the Interaction features (network-loss banner, citation chips/sheet, FA
 5. No double-tap guard on mode creation (could create duplicate conversations)
 
 ### P3 (low — polish)
+
 1. Citation sheet lacks a visible heading for screen readers
 2. Network banner aria-live region not announced on visibility change
 3. FAB position not adjusted for safe-area bottom on iPhone with home indicator

@@ -310,6 +310,53 @@ function announce(message) {
   setTimeout(function() { liveRegion.textContent = message; }, 50);
 }
 
+/* AUDIT-04/05: Focus trap for sheets (citation sheet, mode sheet).
+ * Tab cycles forward within the active sheet; Shift+Tab wraps backward.
+ * Focus returns to the triggering element on close.
+ * Used by both the shared mode-sheet and the page-specific citation-sheet. */
+var __piaSheetTrigger = null;
+
+function trapTabIn(el, e) {
+  var focusable = el.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (focusable.length === 0) return;
+  var first = focusable[0];
+  var last = focusable[focusable.length - 1];
+  if (e.key === 'Tab') {
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  }
+}
+
+function openSheetWithFocus(el, trigger) {
+  if (!el) return;
+  if (trigger) __piaSheetTrigger = trigger;
+  el.hidden = false;
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      el.classList.add('sheet-open');
+      var first = el.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (first) first.focus();
+    });
+  });
+}
+
+function closeSheetWithFocus(el) {
+  if (!el) return;
+  el.classList.remove('sheet-open');
+  var done = function() {
+    el.removeEventListener('transitionend', done);
+    el.hidden = true;
+    if (__piaSheetTrigger) {
+      __piaSheetTrigger.focus();
+      __piaSheetTrigger = null;
+    }
+  };
+  el.addEventListener('transitionend', done);
+}
+
 /* PIA-MUR-D-004-IMPL commit 5: network-loss banner.
  * Shows the banner when offline; disables destructive actions
  * (FAB, Send, btn-danger) so the user can't submit work that
@@ -375,11 +422,15 @@ function closeSheet(el) {
   };
   el.addEventListener('transitionend', done);
 }
-function openModeSheet() { openSheet(modeSheet); }
-function closeModeSheet() { closeSheet(modeSheet); }
+function openModeSheet() { openSheetWithFocus(modeSheet, document.getElementById('fab-conversation')); }
+function closeModeSheet() { closeSheetWithFocus(modeSheet); }
 if (modeSheet) {
   var fabConv = document.getElementById('fab-conversation');
   if (fabConv) fabConv.addEventListener('click', openModeSheet);
+  // Backdrop click closes the mode sheet
+  modeSheet.addEventListener('click', function(ce) {
+    if (ce.target === modeSheet) closeModeSheet();
+  });
   modeSheet.querySelectorAll('.mode-row[data-mode]').forEach(function (btn) {
     btn.addEventListener('click', async function () {
       var mode = btn.getAttribute('data-mode');
@@ -399,9 +450,10 @@ if (modeSheet) {
       }
     });
   });
-  // Esc key closes the mode sheet
+  // Esc + focus-trap Tab cycling
   modeSheet.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeModeSheet();
+    if (e.key === 'Escape') { closeModeSheet(); return; }
+    trapTabIn(modeSheet, e);
   });
 }
 
