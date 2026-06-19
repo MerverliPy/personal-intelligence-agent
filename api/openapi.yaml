@@ -1435,6 +1435,11 @@ components:
           $ref: '#/components/schemas/Uuid'
         role:
           type: string
+          enum:
+            - USER
+            - ASSISTANT
+            - SYSTEM_NOTE
+            - TOOL
         content:
           type: string
         created_at:

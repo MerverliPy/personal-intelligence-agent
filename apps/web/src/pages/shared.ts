@@ -42,7 +42,7 @@ export const sharedCss = `
     --z-status: 1000;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--fg); line-height: 1.42; min-height: 100dvh; min-height: 100vh;
+  body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--fg); line-height: 1.42; min-height: 100vh; min-height: 100dvh;
           padding-top: max(env(safe-area-inset-top, 0px), 59pt);
           padding-bottom: env(safe-area-inset-bottom, 0px);
           padding-left: env(safe-area-inset-left, 0px);

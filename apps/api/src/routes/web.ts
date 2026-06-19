@@ -125,8 +125,8 @@ const WEB_SHELL_HTML = `<!DOCTYPE html>
         content.innerHTML = html;
         // iOS PWA: use click handlers instead of <a> tags to stay in standalone mode
         content.querySelectorAll('.ws-card').forEach(function(card) {
-          card.addEventListener('click', function() { window.location.href = card.getAttribute('data-href'); });
-          card.addEventListener('keydown', function(e) { if (e.key === 'Enter') window.location.href = card.getAttribute('data-href'); });
+          card.addEventListener('click', function() { var href = card.getAttribute('data-href'); if (href) window.location.href = href; });
+          card.addEventListener('keydown', function(e) { if (e.key === 'Enter') { var href = card.getAttribute('data-href'); if (href) window.location.href = href; } });
         });
       } catch (err) {
         showError(err.message);

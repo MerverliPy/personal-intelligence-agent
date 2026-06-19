@@ -33,7 +33,7 @@ EXCLUDE_DIRS=(
   "test-results"
   "planning"
   ".chatgpt-context-pack"
-  ".chatgpt-context-pack.manual-20260618-155728"
+  ".chatgpt-context-pack.manual-*"
 )
 
 # Files to exclude from scanning (legitimate secret references)

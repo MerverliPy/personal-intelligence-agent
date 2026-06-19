@@ -68,7 +68,7 @@ function toApiConversation(row: {
 function toApiMessage(row: {
   id: string;
   conversationId: string;
-  role: string;
+  role: Message['role'];
   content: string;
   createdAt: string;
 }): Message {
@@ -199,7 +199,7 @@ const conversationRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
   // -----------------------------------------------------------------------
   // GET /v1/workspaces/{workspace_id}/conversations/{conversation_id}/messages
   //
-  // Returns all messages for a conversation in chronological order.
+  // Returns messages for a conversation (up to 200) in chronological order.
   // -----------------------------------------------------------------------
   app.get(
     '/v1/workspaces/:workspace_id/conversations/:conversation_id/messages',
@@ -215,10 +215,12 @@ const conversationRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
           .send(createErrorEnvelope('NOT_FOUND', 'Conversation not found.', request.id));
       }
 
-      const rows = await getConversationMessages(pool, ctx.workspaceId, params.conversation_id);
+      const rows = await getConversationMessages(pool, ctx.workspaceId, params.conversation_id, {
+        limit: 200,
+      });
 
       const items = rows.map(toApiMessage);
-      const page: MessagePage = { items };
+      const page: MessagePage = { items, next_cursor: null };
       return reply.send(page);
     },
   );

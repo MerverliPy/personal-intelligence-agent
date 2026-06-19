@@ -377,7 +377,7 @@ export interface ConversationPage {
 /** A message resource returned by the API. */
 export interface Message {
   id: string;
-  role: string;
+  role: 'USER' | 'ASSISTANT' | 'SYSTEM_NOTE' | 'TOOL';
   content: string;
   created_at: string;
 }
