@@ -36,7 +36,7 @@ the stricter permission baseline.
 The repository will use exactly one canonical project configuration:
 
 - Canonical file: `opencode.jsonc`
-- Default agent: `plan`
+- Default agent: `delivery` (updated 2026-06-20: post-decision change from `plan` to `delivery` to match implementation)
 - OpenCode version: exactly `1.17.7`
 - `opencode.json` will be removed
 
@@ -80,7 +80,7 @@ An effective-configuration smoke test will verify at minimum:
 
 1. exactly one root OpenCode configuration exists;
 2. the local OpenCode version is `1.17.7`;
-3. the resolved default agent is `plan`;
+3. the resolved default agent is `delivery`;
 4. sharing remains disabled;
 5. all required instruction files are loaded;
 6. task and skill permissions remain denied;

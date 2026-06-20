@@ -50,4 +50,16 @@ echo "=== Security: Dependency audit ==="
 pnpm security:dependencies
 
 echo ""
+echo "=== Security: OpenCode config smoke test ==="
+bash scripts/security/check-opencode-config.sh
+
+echo ""
+echo "=== Registry: Agent count validation ==="
+bash scripts/ci/check-registry-counts.sh
+
+echo ""
+echo "=== Registry: Permission consistency ==="
+bash scripts/ci/check-agent-permissions.sh
+
+echo ""
 echo "=== All quality gates passed ==="

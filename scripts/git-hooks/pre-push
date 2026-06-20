@@ -46,6 +46,7 @@ while read -r _local_ref _local_sha remote_ref _remote_sha; do
   run_check "format:check" pnpm format:check
   run_check "lint"        pnpm lint
   run_check "secrets"     pnpm security:secrets
+  run_check "config"      bash scripts/security/check-opencode-config.sh
   run_check "typecheck"   pnpm typecheck
 
   if command -v pg_isready &>/dev/null && pg_isready -h localhost -U pia -d pia -q 2>/dev/null; then

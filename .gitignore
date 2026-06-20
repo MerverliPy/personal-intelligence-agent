@@ -50,9 +50,10 @@ __pycache__/
 # Mobile UI redesign backup of pre-redesign files (intentionally untracked)
 /.ui-redesign/backup/
 
-# ChatGPT context-pack audit artifacts (generated, not product source)
-/.chatgpt-context-pack/
-/.chatgpt-context-pack.manual-*/
+# Canonical context-pack generator output (generated, not product source)
+/.context-pack/
+
+# Legacy chatgpt context-pack (superseded by scripts/dev/generate-context-pack.sh)
 
 # Mobile UI redesign device-validation pre-flight per-session runtime
 # (PIDs, log files, trycloudflare URLs — all change every session;
