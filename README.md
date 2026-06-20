@@ -706,7 +706,7 @@ This repository is designed for AI-assisted development with OpenCode. The task 
 
 ### Mobile UI Redesign Workflow
 
-An approval-gated orchestrator (`mobile-ui-orchestrator`) coordinates 25 agents and 27 commands for the iPhone 16 Pro-first web UI redesign. Every design decision requires explicit approval; no product code changes before the repository adapter, baseline, product model, concept, design contract, and implementation contract are approved.
+An approval-gated orchestrator (`mobile-ui-orchestrator`) coordinates 25 agents and 28 commands for the iPhone 16 Pro-first web UI redesign. Every design decision requires explicit approval; no product code changes before the repository adapter, baseline, product model, concept, design contract, and implementation contract are approved.
 
 | Command                       | Purpose                                      |
 | ----------------------------- | -------------------------------------------- |

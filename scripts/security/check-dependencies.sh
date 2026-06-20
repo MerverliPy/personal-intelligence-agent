@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # check-dependencies.sh — Audit installed dependencies for known vulnerabilities.
 #
-# Uses `pnpm audit --prod` to check only production dependencies against
-# the public vulnerability database. Dev-only dependencies (test runners,
-# build tools) are excluded because they do not ship to production.
+# Uses `pnpm audit --prod` to check production dependencies against
+# the public vulnerability database. Dev-only dependencies are scanned
+# separately as informational only (they do not block the pipeline but
+# are reported for awareness).
 # Any vulnerability finding causes a non-zero exit to ensure issues are
 # visible in CI.
 #
@@ -48,3 +49,28 @@ fi
 
 echo ""
 echo "No critical or high vulnerabilities detected."
+
+# ── Dev dependency audit (informational only) ──
+echo ""
+echo "=== Dev dependency advisory scan (informational) ==="
+echo ""
+echo "Scanning all dependencies including dev-only. Findings are reported"
+echo "but do not block the pipeline. Dev dependencies do not ship to production."
+echo ""
+
+DEV_AUDIT_OUTPUT=$(pnpm audit 2>&1) || DEV_AUDIT_EXIT=$?
+
+echo "$DEV_AUDIT_OUTPUT"
+
+if [ "${DEV_AUDIT_EXIT:-0}" -ne 0 ]; then
+  echo ""
+  echo "=== Dev dependency advisories found (non-blocking) ==="
+  echo ""
+  echo "These advisories affect dev-only packages (build tools, test runners,"
+  echo "linters). They do not impact production runtime. Review and track"
+  echo "upstream fixes, but do not block releases on dev-only advisories"
+  echo "unless a specific advisory is assessed as high-risk for this project."
+else
+  echo ""
+  echo "No dev dependency advisories."
+fi
