@@ -51,7 +51,7 @@ permission:
     'git branch --show-current*': allow
     'git rev-parse*': allow
     'git ls-files*': allow
-    'git push*': deny
+    'git push*': ask
     'git reset*': deny
     'git clean*': deny
     'git restore*': deny
