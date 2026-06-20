@@ -20,7 +20,20 @@ permission:
     '**/*credentials*': deny
     '.git/**': deny
     '**/.git/**': deny
-  edit: deny
+  edit:
+    '*': deny
+    '*.env': deny
+    '**/.env': deny
+    '*.env.*': deny
+    '**/.env.*': deny
+    '*.pem': deny
+    '**/*.pem': deny
+    '*.key': deny
+    '**/*.key': deny
+    '*credentials*': deny
+    '**/*credentials*': deny
+    '.git/**': deny
+    '**/.git/**': deny
   bash:
     '*': ask
     'pwd': allow

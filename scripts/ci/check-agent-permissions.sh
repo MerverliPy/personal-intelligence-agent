@@ -59,20 +59,28 @@ for agent in "${AGENTS[@]}"; do
 
   # Extract the read: section from the agent frontmatter
   READ_SECTION=$(sed -n '/^  read:/,/^  [a-z]/{/^  read:/d;/^  [a-z]/d;p;}' "$AGENT_FILE" 2>/dev/null || echo "")
+  # Extract the edit: section from the agent frontmatter
+  EDIT_SECTION=$(sed -n '/^  edit:/,/^  [a-z]/{/^  edit:/d;/^  [a-z]/d;p;}' "$AGENT_FILE" 2>/dev/null || echo "")
 
-  MISSING=0
+  MISSING_READ=0
+  MISSING_EDIT=0
   for pattern in "${CANONICAL_PATTERNS[@]}"; do
     # Normalize pattern (remove leading/trailing whitespace, handle quoting)
     normalized=$(echo "$pattern" | sed "s/'/\"/g")
     if ! echo "$READ_SECTION" | grep -qF "$pattern" && ! echo "$READ_SECTION" | grep -qF "$normalized"; then
-      MISSING=$((MISSING + 1))
+      MISSING_READ=$((MISSING_READ + 1))
+    fi
+    if ! echo "$EDIT_SECTION" | grep -qF "$pattern" && ! echo "$EDIT_SECTION" | grep -qF "$normalized"; then
+      MISSING_EDIT=$((MISSING_EDIT + 1))
     fi
   done
 
-  if [ "$MISSING" -eq 0 ]; then
-    echo "  ✓ $agent — all ${#CANONICAL_PATTERNS[@]} secret-path read-denies present"
+  TOTAL_MISSING=$((MISSING_READ + MISSING_EDIT))
+  if [ "$TOTAL_MISSING" -eq 0 ]; then
+    echo "  ✓ $agent — all ${#CANONICAL_PATTERNS[@]} secret-path read + edit denies present"
   else
-    echo "  ✗ $agent — $MISSING/${#CANONICAL_PATTERNS[@]} secret-path read-denies MISSING"
+    [ "$MISSING_READ" -gt 0 ] && echo "  ✗ $agent — $MISSING_READ/${#CANONICAL_PATTERNS[@]} secret-path read-denies MISSING"
+    [ "$MISSING_EDIT" -gt 0 ] && echo "  ✗ $agent — $MISSING_EDIT/${#CANONICAL_PATTERNS[@]} secret-path edit-denies MISSING"
     FAILED=1
   fi
 done

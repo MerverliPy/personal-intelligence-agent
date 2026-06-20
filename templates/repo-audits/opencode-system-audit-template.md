@@ -1,8 +1,7 @@
 # Repository Audit Agent Handoff
 
 > **Template ID:** `opencode-system-audit-template`
-> **Source:** extracted from `.opencode/agents/repo-auditor.md` §Required AGENT_HANDOFF.md
-> **Canonical schema version:** as of `repo-auditor.md` lines 207-279 (2026-06-20)
+> **Source:** extracted from `.opencode/agents/repo-auditor.md` §Required AGENT_HANDOFF.md (canonical schema version)
 > **Purpose:** This is the canonical output schema for `repo-auditor` audits. Use this template for new audit handoffs.
 
 ---

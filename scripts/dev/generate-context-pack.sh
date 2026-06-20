@@ -69,6 +69,18 @@ echo "  $FILE_COUNT candidate files from git ls-files + allowlist"
 
 # ── Step 2: Filter and generate with Python ──
 echo "=== Generating context pack ($FORMAT format) ==="
+
+# Safety: prevent --output from destroying the repo root or filesystem
+if [ "$OUTPUT_DIR" = "." ] || [ "$OUTPUT_DIR" = "/" ] || [ "$OUTPUT_DIR" = "" ] || [ "$OUTPUT_DIR" = "$REPO_ROOT" ]; then
+  echo "ERROR: refusing to rm -rf unsafe output path: $OUTPUT_DIR"
+  exit 1
+fi
+# Enforce output within repo (relative path starting with .context-pack or similar)
+if [[ "$OUTPUT_DIR" != .* ]]; then
+  echo "ERROR: output directory must be a hidden dir inside the repo (starts with '.'), got: $OUTPUT_DIR"
+  exit 1
+fi
+
 rm -rf "$OUTPUT_DIR"
 mkdir -p "$OUTPUT_DIR"
 

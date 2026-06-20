@@ -31,7 +31,7 @@ echo -n "Agents: $ACTUAL_AGENTS actual ... "
 AGENT_TABLE_START=$(grep -n "^## Agents" .opencode/REGISTRY.md | cut -d: -f1)
 AGENT_TABLE_END=$(grep -n "^### Agent categories" .opencode/REGISTRY.md | cut -d: -f1)
 REGISTRY_AGENTS=$(sed -n "${AGENT_TABLE_START},${AGENT_TABLE_END}p" .opencode/REGISTRY.md | grep -c "^| \`" || echo 0)
-README_AGENTS=$(grep -oP '\d+(?= agents)' README.md 2>/dev/null | head -1 || echo 0)
+README_AGENTS=$(grep -oE '[0-9]+ agents' README.md 2>/dev/null | head -1 | grep -oE '[0-9]+' || echo 0)
 
 if [ "$REGISTRY_AGENTS" -eq "$ACTUAL_AGENTS" ] 2>/dev/null; then
   echo "REGISTRY.md: $REGISTRY_AGENTS ✓"
@@ -52,7 +52,7 @@ echo -n "Commands: $ACTUAL_COMMANDS actual ... "
 CMD_TABLE_START=$(grep -n "^## Commands" .opencode/REGISTRY.md | cut -d: -f1)
 CMD_TABLE_END=$(grep -n "^## Skills" .opencode/REGISTRY.md | cut -d: -f1)
 REGISTRY_COMMANDS=$(sed -n "${CMD_TABLE_START},${CMD_TABLE_END}p" .opencode/REGISTRY.md | grep -c "^| \`/" || echo 0)
-README_COMMANDS=$(grep -oP '\d+(?= commands)' README.md 2>/dev/null | head -1 || echo 0)
+README_COMMANDS=$(grep -oE '[0-9]+ commands' README.md 2>/dev/null | head -1 | grep -oE '[0-9]+' || echo 0)
 
 if [ "$REGISTRY_COMMANDS" -eq "$ACTUAL_COMMANDS" ] 2>/dev/null; then
   echo "REGISTRY.md: $REGISTRY_COMMANDS ✓"
