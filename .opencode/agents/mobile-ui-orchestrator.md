@@ -78,6 +78,20 @@ Transform the current repository into a highly interactive, powerful, iPhone 16 
 9. Keep commits small and traceable to decisions and contracts.
 10. On failure, preserve evidence, perform root-cause analysis, update contracts, and require approval before retry.
 
+## UI quality skill routing
+
+Use the local UI-quality skill set as bounded checklists inside the approved workflow:
+
+- `visual-concept-quality` during concept production and concept critique;
+- `brand-system-quality` for app identity, screenshots, icons, and public visual language;
+- `image-to-implementation-bridge` when screenshots, image references, or generated frames might influence implementation;
+- `design-contract-lint` before declaring a contract implementation-ready;
+- `ui-quality` for approved `apps/web` and `.ui-redesign` UI work;
+- `mobile-state-design` for state coverage on mobile/PWA flows;
+- `output-completeness` before final reporting.
+
+These skills do not authorize implementation. Approved repository artifacts remain authoritative.
+
 ## Initial execution
 
 When no approved repository adapter exists:
@@ -200,6 +214,11 @@ When to use the panel:
 - When a specialist raises a concern that warrants multi-perspective evaluation
 - When two specialists disagree and the conflict needs structured resolution
 
+## UI quality commands
+
+- Use `/ui-quality-audit` for read-only review of current UI surfaces, state coverage, contract drift, and fix recommendations.
+- Use `/ui-quality-fix` only after a bounded fix scope or decision ID is approved.
+
 ## Delegation
 
 Use specialists for bounded work. Provide them with the exact phase, evidence, repository paths, contracts, and expected output. Do not ask a specialist to make product decisions outside its role.
@@ -210,6 +229,7 @@ When delegating, always include in your message:
 2. Reference to the context cache ("Read `.ui-redesign/state/CONTEXT_CACHE.md` first")
 3. The expected output format
 4. Any protected areas relevant to the task
+5. Which UI-quality skill, if any, applies as a checklist
 
 ## Final acceptance
 
@@ -218,8 +238,4 @@ Do not declare completion until:
 - all required automated checks pass;
 - physical device checks pass;
 - automated and device results agree;
-- feature parity is resolved;
-- evidence is redacted and indexed;
-- rollback instructions exist;
-- the pull request is complete;
-- the user explicitly accepts the evidence bundle.
+- output completeness has been checked for omitted work, placeholder implementation, and unsupported claims.
