@@ -60,6 +60,10 @@ const CONVERSATION_ID = ${JSON.stringify(conversationId)};
 
 let activeEventSource = null;
 let citationModal = null;
+// PR14-RUNTIME-FOLLOWUPS Fix 2: track the currently streaming run so
+// deltas are targeted at the correct assistant message element rather
+// than being appended to the last historical assistant message.
+let activeStreamRunId = null;
 
 async function loadMessages() {
   var thread = document.getElementById('message-thread');
@@ -341,6 +345,13 @@ function handleSseEvent(ev) {
   var container = document.getElementById('run-state-container');
   if (type === 'run.started') {
     container.innerHTML = renderRunStateBadge('STREAMING');
+    // PR14-RUNTIME-FOLLOWUPS Fix 2: create a fresh assistant message
+    // placeholder for this specific run. All response.delta events will
+    // target this element via its data-streaming-run attribute.
+    activeStreamRunId = data.run_id || 'streaming-' + Date.now();
+    var thread = document.getElementById('message-thread');
+    var html = '<article class="message message-assistant" data-streaming-run="' + activeStreamRunId + '" aria-label="Assistant message"><div class="message-content"></div><div class="message-meta"><span class="badge badge-processing">Streaming</span></div></article>';
+    thread.insertAdjacentHTML('beforeend', html);
     return;
   }
   if (type === 'response.delta') {
@@ -353,11 +364,16 @@ function handleSseEvent(ev) {
   }
   if (type === 'response.completed') {
     container.innerHTML = renderRunStateBadge('COMPLETED');
+    // PR14-RUNTIME-FOLLOWUPS Fix 2: clear streaming marker so subsequent
+    // messages from a new run don't target this element.
+    clearStreamingMarker();
     announce('Response completed.');
     return;
   }
   if (type === 'run.failed') {
     container.innerHTML = renderRunStateBadge('FAILED');
+    // PR14-RUNTIME-FOLLOWUPS Fix 2: clear streaming marker on failure.
+    clearStreamingMarker();
     var msg = (data.error && data.error.message) || 'Run failed.';
     showError(msg);
     return;
@@ -365,19 +381,42 @@ function handleSseEvent(ev) {
   // Unknown event types are ignored.
 }
 
+/**
+ * PR14-RUNTIME-FOLLOWUPS Fix 2: deltas target the current streaming
+ * assistant message by its data-streaming-run attribute rather than
+ * using :last-of-type (which would attach to historical messages).
+ */
 function appendAssistantDelta(text) {
   var thread = document.getElementById('message-thread');
-  var last = thread.querySelector('article.message-assistant:last-of-type .message-content');
-  if (!last) {
-    // No assistant message yet; create one.
-    var msgId = 'streaming-' + Date.now();
-    var html = '<article class="message message-assistant" data-message-id="' + msgId + '" aria-label="Assistant message"><div class="message-content"></div></article>';
+  var target;
+  if (activeStreamRunId) {
+    target = thread.querySelector('article[data-streaming-run="' + activeStreamRunId + '"] .message-content');
+  }
+  if (!target) {
+    // Fallback: create a new streaming placeholder (no active run tracking).
+    var fallbackId = 'streaming-' + Date.now();
+    var html = '<article class="message message-assistant" data-streaming-run="' + fallbackId + '" aria-label="Assistant message"><div class="message-content"></div><div class="message-meta"><span class="badge badge-processing">Streaming</span></div></article>';
     thread.insertAdjacentHTML('beforeend', html);
-    last = thread.querySelector('article.message-assistant:last-of-type .message-content');
+    target = thread.querySelector('article[data-streaming-run="' + fallbackId + '"] .message-content');
+    activeStreamRunId = fallbackId;
   }
   // SECURITY: text from the model is untrusted. We render via
   // textContent (never innerHTML) so the browser escapes it.
-  last.textContent += text;
+  target.textContent += text;
+}
+
+/** PR14-RUNTIME-FOLLOWUPS Fix 2: remove the streaming badge marker. */
+function clearStreamingMarker() {
+  if (!activeStreamRunId) return;
+  var el = document.querySelector('article[data-streaming-run="' + activeStreamRunId + '"]');
+  if (el) {
+    // Remove the data-streaming-run attribute and streaming badge so
+    // this element won't be re-targeted by future deltas.
+    el.removeAttribute('data-streaming-run');
+    var badge = el.querySelector('.message-meta');
+    if (badge) badge.innerHTML = '';
+  }
+  activeStreamRunId = null;
 }
 
 function registerCitation(c) {
@@ -429,6 +468,17 @@ document.getElementById('message-form').addEventListener('submit', async functio
 });
 
 loadMessages();
+
+// PR14-RUNTIME-FOLLOWUPS Fix 1: If arriving from quick-ask (with run_id in
+// the URL), start the SSE stream so the user sees the assistant response.
+var urlParams = new URLSearchParams(window.location.search);
+var urlRunId = urlParams.get('run_id');
+if (urlRunId) {
+  // Clean the URL without reloading the page
+  var cleanUrl = window.location.pathname;
+  window.history.replaceState({}, '', cleanUrl);
+  openRunStream(urlRunId);
+}
 `;
 
   return pageShell({

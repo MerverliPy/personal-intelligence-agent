@@ -397,6 +397,9 @@ paths:
       tags:
         - Conversations
       operationId: getConversationMessages
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
       responses:
         '200':
           description: Messages in chronological order.

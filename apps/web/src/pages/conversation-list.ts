@@ -93,12 +93,17 @@ document.getElementById('quick-ask-form').addEventListener('submit', async funct
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ mode: 'ASK', title: null }),
     });
-    await apiFetch('/v1/workspaces/' + WORKSPACE_ID + '/conversations/' + c.id + '/messages', {
+    var msgResult = await apiFetch('/v1/workspaces/' + WORKSPACE_ID + '/conversations/' + c.id + '/messages', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ content: question }),
     });
-    window.location.href = '/app/workspaces/' + WORKSPACE_ID + '/conversations/' + c.id;
+    // PR14-RUNTIME-FOLLOWUPS Fix 1: preserve the returned model run ID so the
+    // conversation detail page can start the SSE stream.
+    var runId = (msgResult && msgResult.id) || null;
+    var navUrl = '/app/workspaces/' + WORKSPACE_ID + '/conversations/' + c.id;
+    if (runId) navUrl += '?run_id=' + encodeURIComponent(runId);
+    window.location.href = navUrl;
   } catch (err) {
     showError('Failed to start conversation: ' + err.message);
   }
