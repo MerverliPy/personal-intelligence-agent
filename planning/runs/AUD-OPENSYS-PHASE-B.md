@@ -32,14 +32,14 @@ Execute Phase B — "Close the Structural Gap" from the opencode system audit ha
 
 ### Pre-execution discoveries
 
-| Discovery | Detail |
-|---|---|
-| `gather-chatgpt-repo-context.sh 1.0.0` found | `/home/calvin/personal-intelligence-agent-audit-tools/` (external, cannot modify) |
-| Second single-file generator | Still unknown — but canonical generator replaces both |
-| ADR-0008 filename | `0008-canonical-opencode-project-configuration.md` (not `0008-opencode-config-consolidation.md`) |
-| `opencode.json` already removed | ✅ Per ADR-0008 |
-| `opencode-ai: 1.17.7` pinned | ✅ In root `package.json:32` |
-| `default_agent` discrepancy | ADR said `"plan"`, config said `"delivery"` — resolved: config is authoritative |
+| Discovery                                    | Detail                                                                                           |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `gather-chatgpt-repo-context.sh 1.0.0` found | `/home/calvin/personal-intelligence-agent-audit-tools/` (external, cannot modify)                |
+| Second single-file generator                 | Still unknown — but canonical generator replaces both                                            |
+| ADR-0008 filename                            | `0008-canonical-opencode-project-configuration.md` (not `0008-opencode-config-consolidation.md`) |
+| `opencode.json` already removed              | ✅ Per ADR-0008                                                                                  |
+| `opencode-ai: 1.17.7` pinned                 | ✅ In root `package.json:32`                                                                     |
+| `default_agent` discrepancy                  | ADR said `"plan"`, config said `"delivery"` — resolved: config is authoritative                  |
 
 ### Decisions made
 
@@ -60,55 +60,55 @@ Execute Phase B — "Close the Structural Gap" from the opencode system audit ha
 
 ## Files Modified
 
-| File | Change | Finding |
-|---|---|---|
-| `docs/adr/0008-canonical-opencode-project-configuration.md` | **Modified** (lines 39, 83): `plan` → `delivery` with annotation | B.1 |
-| `scripts/security/check-opencode-config.sh` | **Created** (211 lines): 11-point ADR-0008 smoke test | AUD-P1-001 |
-| `scripts/ci/check-all.sh` | **Modified** (+4 lines): smoke test integrated after dependency audit | B.3 |
-| `scripts/git-hooks/pre-push` | **Modified** (+1 line): smoke test integrated after secrets check | B.3 |
-| `scripts/dev/generate-context-pack.sh` | **Created** (192 lines): canonical git-ls-files-based generator | AUD-P0-003 |
-| `.gitignore` | **Modified** (lines 53-56): `.chatgpt-context-pack*` → `.context-pack/` | B.4 |
-| `scripts/security/check-secrets.sh` | **Modified**: `.chatgpt-context-pack*` → `.context-pack` in EXCLUDE_DIRS | B.4 |
-| `.chatgpt-context-pack/` | **Deleted** (legacy generator output; gitignored) | B.4 cleanup |
-| `.chatgpt-context-pack.manual-20260618-155728/` | **Deleted** (legacy manual output; was gitignored) | B.4 cleanup |
+| File                                                        | Change                                                                   | Finding     |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------ | ----------- |
+| `docs/adr/0008-canonical-opencode-project-configuration.md` | **Modified** (lines 39, 83): `plan` → `delivery` with annotation         | B.1         |
+| `scripts/security/check-opencode-config.sh`                 | **Created** (211 lines): 11-point ADR-0008 smoke test                    | AUD-P1-001  |
+| `scripts/ci/check-all.sh`                                   | **Modified** (+4 lines): smoke test integrated after dependency audit    | B.3         |
+| `scripts/git-hooks/pre-push`                                | **Modified** (+1 line): smoke test integrated after secrets check        | B.3         |
+| `scripts/dev/generate-context-pack.sh`                      | **Created** (192 lines): canonical git-ls-files-based generator          | AUD-P0-003  |
+| `.gitignore`                                                | **Modified** (lines 53-56): `.chatgpt-context-pack*` → `.context-pack/`  | B.4         |
+| `scripts/security/check-secrets.sh`                         | **Modified**: `.chatgpt-context-pack*` → `.context-pack` in EXCLUDE_DIRS | B.4         |
+| `.chatgpt-context-pack/`                                    | **Deleted** (legacy generator output; gitignored)                        | B.4 cleanup |
+| `.chatgpt-context-pack.manual-20260618-155728/`             | **Deleted** (legacy manual output; was gitignored)                       | B.4 cleanup |
 
 ## Commands and Results
 
-| # | Command | Result | Evidence |
-|---|---|---|---|
-| 1 | `bash scripts/security/check-opencode-config.sh` | **PASSED** | 11/11 assertions passed; exit 0 |
-| 2 | `bash scripts/dev/generate-context-pack.sh --format chunked --output .context-pack` | **PASSED** | 612 files selected, 29 excluded, 9 chunks; no gitignored files in output |
-| 3 | `grep -c "run-logs\|opencode/package.json" .context-pack/01-inventory/selected-files.txt` | **PASSED** | 0 matches — gitignored files excluded |
-| 4 | `bash -n scripts/dev/generate-context-pack.sh` | **PASSED** | Bash syntax valid |
-| 5 | `bash -n scripts/security/check-opencode-config.sh` | **PASSED** | Bash syntax valid |
-| 6 | `rm -rf .chatgpt-context-pack/` | **PASSED** | Legacy directory removed |
-| 7 | `rm -rf .chatgpt-context-pack.manual-*` | **PASSED** | Legacy manual directory removed |
-| 8 | `git status --short` | **PASSED** | 6 modified tracked files; 10 untracked (new artifacts) |
+| #   | Command                                                                                   | Result     | Evidence                                                                 |
+| --- | ----------------------------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------ |
+| 1   | `bash scripts/security/check-opencode-config.sh`                                          | **PASSED** | 11/11 assertions passed; exit 0                                          |
+| 2   | `bash scripts/dev/generate-context-pack.sh --format chunked --output .context-pack`       | **PASSED** | 612 files selected, 29 excluded, 9 chunks; no gitignored files in output |
+| 3   | `grep -c "run-logs\|opencode/package.json" .context-pack/01-inventory/selected-files.txt` | **PASSED** | 0 matches — gitignored files excluded                                    |
+| 4   | `bash -n scripts/dev/generate-context-pack.sh`                                            | **PASSED** | Bash syntax valid                                                        |
+| 5   | `bash -n scripts/security/check-opencode-config.sh`                                       | **PASSED** | Bash syntax valid                                                        |
+| 6   | `rm -rf .chatgpt-context-pack/`                                                           | **PASSED** | Legacy directory removed                                                 |
+| 7   | `rm -rf .chatgpt-context-pack.manual-*`                                                   | **PASSED** | Legacy manual directory removed                                          |
+| 8   | `git status --short`                                                                      | **PASSED** | 6 modified tracked files; 10 untracked (new artifacts)                   |
 
 ## Acceptance-Criterion Evidence
 
 ### AUD-P0-003 — Context-pack generator respects .gitignore
 
-| Criterion | Status | Evidence |
-|---|---|---|
-| Generator is `git ls-files`-based | ✅ **PASSED** | `generate-context-pack.sh` uses `git ls-files` for file list |
-| Only one canonical generator exists | ✅ **PASSED** | `scripts/dev/generate-context-pack.sh` is the single canonical script |
-| Generator is source-controlled | ✅ **PASSED** | Under `scripts/dev/`, tracked via git |
-| Pre-export hook purges `.opencode/run-logs/` | ✅ **PASSED** | Script line: `rm -f .opencode/run-logs/*` before collection |
-| No gitignored files appear in output | ✅ **PASSED** | Verified: 0 matches for `.opencode/run-logs/`, `.opencode/package.json` |
-| Legacy generator output removed | ✅ **PASSED** | `.chatgpt-context-pack/` and `.chatgpt-context-pack.manual-*/` deleted |
-| `.gitignore` updated | ✅ **PASSED** | Old entries replaced with `.context-pack/` |
+| Criterion                                    | Status        | Evidence                                                                |
+| -------------------------------------------- | ------------- | ----------------------------------------------------------------------- |
+| Generator is `git ls-files`-based            | ✅ **PASSED** | `generate-context-pack.sh` uses `git ls-files` for file list            |
+| Only one canonical generator exists          | ✅ **PASSED** | `scripts/dev/generate-context-pack.sh` is the single canonical script   |
+| Generator is source-controlled               | ✅ **PASSED** | Under `scripts/dev/`, tracked via git                                   |
+| Pre-export hook purges `.opencode/run-logs/` | ✅ **PASSED** | Script line: `rm -f .opencode/run-logs/*` before collection             |
+| No gitignored files appear in output         | ✅ **PASSED** | Verified: 0 matches for `.opencode/run-logs/`, `.opencode/package.json` |
+| Legacy generator output removed              | ✅ **PASSED** | `.chatgpt-context-pack/` and `.chatgpt-context-pack.manual-*/` deleted  |
+| `.gitignore` updated                         | ✅ **PASSED** | Old entries replaced with `.context-pack/`                              |
 
 ### AUD-P1-001 — ADR-0008 smoke test implemented
 
-| Criterion | Status | Evidence |
-|---|---|---|
-| `scripts/security/check-opencode-config.sh` exists | ✅ **PASSED** | 211 lines, executable |
-| Smoke test covers all ADR-0008 points | ✅ **PASSED** | 11 assertions (10 original + read-only tools) |
-| Smoke test passes against current config | ✅ **PASSED** | 11/11 passed, exit 0 |
-| Wired into CI (`check-all.sh`) | ✅ **PASSED** | Inserted at line 54, after dependency audit |
-| Wired into pre-push hook | ✅ **PASSED** | Inserted at line 49, after secrets check |
-| `default_agent` discrepancy resolved | ✅ **PASSED** | ADR updated to `"delivery"` with annotation |
+| Criterion                                          | Status        | Evidence                                      |
+| -------------------------------------------------- | ------------- | --------------------------------------------- |
+| `scripts/security/check-opencode-config.sh` exists | ✅ **PASSED** | 211 lines, executable                         |
+| Smoke test covers all ADR-0008 points              | ✅ **PASSED** | 11 assertions (10 original + read-only tools) |
+| Smoke test passes against current config           | ✅ **PASSED** | 11/11 passed, exit 0                          |
+| Wired into CI (`check-all.sh`)                     | ✅ **PASSED** | Inserted at line 54, after dependency audit   |
+| Wired into pre-push hook                           | ✅ **PASSED** | Inserted at line 49, after secrets check      |
+| `default_agent` discrepancy resolved               | ✅ **PASSED** | ADR updated to `"delivery"` with annotation   |
 
 ## Diff and Path-Boundary Review
 
@@ -143,6 +143,7 @@ Execute Phase B — "Close the Structural Gap" from the opencode system audit ha
 ## Outstanding Work
 
 ### Phase D (ready — polish)
+
 - AUD-P2-001: Wire `git-quality` agent to a slash command
 - AUD-P2-005: Create agent/command/skill registry
 - AUD-P2-006: Permission-block regression test
@@ -150,6 +151,7 @@ Execute Phase B — "Close the Structural Gap" from the opencode system audit ha
 - AUD-P3-001: Bash deny-list asymmetry (optional)
 
 ### Unknown generator still unidentified
+
 The single-file generator that produced `calvin-opencode-system-context-pack.md` was never found. The new canonical generator (`scripts/dev/generate-context-pack.sh`) replaces both old generators. The unknown tool is now irrelevant — any future context packs should use the canonical generator.
 
 ## Risks and Assumptions

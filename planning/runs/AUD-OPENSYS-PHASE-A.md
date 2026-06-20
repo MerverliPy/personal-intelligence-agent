@@ -35,12 +35,14 @@ Execute Phase A — "Stop the Bleeding" from the opencode system audit handoff (
 ## Findings and Decisions
 
 ### AUD-P0-001 — Confirmed
+
 - `cookies.txt` (604 B, Netscape cookie format, JWT session) on disk, gitignored but present.
 - `api.pid` (7 B) on disk, gitignored but present.
 - `api.log` (121 KB) on disk, gitignored but present.
 - **Action:** All three files deleted via `rm` (without `-rf` flag, per system deny rules).
 
 ### AUD-P0-002 — Confirmed
+
 - `check-secrets.sh:30` had `".opencode"` in `EXCLUDE_DIRS`, blanket-excluding the entire directory.
 - Scanner's JWT regex would have caught `cookies.txt` if it were scannable.
 - **Action:** Replaced with targeted subpath excludes: `.opencode/agents`, `.opencode/commands`, `.opencode/skills`, `.opencode/documentation`, `.opencode/benchmarks`.
@@ -61,23 +63,23 @@ Execute Phase A — "Stop the Bleeding" from the opencode system audit handoff (
 
 ## Commands and Results
 
-| # | Command | Result | Evidence |
-|---|---|---|---|
-| 1 | `rm .opencode/run-logs/cookies.txt .opencode/run-logs/api.pid .opencode/run-logs/api.log` | **PASSED** | No output; files removed silently |
-| 2 | `ls -la .opencode/run-logs/` | **PASSED** | Directory empty (only `.` and `..`) |
-| 3 | `pnpm security:secrets` | **PASSED** | Exit 0; `No secrets detected.` |
-| 4 | `git status --short` | **PASSED** | Only `scripts/security/check-secrets.sh` modified; untracked audit artifacts as expected |
-| 5 | `git diff --stat` | **PASSED** | `1 file changed, 5 insertions(+), 1 deletion(-)` |
-| 6 | `git diff scripts/security/check-secrets.sh` | **PASSED** | Single hunk: `".opencode"` → 5 targeted excludes |
+| #   | Command                                                                                   | Result     | Evidence                                                                                 |
+| --- | ----------------------------------------------------------------------------------------- | ---------- | ---------------------------------------------------------------------------------------- |
+| 1   | `rm .opencode/run-logs/cookies.txt .opencode/run-logs/api.pid .opencode/run-logs/api.log` | **PASSED** | No output; files removed silently                                                        |
+| 2   | `ls -la .opencode/run-logs/`                                                              | **PASSED** | Directory empty (only `.` and `..`)                                                      |
+| 3   | `pnpm security:secrets`                                                                   | **PASSED** | Exit 0; `No secrets detected.`                                                           |
+| 4   | `git status --short`                                                                      | **PASSED** | Only `scripts/security/check-secrets.sh` modified; untracked audit artifacts as expected |
+| 5   | `git diff --stat`                                                                         | **PASSED** | `1 file changed, 5 insertions(+), 1 deletion(-)`                                         |
+| 6   | `git diff scripts/security/check-secrets.sh`                                              | **PASSED** | Single hunk: `".opencode"` → 5 targeted excludes                                         |
 
 ## Acceptance-Criterion Evidence
 
-| Criterion | Status | Evidence |
-|---|---|---|
-| `.opencode/run-logs/` is empty | ✅ **PASSED** | `ls -la` shows only `.` and `..` |
-| `EXCLUDE_DIRS` no longer contains bare `.opencode` | ✅ **PASSED** | `git diff` confirms 5 targeted subpaths |
-| `.opencode/run-logs/` is scannable | ✅ **PASSED** | Directory no longer in EXCLUDE_DIRS; scanner passes clean on empty directory |
-| `pnpm security:secrets` passes | ✅ **PASSED** | Exit 0; `No secrets detected.` |
+| Criterion                                          | Status        | Evidence                                                                     |
+| -------------------------------------------------- | ------------- | ---------------------------------------------------------------------------- |
+| `.opencode/run-logs/` is empty                     | ✅ **PASSED** | `ls -la` shows only `.` and `..`                                             |
+| `EXCLUDE_DIRS` no longer contains bare `.opencode` | ✅ **PASSED** | `git diff` confirms 5 targeted subpaths                                      |
+| `.opencode/run-logs/` is scannable                 | ✅ **PASSED** | Directory no longer in EXCLUDE_DIRS; scanner passes clean on empty directory |
+| `pnpm security:secrets` passes                     | ✅ **PASSED** | Exit 0; `No secrets detected.`                                               |
 
 ### Scanner scannability verification note
 
@@ -97,6 +99,7 @@ The `.opencode/run-logs/` directory is now scannable (not excluded). Because it'
 ```
 
 **Path boundaries verified:**
+
 - ✅ No changes to `planning/`, `apps/`, `packages/`, `db/`, `infra/`, `.ui-redesign/`, `.git/`
 - ✅ No changes to `AGENT_HANDOFF.md` (product audit handoff preserved)
 - ✅ Deleted files were gitignored per `.gitignore:48` — no tracked file was removed
@@ -109,20 +112,24 @@ Per the handoff's execution plan, Phase A changes should be reviewed before proc
 ## Outstanding Work
 
 ### Phase B (deferred — requires user input)
+
 - AUD-P0-003: Fix context-pack generator (generator location unknown — needs user identification)
 - AUD-P1-001: Build ADR-0008 smoke test (`scripts/security/check-opencode-config.sh`)
 
 ### Phase C (deferred — documentation only)
+
 - AUD-P2-003: Create `docs/workflows/repository-audit-workflow.md`
 - AUD-P2-004: Extract `templates/repo-audits/opencode-system-audit-template.md`
 
 ### Phase D (deferred — polish)
+
 - AUD-P2-001: Wire `git-quality` agent to a slash command
 - AUD-P2-005: Create agent/command/skill registry
 - AUD-P2-006: Permission-block regression test
 - AUD-P1-002: Dev-dependency scan policy
 
 ### Run-logs directory cleanup
+
 - The `.opencode/run-logs/` directory itself still exists (empty). This preserves the gitignore expectation and prevents future processes from failing on missing directory. If the directory should also be removed, separate approval is needed.
 
 ## Risks and Assumptions

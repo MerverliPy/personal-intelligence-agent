@@ -9,7 +9,7 @@
 - **Date:** 2026-06-20
 - **Repository:** `personal-intelligence-agent-blueprint` (root `/home/calvin/personal-intelligence-agent-blueprint`)
 - **Branch:** `main` @ `7b19197` — clean worktree (only untracked file: `opencode-system-audit-2026-06-20.md`)
-- **Scope:** The opencode *operating system* layer — `.opencode/` (25 agents, 27 commands, 12 skills), `AGENTS.md`, `docs/`, `scripts/`, `templates/` — not the PIA product source (`apps/`, `packages/`, `db/`, `infra/`, `planning/`).
+- **Scope:** The opencode _operating system_ layer — `.opencode/` (25 agents, 27 commands, 12 skills), `AGENTS.md`, `docs/`, `scripts/`, `templates/` — not the PIA product source (`apps/`, `packages/`, `db/`, `infra/`, `planning/`).
 - **Source artifact:** `calvin-opencode-system-context-pack.md` (generated `2026-06-20T08:18:48Z`, not tracked in repo)
 - **Overall health:** Mature, unusually disciplined opencode configuration — 25 agents, 27 commands, 12 skills all internally consistent with README claims. Permission model is the strongest part. One P0 finding (live session cookie and PID captured in context pack) drives three root-cause gaps.
 - **Findings:** 3 P0, 2 P1, 6 P2, 4 P3 (see Findings Summary below)
@@ -22,15 +22,15 @@
 
 ### Agents (25 — all confirmed present in `.opencode/agents/`)
 
-| Category | Agents | Mode | Permission tier |
-|---|---|---|---|
-| Planning ledger (status-authoritative) | `qa`, `reviewer` | `subagent` | `planning/status.yaml: allow` edit; hash-checkpointed status writes |
-| Implementation | `delivery` (primary), `frontend-implementer`, `backend-integration-engineer` | mixed | `edit: ask`; `task: deny` (no further delegation) |
-| Repository hygiene | `git-quality` (primary), `repository-integrity`, `repo-auditor` | mixed | bash-heavy with explicit deny-lists |
-| Documentation | `repository-docs` (`mode: all`) | all | only agent invocable directly, as subtask, or via 5 dedicated commands |
-| Mobile UI orchestration | `mobile-ui-orchestrator` (primary) + 13 `hidden: true` specialists | mixed | orchestrator alone can `task:` into specialists |
-| Feature Critique Panel | `feature-advocate`, `feature-critic`, `feature-judge` | `hidden: true` | `bash: deny` entirely (pure analysis) |
-| Security/architecture (read-only) | `architect`, `data-modeler`, `security` | subagent | `edit: deny` outright |
+| Category                               | Agents                                                                       | Mode           | Permission tier                                                        |
+| -------------------------------------- | ---------------------------------------------------------------------------- | -------------- | ---------------------------------------------------------------------- |
+| Planning ledger (status-authoritative) | `qa`, `reviewer`                                                             | `subagent`     | `planning/status.yaml: allow` edit; hash-checkpointed status writes    |
+| Implementation                         | `delivery` (primary), `frontend-implementer`, `backend-integration-engineer` | mixed          | `edit: ask`; `task: deny` (no further delegation)                      |
+| Repository hygiene                     | `git-quality` (primary), `repository-integrity`, `repo-auditor`              | mixed          | bash-heavy with explicit deny-lists                                    |
+| Documentation                          | `repository-docs` (`mode: all`)                                              | all            | only agent invocable directly, as subtask, or via 5 dedicated commands |
+| Mobile UI orchestration                | `mobile-ui-orchestrator` (primary) + 13 `hidden: true` specialists           | mixed          | orchestrator alone can `task:` into specialists                        |
+| Feature Critique Panel                 | `feature-advocate`, `feature-critic`, `feature-judge`                        | `hidden: true` | `bash: deny` entirely (pure analysis)                                  |
+| Security/architecture (read-only)      | `architect`, `data-modeler`, `security`                                      | subagent       | `edit: deny` outright                                                  |
 
 ### Commands (27 — all confirmed present in `.opencode/commands/`)
 
@@ -40,44 +40,44 @@
 
 ### Skills (12 — all confirmed present in `.opencode/skills/`)
 
-| Skill | Loaded by |
-|---|---|
-| `approval-gated-redesign` | mobile-UI agents (implied) |
-| `database-migration` | `delivery`, `data-modeler`, `repository-integrity`, `task-execution` |
-| `design-contract` | `design-system-architect` |
-| `evidence-bundle` | `evidence-regression-controller` |
-| `iphone-16-pro-pwa` | iPhone specialists |
-| `real-ui-validation` | testing specialists |
-| `repository-adapter` | `repository-discovery` |
-| `repository-docs-analysis/-update/-validation` | `repository-docs` only |
-| `retrieval-quality` | `delivery` |
-| `task-execution` | `delivery` |
+| Skill                                          | Loaded by                                                            |
+| ---------------------------------------------- | -------------------------------------------------------------------- |
+| `approval-gated-redesign`                      | mobile-UI agents (implied)                                           |
+| `database-migration`                           | `delivery`, `data-modeler`, `repository-integrity`, `task-execution` |
+| `design-contract`                              | `design-system-architect`                                            |
+| `evidence-bundle`                              | `evidence-regression-controller`                                     |
+| `iphone-16-pro-pwa`                            | iPhone specialists                                                   |
+| `real-ui-validation`                           | testing specialists                                                  |
+| `repository-adapter`                           | `repository-discovery`                                               |
+| `repository-docs-analysis/-update/-validation` | `repository-docs` only                                               |
+| `retrieval-quality`                            | `delivery`                                                           |
+| `task-execution`                               | `delivery`                                                           |
 
 ### Scripts (security-critical paths)
 
-| Path | Purpose |
-|---|---|
-| `scripts/security/check-secrets.sh` | Secret pattern scan with `EXCLUDE_DIRS` including `.opencode` (blanket) |
-| `scripts/security/check-dependencies.sh` | `pnpm audit --prod` only (dev deps excluded) |
-| `scripts/ci/check-all.sh` | Local CI simulation |
-| `scripts/ci/validate-status.ts` | Governance validation |
-| `scripts/git-hooks/pre-push` | Pre-push hook: format → lint → secrets → typecheck |
+| Path                                     | Purpose                                                                 |
+| ---------------------------------------- | ----------------------------------------------------------------------- |
+| `scripts/security/check-secrets.sh`      | Secret pattern scan with `EXCLUDE_DIRS` including `.opencode` (blanket) |
+| `scripts/security/check-dependencies.sh` | `pnpm audit --prod` only (dev deps excluded)                            |
+| `scripts/ci/check-all.sh`                | Local CI simulation                                                     |
+| `scripts/ci/validate-status.ts`          | Governance validation                                                   |
+| `scripts/git-hooks/pre-push`             | Pre-push hook: format → lint → secrets → typecheck                      |
 
 ### Documentation
 
-| Path | Purpose |
-|---|---|
-| `AGENTS.md` | Agent contract and engineering rules |
-| `AGENT_HANDOFF.md` | Prior product audit handoff (2026-06-13, `efab8b7`) |
-| `README.md` | 40KB repo README with agent/command counts |
-| `docs/05_SECURITY_GOVERNANCE.md` | 7 trust boundaries, 10 threat scenarios, approval matrix |
-| `docs/security/threat-model.md` | TB-1–TB-7, residual risk documentation |
-| `docs/security/review-checklist.md` | Task-category → checklist mapping |
-| `docs/adr/0007-path-boundary-precedent.md` | Formalized path-boundary precedents |
-| `docs/adr/0008-opencode-config-consolidation.md` | `opencode.json`/`opencode.jsonc` dual-config resolution |
-| `docs/REPOSITORY_DOCUMENTATION_WORKFLOW.md` | Documentation workflow (no equivalent for audit workflow) |
-| `templates/` | 8 files — all mobile-UI-redesign-specific; no generic audit template |
-| `.opencode/benchmarks/repository-docs/` | 16-case, 100-point-rubric regression benchmark |
+| Path                                             | Purpose                                                              |
+| ------------------------------------------------ | -------------------------------------------------------------------- |
+| `AGENTS.md`                                      | Agent contract and engineering rules                                 |
+| `AGENT_HANDOFF.md`                               | Prior product audit handoff (2026-06-13, `efab8b7`)                  |
+| `README.md`                                      | 40KB repo README with agent/command counts                           |
+| `docs/05_SECURITY_GOVERNANCE.md`                 | 7 trust boundaries, 10 threat scenarios, approval matrix             |
+| `docs/security/threat-model.md`                  | TB-1–TB-7, residual risk documentation                               |
+| `docs/security/review-checklist.md`              | Task-category → checklist mapping                                    |
+| `docs/adr/0007-path-boundary-precedent.md`       | Formalized path-boundary precedents                                  |
+| `docs/adr/0008-opencode-config-consolidation.md` | `opencode.json`/`opencode.jsonc` dual-config resolution              |
+| `docs/REPOSITORY_DOCUMENTATION_WORKFLOW.md`      | Documentation workflow (no equivalent for audit workflow)            |
+| `templates/`                                     | 8 files — all mobile-UI-redesign-specific; no generic audit template |
+| `.opencode/benchmarks/repository-docs/`          | 16-case, 100-point-rubric regression benchmark                       |
 
 ### Excluded/Generated Areas
 
@@ -90,37 +90,37 @@
 
 No runtime validation commands were executed in this audit. The audit was a static analysis of a context pack. Validation commands for each implementation phase are specified below in the Execution Plan.
 
-| Check | Command | Result | Evidence |
-|---|---|---|---|
-| Agent count (25 claimed) | Direct count of `.opencode/agents/` entries in context pack | **Passed** | 25 files confirmed |
-| Command count (27 claimed) | Direct count of `.opencode/commands/` entries in context pack | **Passed** | 27 files confirmed |
-| Skill count (12 claimed) | Direct count of `.opencode/skills/` entries in context pack | **Passed** | 12 skills confirmed |
-| Agent↔command referential integrity | Cross-reference every command's `agent:` value against agent filenames | **Passed** | All 27 commands target existing agents |
-| Permission consistency (secret paths) | Cross-check deny lists across 7 agents | **Passed** | `*.env`/`*.pem`/`*.key`/`*credentials*`/`.git/**` consistent across all |
-| Secret scan coverage gap | Inspect `check-secrets.sh` `EXCLUDE_DIRS` | **Failed** | `.opencode` blanket-excluded; `.opencode/run-logs/` unscanned (AUD-P0-002) |
-| Context-pack gitignore respect | Check whether gitignored files appear in context pack | **Failed** | `.opencode/run-logs/cookies.txt`, `.opencode/run-logs/api.pid`, `.opencode/package.json`, `.opencode/package-lock.json` all gitignored yet present in context pack (AUD-P0-003) |
-| `opencode.jsonc` smoke test | ADR-0008 10-point smoke test | **Not Executed** | `opencode.jsonc` excluded from context pack; smoke test script not found |
-| Dev-dependency scanning | `check-dependencies.sh` coverage | **Confirmed gap** | Only `pnpm audit --prod`; dev deps unscanned |
+| Check                                 | Command                                                                | Result            | Evidence                                                                                                                                                                        |
+| ------------------------------------- | ---------------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Agent count (25 claimed)              | Direct count of `.opencode/agents/` entries in context pack            | **Passed**        | 25 files confirmed                                                                                                                                                              |
+| Command count (27 claimed)            | Direct count of `.opencode/commands/` entries in context pack          | **Passed**        | 27 files confirmed                                                                                                                                                              |
+| Skill count (12 claimed)              | Direct count of `.opencode/skills/` entries in context pack            | **Passed**        | 12 skills confirmed                                                                                                                                                             |
+| Agent↔command referential integrity   | Cross-reference every command's `agent:` value against agent filenames | **Passed**        | All 27 commands target existing agents                                                                                                                                          |
+| Permission consistency (secret paths) | Cross-check deny lists across 7 agents                                 | **Passed**        | `*.env`/`*.pem`/`*.key`/`*credentials*`/`.git/**` consistent across all                                                                                                         |
+| Secret scan coverage gap              | Inspect `check-secrets.sh` `EXCLUDE_DIRS`                              | **Failed**        | `.opencode` blanket-excluded; `.opencode/run-logs/` unscanned (AUD-P0-002)                                                                                                      |
+| Context-pack gitignore respect        | Check whether gitignored files appear in context pack                  | **Failed**        | `.opencode/run-logs/cookies.txt`, `.opencode/run-logs/api.pid`, `.opencode/package.json`, `.opencode/package-lock.json` all gitignored yet present in context pack (AUD-P0-003) |
+| `opencode.jsonc` smoke test           | ADR-0008 10-point smoke test                                           | **Not Executed**  | `opencode.jsonc` excluded from context pack; smoke test script not found                                                                                                        |
+| Dev-dependency scanning               | `check-dependencies.sh` coverage                                       | **Confirmed gap** | Only `pnpm audit --prod`; dev deps unscanned                                                                                                                                    |
 
 ## Findings Summary
 
-| ID | Severity | Confidence | Finding | Location | Status |
-|---|---|---|---|---|---|
-| AUD-P0-001 | P0 | High | Live session cookie and PID captured in this context pack | `.opencode/run-logs/cookies.txt`, `.opencode/run-logs/api.pid` | **Open** |
-| AUD-P0-002 | P0 | High | Secret scanner blanket-excludes `.opencode/` — root cause of AUD-P0-001's scanner-side gap | `scripts/security/check-secrets.sh` `EXCLUDE_DIRS` | **Open** |
-| AUD-P0-003 | P0 | Medium | Context-pack generator does not respect `.gitignore` — root cause of AUD-P0-001's generator-side gap | Unknown context-pack generator (not in repo) | **Open** |
-| AUD-P1-001 | P1 | High | ADR-0008 required smoke test not implemented | `scripts/` (expected but not found) | **Open** |
-| AUD-P1-002 | P1 | Medium | Dev-dependency supply-chain risk unscanned | `scripts/security/check-dependencies.sh` | **Open** |
-| AUD-P2-001 | P2 | High | `git-quality` agent has no associated slash command | `.opencode/agents/git-quality.md`, `.opencode/commands/` | **Open** |
-| AUD-P2-002 | P2 | High | Two parallel context-pack generators exist and diverge | `.chatgpt-context-pack/`, unknown single-file generator (both untracked) | **Open** |
-| AUD-P2-003 | P2 | Medium | No equivalent `docs/workflows/repository-audit-workflow.md` for audit workflow | `docs/` | **Open** |
-| AUD-P2-004 | P2 | Medium | No generic `templates/repo-audits/opencode-system-audit-template.md` — audit schema inlined in `repo-auditor.md` | `templates/` (all 8 are mobile-UI-specific) | **Open** |
-| AUD-P2-005 | P2 | Medium | No top-level system registry/index for agents/commands/skills | Root manifests | **Open** |
-| AUD-P2-006 | P2 | Medium | Permission-block duplication across 7 agent files — no regression test | `.opencode/agents/{delivery,git-quality,qa,reviewer,repository-integrity,repository-docs,security}.md` | **Open** |
-| AUD-P3-001 | P3 | Low | `repo-auditor` bash deny-list more exhaustive than higher-privilege agents' lists | `.opencode/agents/repo-auditor.md` vs `delivery.md`, `repository-integrity.md` | **Open** |
-| AUD-P3-002 | P3 | Low | `approval-gated-redesign` skill not explicitly allowlisted in any agent frontmatter | `.opencode/agents/` (may be implicitly loaded by `mobile-ui-orchestrator`) | **Open** |
-| AUD-P3-003 | P3 | Low | No `opencode.jsonc` content available to verify ADR-0008 claims | `opencode.jsonc` (excluded from context pack) | **Open** |
-| AUD-P3-004 | P3 | Low | `templates/` is 100% mobile-UI-redesign-specific; no reusable templates for audit/run-record/review workflows | `templates/` | **Open** |
+| ID         | Severity | Confidence | Finding                                                                                                          | Location                                                                                               | Status   |
+| ---------- | -------- | ---------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | -------- |
+| AUD-P0-001 | P0       | High       | Live session cookie and PID captured in this context pack                                                        | `.opencode/run-logs/cookies.txt`, `.opencode/run-logs/api.pid`                                         | **Open** |
+| AUD-P0-002 | P0       | High       | Secret scanner blanket-excludes `.opencode/` — root cause of AUD-P0-001's scanner-side gap                       | `scripts/security/check-secrets.sh` `EXCLUDE_DIRS`                                                     | **Open** |
+| AUD-P0-003 | P0       | Medium     | Context-pack generator does not respect `.gitignore` — root cause of AUD-P0-001's generator-side gap             | Unknown context-pack generator (not in repo)                                                           | **Open** |
+| AUD-P1-001 | P1       | High       | ADR-0008 required smoke test not implemented                                                                     | `scripts/` (expected but not found)                                                                    | **Open** |
+| AUD-P1-002 | P1       | Medium     | Dev-dependency supply-chain risk unscanned                                                                       | `scripts/security/check-dependencies.sh`                                                               | **Open** |
+| AUD-P2-001 | P2       | High       | `git-quality` agent has no associated slash command                                                              | `.opencode/agents/git-quality.md`, `.opencode/commands/`                                               | **Open** |
+| AUD-P2-002 | P2       | High       | Two parallel context-pack generators exist and diverge                                                           | `.chatgpt-context-pack/`, unknown single-file generator (both untracked)                               | **Open** |
+| AUD-P2-003 | P2       | Medium     | No equivalent `docs/workflows/repository-audit-workflow.md` for audit workflow                                   | `docs/`                                                                                                | **Open** |
+| AUD-P2-004 | P2       | Medium     | No generic `templates/repo-audits/opencode-system-audit-template.md` — audit schema inlined in `repo-auditor.md` | `templates/` (all 8 are mobile-UI-specific)                                                            | **Open** |
+| AUD-P2-005 | P2       | Medium     | No top-level system registry/index for agents/commands/skills                                                    | Root manifests                                                                                         | **Open** |
+| AUD-P2-006 | P2       | Medium     | Permission-block duplication across 7 agent files — no regression test                                           | `.opencode/agents/{delivery,git-quality,qa,reviewer,repository-integrity,repository-docs,security}.md` | **Open** |
+| AUD-P3-001 | P3       | Low        | `repo-auditor` bash deny-list more exhaustive than higher-privilege agents' lists                                | `.opencode/agents/repo-auditor.md` vs `delivery.md`, `repository-integrity.md`                         | **Open** |
+| AUD-P3-002 | P3       | Low        | `approval-gated-redesign` skill not explicitly allowlisted in any agent frontmatter                              | `.opencode/agents/` (may be implicitly loaded by `mobile-ui-orchestrator`)                             | **Open** |
+| AUD-P3-003 | P3       | Low        | No `opencode.jsonc` content available to verify ADR-0008 claims                                                  | `opencode.jsonc` (excluded from context pack)                                                          | **Open** |
+| AUD-P3-004 | P3       | Low        | `templates/` is 100% mobile-UI-redesign-specific; no reusable templates for audit/run-record/review workflows    | `templates/`                                                                                           | **Open** |
 
 ### Resolved Findings
 
@@ -325,10 +325,12 @@ None — this is the first opencode-system audit.
 **Finding IDs:** AUD-P0-001, AUD-P0-002
 
 **Expected paths:**
+
 - `.opencode/run-logs/` (delete contents)
 - `scripts/security/check-secrets.sh` (narrow `.opencode` exclude)
 
 **Tasks:**
+
 - [ ] Delete `.opencode/run-logs/*` from disk (`rm -rf .opencode/run-logs/*`). Verify directory is empty.
 - [ ] If Keycloak realm could ever run non-localhost, rotate the dev signing secret and invalidate the session.
 - [ ] Patch `scripts/security/check-secrets.sh`: replace blanket `.opencode` in `EXCLUDE_DIRS` with targeted subpath excludes for `.opencode/agents`, `.opencode/commands`, `.opencode/skills`, `.opencode/documentation`, `.opencode/benchmarks`.
@@ -336,6 +338,7 @@ None — this is the first opencode-system audit.
 - [ ] Commit Phase A changes as a single atomic commit.
 
 **Validation:**
+
 ```bash
 ls .opencode/run-logs/              # Should be empty or directory absent
 pnpm security:secrets               # Must pass (no secrets)
@@ -343,6 +346,7 @@ git status --short                  # Only intended changes
 ```
 
 **Acceptance criteria:**
+
 - `.opencode/run-logs/` is empty or absent.
 - `check-secrets.sh` `EXCLUDE_DIRS` no longer contains bare `.opencode`.
 - `.opencode/run-logs/` is scannable by the secret scanner (a JWT placed there for testing would be caught).
@@ -361,10 +365,12 @@ git status --short                  # Only intended changes
 **Finding IDs:** AUD-P0-003, AUD-P1-001
 
 **Expected paths:**
+
 - Unknown context-pack generator (to be located/inspected/patched)
 - `scripts/security/check-opencode-config.sh` (new file)
 
 **Tasks:**
+
 - [ ] Locate/inspect the tool that generates `calvin-opencode-system-context-pack.md` (and `.chatgpt-context-pack/`).
 - [ ] Make it `git ls-files`-based or `git check-ignore`-filtered before reading file contents.
 - [ ] Add an explicit, audited allowlist for intentionally-untracked-but-wanted files (e.g., `.env.example`).
@@ -375,6 +381,7 @@ git status --short                  # Only intended changes
 - [ ] Run smoke test; confirm `opencode.jsonc` is in the state ADR-0008 claims.
 
 **Validation:**
+
 ```bash
 # Verify context-pack generator excludes gitignored files (test by generating a pack and checking)
 # Verify smoke test passes
@@ -383,6 +390,7 @@ pnpm ci:check                                     # Must pass with new smoke tes
 ```
 
 **Acceptance criteria:**
+
 - Context-pack generator is `git ls-files`-based or `git check-ignore`-filtered.
 - Only one canonical generator exists, source-controlled under `scripts/`.
 - Pre-export hook purges `.opencode/run-logs/` before any export.
@@ -402,17 +410,20 @@ pnpm ci:check                                     # Must pass with new smoke tes
 **Finding IDs:** AUD-P2-003, AUD-P2-004, AUD-P3-004
 
 **Expected paths:**
+
 - `docs/workflows/repository-audit-workflow.md` (new file)
 - `templates/repo-audits/opencode-system-audit-template.md` (new file)
 - `.opencode/agents/repo-auditor.md` (update to reference template)
 
 **Tasks:**
+
 - [ ] Write `docs/workflows/repository-audit-workflow.md` — document the `repo-auditor` → `AGENT_HANDOFF.md` → (human review) → `repo-repair` → `repository-integrity` cycle. Follow the same structure as `docs/REPOSITORY_DOCUMENTATION_WORKFLOW.md`: components, commands table, recommended first run, safety model, validation.
 - [ ] Extract `templates/repo-audits/opencode-system-audit-template.md` from `repo-auditor.md`'s embedded schema (lines 207-279).
 - [ ] Update `repo-auditor.md` to reference the external template instead of inlining it (optional but cleaner).
 - [ ] Optionally file this report (`opencode-system-audit-2026-06-20.md`) under a new `audits/` directory as the first worked example.
 
 **Validation:**
+
 ```bash
 ls docs/workflows/repository-audit-workflow.md      # Must exist
 ls templates/repo-audits/opencode-system-audit-template.md  # Must exist
@@ -420,6 +431,7 @@ ls templates/repo-audits/opencode-system-audit-template.md  # Must exist
 ```
 
 **Acceptance criteria:**
+
 - `docs/workflows/repository-audit-workflow.md` exists and covers the full audit→repair cycle.
 - `templates/repo-audits/opencode-system-audit-template.md` exists and matches `repo-auditor.md`'s schema.
 - (Optional) `repo-auditor.md` references the external template.
@@ -437,11 +449,13 @@ ls templates/repo-audits/opencode-system-audit-template.md  # Must exist
 **Finding IDs:** AUD-P2-001, AUD-P2-005, AUD-P2-006, AUD-P3-001
 
 **Expected paths:**
+
 - `.opencode/commands/quality-check.md` (new) OR `.opencode/agents/git-quality.md` (update)
 - `.opencode/REGISTRY.md` (new) OR `MANIFEST.md` (update)
 - `scripts/ci/check-agent-permissions.sh` (new)
 
 **Tasks:**
+
 - [ ] AUD-P2-001: Add a `/quality-check` command wired to `git-quality`, OR document in `git-quality.md` that it is intentionally command-less.
 - [ ] AUD-P2-005: Create `.opencode/REGISTRY.md` or generate a section in `MANIFEST.md` enumerating all 25 agents, 27 commands, and 12 skills with name → mode → permission-tier → primary-vs-hidden → invoked-by.
 - [ ] AUD-P2-005: Add a CI assertion that README's stated agent/command counts match actual file counts (5-line script).
@@ -450,6 +464,7 @@ ls templates/repo-audits/opencode-system-audit-template.md  # Must exist
 - [ ] AUD-P1-002: Decide and document whether dev-dependency supply-chain risk is accepted or should be scanned; implement or document accordingly.
 
 **Validation:**
+
 ```bash
 ls .opencode/commands/quality-check.md              # Must exist (if added)
 ls .opencode/REGISTRY.md                             # Must exist (if added)
@@ -458,6 +473,7 @@ pnpm ci:check                                        # Must pass with all new ch
 ```
 
 **Acceptance criteria:**
+
 - `git-quality` agent has a command or documented command-less status.
 - Registry file exists with accurate counts; CI verifies on change.
 - Permission-block regression test exists and passes.
@@ -498,12 +514,12 @@ git diff --stat                     # Verify scope
 
 ## Deferred, Blocked, and Rejected Findings
 
-| ID | Decision | Reason | Prerequisite |
-|---|---|---|---|
-| AUD-P3-002 (`approval-gated-redesign` skill) | Deferred | Low severity; needs one-line confirmation in `mobile-ui-orchestrator.md` | None |
-| AUD-P3-003 (`opencode.jsonc` not verified) | Deferred | Resolved by AUD-P1-001 (smoke test) | Phase B completion |
-| AUD-P3-001 (bash deny-list asymmetry) | Deferred | Cosmetic; `bash: '*': ask` catch-all mitigates | None |
-| AUD-P3-004 (`templates/` mobile-UI-only) | Deferred | Schemas work inlined; extract when workflows formalized | Phase C completion |
+| ID                                           | Decision | Reason                                                                   | Prerequisite       |
+| -------------------------------------------- | -------- | ------------------------------------------------------------------------ | ------------------ |
+| AUD-P3-002 (`approval-gated-redesign` skill) | Deferred | Low severity; needs one-line confirmation in `mobile-ui-orchestrator.md` | None               |
+| AUD-P3-003 (`opencode.jsonc` not verified)   | Deferred | Resolved by AUD-P1-001 (smoke test)                                      | Phase B completion |
+| AUD-P3-001 (bash deny-list asymmetry)        | Deferred | Cosmetic; `bash: '*': ask` catch-all mitigates                           | None               |
+| AUD-P3-004 (`templates/` mobile-UI-only)     | Deferred | Schemas work inlined; extract when workflows formalized                  | Phase C completion |
 
 ## Open Questions and Limitations
 
@@ -526,21 +542,25 @@ git diff --stat                     # Verify scope
 **Recommended first phase:** Phase A — Stop the Bleeding.
 
 **First paths to modify (Phase A):**
+
 1. `.opencode/run-logs/` — delete all contents (`rm -rf .opencode/run-logs/*`).
 2. `scripts/security/check-secrets.sh` — replace blanket `.opencode` exclude with targeted subpath excludes.
 
 **First validation commands:**
+
 ```bash
 ls .opencode/run-logs/              # Verify empty
 pnpm security:secrets               # Verify scanner passes
 ```
 
 **Blockers for Phase A start:**
+
 - **Approval required** for deleting `.opencode/run-logs/*` (destructive to untracked log files — but these files should not exist per `.gitignore`).
 - **Approval required** for modifying `scripts/security/check-secrets.sh` (security boundary change).
 - **Secret rotation decision** — user must confirm whether Keycloak signing secret needs rotation (AUD-P0-001).
 
 **Blockers for Phase B start:**
+
 - Context-pack generator location must be identified by the user before AUD-P0-003 can be fixed.
 
 **Blockers for Phase C/D:** None — these are documentation and polish only.
@@ -548,6 +568,7 @@ pnpm security:secrets               # Verify scanner passes
 **Repository state note:** Worktree is clean except for untracked `opencode-system-audit-2026-06-20.md`. Commit `7b19197` is HEAD on `main`.
 
 **Changes that must remain separate:**
+
 - Phase A (stop the bleeding) and Phase B (structural gap) are independent and can be committed separately or together.
 - Phase C (documentation) is purely additive — no existing files modified.
 - Phase D (polish) items are independent of each other — commit per finding.

@@ -43,85 +43,85 @@ Execute Phase D — "Polish" from the opencode system audit handoff (`AGENT_HAND
 
 ## Files Modified
 
-| File | Change | Finding |
-|---|---|---|
-| `.opencode/commands/quality-check.md` | **Created** (17 lines): slash command for `git-quality` | AUD-P2-001 |
-| `.opencode/REGISTRY.md` | **Created** (140+ lines): agent/command/skill registry with notes | AUD-P2-005 |
-| `scripts/ci/check-registry-counts.sh` | **Created** (85 lines): count validation (agents, commands, skills vs. REGISTRY.md + README.md) | AUD-P2-005 |
-| `scripts/ci/check-agent-permissions.sh` | **Created** (70 lines): secret-path deny pattern regression across 7 agents | AUD-P2-006 |
-| `scripts/ci/check-all.sh` | **Modified** (+8 lines): wired both new registry checks | D.3/D.4 |
-| `scripts/security/check-dependencies.sh` | **Modified** (+19 lines): informational dev-dependency audit | AUD-P1-002 |
-| `README.md` | **Modified** (line 709): 27 → 28 commands | Count drift |
+| File                                     | Change                                                                                          | Finding     |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------- |
+| `.opencode/commands/quality-check.md`    | **Created** (17 lines): slash command for `git-quality`                                         | AUD-P2-001  |
+| `.opencode/REGISTRY.md`                  | **Created** (140+ lines): agent/command/skill registry with notes                               | AUD-P2-005  |
+| `scripts/ci/check-registry-counts.sh`    | **Created** (85 lines): count validation (agents, commands, skills vs. REGISTRY.md + README.md) | AUD-P2-005  |
+| `scripts/ci/check-agent-permissions.sh`  | **Created** (70 lines): secret-path deny pattern regression across 7 agents                     | AUD-P2-006  |
+| `scripts/ci/check-all.sh`                | **Modified** (+8 lines): wired both new registry checks                                         | D.3/D.4     |
+| `scripts/security/check-dependencies.sh` | **Modified** (+19 lines): informational dev-dependency audit                                    | AUD-P1-002  |
+| `README.md`                              | **Modified** (line 709): 27 → 28 commands                                                       | Count drift |
 
 ## Commands and Results
 
-| # | Command | Result | Evidence |
-|---|---|---|---|
-| 1 | `bash scripts/security/check-opencode-config.sh` | **PASSED** | 11/11 assertions; exit 0 |
-| 2 | `bash scripts/ci/check-registry-counts.sh` | **PASSED** | Agents 25/25, Commands 28/28, Skills 12/12; exit 0 |
-| 3 | `bash scripts/ci/check-agent-permissions.sh` | **PASSED** | 7/7 agents share canonical secret-path denies; exit 0 |
-| 4 | `bash -n scripts/ci/check-registry-counts.sh` | **PASSED** | Syntax valid |
-| 5 | `bash -n scripts/ci/check-agent-permissions.sh` | **PASSED** | Syntax valid |
-| 6 | `ls .opencode/commands/quality-check.md` | **PASSED** | File exists |
-| 7 | `ls .opencode/REGISTRY.md` | **PASSED** | File exists |
+| #   | Command                                          | Result     | Evidence                                              |
+| --- | ------------------------------------------------ | ---------- | ----------------------------------------------------- |
+| 1   | `bash scripts/security/check-opencode-config.sh` | **PASSED** | 11/11 assertions; exit 0                              |
+| 2   | `bash scripts/ci/check-registry-counts.sh`       | **PASSED** | Agents 25/25, Commands 28/28, Skills 12/12; exit 0    |
+| 3   | `bash scripts/ci/check-agent-permissions.sh`     | **PASSED** | 7/7 agents share canonical secret-path denies; exit 0 |
+| 4   | `bash -n scripts/ci/check-registry-counts.sh`    | **PASSED** | Syntax valid                                          |
+| 5   | `bash -n scripts/ci/check-agent-permissions.sh`  | **PASSED** | Syntax valid                                          |
+| 6   | `ls .opencode/commands/quality-check.md`         | **PASSED** | File exists                                           |
+| 7   | `ls .opencode/REGISTRY.md`                       | **PASSED** | File exists                                           |
 
 ## Acceptance-Criterion Evidence
 
 ### AUD-P2-001 — git-quality slash command
 
-| Criterion | Status | Evidence |
-|---|---|---|
-| `git-quality` agent has a slash command | ✅ **PASSED** | `.opencode/commands/quality-check.md` created, `agent: git-quality` |
-| Command appears in `.opencode/commands/` | ✅ **PASSED** | 28 commands total (was 27); counts validated by CI |
-| Agent value matches | ✅ **PASSED** | `agent: git-quality` in command frontmatter |
+| Criterion                                | Status        | Evidence                                                            |
+| ---------------------------------------- | ------------- | ------------------------------------------------------------------- |
+| `git-quality` agent has a slash command  | ✅ **PASSED** | `.opencode/commands/quality-check.md` created, `agent: git-quality` |
+| Command appears in `.opencode/commands/` | ✅ **PASSED** | 28 commands total (was 27); counts validated by CI                  |
+| Agent value matches                      | ✅ **PASSED** | `agent: git-quality` in command frontmatter                         |
 
 ### AUD-P2-005 — Agent/command/skill registry
 
-| Criterion | Status | Evidence |
-|---|---|---|
-| Registry file exists | ✅ **PASSED** | `.opencode/REGISTRY.md` 140+ lines |
-| Agent counts match reality | ✅ **PASSED** | 25 agents in registry; `check-registry-counts.sh` verified |
-| Command counts match reality | ✅ **PASSED** | 28 commands in registry; CI verified |
-| Skill counts match reality | ✅ **PASSED** | 12 skills in registry; CI verified |
-| README counts match reality | ✅ **PASSED** | README updated: 25 agents, 28 commands; CI verified |
-| CI verifies on change | ✅ **PASSED** | `check-registry-counts.sh` wired into `check-all.sh` |
+| Criterion                    | Status        | Evidence                                                   |
+| ---------------------------- | ------------- | ---------------------------------------------------------- |
+| Registry file exists         | ✅ **PASSED** | `.opencode/REGISTRY.md` 140+ lines                         |
+| Agent counts match reality   | ✅ **PASSED** | 25 agents in registry; `check-registry-counts.sh` verified |
+| Command counts match reality | ✅ **PASSED** | 28 commands in registry; CI verified                       |
+| Skill counts match reality   | ✅ **PASSED** | 12 skills in registry; CI verified                         |
+| README counts match reality  | ✅ **PASSED** | README updated: 25 agents, 28 commands; CI verified        |
+| CI verifies on change        | ✅ **PASSED** | `check-registry-counts.sh` wired into `check-all.sh`       |
 
 ### AUD-P2-006 — Permission-block regression test
 
-| Criterion | Status | Evidence |
-|---|---|---|
-| Regression test exists | ✅ **PASSED** | `scripts/ci/check-agent-permissions.sh` |
-| All 7 agents share canonical secret-path denies | ✅ **PASSED** | All 12 patterns confirmed present in all 7 agents |
-| Test wired into CI | ✅ **PASSED** | Wired into `check-all.sh` after registry count check |
+| Criterion                                       | Status        | Evidence                                             |
+| ----------------------------------------------- | ------------- | ---------------------------------------------------- |
+| Regression test exists                          | ✅ **PASSED** | `scripts/ci/check-agent-permissions.sh`              |
+| All 7 agents share canonical secret-path denies | ✅ **PASSED** | All 12 patterns confirmed present in all 7 agents    |
+| Test wired into CI                              | ✅ **PASSED** | Wired into `check-all.sh` after registry count check |
 
 ### AUD-P3-001 — Bash deny-list asymmetry
 
-| Criterion | Status | Evidence |
-|---|---|---|
+| Criterion                           | Status        | Evidence                                                  |
+| ----------------------------------- | ------------- | --------------------------------------------------------- |
 | Asymmetry documented as intentional | ✅ **PASSED** | REGISTRY.md §Notes documents the asymmetry with rationale |
 
 ### AUD-P1-002 — Dev-dependency scan policy
 
-| Criterion | Status | Evidence |
-|---|---|---|
+| Criterion                                | Status        | Evidence                                                       |
+| ---------------------------------------- | ------------- | -------------------------------------------------------------- |
 | Dev dependencies scanned (informational) | ✅ **PASSED** | `pnpm audit` (without --prod) added to `check-dependencies.sh` |
-| Findings do not block pipeline | ✅ **PASSED** | Dev audit exits 0 regardless; reports as informational |
-| Policy documented in script | ✅ **PASSED** | Script header and output messages explain the policy |
+| Findings do not block pipeline           | ✅ **PASSED** | Dev audit exits 0 regardless; reports as informational         |
+| Policy documented in script              | ✅ **PASSED** | Script header and output messages explain the policy           |
 
 ## Diff and Path-Boundary Review
 
 ### Modified tracked files (8 cumulative, 3 new in Phase D)
 
-| File | Phase | Change |
-|---|---|---|
-| `scripts/security/check-secrets.sh` | A | +5/−1: targeted subpath excludes |
-| `.opencode/agents/repo-auditor.md` | C | +3: template reference |
-| `docs/adr/0008-canonical-opencode-project-configuration.md` | B | `plan` → `delivery` |
-| `scripts/ci/check-all.sh` | B+D | +12 total: smoke test + 2 registry checks |
-| `scripts/git-hooks/pre-push` | B | +1: smoke test |
-| `.gitignore` | B | context-pack entries updated |
-| `scripts/security/check-dependencies.sh` | D | +19: informational dev audit |
-| `README.md` | D | 27→28 commands |
+| File                                                        | Phase | Change                                    |
+| ----------------------------------------------------------- | ----- | ----------------------------------------- |
+| `scripts/security/check-secrets.sh`                         | A     | +5/−1: targeted subpath excludes          |
+| `.opencode/agents/repo-auditor.md`                          | C     | +3: template reference                    |
+| `docs/adr/0008-canonical-opencode-project-configuration.md` | B     | `plan` → `delivery`                       |
+| `scripts/ci/check-all.sh`                                   | B+D   | +12 total: smoke test + 2 registry checks |
+| `scripts/git-hooks/pre-push`                                | B     | +1: smoke test                            |
+| `.gitignore`                                                | B     | context-pack entries updated              |
+| `scripts/security/check-dependencies.sh`                    | D     | +19: informational dev audit              |
+| `README.md`                                                 | D     | 27→28 commands                            |
 
 ### Created files (11 total, 4 new in Phase D)
 
@@ -133,6 +133,7 @@ Execute Phase D — "Polish" from the opencode system audit handoff (`AGENT_HAND
 Plus prior phases: `check-opencode-config.sh`, `generate-context-pack.sh`, workflow doc, template, audit report, 4 run records, handoff, execution plan.
 
 ### Path boundaries verified
+
 - ✅ No changes to `planning/status.yaml`, `planning/backlog.yaml`
 - ✅ No changes to PIA product source (`apps/`, `packages/`, `db/`, `infra/`)
 - ✅ No changes to auth, schema, API contracts, or deployment
@@ -143,21 +144,23 @@ Plus prior phases: `check-opencode-config.sh`, `generate-context-pack.sh`, workf
 
 **None — all 4 phases complete.** All 15 findings addressed:
 
-| Phase | Findings resolved | Status |
-|---|---|---|
-| A | AUD-P0-001, AUD-P0-002 | ✅ |
-| B | AUD-P0-003, AUD-P1-001 | ✅ |
-| C | AUD-P2-003, AUD-P2-004 | ✅ |
-| D | AUD-P2-001, AUD-P2-005, AUD-P2-006, AUD-P1-002, AUD-P3-001 | ✅ |
-| — | AUD-P2-002 (consolidated generators: resolved by B.4) | ✅ |
-| — | AUD-P3-002 (skill allowlist: deferred, low severity) | Deferred |
-| — | AUD-P3-003 (opencode.jsonc: resolved by B.1 smoke test) | ✅ |
-| — | AUD-P3-004 (templates mobile-UI-only: resolved by C.2) | ✅ |
+| Phase | Findings resolved                                          | Status   |
+| ----- | ---------------------------------------------------------- | -------- |
+| A     | AUD-P0-001, AUD-P0-002                                     | ✅       |
+| B     | AUD-P0-003, AUD-P1-001                                     | ✅       |
+| C     | AUD-P2-003, AUD-P2-004                                     | ✅       |
+| D     | AUD-P2-001, AUD-P2-005, AUD-P2-006, AUD-P1-002, AUD-P3-001 | ✅       |
+| —     | AUD-P2-002 (consolidated generators: resolved by B.4)      | ✅       |
+| —     | AUD-P3-002 (skill allowlist: deferred, low severity)       | Deferred |
+| —     | AUD-P3-003 (opencode.jsonc: resolved by B.1 smoke test)    | ✅       |
+| —     | AUD-P3-004 (templates mobile-UI-only: resolved by C.2)     | ✅       |
 
 ### Deferred-only item
+
 - **AUD-P3-002** (`approval-gated-redesign` skill not explicitly allowlisted) — needs one-line confirmation in `mobile-ui-orchestrator.md` frontmatter. Low severity; may be working implicitly.
 
 ### Recommended follow-up
+
 - Delete legacy `gather-chatgpt-repo-context.sh` from `/home/calvin/personal-intelligence-agent-audit-tools/` to prevent accidental use of the unsafe generator.
 - Run `pnpm security:dependencies` to see current dev-dependency advisory state.
 

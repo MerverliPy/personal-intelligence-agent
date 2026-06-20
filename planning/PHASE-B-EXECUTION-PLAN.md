@@ -13,14 +13,15 @@
 
 **Generator identified (partial):**
 
-| Generator | Location | Status |
-|---|---|---|
+| Generator                              | Location                                                                              | Status                                         |
+| -------------------------------------- | ------------------------------------------------------------------------------------- | ---------------------------------------------- |
 | `gather-chatgpt-repo-context.sh 1.0.0` | `/home/calvin/personal-intelligence-agent-audit-tools/gather-chatgpt-repo-context.sh` | **External to workspace** — cannot read/modify |
-| Copy 1 | `/home/calvin/test/gather-chatgpt-repo-context.sh` | External |
-| Copy 2 | `/home/calvin/test/BenchDeck/gather-chatgpt-repo-context.sh` | External |
-| Unknown single-file generator | Produces `calvin-opencode-system-context-pack.md` | **NOT FOUND** |
+| Copy 1                                 | `/home/calvin/test/gather-chatgpt-repo-context.sh`                                    | External                                       |
+| Copy 2                                 | `/home/calvin/test/BenchDeck/gather-chatgpt-repo-context.sh`                          | External                                       |
+| Unknown single-file generator          | Produces `calvin-opencode-system-context-pack.md`                                     | **NOT FOUND**                                  |
 
 **What we know:**
+
 - `.chatgpt-context-pack/` exists in the repo (gitignored, generated Jun 18)
 - It contains a structured, multi-file, chunked export (00-start-here through 05-security)
 - A `.generated-by-gather-chatgpt-repo-context` marker file confirms the tool
@@ -33,21 +34,22 @@
 
 **ADR compliance check against live `opencode.jsonc`:**
 
-| # | ADR Requirement | Expected | Actual (`opencode.jsonc`) | Status |
-|---|---|---|---|---|
-| 1 | Exactly one root config | `opencode.jsonc` only | ✅ `opencode.jsonc` only; `opencode.json` removed | ✅ |
-| 2 | OpenCode version `1.17.7` | Pinned in `package.json` | ✅ `"opencode-ai": "1.17.7"` in root `package.json:32` | ✅ |
-| 3 | Default agent `plan` | `"default_agent": "plan"` | ❌ `"default_agent": "delivery"` | **DISCREPANCY** |
-| 4 | Sharing disabled | `"share": "disabled"` | ✅ `"share": "disabled"` | ✅ |
-| 5 | Required instruction files loaded | AGENTS.md, REPOSITORY_ADAPTER.md, DECISION_LEDGER.md | ✅ All three in `instructions` array | ✅ |
-| 6 | Task denied | `"task": "deny"` | ✅ `"task": "deny"` | ✅ |
-| 7 | Skill denied | `"skill": "deny"` | ✅ `"skill": "deny"` | ✅ |
-| 8 | External-directory denied | `"external_directory": "deny"` | ✅ `"external_directory": "deny"` | ✅ |
-| 9 | Protected read/edit patterns denied | `*.env`, `*.pem`, `*.key`, `*credentials*`, `.git/**` denied | ✅ All present in `read` and `edit` deny blocks | ✅ |
-| 10 | Destructive commands denied | `git push/reset/clean/restore`, `rm -rf`, `sudo`, `npm/pnpm publish` | ✅ All present in `bash` deny block | ✅ |
-| 11 | Read-only tools allowed | `glob`, `grep`, `list`, `lsp`, `todowrite`, `question` | ✅ All six present as `allow` | ✅ |
+| #   | ADR Requirement                     | Expected                                                             | Actual (`opencode.jsonc`)                              | Status          |
+| --- | ----------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------ | --------------- |
+| 1   | Exactly one root config             | `opencode.jsonc` only                                                | ✅ `opencode.jsonc` only; `opencode.json` removed      | ✅              |
+| 2   | OpenCode version `1.17.7`           | Pinned in `package.json`                                             | ✅ `"opencode-ai": "1.17.7"` in root `package.json:32` | ✅              |
+| 3   | Default agent `plan`                | `"default_agent": "plan"`                                            | ❌ `"default_agent": "delivery"`                       | **DISCREPANCY** |
+| 4   | Sharing disabled                    | `"share": "disabled"`                                                | ✅ `"share": "disabled"`                               | ✅              |
+| 5   | Required instruction files loaded   | AGENTS.md, REPOSITORY_ADAPTER.md, DECISION_LEDGER.md                 | ✅ All three in `instructions` array                   | ✅              |
+| 6   | Task denied                         | `"task": "deny"`                                                     | ✅ `"task": "deny"`                                    | ✅              |
+| 7   | Skill denied                        | `"skill": "deny"`                                                    | ✅ `"skill": "deny"`                                   | ✅              |
+| 8   | External-directory denied           | `"external_directory": "deny"`                                       | ✅ `"external_directory": "deny"`                      | ✅              |
+| 9   | Protected read/edit patterns denied | `*.env`, `*.pem`, `*.key`, `*credentials*`, `.git/**` denied         | ✅ All present in `read` and `edit` deny blocks        | ✅              |
+| 10  | Destructive commands denied         | `git push/reset/clean/restore`, `rm -rf`, `sudo`, `npm/pnpm publish` | ✅ All present in `bash` deny block                    | ✅              |
+| 11  | Read-only tools allowed             | `glob`, `grep`, `list`, `lsp`, `todowrite`, `question`               | ✅ All six present as `allow`                          | ✅              |
 
 **Discrepancy:** ADR-0008 §Decision specifies `default_agent: "plan"`, but the live `opencode.jsonc` has `default_agent: "delivery"` (line 5). This must be resolved before the smoke test can be built:
+
 - Either the ADR is outdated and `delivery` is the correct, post-decision value, OR
 - The `opencode.jsonc` was modified after ADR acceptance without updating the ADR.
 
@@ -109,12 +111,14 @@ Create `scripts/security/check-opencode-config.sh` implementing the 10-point (no
 **Prerequisite:** User must provide the single-file generator location OR authorize creating a new canonical generator
 
 **Option A — Patch the existing generator (if user provides location):**
+
 1. Read the generator script (requires external_directory exemption or user copy into repo)
 2. Add `git ls-files`-based filtering before reading file contents
 3. Add an explicit allowlist for intentionally-untracked files (`.env.example`)
 4. Add a pre-export hook: `rm -rf .opencode/run-logs/*` before any export
 
 **Option B — Create a new canonical generator under `scripts/`:**
+
 1. Write `scripts/dev/generate-context-pack.sh` — a new, source-controlled script
 2. Build file list from `git ls-files` plus explicit allowlist
 3. Purge `.opencode/run-logs/*` before collecting files
@@ -131,6 +135,7 @@ Create `scripts/security/check-opencode-config.sh` implementing the 10-point (no
 **Prerequisite:** Step B.4 complete
 
 Add to the generator script (or as a standalone pre-export hook):
+
 ```bash
 # Purge run-logs before any context-pack export
 if [ -d ".opencode/run-logs" ]; then
@@ -144,6 +149,7 @@ fi
 **Duration:** 15 min
 
 Validation:
+
 ```bash
 # Smoke test
 bash scripts/security/check-opencode-config.sh   # Exit 0
@@ -163,14 +169,14 @@ pnpm lint
 
 ## Approval gates for Phase B
 
-| Step | Requires approval | Why |
-|---|---|---|
-| B.1 | **User decision** | `default_agent` discrepancy is architectural |
-| B.2 | Yes | New CI script creation |
-| B.3 | Yes | Modifying CI pipeline and pre-push hook |
-| B.4 | **User provides generator OR authorizes Option B** | External tool access or new script creation |
-| B.5 | Yes (bundled with B.4) | Safety hook is part of generator fix |
-| B.6 | No (validation only) | Read-only checks |
+| Step | Requires approval                                  | Why                                          |
+| ---- | -------------------------------------------------- | -------------------------------------------- |
+| B.1  | **User decision**                                  | `default_agent` discrepancy is architectural |
+| B.2  | Yes                                                | New CI script creation                       |
+| B.3  | Yes                                                | Modifying CI pipeline and pre-push hook      |
+| B.4  | **User provides generator OR authorizes Option B** | External tool access or new script creation  |
+| B.5  | Yes (bundled with B.4)                             | Safety hook is part of generator fix         |
+| B.6  | No (validation only)                               | Read-only checks                             |
 
 ---
 

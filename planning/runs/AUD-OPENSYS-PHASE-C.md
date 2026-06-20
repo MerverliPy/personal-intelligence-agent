@@ -38,12 +38,12 @@ Execute Phase C — "Fill the Documented Gap" from the opencode system audit han
 
 ## Files Modified
 
-| File | Change | Finding |
-|---|---|---|
-| `docs/workflows/repository-audit-workflow.md` | **Created** (92 lines) — mirrors documentation workflow structure | AUD-P2-003 |
-| `templates/repo-audits/opencode-system-audit-template.md` | **Created** (115 lines) — extracted AGENT_HANDOFF.md schema | AUD-P2-004 |
-| `.opencode/agents/repo-auditor.md` | **Modified** (+3 lines) — added canonical template reference at line 207 | Optional (P2-004) |
-| `audits/opencode-system-audit-2026-06-20.md` | **Moved** from root to `audits/` — first worked example | Optional (P2-004) |
+| File                                                      | Change                                                                   | Finding           |
+| --------------------------------------------------------- | ------------------------------------------------------------------------ | ----------------- |
+| `docs/workflows/repository-audit-workflow.md`             | **Created** (92 lines) — mirrors documentation workflow structure        | AUD-P2-003        |
+| `templates/repo-audits/opencode-system-audit-template.md` | **Created** (115 lines) — extracted AGENT_HANDOFF.md schema              | AUD-P2-004        |
+| `.opencode/agents/repo-auditor.md`                        | **Modified** (+3 lines) — added canonical template reference at line 207 | Optional (P2-004) |
+| `audits/opencode-system-audit-2026-06-20.md`              | **Moved** from root to `audits/` — first worked example                  | Optional (P2-004) |
 
 ### Directories created
 
@@ -53,40 +53,40 @@ Execute Phase C — "Fill the Documented Gap" from the opencode system audit han
 
 ## Commands and Results
 
-| # | Command | Result | Evidence |
-|---|---|---|---|
-| 1 | `mkdir -p docs/workflows templates/repo-audits audits` | **PASSED** | Directories created |
-| 2 | `ls docs/workflows/repository-audit-workflow.md` | **PASSED** | File exists (4306 bytes) |
-| 3 | `ls templates/repo-audits/opencode-system-audit-template.md` | **PASSED** | File exists (4324 bytes) |
-| 4 | `ls audits/opencode-system-audit-2026-06-20.md` | **PASSED** | File exists (33451 bytes) |
-| 5 | `git diff .opencode/agents/repo-auditor.md` | **PASSED** | +3 lines, template reference only |
-| 6 | Section cross-check: template vs. repo-auditor.md | **PASSED** | All 11 required sections match |
+| #   | Command                                                      | Result     | Evidence                          |
+| --- | ------------------------------------------------------------ | ---------- | --------------------------------- |
+| 1   | `mkdir -p docs/workflows templates/repo-audits audits`       | **PASSED** | Directories created               |
+| 2   | `ls docs/workflows/repository-audit-workflow.md`             | **PASSED** | File exists (4306 bytes)          |
+| 3   | `ls templates/repo-audits/opencode-system-audit-template.md` | **PASSED** | File exists (4324 bytes)          |
+| 4   | `ls audits/opencode-system-audit-2026-06-20.md`              | **PASSED** | File exists (33451 bytes)         |
+| 5   | `git diff .opencode/agents/repo-auditor.md`                  | **PASSED** | +3 lines, template reference only |
+| 6   | Section cross-check: template vs. repo-auditor.md            | **PASSED** | All 11 required sections match    |
 
 ## Acceptance-Criterion Evidence
 
-| Criterion | Status | Evidence |
-|---|---|---|
-| `docs/workflows/repository-audit-workflow.md` exists and covers the full audit→repair cycle | ✅ **PASSED** | 92 lines; covers components, commands, cycle diagram, safety model, validation, severity, related docs |
-| `templates/repo-audits/opencode-system-audit-template.md` exists and matches `repo-auditor.md`'s schema | ✅ **PASSED** | 115 lines; all 11 required sections confirmed present; completion checks included |
-| `repo-auditor.md` references the external template (optional) | ✅ **PASSED** | 3-line reference block at line 207: `> **Canonical template:** templates/repo-audits/opencode-system-audit-template.md` |
-| `opencode-system-audit-2026-06-20.md` filed under `audits/` (optional) | ✅ **PASSED** | `mv` from root → `audits/` |
+| Criterion                                                                                               | Status        | Evidence                                                                                                                |
+| ------------------------------------------------------------------------------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `docs/workflows/repository-audit-workflow.md` exists and covers the full audit→repair cycle             | ✅ **PASSED** | 92 lines; covers components, commands, cycle diagram, safety model, validation, severity, related docs                  |
+| `templates/repo-audits/opencode-system-audit-template.md` exists and matches `repo-auditor.md`'s schema | ✅ **PASSED** | 115 lines; all 11 required sections confirmed present; completion checks included                                       |
+| `repo-auditor.md` references the external template (optional)                                           | ✅ **PASSED** | 3-line reference block at line 207: `> **Canonical template:** templates/repo-audits/opencode-system-audit-template.md` |
+| `opencode-system-audit-2026-06-20.md` filed under `audits/` (optional)                                  | ✅ **PASSED** | `mv` from root → `audits/`                                                                                              |
 
 ### Template ↔ Schema Section Cross-Reference
 
-| Schema Section (`repo-auditor.md`) | Template Section |
-|---|---|
-| Audit Summary | ✅ Audit Summary |
-| Repository Map | ✅ Repository Map |
-| Validation Results | ✅ Validation Results |
-| Findings Summary | ✅ Findings Summary |
-| Detailed Findings | ✅ Detailed Findings |
-| Suspected Issues and Risks | ✅ Suspected Issues and Risks |
-| Execution Plan | ✅ Execution Plan |
-| Final Verification Checklist | ✅ Final Verification Checklist |
+| Schema Section (`repo-auditor.md`)       | Template Section                            |
+| ---------------------------------------- | ------------------------------------------- |
+| Audit Summary                            | ✅ Audit Summary                            |
+| Repository Map                           | ✅ Repository Map                           |
+| Validation Results                       | ✅ Validation Results                       |
+| Findings Summary                         | ✅ Findings Summary                         |
+| Detailed Findings                        | ✅ Detailed Findings                        |
+| Suspected Issues and Risks               | ✅ Suspected Issues and Risks               |
+| Execution Plan                           | ✅ Execution Plan                           |
+| Final Verification Checklist             | ✅ Final Verification Checklist             |
 | Deferred, Blocked, and Rejected Findings | ✅ Deferred, Blocked, and Rejected Findings |
-| Open Questions and Limitations | ✅ Open Questions and Limitations |
-| Implementation Agent Starting Point | ✅ Implementation Agent Starting Point |
-| Completion checks (lines 257-279) | ✅ Completion checks |
+| Open Questions and Limitations           | ✅ Open Questions and Limitations           |
+| Implementation Agent Starting Point      | ✅ Implementation Agent Starting Point      |
+| Completion checks (lines 257-279)        | ✅ Completion checks                        |
 
 ## Diff and Path-Boundary Review
 
@@ -119,10 +119,12 @@ Execute Phase C — "Fill the Documented Gap" from the opencode system audit han
 ## Outstanding Work
 
 ### Phase B (deferred — requires user input)
+
 - AUD-P0-003: Fix context-pack generator (generator location unknown)
 - AUD-P1-001: Build ADR-0008 smoke test
 
 ### Phase D (ready — polish)
+
 - AUD-P2-001: Wire `git-quality` agent to a slash command
 - AUD-P2-005: Create agent/command/skill registry
 - AUD-P2-006: Permission-block regression test

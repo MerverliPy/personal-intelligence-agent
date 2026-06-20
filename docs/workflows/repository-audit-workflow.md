@@ -13,10 +13,10 @@ The repository includes a bounded, evidence-driven audit system that produces `A
 
 ## Commands
 
-| Command               | Purpose                                                            |
-| --------------------- | ------------------------------------------------------------------ |
+| Command               | Purpose                                                           |
+| --------------------- | ----------------------------------------------------------------- |
 | `/repo-audit [scope]` | Run a bounded, evidence-driven audit; produce `AGENT_HANDOFF.md`. |
-| `/repo-repair`        | Apply approved fixes from `AGENT_HANDOFF.md` execution plan.       |
+| `/repo-repair`        | Apply approved fixes from `AGENT_HANDOFF.md` execution plan.      |
 
 The audit agent can also be invoked with `@repo-auditor`.
 
