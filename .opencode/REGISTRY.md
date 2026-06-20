@@ -1,7 +1,7 @@
 # opencode System Registry
 
 **Generated:** 2026-06-20
-**Counts:** 25 agents, 28 commands, 12 skills
+**Counts:** 25 agents, 28 commands, 13 skills
 
 > This registry enumerates every agent, command, and skill in the opencode system layer. Maintained alongside the source files; CI verifies counts match actual file counts.
 
@@ -79,7 +79,7 @@
 | `/task-review`                | `reviewer`               | Verify one implemented backlog task                |
 | `/task-run`                   | `delivery`               | Execute one backlog task                           |
 
-## Skills (12)
+## Skills (13)
 
 | Skill                        | Description                                                                                     |
 | ---------------------------- | ----------------------------------------------------------------------------------------------- |
@@ -95,6 +95,7 @@
 | `repository-docs-validation` | Validate documentation structure, links, commands, factual claims, and secrets                  |
 | `retrieval-quality`          | Implement hybrid retrieval, ACL filtering, version-aware citations, and ranking                 |
 | `task-execution`             | Execute one machine-readable backlog task with dependency and validation controls               |
+| `ui-quality`                 | Apply PIA-specific UI quality checks while preserving approved contracts and existing stack     |
 
 ## CI Assertions
 
