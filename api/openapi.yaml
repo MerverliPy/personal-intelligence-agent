@@ -393,6 +393,24 @@ paths:
     parameters:
       - $ref: '#/components/parameters/WorkspaceId'
       - $ref: '#/components/parameters/ConversationId'
+    get:
+      tags:
+        - Conversations
+      operationId: getConversationMessages
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Messages in chronological order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessagePage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
     post:
       tags:
         - Conversations
@@ -1408,6 +1426,40 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Uuid'
+    Message:
+      type: object
+      required:
+        - id
+        - role
+        - content
+        - created_at
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        role:
+          type: string
+          enum:
+            - USER
+            - ASSISTANT
+            - SYSTEM_NOTE
+            - TOOL
+        content:
+          type: string
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+    MessagePage:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        next_cursor:
+          type:
+            - string
+            - 'null'
     ModelRun:
       type: object
       required:

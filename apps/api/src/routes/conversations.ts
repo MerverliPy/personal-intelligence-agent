@@ -12,7 +12,7 @@
 import type { FastifyInstance, FastifyPluginAsync, FastifyRequest, FastifyReply } from 'fastify';
 import { createPool } from '@pia/db';
 import { createConversation, listConversations, getConversation } from '@pia/db';
-import { getModelRun, getMessage } from '@pia/db';
+import { getConversationMessages, getModelRun, getMessage } from '@pia/db';
 import type { ConversationMode } from '@pia/db';
 import {
   fakeModelGateway,
@@ -27,10 +27,14 @@ import { RetrievalService, fakeEmbeddingProvider, defaultFakeModelConfig } from 
 import {
   createErrorEnvelope,
   normaliseLimit,
+  decodeCursor,
+  encodeCursor,
   type Conversation,
   type ConversationPage,
   type CreateConversationRequest,
   type CreateMessageRequest,
+  type Message,
+  type MessagePage,
   type ModelRun,
   type ModelRunStatusApi,
 } from '@pia/contracts';
@@ -57,6 +61,24 @@ function toApiConversation(row: {
     mode: row.mode,
     created_at: row.createdAt,
     updated_at: row.updatedAt,
+  };
+}
+
+/**
+ * Maps database PersistedMessage rows to API contract Message objects.
+ */
+function toApiMessage(row: {
+  id: string;
+  conversationId: string;
+  role: Message['role'];
+  content: string;
+  createdAt: string;
+}): Message {
+  return {
+    id: row.id,
+    role: row.role,
+    content: row.content,
+    created_at: row.createdAt,
   };
 }
 
@@ -173,6 +195,53 @@ const conversationRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
       }
 
       return reply.send(toApiConversation(row));
+    },
+  );
+
+  // -----------------------------------------------------------------------
+  // GET /v1/workspaces/{workspace_id}/conversations/{conversation_id}/messages
+  //
+  // Returns messages for a conversation in chronological order, oldest first.
+  //
+  // PR14-RUNTIME-FOLLOWUPS Fix 3: real cursor pagination. Accepts an
+  // optional `cursor` query parameter (encoded message ID) for fetching
+  // messages older than the given cursor. When `next_cursor` is present
+  // in the response the client can request older pages by passing it
+  // back as the `cursor`. When `next_cursor` is null the complete
+  // thread has been returned.
+  //
+  // The default limit is 200 (MAX_PAGE_LIMIT).  Use `?limit=N` to
+  // request fewer messages per page.
+  // -----------------------------------------------------------------------
+  app.get(
+    '/v1/workspaces/:workspace_id/conversations/:conversation_id/messages',
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      requireAuth(request);
+      const ctx = await requireWorkspaceContext(request);
+      const params = request.params as { conversation_id: string };
+      const reqQuery = request.query as { cursor?: string; limit?: string };
+
+      const conv = await getConversation(pool, ctx.workspaceId, params.conversation_id);
+      if (!conv) {
+        return reply
+          .status(404)
+          .send(createErrorEnvelope('NOT_FOUND', 'Conversation not found.', request.id));
+      }
+
+      const limit = normaliseLimit(reqQuery.limit ? parseInt(reqQuery.limit, 10) : undefined);
+      const beforeId = decodeCursor(reqQuery.cursor);
+
+      const rows = await getConversationMessages(pool, ctx.workspaceId, params.conversation_id, {
+        limit: limit + 1,
+        ...(beforeId ? { before: beforeId } : {}),
+      });
+
+      const hasMore = rows.length > limit;
+      const items = rows.slice(0, limit).map(toApiMessage);
+      const nextCursor = hasMore ? encodeCursor(items[items.length - 1]!.id) : null;
+
+      const page: MessagePage = { items, next_cursor: nextCursor };
+      return reply.send(page);
     },
   );
 

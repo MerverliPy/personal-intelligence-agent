@@ -23,45 +23,65 @@ export function conversationDetailPage(
   conversationId: string,
 ): string {
   const bodyHtml = `
+<div class="conversation-layout">
 <section aria-labelledby="conversation-title-heading">
   <h2 id="conversation-title-heading">Conversation</h2>
   <div id="run-state-container" aria-live="polite"></div>
 </section>
 
-<form id="message-form" aria-label="Send a message">
-  <label for="message-content">Your message</label>
-  <textarea id="message-content" name="content" rows="4" required
-    placeholder="Ask a question, or request research / analysis / planning."></textarea>
-  <button type="submit" class="btn btn-primary">Send</button>
-</form>
-
-<section aria-labelledby="thread-heading">
-  <h3 id="thread-heading" class="sr-only">Message thread</h3>
+<div class="message-thread-section">
   <div id="message-thread" role="log" aria-live="polite" aria-relevant="additions">
     <p class="loading">Loading messages…</p>
   </div>
-</section>
+</div>
+
+<form id="message-form" class="message-form" aria-label="Send a message">
+  <div class="message-form__row">
+    <label for="message-content" class="sr-only">Your message</label>
+    <textarea id="message-content" name="content" rows="1" required
+      placeholder="Ask a question, or request research / analysis / planning."
+      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight, 200)+'px'"></textarea>
+    <button type="submit" class="btn btn-primary send-btn">Send</button>
+  </div>
+</form>
 
 <div id="citation-sheet" class="citation-sheet" role="dialog" aria-modal="true" aria-labelledby="citation-modal-title" hidden>
   <div class="citation-sheet__panel">
     <dialog id="citation-modal" class="citation-modal" aria-labelledby="citation-modal-title"></dialog>
   </div>
 </div>
+</div>
 `;
 
   const bodyScript = `
 const WORKSPACE_ID = ${JSON.stringify(workspaceId)};
+window.__piaWorkspaceId = WORKSPACE_ID;
 const CONVERSATION_ID = ${JSON.stringify(conversationId)};
 
 let activeEventSource = null;
 let citationModal = null;
+// PR14-RUNTIME-FOLLOWUPS Fix 2: track the currently streaming run so
+// deltas are targeted at the correct assistant message element rather
+// than being appended to the last historical assistant message.
+let activeStreamRunId = null;
 
 async function loadMessages() {
-  // No dedicated list-messages endpoint exists yet (the API only exposes
-  // SSE for live streams), so the initial thread is rendered empty and
-  // new messages are appended as the user sends them.
   var thread = document.getElementById('message-thread');
-  thread.innerHTML = '<p class="empty">No messages yet. Send one above.</p>';
+  try {
+    var data = await apiFetch('/v1/workspaces/' + WORKSPACE_ID + '/conversations/' + CONVERSATION_ID + '/messages');
+    var items = (data && data.items) || [];
+    if (items.length === 0) {
+      thread.innerHTML = '<p class="empty">No messages yet. Send one above.</p>';
+      return;
+    }
+    thread.innerHTML = items.map(function(msg) {
+      return renderMessageClient(msg, true);
+    }).join('');
+    wireCitationChips();
+    wireFeedbackForms();
+  } catch (err) {
+    thread.innerHTML = '<p class="empty">Could not load messages.</p>';
+  }
 }
 
 // Client-side mirror of renderMessage (kept inline so the page works
@@ -154,12 +174,9 @@ async function submitFeedback(form) {
 }
 
 async function openCitationModal(citationId) {
-  // PIA-MUR-D-004-IMPL commit 6: the citation dialog is now wrapped
-  // in a slide-up sheet container (#citation-sheet). We toggle the
-  // sheet wrapper's hidden attribute instead of calling
-  // dialog.showModal() (the inner <dialog> is left in the DOM but
-  // hidden inside the sheet panel; the sheet is the visible
-  // affordance).
+  // PIA-MUR-D-004-IMPL commit 6 + critique fix: slide-up sheet
+  // animation uses a three-phase approach (remove hidden, wait for
+  // paint, add .sheet-open class) to allow CSS transitions to fire.
   var sheet = document.getElementById('citation-sheet');
   var modal = document.getElementById('citation-modal');
   if (!sheet || !modal) return;
@@ -169,12 +186,49 @@ async function openCitationModal(citationId) {
   } else {
     modal.innerHTML = renderCitationModalBodyClient(citations);
   }
+  // Store trigger (the citation chip that was clicked) for focus restoration
+  if (__piaSheetTrigger === undefined) __piaSheetTrigger = null;
+  __piaSheetTrigger = document.querySelector('.citation-chip[data-citation-id="' + citationId + '"]');
+  // Three-phase slide-up animation
   sheet.hidden = false;
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      sheet.classList.add('sheet-open');
+      // Focus the first focusable element inside the sheet
+      var firstFocusable = sheet.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (firstFocusable) firstFocusable.focus();
+    });
+  });
 }
 
 function closeCitationModal() {
   var sheet = document.getElementById('citation-sheet');
-  if (sheet) sheet.hidden = true;
+  if (!sheet) return;
+  sheet.classList.remove('sheet-open');
+  var done = function() {
+    sheet.removeEventListener('transitionend', done);
+    sheet.hidden = true;
+    if (__piaSheetTrigger) {
+      __piaSheetTrigger.focus();
+      __piaSheetTrigger = null;
+    }
+  };
+  sheet.addEventListener('transitionend', done);
+}
+
+// Esc key closes the citation sheet. Tab cycles within it.
+// Backdrop click dismisses the citation sheet.
+document.addEventListener('keydown', function(ce) {
+  var sheet = document.getElementById('citation-sheet');
+  if (!sheet || !!sheet.hidden) return;
+  if (ce.key === 'Escape') { closeCitationModal(); return; }
+  trapTabIn(sheet, ce);
+});
+var citationSheet = document.getElementById('citation-sheet');
+if (citationSheet) {
+  citationSheet.addEventListener('click', function(ce) {
+    if (ce.target === this) closeCitationModal();
+  });
 }
 
 function renderCitationModalBodyClient(citation) {
@@ -291,6 +345,13 @@ function handleSseEvent(ev) {
   var container = document.getElementById('run-state-container');
   if (type === 'run.started') {
     container.innerHTML = renderRunStateBadge('STREAMING');
+    // PR14-RUNTIME-FOLLOWUPS Fix 2: create a fresh assistant message
+    // placeholder for this specific run. All response.delta events will
+    // target this element via its data-streaming-run attribute.
+    activeStreamRunId = data.run_id || 'streaming-' + Date.now();
+    var thread = document.getElementById('message-thread');
+    var html = '<article class="message message-assistant" data-streaming-run="' + activeStreamRunId + '" aria-label="Assistant message"><div class="message-content"></div><div class="message-meta"><span class="badge badge-processing">Streaming</span></div></article>';
+    thread.insertAdjacentHTML('beforeend', html);
     return;
   }
   if (type === 'response.delta') {
@@ -303,11 +364,16 @@ function handleSseEvent(ev) {
   }
   if (type === 'response.completed') {
     container.innerHTML = renderRunStateBadge('COMPLETED');
+    // PR14-RUNTIME-FOLLOWUPS Fix 2: clear streaming marker so subsequent
+    // messages from a new run don't target this element.
+    clearStreamingMarker();
     announce('Response completed.');
     return;
   }
   if (type === 'run.failed') {
     container.innerHTML = renderRunStateBadge('FAILED');
+    // PR14-RUNTIME-FOLLOWUPS Fix 2: clear streaming marker on failure.
+    clearStreamingMarker();
     var msg = (data.error && data.error.message) || 'Run failed.';
     showError(msg);
     return;
@@ -315,19 +381,42 @@ function handleSseEvent(ev) {
   // Unknown event types are ignored.
 }
 
+/**
+ * PR14-RUNTIME-FOLLOWUPS Fix 2: deltas target the current streaming
+ * assistant message by its data-streaming-run attribute rather than
+ * using :last-of-type (which would attach to historical messages).
+ */
 function appendAssistantDelta(text) {
   var thread = document.getElementById('message-thread');
-  var last = thread.querySelector('article.message-assistant:last-of-type .message-content');
-  if (!last) {
-    // No assistant message yet; create one.
-    var msgId = 'streaming-' + Date.now();
-    var html = '<article class="message message-assistant" data-message-id="' + msgId + '" aria-label="Assistant message"><div class="message-content"></div></article>';
+  var target;
+  if (activeStreamRunId) {
+    target = thread.querySelector('article[data-streaming-run="' + activeStreamRunId + '"] .message-content');
+  }
+  if (!target) {
+    // Fallback: create a new streaming placeholder (no active run tracking).
+    var fallbackId = 'streaming-' + Date.now();
+    var html = '<article class="message message-assistant" data-streaming-run="' + fallbackId + '" aria-label="Assistant message"><div class="message-content"></div><div class="message-meta"><span class="badge badge-processing">Streaming</span></div></article>';
     thread.insertAdjacentHTML('beforeend', html);
-    last = thread.querySelector('article.message-assistant:last-of-type .message-content');
+    target = thread.querySelector('article[data-streaming-run="' + fallbackId + '"] .message-content');
+    activeStreamRunId = fallbackId;
   }
   // SECURITY: text from the model is untrusted. We render via
   // textContent (never innerHTML) so the browser escapes it.
-  last.textContent += text;
+  target.textContent += text;
+}
+
+/** PR14-RUNTIME-FOLLOWUPS Fix 2: remove the streaming badge marker. */
+function clearStreamingMarker() {
+  if (!activeStreamRunId) return;
+  var el = document.querySelector('article[data-streaming-run="' + activeStreamRunId + '"]');
+  if (el) {
+    // Remove the data-streaming-run attribute and streaming badge so
+    // this element won't be re-targeted by future deltas.
+    el.removeAttribute('data-streaming-run');
+    var badge = el.querySelector('.message-meta');
+    if (badge) badge.innerHTML = '';
+  }
+  activeStreamRunId = null;
 }
 
 function registerCitation(c) {
@@ -379,6 +468,17 @@ document.getElementById('message-form').addEventListener('submit', async functio
 });
 
 loadMessages();
+
+// PR14-RUNTIME-FOLLOWUPS Fix 1: If arriving from quick-ask (with run_id in
+// the URL), start the SSE stream so the user sees the assistant response.
+var urlParams = new URLSearchParams(window.location.search);
+var urlRunId = urlParams.get('run_id');
+if (urlRunId) {
+  // Clean the URL without reloading the page
+  var cleanUrl = window.location.pathname;
+  window.history.replaceState({}, '', cleanUrl);
+  openRunStream(urlRunId);
+}
 `;
 
   return pageShell({
