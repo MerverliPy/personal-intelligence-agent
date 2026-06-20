@@ -44,7 +44,8 @@ Identify:
 - missing validation;
 - agent overlap;
 - commands that failed or were ambiguous;
-- instructions that produced inconsistent behavior.
+- instructions that produced inconsistent behavior;
+- opportunities to apply `ui-quality`, `visual-concept-quality`, `mobile-state-design`, `design-contract-lint`, or `output-completeness` more precisely.
 
 Propose:
 

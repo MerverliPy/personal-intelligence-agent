@@ -49,6 +49,9 @@ Before changing files, verify:
 During implementation:
 
 - follow the approved design contract;
+- use `ui-quality` for `apps/web`, shared CSS, page builders, and mobile/PWA UI polish;
+- use `mobile-state-design` when a change touches loading, empty, error, disabled, streaming, offline, or approval-required states;
+- use `output-completeness` before reporting completion;
 - preserve real data and integrations;
 - do not add mocks as a substitute;
 - keep commits atomic and decision-linked;

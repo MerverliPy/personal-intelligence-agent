@@ -1,7 +1,7 @@
 # opencode System Registry
 
 **Generated:** 2026-06-20
-**Counts:** 25 agents, 28 commands, 12 skills
+**Counts:** 25 agents, 30 commands, 20 skills
 
 > This registry enumerates every agent, command, and skill in the opencode system layer. Maintained alongside the source files; CI verifies counts match actual file counts.
 
@@ -46,7 +46,7 @@
 | Mobile UI orchestration (13 specialists + orchestrator) | `mobile-ui-orchestrator`, `accessibility-performance-validator`, `design-system-architect`, `evidence-regression-controller`, `frontend-implementer`, `iphone-interaction-specialist`, `product-ux-analyst`, `real-ui-product-tester`, `repository-discovery`, `visual-concept-prototyper`, `workflow-improvement-reviewer`, `feature-advocate`, `feature-critic`, `feature-judge` |
 | Security/architecture (read-only)                       | `architect`, `data-modeler`, `security`                                                                                                                                                                                                                                                                                                                                            |
 
-## Commands (28)
+## Commands (30)
 
 | Command                       | Agent                    | Description                                        |
 | ----------------------------- | ------------------------ | -------------------------------------------------- |
@@ -78,23 +78,33 @@
 | `/security-review`            | `security`               | Focused security and privacy review                |
 | `/task-review`                | `reviewer`               | Verify one implemented backlog task                |
 | `/task-run`                   | `delivery`               | Execute one backlog task                           |
+| `/ui-quality-audit`           | `mobile-ui-orchestrator` | Read-only UI quality audit                         |
+| `/ui-quality-fix`             | `mobile-ui-orchestrator` | Apply bounded approved UI quality fixes            |
 
-## Skills (12)
+## Skills (20)
 
-| Skill                        | Description                                                                                     |
-| ---------------------------- | ----------------------------------------------------------------------------------------------- |
-| `approval-gated-redesign`    | Enforce decision packets, explicit approvals, contract boundaries, decision-ledger traceability |
-| `database-migration`         | Design and verify PostgreSQL migrations with tenant isolation and forward compatibility         |
-| `design-contract`            | Convert approved concepts into human-readable and machine-readable design system                |
-| `evidence-bundle`            | Build redacted, traceable evidence package from baseline through delivery                       |
-| `iphone-16-pro-pwa`          | iPhone 16 Pro portrait-first, network-required PWA design and validation                        |
-| `real-ui-validation`         | Validate real running application without mock-only evidence                                    |
-| `repository-adapter`         | Detect and document repository architecture, commands, runtime, and protected areas             |
-| `repository-docs-analysis`   | Map repository evidence, detect stale documentation, identify contradictions                    |
-| `repository-docs-update`     | Apply evidence-backed documentation edits with approval gates                                   |
-| `repository-docs-validation` | Validate documentation structure, links, commands, factual claims, and secrets                  |
-| `retrieval-quality`          | Implement hybrid retrieval, ACL filtering, version-aware citations, and ranking                 |
-| `task-execution`             | Execute one machine-readable backlog task with dependency and validation controls               |
+| Skill                            | Description                                                                                     |
+| -------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `approval-gated-redesign`        | Enforce decision packets, explicit approvals, contract boundaries, decision-ledger traceability |
+| `brand-system-quality`           | Keep PIA identity, screenshots, icons, and visual language consistent                           |
+| `database-migration`             | Design and verify PostgreSQL migrations with tenant isolation and forward compatibility         |
+| `design-contract`                | Convert approved concepts into human-readable and machine-readable design system                |
+| `design-contract-lint`           | Review design contracts for completeness and implementation readiness                           |
+| `evidence-bundle`                | Build redacted, traceable evidence package from baseline through delivery                       |
+| `image-to-implementation-bridge` | Translate visual references into contract-compatible implementation guidance                    |
+| `iphone-16-pro-pwa`              | iPhone 16 Pro portrait-first, network-required PWA design and validation                        |
+| `mobile-state-design`            | Ensure mobile and PWA screens represent real application states clearly                         |
+| `output-completeness`            | Require complete implementation, explicit blockers, and evidence-backed reporting               |
+| `readme-landing-quality`         | Improve public-facing README, documentation landing sections, and project presentation          |
+| `real-ui-validation`             | Validate real running application without mock-only evidence                                    |
+| `repository-adapter`             | Detect and document repository architecture, commands, runtime, and protected areas             |
+| `repository-docs-analysis`       | Map repository evidence, detect stale documentation, identify contradictions                    |
+| `repository-docs-update`         | Apply evidence-backed documentation edits with approval gates                                   |
+| `repository-docs-validation`     | Validate documentation structure, links, commands, factual claims, and secrets                  |
+| `retrieval-quality`              | Implement hybrid retrieval, ACL filtering, version-aware citations, and ranking                 |
+| `task-execution`                 | Execute one machine-readable backlog task with dependency and validation controls               |
+| `ui-quality`                     | Apply PIA-specific UI quality checks while preserving approved contracts and existing stack     |
+| `visual-concept-quality`         | Improve mobile visual concepts before they become design decisions or contracts                 |
 
 ## CI Assertions
 

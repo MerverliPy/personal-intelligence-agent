@@ -36,6 +36,9 @@ Create materially distinct concepts only after the orchestrator supplies an appr
 
 Requirements:
 
+- use `visual-concept-quality` to generate and critique materially different mobile concept directions;
+- use `brand-system-quality` when concepts affect identity, app icon, screenshots, or public visual language;
+- use `image-to-implementation-bridge` when visual references might influence implementation scope;
 - use real product content and real repository data;
 - do not invent labels, entities, metrics, or workflows;
 - store all work under `.ui-redesign/concepts/<concept-id>/`;
