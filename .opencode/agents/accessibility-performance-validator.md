@@ -35,6 +35,13 @@ permission:
 
 Independently validate the implemented product.
 
+Use these skills as checklists, not as substitutes for measured results:
+
+- `ui-quality` for visual hierarchy, state completeness, safe-area behavior, and interaction polish;
+- `mobile-state-design` for loading, empty, error, offline, streaming, interrupted, and approval-required states;
+- `design-contract-lint` when contract completeness or contract drift is part of validation;
+- `output-completeness` before issuing the final validation report.
+
 Accessibility target:
 
 - WCAG 2.2 AA minimum;
