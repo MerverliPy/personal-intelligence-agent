@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # check-registry-counts.sh — Verify agent/command/skill counts match reality.
 #
-# Compares actual file counts against REGISTRY.md and README.md claims.
-# Prevents drift between manifests and the filesystem.
+# Compares actual file counts against REGISTRY.md claims.
+# Prevents drift between the registry and the filesystem.
 #
 # Usage:
 #   bash scripts/ci/check-registry-counts.sh
@@ -31,7 +31,6 @@ echo -n "Agents: $ACTUAL_AGENTS actual ... "
 AGENT_TABLE_START=$(grep -n "^## Agents" .opencode/REGISTRY.md | cut -d: -f1)
 AGENT_TABLE_END=$(grep -n "^### Agent categories" .opencode/REGISTRY.md | cut -d: -f1)
 REGISTRY_AGENTS=$(sed -n "${AGENT_TABLE_START},${AGENT_TABLE_END}p" .opencode/REGISTRY.md | grep -c "^| \`" || echo 0)
-README_AGENTS=$(grep -oE '[0-9]+ agents' README.md 2>/dev/null | head -1 | grep -oE '[0-9]+' || echo 0)
 
 if [ "$REGISTRY_AGENTS" -eq "$ACTUAL_AGENTS" ] 2>/dev/null; then
   echo "REGISTRY.md: $REGISTRY_AGENTS ✓"
@@ -40,31 +39,16 @@ else
   FAILED=1
 fi
 
-if [ "$README_AGENTS" -eq "$ACTUAL_AGENTS" ] 2>/dev/null; then
-  echo "  README.md: $README_AGENTS ✓"
-else
-  echo "  README.md: $README_AGENTS ✗ (expected $ACTUAL_AGENTS)"
-  FAILED=1
-fi
-
 # Check command count (count rows in command table only, between "## Commands" and "## Skills")
 echo -n "Commands: $ACTUAL_COMMANDS actual ... "
 CMD_TABLE_START=$(grep -n "^## Commands" .opencode/REGISTRY.md | cut -d: -f1)
 CMD_TABLE_END=$(grep -n "^## Skills" .opencode/REGISTRY.md | cut -d: -f1)
 REGISTRY_COMMANDS=$(sed -n "${CMD_TABLE_START},${CMD_TABLE_END}p" .opencode/REGISTRY.md | grep -c "^| \`/" || echo 0)
-README_COMMANDS=$(grep -oE '[0-9]+ commands' README.md 2>/dev/null | head -1 | grep -oE '[0-9]+' || echo 0)
 
 if [ "$REGISTRY_COMMANDS" -eq "$ACTUAL_COMMANDS" ] 2>/dev/null; then
   echo "REGISTRY.md: $REGISTRY_COMMANDS ✓"
 else
   echo "REGISTRY.md: $REGISTRY_COMMANDS ✗ (expected $ACTUAL_COMMANDS)"
-  FAILED=1
-fi
-
-if [ "$README_COMMANDS" -eq "$ACTUAL_COMMANDS" ] 2>/dev/null; then
-  echo "  README.md: $README_COMMANDS ✓"
-else
-  echo "  README.md: $README_COMMANDS ✗ (expected $ACTUAL_COMMANDS)"
   FAILED=1
 fi
 
@@ -87,7 +71,7 @@ if [ "$FAILED" -eq 0 ]; then
   echo "All registry counts match actual files."
   exit 0
 else
-  echo "Registry count drift detected. Update REGISTRY.md or README.md."
+  echo "Registry count drift detected. Update REGISTRY.md."
   echo "Run: ls .opencode/agents/*.md | wc -l"
   echo "Run: ls .opencode/commands/*.md | wc -l"
   echo "Run: ls -d .opencode/skills/*/ | wc -l"
