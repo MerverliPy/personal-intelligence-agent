@@ -27,6 +27,8 @@ import { RetrievalService, fakeEmbeddingProvider, defaultFakeModelConfig } from 
 import {
   createErrorEnvelope,
   normaliseLimit,
+  decodeCursor,
+  encodeCursor,
   type Conversation,
   type ConversationPage,
   type CreateConversationRequest,
@@ -199,7 +201,17 @@ const conversationRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
   // -----------------------------------------------------------------------
   // GET /v1/workspaces/{workspace_id}/conversations/{conversation_id}/messages
   //
-  // Returns messages for a conversation (up to 200) in chronological order.
+  // Returns messages for a conversation in chronological order, oldest first.
+  //
+  // PR14-RUNTIME-FOLLOWUPS Fix 3: real cursor pagination. Accepts an
+  // optional `cursor` query parameter (encoded message ID) for fetching
+  // messages older than the given cursor. When `next_cursor` is present
+  // in the response the client can request older pages by passing it
+  // back as the `cursor`. When `next_cursor` is null the complete
+  // thread has been returned.
+  //
+  // The default limit is 200 (MAX_PAGE_LIMIT).  Use `?limit=N` to
+  // request fewer messages per page.
   // -----------------------------------------------------------------------
   app.get(
     '/v1/workspaces/:workspace_id/conversations/:conversation_id/messages',
@@ -207,6 +219,7 @@ const conversationRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
       requireAuth(request);
       const ctx = await requireWorkspaceContext(request);
       const params = request.params as { conversation_id: string };
+      const reqQuery = request.query as { cursor?: string; limit?: string };
 
       const conv = await getConversation(pool, ctx.workspaceId, params.conversation_id);
       if (!conv) {
@@ -215,12 +228,19 @@ const conversationRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
           .send(createErrorEnvelope('NOT_FOUND', 'Conversation not found.', request.id));
       }
 
+      const limit = normaliseLimit(reqQuery.limit ? parseInt(reqQuery.limit, 10) : undefined);
+      const beforeId = decodeCursor(reqQuery.cursor);
+
       const rows = await getConversationMessages(pool, ctx.workspaceId, params.conversation_id, {
-        limit: 200,
+        limit: limit + 1,
+        ...(beforeId ? { before: beforeId } : {}),
       });
 
-      const items = rows.map(toApiMessage);
-      const page: MessagePage = { items, next_cursor: null };
+      const hasMore = rows.length > limit;
+      const items = rows.slice(0, limit).map(toApiMessage);
+      const nextCursor = hasMore ? encodeCursor(items[items.length - 1]!.id) : null;
+
+      const page: MessagePage = { items, next_cursor: nextCursor };
       return reply.send(page);
     },
   );

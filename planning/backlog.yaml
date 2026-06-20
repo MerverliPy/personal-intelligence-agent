@@ -1869,6 +1869,75 @@ tasks:
     required_reviewers:
       - reviewer
       - security
+  - id: P3-T11
+    phase: P3
+    title: PR14 runtime follow-up fixes
+    objective: |
+      Fix three runtime correctness issues surfaced after PR #14 audit remediation:
+      (1) quick-ask must preserve and start the returned model run,
+      (2) streaming deltas must attach only to the active assistant response for the
+      current run, never to historical assistant messages,
+      (3) GET /messages must implement real cursor pagination or document explicit
+      complete-thread contract.
+    depends_on:
+      - P3-T05
+      - P3-T06
+    requirements:
+      - FR-CONV-007
+    spec_refs:
+      - docs/04_API_ARCHITECTURE.md#6-sse-event-contract
+    allowed_paths:
+      - apps/web/src/pages/conversation-list.ts
+      - apps/web/src/pages/conversation-detail.ts
+      - apps/api/src/routes/conversations.ts
+      - packages/contracts/src/index.ts
+      - api/openapi.yaml
+      - apps/api/test/conversation-routes.test.ts
+      - apps/web/test/**
+      - planning/runs/P3-T11.md
+      - planning/reviews/P3-T11.md
+    forbidden_paths:
+      - infra/terraform/prod/**
+      - .env
+      - '**/*secret*'
+    inputs:
+      - PR #14 audit remediation merge base
+      - P3-T05 conversation route and SSE event contract
+      - P3-T06 model run persistence
+    outputs:
+      - Corrected quick-ask flow with run stream preservation
+      - Attribute-targeted streaming delta rendering
+      - Cursor-paginated GET /messages endpoint
+    implementation_notes:
+      - No schema, auth, RBAC, dependency, or deployment changes.
+      - Backward-compatible API change (additive cursor/limit params).
+    verification:
+      - pnpm format:check
+      - pnpm typecheck
+      - pnpm lint
+      - pnpm test:unit
+      - pnpm security:secrets
+    acceptance:
+      - Quick-ask preserves the returned ModelRun.id and starts the run stream
+        reliably.
+      - Streaming deltas append only to the active assistant response for the
+        current run, never to historical assistant messages.
+      - GET /messages has real cursor pagination, or the endpoint contract
+        explicitly avoids silent truncation.
+      - All verification commands pass.
+    security_checks:
+      - Cursor parameters carry only opaque base64url-encoded message IDs; no
+        sensitive data in query strings.
+    rollback:
+      - Revert the three source files; no destructive data changes.
+    stop_conditions:
+      - A required dependency is not DONE or NO_CHANGE_REQUIRED.
+      - A specification conflict changes public behavior or security semantics.
+      - A real credential, production account, destructive operation, or external
+        side effect is required.
+    parallel_group: null
+    required_reviewers:
+      - reviewer
   - id: P4-T01
     phase: P4
     title: Implement memory persistence and lifecycle
