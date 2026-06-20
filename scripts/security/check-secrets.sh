@@ -27,13 +27,16 @@ EXCLUDE_DIRS=(
   "dist"
   ".next"
   "coverage"
-  ".opencode"
+  ".opencode/agents"
+  ".opencode/commands"
+  ".opencode/skills"
+  ".opencode/documentation"
+  ".opencode/benchmarks"
   ".venv"
   "ci-output"
   "test-results"
   "planning"
-  ".chatgpt-context-pack"
-  ".chatgpt-context-pack.manual-*"
+  ".context-pack"
 )
 
 # Files to exclude from scanning (legitimate secret references)

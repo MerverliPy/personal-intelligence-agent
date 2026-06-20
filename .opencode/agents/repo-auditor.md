@@ -204,6 +204,9 @@ Use stable IDs such as `AUD-P1-001`. Do not reuse IDs or split one root cause ac
 
 ## Required `AGENT_HANDOFF.md`
 
+> **Canonical template:** `templates/repo-audits/opencode-system-audit-template.md`
+> The template is the standalone, diffable reference. The inline schema below is the authority for agent behavior; the template should stay in sync.
+
 # Repository Audit Agent Handoff
 
 ## Audit Summary

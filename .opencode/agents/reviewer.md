@@ -22,6 +22,18 @@ permission:
     '**/.git/**': deny
   edit:
     '*': deny
+    '*.env': deny
+    '**/.env': deny
+    '*.env.*': deny
+    '**/.env.*': deny
+    '*.pem': deny
+    '**/*.pem': deny
+    '*.key': deny
+    '**/*.key': deny
+    '*credentials*': deny
+    '**/*credentials*': deny
+    '.git/**': deny
+    '**/.git/**': deny
     'planning/reviews/P*-T*.md': allow
     'planning/status.yaml': allow
   glob: allow

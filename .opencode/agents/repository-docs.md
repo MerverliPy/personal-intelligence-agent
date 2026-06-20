@@ -26,6 +26,18 @@ permission:
   lsp: allow
   edit:
     '*': deny
+    '*.env': deny
+    '**/.env': deny
+    '*.env.*': deny
+    '**/.env.*': deny
+    '*.pem': deny
+    '**/*.pem': deny
+    '*.key': deny
+    '**/*.key': deny
+    '*credentials*': deny
+    '**/*credentials*': deny
+    '.git/**': deny
+    '**/.git/**': deny
     'README.md': allow
     'MANIFEST.md': allow
     'docs/**': allow
