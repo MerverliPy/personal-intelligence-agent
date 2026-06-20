@@ -57,7 +57,7 @@ FILE_LIST=$(mktemp)
 git ls-files > "$FILE_LIST"
 
 # Add explicitly allowed untracked files (if they exist)
-ALLOWLIST=(".env.example" "pnpm-lock.yaml")
+ALLOWLIST=(".env.example")
 for f in "${ALLOWLIST[@]}"; do
   if [ -f "$f" ] && ! grep -qxF "$f" "$FILE_LIST" 2>/dev/null; then
     echo "$f" >> "$FILE_LIST"

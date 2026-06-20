@@ -201,7 +201,7 @@ fi
 
 # ── Check 10: Destructive and publishing commands denied ──
 echo -n "10. Destructive commands denied ... "
-DESTRUCTIVE=("git push*" "git reset*" "git clean*" "git restore*" "rm -rf *" "sudo *" "npm publish*" "pnpm publish*")
+DESTRUCTIVE=("git reset*" "git clean*" "git restore*" "rm -rf *" "sudo *" "npm publish*" "pnpm publish*")
 CMD_PROBLEMS=0
 
 for cmd in "${DESTRUCTIVE[@]}"; do
@@ -214,6 +214,17 @@ if [ "$CMD_PROBLEMS" -eq 0 ]; then
   PASSED=$((PASSED + 1))
 else
   echo "FAILED — $CMD_PROBLEMS commands not denied"
+  FAILED=$((FAILED + 1))
+fi
+
+# ── Check 10a: git push is ask (not deny) ──
+echo -n "10a. git push is ask ... "
+PUSH_VAL=$(jsonc_get_key '.permission.bash' "git push*")
+if [ "$PUSH_VAL" = "ask" ]; then
+  echo "PASSED"
+  PASSED=$((PASSED + 1))
+else
+  echo "FAILED — expected 'ask', got '$PUSH_VAL'"
   FAILED=$((FAILED + 1))
 fi
 

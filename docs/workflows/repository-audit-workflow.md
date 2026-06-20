@@ -74,4 +74,4 @@ Confidence: `High`, `Medium`, or `Low`.
 - `docs/REPOSITORY_DOCUMENTATION_WORKFLOW.md` — the documentation maintenance workflow (audit is the parallel audit-maintenance workflow)
 - `docs/05_SECURITY_GOVERNANCE.md` — security governance and trust boundaries
 - `docs/security/threat-model.md` — threat model (TB-1–TB-7)
-- `docs/adr/0008-opencode-config-consolidation.md` — `opencode.jsonc` consolidation decision (audit-relevant)
+- `docs/adr/0008-canonical-opencode-project-configuration.md` — `opencode.jsonc` consolidation decision (audit-relevant)

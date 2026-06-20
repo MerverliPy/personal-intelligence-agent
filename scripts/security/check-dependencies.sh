@@ -5,8 +5,8 @@
 # the public vulnerability database. Dev-only dependencies are scanned
 # separately as informational only (they do not block the pipeline but
 # are reported for awareness).
-# Any vulnerability finding causes a non-zero exit to ensure issues are
-# visible in CI.
+# Production dependency vulnerability findings cause a non-zero exit;
+# dev-only dependency findings are informational and non-blocking.
 #
 # Usage:
 #   pnpm security:dependencies
